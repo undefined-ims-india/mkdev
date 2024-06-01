@@ -8,7 +8,7 @@ module.exports = {
     filename: './client/index.js',
     path: path.resolve(__dirname, 'lib'),
   },
-  devtool: 'eval',
+  devtool: 'source-map',
   watch: true,
   module: {
     rules: [
@@ -42,4 +42,3 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
 };
-// { loader: 'babel-loader'}
