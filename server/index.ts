@@ -1,6 +1,6 @@
 
 
-const hi = (name: String):void => {
+const hi = (name: string):void => {
 console.log(`Hello${name}`)
 };
 
