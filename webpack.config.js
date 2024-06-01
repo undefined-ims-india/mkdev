@@ -6,7 +6,7 @@ module.exports = {
   mode: 'development',
   output: {
     filename: './client/index.js',
-    path: path.resolve(__dirname, 'lib'),
+    path: path.resolve(__dirname, 'dist'),
   },
   devtool: 'source-map',
   watch: true,
@@ -19,16 +19,16 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-                presets: [
-                    '@babel/preset-env',
-                    ['@babel/preset-react', {'runtime': 'automatic'}],
-                    '@babel/preset-typescript'
-                  ]
-                }
-              },
-              {
-                loader: 'ts-loader'
-              },
+              presets: [
+                '@babel/preset-env',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                '@babel/preset-typescript',
+              ],
+            },
+          },
+          {
+            loader: 'ts-loader',
+          },
         ],
       },
       {
