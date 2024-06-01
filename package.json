@@ -5,15 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-
-
     "prod:build:compile": "npx babel src --extensions .ts --out-dir lib",
+    "prod:build:server" : "npx babel server .ts --out-dir lib",
     "prod:build:types": "tsc",
     "prod:build": "concurrently npm:prod:build:*",
-
-
     "build:types": "tsc --watch",
-    "build:compile": "npx babel src --extensions .ts --out-dir lib --watch",
+    "build:client": "npx babel src --extensions .ts --out-dir lib --watch",
+    "build:server" : "npx babel server .ts --out-dir lib --watch",
     "build": "concurrently npm:build:*"
   },
   "keywords": [],
@@ -22,14 +20,22 @@
   "dependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "webpack": "^5.91.0"
+    "babel-loader": "^9.1.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.6",
     "@babel/core": "^7.24.6",
     "@babel/preset-env": "^7.24.6",
+    "@babel/preset-react": "^7.24.6",
     "@babel/preset-typescript": "^7.24.6",
     "concurrently": "^8.2.2",
-    "typescript": "^5.4.5"
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   }
 }
