@@ -1,13 +1,10 @@
 const dotenv = require('dotenv');
-require('express, Router, app, path, PORT');
-// require('Router');
-// require('app');
-// require('path');
-// require('PORT');
+// import { Router } from 'express';
+const { Router } = require('express');
 const { auth, requiresAuth } = require('express-openid-connect');
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 
-dotenv.load();
+// dotenv.load();
 
 const config = {
   authRequired: false,
