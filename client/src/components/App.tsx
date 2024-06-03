@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 
-const App = () => {
   return <>Teachers aka Users</>;
+const App = (): ReactElement => {
 };
 
 export default App;
