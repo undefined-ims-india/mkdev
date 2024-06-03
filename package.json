@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "### Development Team   - [Cody Daigle](https://github.com/cody-daigle)   - [Alex Hebert](https://github.com/AlexPHebert2000)   - [Patrick Henry](https://github.com/Hackman78)   - [Mike Sammartino](https://github.com/mikesamm)",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.ts",
     "prod:build:compile": "npx webpack",
     "prod:build:server": "npx babel server .ts --out-dir lib",
     "prod:build:types": "tsc",
@@ -21,9 +23,12 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "babel-loader": "^9.1.3",
+    "debug": "^4.3.5",
     "dotenv": "^16.4.5",
     "eslint-config-airbnb": "^19.0.4",
     "express": "^4.19.2",
+    "express-openid-connect": "^2.17.1",
+    "morgan": "^1.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
