@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "### Development Team   - [Cody Daigle](https://github.com/cody-daigle)   - [Alex Hebert](https://github.com/AlexPHebert2000)   - [Patrick Henry](https://github.com/Hackman78)   - [Mike Sammartino](https://github.com/mikesamm)",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/index.ts",
