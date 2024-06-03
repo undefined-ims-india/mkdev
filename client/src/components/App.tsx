@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
+import { Link } from 'react-router-dom';
 
-const App = () => {
-  return <>Teachers aka Users</>;
+const App = (): ReactElement => {
+  return (
+    <>
+      <Link to='/dashboard'>Dashboard</Link>
+      <h1>Teachers aka Users</h1>
+    </>
+  );
 };
 
 export default App;
