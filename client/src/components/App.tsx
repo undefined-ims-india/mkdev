@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 
-  return <>Teachers aka Users</>;
 const App = (): ReactElement => {
+  return <>Teachers aka Users</>;
 };
 
 export default App;
