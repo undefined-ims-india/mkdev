@@ -1,43 +1,28 @@
-require('dotenv').config();
-const path = require('path');
-const express = require('express');
+// const path = require('path');
+import path from 'path';
+require('dotenv').config({ path: '../.env' }); //???
+import express, { Request, Response } from 'express';
 
-const { auth, requiresAuth } = require('express-openid-connect');
-const CLIENT = path.resolve(__dirname, 'client/index.html');
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, PORT = 3000 } = process.env;
+const route = require('./routes/index.ts');
+const { PORT = 3000 } = process.env;
+
+const CLIENT = path.resolve(__dirname, '..', 'dist');
 
 const app = express();
 
 app.use(express.static(CLIENT));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(CLIENT));
+app.use('/api', route);
 
-/*** AUTH ***/
-
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  baseURL: `http://localhost:${PORT}`,
-  clientID: GOOGLE_CLIENT_ID,
-  secret: GOOGLE_CLIENT_SECRET,
-  issuerBaseURL: `https://dev-uatvgw7p2cq7mmm0.us.auth0.com`,
-};
-
-app.use(auth(config));
-
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated()); // * Returns 'false' at the moment
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(CLIENT, 'index.html'));
 });
-
-app.use((req, res) => {
-  res.locals.user = req.oidc.user;
-});
-
-app.get('/profile', requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user, null, 2));
-});
-/*** AUTH ***/
-
 app.listen(PORT, () => {
-  console.info(`http://localhost:${PORT} \n\n http://127.0.0.1:${PORT}`);
+  console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
 });
+
+module.exports = {
+  app,
+};
