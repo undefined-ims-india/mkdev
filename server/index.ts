@@ -14,7 +14,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
-app.use('/api', routes);
 
 const config = {
   authRequired: false,
@@ -27,6 +26,12 @@ const config = {
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
+app.use('/api', routes);
+
+// Middleware to make the `user` object available for all views
+app.use((req, res) => {
+  res.locals.user = req.oidc.user;
+});
 
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
