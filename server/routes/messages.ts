@@ -1,8 +1,9 @@
-const express = require('express');
-const messageRoutes = express.Router();
+import { Router } from 'express';
 
-messageRoutes.get('/', (req, res) => {
+const messages = Router();
+
+messages.get('/', (req, res) => {
   res.send('Reached messages GET route successfully');
 });
 
-module.exports = messageRoutes;
+export default messages;
