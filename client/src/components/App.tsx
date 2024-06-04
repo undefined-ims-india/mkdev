@@ -5,6 +5,8 @@ const App = (): ReactElement => {
   return (
     <>
       <Link to='/dashboard'>Dashboard</Link>
+      <br/>
+      <Link to='/login'>Login</Link>
       <h1>Teachers aka Users</h1>
     </>
   );
