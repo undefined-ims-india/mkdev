@@ -1,4 +1,4 @@
-const { Router } = require('express');
+const { Router, Request } = require('express');
 const {PrismaClient} = require('@prisma/client');
 
 const posts = Router();
@@ -14,6 +14,20 @@ posts.post('/', (req:any, res:any) => {
     .then((post: any) => {
       console.log(post);
       res.sendStatus(201)
+    })
+    .catch((err: string) => {
+      console.error(err);
+      res.sendStatus(500)
+    })
+    .finally(async () => {
+      await prisma.$disconnect()
+    });
+});
+
+posts.get('/', (req:any, res:any) => {
+  prisma.post.findMany({where: {userId: USER_ID}})
+    .then((posts: {}[]) => {
+      res.send(posts);
     })
     .catch((err: string) => {
       console.error(err);
