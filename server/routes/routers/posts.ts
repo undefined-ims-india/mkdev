@@ -15,7 +15,7 @@ posts.post('/', (req:any, res:any) => {
       console.log(post);
       res.sendStatus(201)
     })
-    .catch((err: string) => {
+    .catch((err: {name:string}) => {
       console.error(err);
       res.sendStatus(500)
     })
@@ -37,5 +37,25 @@ posts.get('/', (req:any, res:any) => {
       await prisma.$disconnect()
     });
 });
+
+posts.get('/:id', (req: any, res: any) => {
+  const { id }: {id:string} = req.params;
+  prisma.post.findFirstOrThrow({where: {id: +id}})
+    .then((post: any) => {
+      res.send(post);
+    })
+    .catch((err: {name:string}) => {
+      console.error(err);
+      if (err.name === 'NotFoundError') {
+        res.sendStatus(404);
+      }
+      else {
+        res.sendStatus(500)
+      }
+    })
+    .finally(async () => {
+      await prisma.$disconnect()
+    });
+})
 
 module.exports = posts
