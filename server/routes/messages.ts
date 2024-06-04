@@ -16,18 +16,33 @@ messages.get('/', async (req, res) => {
 });
 
 messages.post('/', async (req: Request, res: Response) => {
-  const { body, sender, conversation } = req.body.message;
+  const { 
+    body,
+    senderId,
+    sender,
+    conversationId,
+    conversation
+  } = req.body.message;
+  // const { username } = req.body.user;
 
   // query database for sender user id,
+  let user = await prisma.user.findUnique({
+    where: {
+      username: 'mikesamm'
+    },
+  })
+  console.log('user', user);
   // query database for conversation id?
   // then create message based on those ids (bc they should have
   //    correct type like that?)
 
   await prisma.messages.create({
     data: {
-      body: body,
-      sender: sender,
-      conversation: conversation,
+      body,
+      senderId: user?.id,
+      sender,
+      conversationId,
+      conversation,
     }
   })
 
