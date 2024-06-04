@@ -32,7 +32,7 @@ model Post {
 //User has a gh username and has many relationships
 model User {
   id      Int      @id @default(autoincrement())
-  username String?
+  username String? @unique
   firstName String?
   lastName String?
   follower_count Int?
@@ -68,9 +68,9 @@ model Messages {
   id        Int      @id @default(autoincrement())
   body String
   senderId Int
-  sender User @relation(fields: [senderId], references: [id]) // Message has one sender
+  sender User? @relation(fields: [senderId], references: [id]) // Message has one sender
   conversationId Int
-  conversation Conversations @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
+  conversation Conversations? @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
 }
 
 //Conversations is where we have our entire conversations made up of individual messages
