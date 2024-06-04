@@ -1,11 +1,11 @@
-// const path = require('path');
 import path from 'path';
-require('dotenv').config();
-import express, { Request, Response } from 'express';
+import dotEnv from 'dotenv';
+dotEnv.config();
+import express from 'express';
 import { auth } from 'express-openid-connect';
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, PORT = 3000 } = process.env;
 
-import route from './routes';
+import routes from './routes';
 
 const CLIENT = path.resolve(__dirname, '..', 'dist');
 
@@ -15,11 +15,11 @@ app.use(express.json());
 app.use(express.static(CLIENT));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
-app.use('/api', route);
+app.use('/api', routes);
 
-// app.get('*', (req: Request, res: Response) => {
-//   res.sendFile(path.join(CLIENT, 'index.html'));
-// });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(CLIENT, 'index.html'));
+});
 
 const config = {
   authRequired: false,
@@ -32,8 +32,8 @@ const config = {
 
 app.use(auth(config));
 
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated());
+app.use((req, res) => {
+  res.locals.user = req.oidc.user;
 });
 
 app.listen(PORT, () => {
