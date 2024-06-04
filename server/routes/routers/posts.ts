@@ -7,9 +7,9 @@ const prisma = new PrismaClient();
 const USER_ID = 3;
 
 posts.post('/', (req:any, res:any) => {
-  const { newPost } : {newPost: {title: string, body: string}} = req.body;
+  const { title, body } : {title: string, body:string} = req.body.newPost;
   prisma.post.create({
-    data: {...newPost, author: {connect: {id: USER_ID}}}
+    data: {title, body, author: {connect: {id: USER_ID}}}
   })
     .then((post: any) => {
       console.log(post);
@@ -56,6 +56,17 @@ posts.get('/:id', (req: any, res: any) => {
     .finally(async () => {
       await prisma.$disconnect()
     });
+})
+
+posts.update('/:id', (req: any, res: any) => {
+  const { title, body } : {title: string, body:string} = req.body.newPost;
+  const { id }: {id:string} = req.params;
+  prisma.post.update({
+    where: {id: +id},
+    data:{
+
+    }
+  })
 })
 
 module.exports = posts
