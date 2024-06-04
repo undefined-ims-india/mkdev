@@ -3,10 +3,12 @@ import Nav from './Nav';
 
 const Profile = (): ReactElement => {
   return (
-    <>
+    <div>
     <p> Welcome to the profile page</p>
+    <>
   <Nav/>
     </>
+    </div>
   )
 };
 
