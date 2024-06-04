@@ -78,6 +78,26 @@ posts.patch('/:id', (req: any, res: any) => {
     .finally(async () => {
       await prisma.$disconnect()
     });
+});
+
+posts.delete('/:id', (req: any, res: any) => {
+  const { id }: {id:string} = req.params;
+  prisma.post.delete({where: {userId: USER_ID, id: +id}})
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err: {name:string}) => {
+      console.error(err);
+      if(err.name === 'PrismaClientKnownRequestError') {
+        res.sendStatus(404);
+      }
+      else {
+        res.sendStatus(500)
+      }
+    })
+    .finally(async () => {
+      await prisma.$disconnect()
+    });
 })
 
 module.exports = posts
