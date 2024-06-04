@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 const USER_ID = 3;
 
+// add a post to logged in user
 posts.post('/', (req:any, res:any) => {
   const { title, body } : {title: string, body:string} = req.body.newPost;
   prisma.post.create({
@@ -24,6 +25,7 @@ posts.post('/', (req:any, res:any) => {
     });
 });
 
+// get all users posts
 posts.get('/', (req:any, res:any) => {
   prisma.post.findMany({where: {userId: USER_ID}})
     .then((posts: {}[]) => {
@@ -38,6 +40,7 @@ posts.get('/', (req:any, res:any) => {
     });
 });
 
+// get certain post
 posts.get('/:id', (req: any, res: any) => {
   const { id }: {id:string} = req.params;
   prisma.post.findFirstOrThrow({where: {id: +id}})
@@ -58,6 +61,7 @@ posts.get('/:id', (req: any, res: any) => {
     });
 })
 
+// update post
 posts.patch('/:id', (req: any, res: any) => {
   const { title, body } : {title: string, body:string} = req.body.newPost;
   const { id }: {id:string} = req.params;
@@ -80,6 +84,7 @@ posts.patch('/:id', (req: any, res: any) => {
     });
 });
 
+// delete post
 posts.delete('/:id', (req: any, res: any) => {
   const { id }: {id:string} = req.params;
   prisma.post.delete({where: {userId: USER_ID, id: +id}})
