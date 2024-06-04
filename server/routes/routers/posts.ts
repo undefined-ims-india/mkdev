@@ -29,7 +29,7 @@ posts.get('/', (req:any, res:any) => {
     .then((posts: {}[]) => {
       res.send(posts);
     })
-    .catch((err: string) => {
+    .catch((err: {name:string}) => {
       console.error(err);
       res.sendStatus(500)
     })
@@ -58,15 +58,26 @@ posts.get('/:id', (req: any, res: any) => {
     });
 })
 
-posts.update('/:id', (req: any, res: any) => {
+posts.patch('/:id', (req: any, res: any) => {
   const { title, body } : {title: string, body:string} = req.body.newPost;
   const { id }: {id:string} = req.params;
   prisma.post.update({
     where: {id: +id},
     data:{
-
+      title,
+      body
     }
   })
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((err: {name:string}) => {
+      console.error(err);
+      res.sendStatus(500)
+    })
+    .finally(async () => {
+      await prisma.$disconnect()
+    });
 })
 
 module.exports = posts
