@@ -3,8 +3,19 @@
   <head>
     <meta charset="utf-8">
     <title>mkDev</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"><script defer src="./client/index.js"></script></head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script defer src="./client/index.js"></script>
+  </head>
   <body>
     <div id="root"></div>
+    <script type="module">
+      import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js";
+      // creating socket on the client side
+      const socket = io('http://localhost:4000', {
+          auth: {
+            serverOffset: 0,
+          }
+        });
+    </script>
   </body>
 </html>
