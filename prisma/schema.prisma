@@ -20,40 +20,40 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(255)
   body      String?
-  author    User     @relation(fields: [userId], references: [id], "UserPosts")// Post has one Author
+  author    User     @relation(fields: [userId], references: [id], "UserPosts") // Post has one Author
   userId    Int
-  repoLink  String?   @db.Uuid
+  repoLink  String?  @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  liked     User[]   @relation("LikedPosts")// Liked posts Table 
-  tags      Tags[]   // Post Tags Table
+  liked     User[]   @relation("LikedPosts") // Liked posts Table 
+  tags      Tags[] // Post Tags Table
 }
 
 //User has a gh username and has many relationships
 model User {
-  id      Int      @id @default(autoincrement())
-  username String? @unique
-  firstName String?
-  lastName String?
-  follower_count Int? @default(0)
-  post_count Int? @default(0)
-  posts   Post[] @relation("UserPosts") // User Posts Join Table
-  following  User[]  @relation("UserFollows")  // Follower and Following tables
-  followedBy User[]  @relation("UserFollows")// Follower and Following tables
-  likedPosts Post[] @relation("LikedPosts") // Liked posts Table 
-  tags Tags[] // User Tags Table
-  messages Messages[] //User has many Messages
-  conversations Conversations[] // User has many Conversations
+  id             Int             @id @default(autoincrement())
+  username       String?         @unique
+  firstName      String?
+  lastName       String?
+  follower_count Int?            @default(0)
+  post_count     Int?            @default(0)
+  posts          Post[]          @relation("UserPosts") // User Posts Join Table
+  following      User[]          @relation("UserFollows") // Follower and Following tables
+  followedBy     User[]          @relation("UserFollows") // Follower and Following tables
+  likedPosts     Post[]          @relation("LikedPosts") // Liked posts Table 
+  tags           Tags[] // User Tags Table
+  messages       Messages[] //User has many Messages
+  conversations  Conversations[] // User has many Conversations
 }
 
 //Tags used for searching and interacting with the user and Posts tables.
 model Tags {
-  id        Int      @id @default(autoincrement())
-  tagType tagType 
-  name String
+  id       Int     @id @default(autoincrement())
+  tagType  tagType
+  name     String
   category String?
-  posts Post[]// Post Tags Table
-  user User[] // User Tags Table
+  posts    Post[] // Post Tags Table
+  user     User[] // User Tags Table
 }
 
 //what posts does a user Like keeping until we know we don't need
@@ -65,17 +65,17 @@ model Tags {
 
 //Messages are what are in our dm feature and a messae has one sender
 model Messages {
-  id              Int           @id @default(autoincrement())
-  body            String
-  senderId        Int
-  sender          User          @relation(fields: [senderId], references: [id]) // Message has one sender
-  conversationId  Int
-  conversation    Conversations @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
+  id             Int           @id @default(autoincrement())
+  body           String
+  senderId       Int
+  sender         User          @relation(fields: [senderId], references: [id]) // Message has one sender
+  conversationId Int
+  conversation   Conversations @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
 }
 
 //Conversations is where we have our entire conversations made up of individual messages
 model Conversations {
-  id              Int           @id @default(autoincrement())
-  messages        Messages[]    // all the messages in this conversation
-  participants    User[]        //Conversation has many participants
+  id           Int        @id @default(autoincrement())
+  messages     Messages[] // all the messages in this conversation
+  participants User[] //Conversation has many participants
 }
