@@ -1,9 +1,11 @@
 import React, { ReactElement, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Input, Fieldset, Field, Label, Textarea, Button } from '@headlessui/react';
 import axios from 'axios'
 
 const PostCreationPage = () :ReactElement => {
 
+  const navigate = useNavigate();
   const [title, setTitle]: [string, Function] = useState('');
   const [body, setBody]: [string, Function] = useState('');
 
@@ -25,7 +27,7 @@ const PostCreationPage = () :ReactElement => {
     const newPost:{title:string, body:string} = {title, body};
     axios.post('/api/posts', {newPost})
       .then(() :void => {
-        console.log('success')
+        navigate('/dashboard')
       })
   }
 
