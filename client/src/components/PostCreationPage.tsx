@@ -24,6 +24,7 @@ const PostCreationPage = () :ReactElement => {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (!title.length || !body.length) {return}
     const newPost:{title:string, body:string} = {title, body};
     axios.post('/api/posts', {newPost})
       .then(() :void => {
@@ -32,35 +33,35 @@ const PostCreationPage = () :ReactElement => {
   }
 
   return (
-  <>
+  <div className=' flex flex-col flex-grow ml-3 mt-3'>
     <h1>Create Post</h1>
-    <Fieldset>
-      <Field>
-        <Label className="block">Title</Label>
+    <Fieldset className="size-3/4">
+      <Field className="justify-around flex-grow">
+        <Label className="block font-bold"><h2>Title</h2></Label>
         <Input
           value={title}
           onChange={handleTextInput}
           name="Post Title"
           type="text"
           placeholder="Title"
-           className="block"
+           className="block border-solid border-2"
           />
       </Field>
       <Field>
-        <Label className="block">Body</Label>
+        <Label className="block font-bold">Body</Label>
         <Textarea
           value={body}
           onChange={handleTextInput}
           name="Post Body"
           placeholder="Body Text"
-           className="block"
+           className="block border-solid border-2"
         />
       </Field>
       <Field>
-        <Button onClick={handleSubmit} >Submit</Button>
+        <Button onClick={handleSubmit} className="bg-lime-400 hover:bg-lime-700 rounded-md border-solid border-black border-2" >Submit</Button>
       </Field>
     </Fieldset>
-  </>
+  </div>
   )
 }
 
