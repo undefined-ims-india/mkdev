@@ -68,14 +68,14 @@ model Messages {
   id        Int      @id @default(autoincrement())
   body String
   senderId Int
-  sender User? @relation(fields: [senderId], references: [id]) // Message has one sender
+  sender User @relation(fields: [senderId], references: [id]) // Message has one sender
   conversationId Int
-  conversation Conversations? @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
+  conversation Conversations @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
 }
 
 //Conversations is where we have our entire conversations made up of individual messages
 model Conversations {
   id        Int      @id @default(autoincrement())
-  conversation Messages[] // all the messages in this conversation
+  messages Messages[] // all the messages in this conversation
   participants User[] //Conversation has many participants
 }
