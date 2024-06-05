@@ -22,7 +22,7 @@ model Post {
   body      String?
   author    User     @relation(fields: [userId], references: [id], "UserPosts")// Post has one Author
   userId    Int
-  repoLink  String   @db.Uuid
+  repoLink  String?   @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   liked     User[]   @relation("LikedPosts")// Liked posts Table 
@@ -35,8 +35,8 @@ model User {
   username String? @unique
   firstName String?
   lastName String?
-  follower_count Int?
-  post_count Int?
+  follower_count Int? @default(0)
+  post_count Int? @default(0)
   posts   Post[] @relation("UserPosts") // User Posts Join Table
   following  User[]  @relation("UserFollows")  // Follower and Following tables
   followedBy User[]  @relation("UserFollows")// Follower and Following tables
