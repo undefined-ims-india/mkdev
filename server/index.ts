@@ -20,6 +20,7 @@ app.use('/api', routes);
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
 });
+
 app.listen(PORT, () => {
   console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
 });
