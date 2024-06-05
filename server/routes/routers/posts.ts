@@ -1,4 +1,4 @@
-const { Router, Request } = require('express');
+import { Router, Request } from 'express';
 const { PrismaClient } = require('@prisma/client');
 
 const posts = Router();
