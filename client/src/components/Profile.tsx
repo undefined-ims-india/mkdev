@@ -1,15 +1,15 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import Nav from './Nav';
 
 const Profile = (): ReactElement => {
   return (
     <div>
-    <p> Welcome to the profile page</p>
-    <>
-  <Nav/>
-    </>
+      <h1> Profile </h1>
+      <>
+        <Nav />
+      </>
     </div>
-  )
+  );
 };
 
 export default Profile;
