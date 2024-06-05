@@ -4,49 +4,36 @@ import { PrismaClient } from '@prisma/client';
 const messages = Router();
 const prisma = new PrismaClient();
 
-// type message = {
-//   body: string;
-// }
-
-// Messages routes
-
 messages.get('/', async (req, res) => {
   const allMessages = await prisma.messages.findMany();
   res.status(200).send(allMessages);
 });
 
-messages.post('/', async (req: Request, res: Response) => {
-  const { 
-    body,
-    senderId,
-    sender,
-    conversationId,
-    conversation
-  } = req.body.message;
-  // const { username } = req.body.user;
+messages.post('/:conversationId', (req: Request, res: Response) => {
+  // body: from frontend input field
+  // sender: from frontend based on who's logged in
+  const { body, sender } = req.body.message;
+  // from frontend based on conversation POST response
+  const conversationId: number = Number(req.params.conversationId);
 
-  // query database for sender user id,
-  let user = await prisma.user.findUnique({
-    where: {
-      username: 'mikesamm'
-    },
-  })
-  console.log('user', user);
-  // query database for conversation id?
-  // then create message based on those ids (bc they should have
-  //    correct type like that?)
-
-  await prisma.messages.create({
+  // create message with data from request body and params
+  prisma.messages.create({
     data: {
       body,
-      senderId: user?.id,
-      sender,
-      conversationId,
-      conversation,
+      sender: {
+        connect: { id: 2 } // TODO: userId ideally from request, Auth0 g
+      },
+      conversation: {
+        connect: { id: conversationId }
+      }
     }
   })
+  .then(() => { res.sendStatus(201) })
+  .catch((err: Error) => {
+    console.error('Failed to create new message', err);
+    res.sendStatus(500);
+  });
 
-  res.sendStatus(201);
 })
 
 export default messages;
