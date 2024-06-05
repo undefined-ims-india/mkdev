@@ -13,7 +13,7 @@ users.post('/', (req: any, res: any) => {
       console.log(user);
       res.sendStatus(201);
     })
-    .catch((err: string) => {
+    .catch((err: {name:string}) => {
       console.error(err);
       res.sendStatus(500);
     })
@@ -28,7 +28,7 @@ users.get('/', (req: any, res: any) => {
     .then((users: {}[]) => {
       res.send(users);
     })
-    .catch((err: string) => {
+    .catch((err: {name:string}) => {
       console.error(err);
       res.sendStatus(500);
     })
