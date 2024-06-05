@@ -17,6 +17,10 @@ const socket = express();
 const server = createServer(socket);
 const io = new Server(server, {
   connectionStateRecovery: {},
+  cors: {
+    origin: 'http://localhost:3000',
+    methods:['GET','POST']
+  }
 })
 
 app.use(express.json());
@@ -35,7 +39,7 @@ io.on('connection', (socket) => {
 // socket handling ----------------------------------------- //
 
 // websocket server
-server.listen(4000);
+io.listen(4000);
 
 app.listen(PORT, () => {
   console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
