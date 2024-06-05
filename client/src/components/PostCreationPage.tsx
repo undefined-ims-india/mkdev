@@ -1,5 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import { Input, Fieldset, Field, Label, Textarea, Button } from '@headlessui/react';
+import axios from 'axios'
 
 const PostCreationPage = () :ReactElement => {
 
@@ -21,7 +22,11 @@ const PostCreationPage = () :ReactElement => {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log(title, body);
+    const newPost:{title:string, body:string} = {title, body};
+    axios.post('/api/posts', {newPost})
+      .then(() :void => {
+        console.log('success')
+      })
   }
 
   return (
