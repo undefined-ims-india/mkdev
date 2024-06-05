@@ -11,9 +11,8 @@
     "prod:build:types": "tsc",
     "prod:build": "concurrently npm:prod:build:*",
     "build:types": "tsc --watch",
-    "build:client": "npx webpack",
-    "build:server": "npx babel server .ts --out-dir lib --watch",
-    "build": "concurrently npm:build:*"
+    "build:webpack": "npx webpack",
+    "build": "concurrently npm:build:* -c #FFCA28,#55C3FF "
   },
   "keywords": [],
   "author": "",
@@ -25,6 +24,7 @@
     "@types/react-dom": "^18.3.0",
     "@types/react-router-dom": "^5.3.3",
     "babel-loader": "^9.1.3",
+    "cli-color": "^2.0.4",
     "debug": "^4.3.5",
     "dotenv": "^16.4.5",
     "eslint-config-airbnb": "^19.0.4",
