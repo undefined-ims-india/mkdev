@@ -107,3 +107,5 @@ posts.delete('/:id', (req: any, res: any) => {
       await prisma.$disconnect();
     });
 });
+
+export default posts;
