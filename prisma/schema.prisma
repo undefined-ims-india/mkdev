@@ -32,7 +32,7 @@ model Post {
 //User has a gh username and has many relationships
 model User {
   id      Int      @id @default(autoincrement())
-  username String?
+  username String? @unique
   firstName String?
   lastName String?
   follower_count Int?
@@ -65,17 +65,17 @@ model Tags {
 
 //Messages are what are in our dm feature and a messae has one sender
 model Messages {
-  id        Int      @id @default(autoincrement())
-  body String
-  senderId Int
-  sender User @relation(fields: [senderId], references: [id]) // Message has one sender
-  conversationId Int
-  conversation Conversations @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
+  id              Int           @id @default(autoincrement())
+  body            String
+  senderId        Int
+  sender          User          @relation(fields: [senderId], references: [id]) // Message has one sender
+  conversationId  Int
+  conversation    Conversations @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
 }
 
 //Conversations is where we have our entire conversations made up of individual messages
 model Conversations {
-  id        Int      @id @default(autoincrement())
-  conversation Messages[] // all the messages in this conversation
-  participants User[] //Conversation has many participants
+  id              Int           @id @default(autoincrement())
+  messages        Messages[]    // all the messages in this conversation
+  participants    User[]        //Conversation has many participants
 }
