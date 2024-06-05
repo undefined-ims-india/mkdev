@@ -4,11 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const conversations = Router();
 const prisma = new PrismaClient();
 
-// type message = {
-//   body: string;
-// }
-
-// Messages routes
+// Conversations routes
 
 conversations.get('/', async (req, res) => {
   const allConversations = await prisma.conversations.findMany();
@@ -16,11 +12,18 @@ conversations.get('/', async (req, res) => {
 });
 
 conversations.post('/', async (req: Request, res: Response) => {
-  // const { body, sender, conversation } = req.body.message;
+  const { sender } = req.body; // TODO: from request after Auth0
 
-  await prisma.conversations.create({})
+  // a conversation is created, then the id is sent back to frontend
+  prisma.conversations.create({})
+    .then(({ id }) => {
+      res.status(201).send(JSON.stringify(id));
+    })
+    .catch((err: Error) => {
+      console.error('Failed to create new conversation', err);
+      res.sendStatus(500);
+    });
 
-  res.sendStatus(201);
 })
 
 export default conversations;
