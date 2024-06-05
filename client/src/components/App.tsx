@@ -5,11 +5,15 @@ import '../styling/index.css'
 const App = (): ReactElement => {
   return (
     <>
-      <Link to='/dashboard'>Dashboard</Link>
-      <h1>Teachers aka Users</h1>
       <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+        mkDev
+      </h1>
+      <div>
+        <Link to='/dashboard'>Dashboard</Link>
+      </div>
+      <div>
+        <Link to='/messages'>Messages</Link>
+      </div>
     </>
   );
 };
