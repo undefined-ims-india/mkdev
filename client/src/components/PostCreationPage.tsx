@@ -1,7 +1,8 @@
 import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Input, Fieldset, Field, Label, Textarea, Button } from '@headlessui/react';
-import axios from 'axios'
+import axios from 'axios';
+import Marked from './Marked'
 
 const PostCreationPage = () :ReactElement => {
 
@@ -33,9 +34,15 @@ const PostCreationPage = () :ReactElement => {
   }
 
   return (
-  <div className=' flex flex-col flex-grow ml-3 mt-3'>
+  <div className=' flex flex-row flex-grow ml-3 mt-3'>
     <h1>Create Post</h1>
-    <Fieldset className="size-3/4">
+    <div className='flex flex-col'>
+      <h2>Title</h2>
+      <Marked text={title} />
+      <h2>Body</h2>
+      <Marked text={body} />
+    </div>
+    <Fieldset className="flex flex-col">
       <Field className="justify-around flex-grow">
         <Label className="block font-bold"><h2>Title</h2></Label>
         <Input
