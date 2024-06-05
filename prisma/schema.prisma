@@ -19,14 +19,14 @@ enum tagType {
 model Post {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(255)
-  body String?
+  body      String?
   author    User     @relation(fields: [userId], references: [id], "UserPosts")// Post has one Author
-  userId Int
-  repoLink String @db.Uuid
+  userId    Int
+  repoLink  String   @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  liked User[] @relation("LikedPosts")// Liked posts Table 
-  tags Tags[]// Post Tags Table
+  liked     User[]   @relation("LikedPosts")// Liked posts Table 
+  tags      Tags[]   // Post Tags Table
 }
 
 //User has a gh username and has many relationships
