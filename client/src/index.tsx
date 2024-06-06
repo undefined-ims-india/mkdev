@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './components/App';
 import Dashboard from './components/Dashboard';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Search from './components/Search';
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
   {
     path: '/dashboard',
     element: <Dashboard />,
+  },
+  {
+    path: '/search',
+    element: <Search />,
   },
 ]);
 
