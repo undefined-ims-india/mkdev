@@ -2,6 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './components/App';
 import Dashboard from './components/Dashboard';
+import Login from './components/Login';
+import Logout from './components/Logout';
 import PostCreationPage from './components/PostCreationPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -15,13 +17,21 @@ const router = createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path:'/create-post',
-    element: <PostCreationPage />
-  }
+    path: '/create-post',
+    element: <PostCreationPage />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/logout',
+    element: <Logout />,
+  },
 ]);
 
 createRoot(document.getElementById('root')!).render(
-  <RouterProvider router={router} />,
+  <RouterProvider router={router} />
 );
 
 // root.render(<App />)
