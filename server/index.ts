@@ -34,7 +34,14 @@ app.get('/', (req: Request, res: Response) => {
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
-  console.log('A user has connected');
+  // console.log('A user has connected');
+  // on 'message' event
+  socket.on('message', (message) => {
+    // console.log(`message: ${message}`);
+
+    // broadcast message to all clients
+    io.emit('message', message);
+  });
 });
 // socket handling ----------------------------------------- //
 
