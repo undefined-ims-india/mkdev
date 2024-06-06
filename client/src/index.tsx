@@ -4,6 +4,7 @@ import App from './components/App';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
 import Logout from './components/Logout';
+import PostCreationPage from './components/PostCreationPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
     path: '/dashboard',
     element: <Dashboard />,
   },
+  {
+    path:'/create-post',
+    element: <PostCreationPage />
+  }
   {
     path: '/login',
     element: <Login />,
