@@ -29,12 +29,11 @@ app.use(auth(config));
 
 app.use((req: Request, res: Response) => {
   res.locals.user = req.oidc.user;
-  // console.log('user', req.oidc.user);
 });
 
 app.use('/api', routes);
 
-app.get('*', (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
 });
 
