@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import markdownit from 'markdown-it';
 const md = markdownit();
 
-const Marked = ({text}:{text: string}) :ReactElement => {
+const MarkDown = ({text}:{text: string}) :ReactElement => {
   return (
     <>
       {parse(md.render(text))}
@@ -11,4 +11,4 @@ const Marked = ({text}:{text: string}) :ReactElement => {
   )
 }
 
-export default Marked;
+export default MarkDown;

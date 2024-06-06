@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Marked from './Marked'
+import MarkDown from './MarkDown'
 
 const PostCreationPage = () :ReactElement => {
 
@@ -53,6 +53,8 @@ const PostCreationPage = () :ReactElement => {
         />
         <button onClick={handleSubmit} >Submit</button>
     </fieldset>
+    <MarkDown text={title} />
+    <MarkDown text={body} />
   </div>
   )
 }
