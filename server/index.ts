@@ -1,9 +1,9 @@
 import path from 'path';
 import dotEnv from 'dotenv';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { auth, requiresAuth } from 'express-openid-connect';
+import { auth } from 'express-openid-connect';
 import routes from './routes';
 
 const { CLIENT_ID, SECRET, PORT = 3000 } = process.env;
@@ -38,8 +38,9 @@ const config = {
 
 app.use(auth(config));
 
-app.use((req: Request, res: Response) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.locals.user = req.oidc.user;
+  next();
 });
 
 app.use('/api', routes);
