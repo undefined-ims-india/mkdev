@@ -29,6 +29,7 @@ app.use(auth(config));
 
 app.use((req: Request, res: Response) => {
   res.locals.user = req.oidc.user;
+  console.log('user', req.oidc.user);
 });
 
 app.use('/api', routes);
