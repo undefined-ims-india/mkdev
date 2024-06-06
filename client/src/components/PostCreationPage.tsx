@@ -3,18 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import MarkDown from './MarkDown'
 
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField'
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider'
+
 const PostCreationPage = () :ReactElement => {
 
   const navigate = useNavigate();
-  const [title, setTitle]: [string, Function] = useState('');
+  const [title, setTitle]: [string, Function] = useState('# ');
   const [body, setBody]: [string, Function] = useState('');
+  const [titleFieldTooltip, setTitleFieldTooltip] = useState(false);
+  const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>) :void => {
     let setStateFunc :Function
     if (e.target.name === 'Post Title') {
+      if (titleFieldTooltip) {setTitleFieldTooltip(false);}
       setStateFunc = setTitle;
-    }
+      }
     else if (e.target.name === 'Post Body') {
+      if (bodyFieldTooltip) {setBodyFieldTooltip(false);}
       setStateFunc = setBody;
     }
     else {
@@ -24,7 +34,11 @@ const PostCreationPage = () :ReactElement => {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (!title.length || !body.length) {return}
+    if (!title.length || !body.length) {
+      if (!title.length) {setTitleFieldTooltip(true);}
+      if (!body.length) {setBodyFieldTooltip(true);}
+      return
+    }
     const newPost:{title:string, body:string} = {title, body};
     axios.post('/api/posts', {newPost})
       .then(() :void => {
@@ -35,26 +49,34 @@ const PostCreationPage = () :ReactElement => {
   return (
   <div>
     <h1>Create Post</h1>
-    <fieldset>
-        <label>Title</label>
-        <input
-          value={title}
-          onChange={handleTextInput}
-          name="Post Title"
-          type="text"
-          placeholder="Title"
-          />
-        <label>Body</label>
-        <textarea
-          value={body}
-          onChange={handleTextInput}
-          name="Post Body"
-          placeholder="Body Text"
-        />
-        <button onClick={handleSubmit} >Submit</button>
-    </fieldset>
-    <MarkDown text={title} />
-    <MarkDown text={body} />
+    <Stack>
+      <Stack>
+        <Tooltip title="Please provide a title" open={titleFieldTooltip} enterDelay={500} leaveDelay={200}>
+          <TextField
+            value={title}
+            onChange={handleTextInput}
+            name="Post Title"
+            placeholder="Title"
+            />
+          </Tooltip>
+        <Tooltip title="Please provide some body text" open={bodyFieldTooltip} enterDelay={500} leaveDelay={200}>
+          <TextField
+            multiline
+            value={body}
+            onChange={handleTextInput}
+            name="Post Body"
+            placeholder="Body Text"
+            rows={4}
+            />
+        </Tooltip>
+        <Button onClick={handleSubmit} >Submit</Button>
+      </Stack>
+      <Divider />
+      <Stack>
+        <MarkDown text={title} />
+        <MarkDown text={body} />
+      </Stack>
+    </Stack>
   </div>
   )
 }
