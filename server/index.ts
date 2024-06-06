@@ -3,7 +3,7 @@ import dotEnv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { auth } from 'express-openid-connect';
+import { auth, requiresAuth } from 'express-openid-connect';
 import routes from './routes';
 
 const { CLIENT_ID, SECRET, PORT = 3000 } = process.env;
@@ -36,18 +36,32 @@ const config = {
   issuerBaseURL: 'https://dev-uatvgw7p2cq7mmm0.us.auth0.com',
 };
 
+// * Auth * //
+//Everything below this middleware will require authentication to access
 app.use(auth(config));
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.locals.user = req.oidc.user;
-  next();
-});
+// It will need to be positioned when we decide what should
+// be public and what should be private
+/**********************/
 
 app.use('/api', routes);
 
 app.get('/', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
 });
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.locals.user = req.oidc.user;
+  next();
+});
+
+app.get('/', (req: Request, res: Response) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
+  res.send(JSON.stringify(req.oidc.user, null, 2));
+});
+// * Auth * //
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
