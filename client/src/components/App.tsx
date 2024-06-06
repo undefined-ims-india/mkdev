@@ -11,6 +11,9 @@ const App = (): ReactElement => {
       <Link to='/create-post'>
         <button>Create Post</button>
       </Link>
+      <Link to='/profile'>
+        <button>Profile</button>
+      </Link>
       <h1>Teachers aka Users</h1>
     </>
   );
