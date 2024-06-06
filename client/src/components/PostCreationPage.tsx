@@ -1,6 +1,5 @@
 import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Input, Fieldset, Field, Label, Textarea, Button } from '@headlessui/react';
 import axios from 'axios';
 import Marked from './Marked'
 
@@ -36,16 +35,9 @@ const PostCreationPage = () :ReactElement => {
   return (
   <div className=' flex flex-row flex-grow ml-3 mt-3'>
     <h1>Create Post</h1>
-    <div className='flex flex-col'>
-      <h2>Title</h2>
-      <Marked text={title} />
-      <h2>Body</h2>
-      <Marked text={body} />
-    </div>
-    <Fieldset className="flex flex-col">
-      <Field className="justify-around flex-grow">
-        <Label className="block font-bold"><h2>Title</h2></Label>
-        <Input
+    <fieldset>
+        <label>Title</label>
+        <input
           value={title}
           onChange={handleTextInput}
           name="Post Title"
@@ -53,22 +45,17 @@ const PostCreationPage = () :ReactElement => {
           placeholder="Title"
            className="block border-solid border-2"
           />
-      </Field>
-      <Field>
-        <Label className="block font-bold">Body</Label>
-        <Textarea
+        <label className="block">Body</label>
+        <textarea
           value={body}
           onChange={handleTextInput}
           name="Post Body"
           placeholder="Body Text"
            className="block border-solid border-2"
         />
-      </Field>
-      <Field>
-        <Button onClick={handleSubmit} className="bg-lime-400 hover:bg-lime-700 rounded-md border-solid border-black border-2" >Submit</Button>
-      </Field>
-    </Fieldset>
-  </div>
+        <button onClick={handleSubmit} >Submit</button>
+    </fieldset>
+  </>
   )
 }
 
