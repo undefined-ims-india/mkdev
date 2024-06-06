@@ -12,14 +12,9 @@ const MessageInput = (): ReactElement => {
 
   const sendMessage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault();
-    console.log('sent text', text);
+    // console.log('sent text', text);
+    // broadcast the message to all the clients (through server)
     socket.emit('message', text);
-    // if (input.value) {
-    //   // broadcast the message to all the clients
-    //   socket.emit('chat message', input.value);
-    //   // reset the input value to empty string
-    //   input.value = '';
-    // }
     setText('');
   }
 
