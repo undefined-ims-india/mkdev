@@ -1,19 +1,30 @@
 import React, { ReactElement } from 'react';
-import { Link } from 'react-router-dom';
 import '../styling/index.css'
+import { Link } from 'react-router-dom';
 
 const App = (): ReactElement => {
   return (
     <>
-      <h1 className="text-3xl font-bold underline">
-        mkDev
-      </h1>
-      <div>
-        <Link to='/dashboard'>Dashboard</Link>
-      </div>
-      <div>
-        <Link to='/messages'>Messages</Link>
-      </div>
+      <Link to='/'>
+        <h1>
+          mkDev
+        </h1>
+      </Link>
+      <Link to='/dashboard'>
+          <button>
+            Dashboard
+          </button>
+        </Link>
+      <Link to='/create-post'>
+          <button>
+            Create Post
+          </button>
+        </Link>
+      <Link to='/messages'>
+        <button>
+          Messages
+        </button>
+      </Link>
     </>
   );
 };

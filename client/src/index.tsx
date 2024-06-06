@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './components/App';
 import Dashboard from './components/Dashboard';
 import Messages from './components/messages/Messages';
+import PostCreationPage from './components/PostCreationPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: '/dashboard',
     element: <Dashboard />,
+  },
+  {
+    path: '/create-post',
+    element: <PostCreationPage />
   },
   {
     path: '/messages',

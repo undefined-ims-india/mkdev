@@ -19,6 +19,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.19",
+    "@mui/material": "^5.15.19",
     "@prisma/client": "^5.14.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
@@ -34,8 +38,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
     "socket.io": "^4.7.5",
-    "socket.io-client": "^4.7.5",
-    "tailwindcss": "^3.4.3"
+    "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.24.6",
@@ -49,14 +52,11 @@
     "@types/node": "^20.14.0",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
-    "autoprefixer": "^10.4.19",
     "concurrently": "^8.2.2",
     "css-loader": "^7.1.2",
     "eslint": "^8.57.0",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "html-webpack-plugin": "^5.6.0",
-    "postcss": "^8.4.38",
-    "postcss-loader": "^8.1.1",
     "prisma": "^5.14.0",
     "style-loader": "^4.0.0",
     "ts-loader": "^9.5.1",
