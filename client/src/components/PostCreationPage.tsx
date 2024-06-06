@@ -1,5 +1,4 @@
 import React, { ReactElement, useState } from 'react';
-import { Input, Fieldset, Field, Label, Textarea, Button } from '@headlessui/react';
 
 const PostCreationPage = () :ReactElement => {
 
@@ -27,10 +26,9 @@ const PostCreationPage = () :ReactElement => {
   return (
   <>
     <h1>Create Post</h1>
-    <Fieldset>
-      <Field>
-        <Label className="block">Title</Label>
-        <Input
+    <fieldset>
+        <label>Title</label>
+        <input
           value={title}
           onChange={handleTextInput}
           name="Post Title"
@@ -38,21 +36,16 @@ const PostCreationPage = () :ReactElement => {
           placeholder="Title"
            className="block"
           />
-      </Field>
-      <Field>
-        <Label className="block">Body</Label>
-        <Textarea
+        <label className="block">Body</label>
+        <textarea
           value={body}
           onChange={handleTextInput}
           name="Post Body"
           placeholder="Body Text"
            className="block"
         />
-      </Field>
-      <Field>
-        <Button onClick={handleSubmit} >Submit</Button>
-      </Field>
-    </Fieldset>
+        <button onClick={handleSubmit} >Submit</button>
+    </fieldset>
   </>
   )
 }
