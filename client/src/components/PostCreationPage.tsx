@@ -33,7 +33,7 @@ const PostCreationPage = () :ReactElement => {
   }
 
   return (
-  <div className=' flex flex-row flex-grow ml-3 mt-3'>
+  <div>
     <h1>Create Post</h1>
     <fieldset>
         <label>Title</label>
@@ -43,19 +43,17 @@ const PostCreationPage = () :ReactElement => {
           name="Post Title"
           type="text"
           placeholder="Title"
-           className="block border-solid border-2"
           />
-        <label className="block">Body</label>
+        <label>Body</label>
         <textarea
           value={body}
           onChange={handleTextInput}
           name="Post Body"
           placeholder="Body Text"
-           className="block border-solid border-2"
         />
         <button onClick={handleSubmit} >Submit</button>
     </fieldset>
-  </>
+  </div>
   )
 }
 
