@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './components/App';
 import Dashboard from './components/Dashboard';
+import Messages from './components/messages/Messages';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import PostCreationPage from './components/PostCreationPage';
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <Profile />,
+  },
+  {
+    path: '/messages',
+    element: <Messages />,
   },
 ]);
 

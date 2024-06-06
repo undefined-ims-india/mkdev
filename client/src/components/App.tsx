@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 const App = (): ReactElement => {
   return (
     <>
+      <Link to='/'>
+        <h1>mkDev</h1>
+      </Link>
       <Link to='/dashboard'>
         <button>Dashboard</button>
       </Link>
@@ -17,7 +20,9 @@ const App = (): ReactElement => {
       <Link to='/profile'>
         <button>Profile</button>
       </Link>
-      <h1>Teachers aka Users</h1>
+      <Link to='/messages'>
+        <button>Messages</button>
+      </Link>
     </>
   );
 };
