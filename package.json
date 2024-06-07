@@ -4,6 +4,7 @@
   "description": "### Development Team   - [Cody Daigle](https://github.com/cody-daigle)   - [Alex Hebert](https://github.com/AlexPHebert2000)   - [Patrick Henry](https://github.com/Hackman78)   - [Mike Sammartino](https://github.com/mikesamm)",
   "main": "index.js",
   "scripts": {
+    "seed": "node prisma/seed.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index.ts",
     "prod:build:compile": "npx webpack",
@@ -38,6 +39,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
     "ts-dotenv": "^0.9.1"
   },
   "devDependencies": {

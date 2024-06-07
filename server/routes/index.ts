@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import auth from './routers/auth';
 import messages from './messages';
 import conversations from './conversations';
 import posts from './routers/posts';
@@ -9,14 +8,12 @@ import search  from './routers/search';
 // const usersRouter = require('./routers/users.ts');
 
 const api = Router();
+
 api.use('/posts', posts);
 api.use('/users', users);
-// api.use('/posts', postsRouter);
-// api.use('/users', usersRouter);
+
 api.use('/messages', messages);
 api.use('/conversations', conversations);
 api.use('/search', search);
-
-api.use('/', auth);
 
 export default api;
