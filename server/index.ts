@@ -50,11 +50,6 @@ app.get('/user', requiresAuth(), (req: any, res: any) => {
   res.send(req.oidc.user);
 });
 
-app.get('/', (req: Request, res: Response) => {
-  res.sendFile(path.join(CLIENT, 'index.html'));
-});
-app.use('/api', routes);
-
 // get logged in user profile
 // * Must be /profile for Auth0 to work
 app.get('/profile', requiresAuth(), (req: any, res: any) => {
@@ -65,6 +60,11 @@ app.get('/profile', requiresAuth(), (req: any, res: any) => {
     picture: user.picture,
   };
   res.send(JSON.stringify(currentUser, null, 2));
+});
+app.use('/api', routes);
+
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(CLIENT, 'index.html'));
 });
 // * Auth * //
 
