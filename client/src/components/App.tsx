@@ -6,9 +6,7 @@ const App = (): ReactElement => {
   return (
     <>
       <Link to='/'>
-        <h1>
-          mkDev
-        </h1>
+        <h1>mkDev</h1>
       </Link>
       <Link to='/dashboard'>
         <button>Dashboard</button>
@@ -18,6 +16,12 @@ const App = (): ReactElement => {
       </Link>
       <Link to='/login'>
         <button>Login</button>
+      </Link>
+      <Link to='/logout'>
+        <button>Logout</button>
+      </Link>
+      <Link to='/profile'>
+        <button>Profile</button>
       </Link>
       <Link to='/messages'>
         <button>Messages</button>
