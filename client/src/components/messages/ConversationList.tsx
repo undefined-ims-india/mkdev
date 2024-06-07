@@ -3,11 +3,11 @@ import Conversation from './Conversation';
 
 const ConversationList = (): ReactElement => {
   return (
-    <>
-      <h4>The ConversationList component will be here</h4>
+    <div>
+      <h2>The ConversationList component will be here</h2>
       {/** map Conversation */}
       <Conversation />
-    </>
+    </div>
   );
 }
 
