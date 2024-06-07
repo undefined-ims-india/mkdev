@@ -15,7 +15,10 @@ const MessageInput = (): ReactElement => {
     e.preventDefault();
     // console.log('sent text', text);
     // broadcast the message to all the clients (through server)
-    socket.emit('message', text);
+    socket.emit('message', {
+      body: text
+      // senderId -> how to include here?
+    });
     setText('');
   }
 

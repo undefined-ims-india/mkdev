@@ -1,16 +1,12 @@
 import React, { ReactElement } from 'react';
-import Conversations from './Conversations';
+import ConversationList from './ConversationList';
 import ConversationView from './ConversationView';
-
-// this is where I want the socketio client to go instead of on index.html
-import io from 'socket.io-client';
-const socket = io('http://localhost:4000');
 
 const Messages = (): ReactElement => {
   return (
     <div>
-      <h1>The messages will be here</h1>
-      <Conversations />
+      <h1>Direct Messages</h1>
+      <ConversationList />
       <ConversationView />
     </div>
   );

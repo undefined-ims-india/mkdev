@@ -1,15 +1,26 @@
 import React, { ReactElement } from 'react';
 
+// {
+//   "id": 5,
+//   "body": "Well, that's just like... your opinion, man.",
+//   "senderId": 1,
+//   "conversationId": 1
+// },
+
+
 interface PropsType {
-  msg: string
+  msg: {
+    body: string;
+    senderId: number;
+  }
 }
 
 const Message: React.FC<PropsType> = (props): ReactElement => {
-  const { msg } = props;
+  const { body, senderId } = props.msg;
 
   return (
     <div>
-      <p>{ msg }</p>
+      <p>{ body }</p>
     </div>
   );
 }

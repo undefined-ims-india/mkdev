@@ -2,7 +2,10 @@ import React, { ReactElement } from 'react';
 import Message from './Message';
 
 interface PropsType {
-  allMsgs: string[],
+  allMsgs: {
+    body: string;
+    senderId: number;
+  }[],
 }
 
 const MessagesList: React.FC<PropsType> = (props): ReactElement => {
@@ -14,6 +17,7 @@ const MessagesList: React.FC<PropsType> = (props): ReactElement => {
       <h4>List of messages below</h4>
       {
         allMsgs.map((msg, i) => {
+          console.log('msg in map', msg);
           return (
             <Message msg={msg} key={`${msg}-${i}`}/>
           )
