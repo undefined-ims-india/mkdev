@@ -1,5 +1,6 @@
 import { Router, Request } from 'express';
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
+import awsS3Upload from '../../helpers/aws-s3-upload';
 
 const posts = Router();
 const prisma = new PrismaClient();
@@ -8,13 +9,14 @@ const USER_ID = 3;
 
 // add a post to logged in user
 posts.post('/', (req: any, res: any) => {
-  const { title, body }: { title: string; body: string } = req.body.newPost;
-  prisma.post
-    .create({
-      data: { title, body, author: { connect: { id: USER_ID } } },
-    })
-    .then((post: any) => {
-      console.log(post);
+  const { title, body, file }: { title: string; body: string, file:string } = req.body.newPost;
+  awsS3Upload(file)
+  .then((data: any) => {
+    console.log(data);
+    return prisma.post.create({data: { title, body, author: { connect: { id: USER_ID } } }})
+  })
+    .then((data: any) => {
+      console.log(data);
       res.sendStatus(201);
     })
     .catch((err: { name: string }) => {
