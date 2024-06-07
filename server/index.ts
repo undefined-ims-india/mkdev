@@ -1,6 +1,6 @@
 import path from 'path';
 import dotEnv from 'dotenv';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import { auth, requiresAuth } from 'express-openid-connect';
@@ -38,9 +38,10 @@ const config = {
 
 app.use(auth(config));
 
-app.use((req: Request, res: Response) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.locals.user = req.oidc.user;
   console.log('user', req.oidc.user);
+  next();
 });
 
 app.use('/api', routes);
@@ -51,7 +52,7 @@ app.get('/', (req: Request, res: Response) => {
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
-  // console.log('A user has connected');
+  console.log('A user has connected');
 
   // on disconnection
   socket.on('disconnect', () => {
@@ -60,7 +61,7 @@ io.on('connection', (socket) => {
 
   // on 'message' event
   socket.on('message', (message) => {
-    // console.log(`message: ${message}`);
+    console.log(`message: ${message}`);
 
     // broadcast message to all clients
     io.emit('message', message);
