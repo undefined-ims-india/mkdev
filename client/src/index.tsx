@@ -8,40 +8,45 @@ import Logout from './components/Logout';
 import PostCreationPage from './components/PostCreationPage';
 import Profile from './components/Profile';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Search from './components/Search';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-  },
-  {
-    path: '/dashboard',
-    element: <Dashboard />,
-  },
-  {
-    path: '/create-post',
-    element: <PostCreationPage />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/logout',
-    element: <Logout />,
-  },
-  {
-    path: '/profile',
-    element: <Profile />,
-  },
-  {
-    path: '/messages',
-    element: <Messages />,
-  },
+    {
+        path: '/',
+        element: <App />,
+    },
+    {
+        path: '/dashboard',
+        element: <Dashboard />,
+    },
+    {
+        path: '/create-post',
+        element: <PostCreationPage />,
+    },
+    {
+        path: '/login',
+        element: <Login />,
+    },
+    {
+        path: '/logout',
+        element: <Logout />,
+    },
+    {
+        path: '/search',
+        element: <Search />,
+    },
+    {
+        path: '/profile',
+        element: <Profile />,
+    },
+    {
+        path: '/messages',
+        element: <Messages />,
+    },
 ]);
 
 createRoot(document.getElementById('root')!).render(
-  <RouterProvider router={router} />
+    <RouterProvider router={router} />,
 );
 
 // root.render(<App />)
