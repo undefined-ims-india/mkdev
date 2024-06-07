@@ -8,11 +8,11 @@ const socket = io('http://localhost:4000');
 
 const Messages = (): ReactElement => {
   return (
-    <>
+    <div>
       <h1>The messages will be here</h1>
       <Conversations />
       <ConversationView />
-    </>
+    </div>
   );
 }
 
