@@ -42,6 +42,23 @@ posts.get('/', (req: any, res: any) => {
     });
 });
 
+// get current user's posts for Profile page
+posts.get('/:userId', async (req: any, res: any) => {
+  const { userId } = req.params;
+  // console.log(userId);
+  prisma.post
+    .findMany({
+      where: { userId: +userId },
+    })
+    .then((userPosts: any) => {
+      res.json(userPosts);
+    })
+    .catch((err: any) => {
+      console.error('Failed to get user posts:', err);
+      res.status(500);
+    });
+});
+
 // get certain post
 posts.get('/:id', (req: any, res: any) => {
   const { id }: { id: string } = req.params;
