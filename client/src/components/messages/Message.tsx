@@ -1,10 +1,16 @@
 import React, { ReactElement } from 'react';
 
-const Message = (): ReactElement => {
+interface PropsType {
+  msg: string
+}
+
+const Message: React.FC<PropsType> = (props): ReactElement => {
+  const { msg } = props;
+
   return (
-    <>
-      <h6>A Message component will be here</h6>
-    </>
+    <div>
+      <p>{ msg }</p>
+    </div>
   );
 }
 
