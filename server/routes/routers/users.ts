@@ -5,7 +5,7 @@ const users = Router();
 const prisma = new PrismaClient();
 
 users.post('/', (req: any, res: any) => {
-  const { newUser }: { newUser: { firstName: string; lastname: string } } =
+  const { newUser }: { newUser: { firstName: string; lastName: string } } =
     req.body;
   prisma.user
     .create({ data: newUser })
