@@ -55,6 +55,7 @@ app.get('/user', requiresAuth(), (req: any, res: any) => {
 app.get('/profile', requiresAuth(), (req: any, res: any) => {
   const user = req.oidc.user;
   const currentUser = {
+    sid: user.sid,
     name: user.name,
     email: user.email,
     picture: user.picture,
