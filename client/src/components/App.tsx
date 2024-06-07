@@ -17,6 +17,9 @@ const App = (): ReactElement => {
       <Link to='/login'>
         <button>Login</button>
       </Link>
+      <Link to='/logout'>
+        <button>Logout</button>
+      </Link>
       <Link to='/profile'>
         <button>Profile</button>
       </Link>
