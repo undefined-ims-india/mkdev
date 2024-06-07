@@ -33,6 +33,7 @@ model Post {
 model User {
   id             Int             @id @default(autoincrement())
   username       String?         @unique
+  picture        String?
   firstName      String?
   lastName       String?
   follower_count Int?            @default(0)
