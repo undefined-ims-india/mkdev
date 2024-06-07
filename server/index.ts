@@ -39,27 +39,32 @@ const config = {
 // * Auth * //
 //Everything below this middleware will require authentication to access
 app.use(auth(config));
-// It will need to be positioned when we decide what should
-// be public and what should be private
 /**********************/
-
-app.use('/api', routes);
-
-app.get('/', (req: Request, res: Response) => {
-  res.sendFile(path.join(CLIENT, 'index.html'));
-});
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.locals.user = req.oidc.user;
   next();
 });
-
-app.get('/', (req: Request, res: Response) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+// get the logged in user
+app.get('/user', requiresAuth(), (req: any, res: any) => {
+  res.send(req.oidc.user);
 });
 
-app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
-  res.send(JSON.stringify(req.oidc.user, null, 2));
+app.get('/', (req: Request, res: Response) => {
+  res.sendFile(path.join(CLIENT, 'index.html'));
+});
+app.use('/api', routes);
+
+// get logged in user profile
+// * Must be /profile for Auth0 to work
+app.get('/profile', requiresAuth(), (req: any, res: any) => {
+  const user = req.oidc.user;
+  const currentUser = {
+    name: user.name,
+    email: user.email,
+    picture: user.picture,
+  };
+  res.send(JSON.stringify(currentUser, null, 2));
 });
 // * Auth * //
 
@@ -69,7 +74,7 @@ io.on('connection', (socket) => {
 
   // on disconnection
   socket.on('disconnect', () => {
-    console.log('A user has disconnected');
+    // console.log('A user has disconnected');
   });
 
   // on 'message' event
