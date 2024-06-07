@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Card, CardContent, Typography } from '@material-ui/core';
 interface User {
   name: string;
   picture: string;
