@@ -1,5 +1,6 @@
 import React, { useState, ReactElement } from 'react';
 import io from 'socket.io-client';
+import axios from 'axios';
 
 const socket = io('http://localhost:4000');
 
@@ -20,6 +21,21 @@ const MessageInput = (): ReactElement => {
       // senderId -> how to include here?
     });
     setText('');
+
+    // send POST request to /api/messages
+    // TODO: need to get conversation id and interpolate it into post url
+    axios
+      .post('/api/messages/1', {
+        message: {
+          body: text
+        }
+      })
+      .then(() => {
+        // console.log('message posted to db');
+      })
+      .catch((err) => {
+        console.error('Failed to post message to db', err.cause);
+      });
   }
 
   return (

@@ -9,7 +9,7 @@ interface PropsType {
 }
 
 const MessagesList: React.FC<PropsType> = (props): ReactElement => {
-  console.log('props.allMsgs', props.allMsgs)
+  // console.log('props.allMsgs', props.allMsgs)
   const { allMsgs } = props;
 
   return (
@@ -17,7 +17,7 @@ const MessagesList: React.FC<PropsType> = (props): ReactElement => {
       <h4>List of messages below</h4>
       {
         allMsgs.map((msg, i) => {
-          console.log('msg in map', msg);
+          // console.log('msg in map', msg);
           return (
             <Message msg={msg} key={`${msg}-${i}`}/>
           )
