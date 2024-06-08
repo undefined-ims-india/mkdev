@@ -1,12 +1,25 @@
 import React, { ReactElement } from 'react';
 import Conversation from './Conversation';
 
-const ConversationList = (): ReactElement => {
+interface PropTypes {
+  allCons: {
+    id: number;
+  }[],
+}
+
+const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
+  const { allCons } = props;
+
   return (
     <div>
-      <h2>The ConversationList component will be here</h2>
-      {/** map Conversation */}
-      <Conversation />
+      {
+        allCons.map((con, i) => {
+          return (
+            <Conversation id={ con.id } key={ `${con.id}-${i}` }/>
+          )
+        })
+      }
+
     </div>
   );
 }
