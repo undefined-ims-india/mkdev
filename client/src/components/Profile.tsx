@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, ReactElement } from 'react';
 import axios from 'axios';
 import Nav from './Nav';
-import UserPosts from './UserPosts';
+// import UserPosts from './UserPosts';
 interface User {
   userId: number;
   name: string;
@@ -42,7 +42,7 @@ const Profile = (): ReactElement => {
 
   useEffect(() => {
     if (user) {
-      // getPosts(user.userId);
+      getPosts(user.userId);
     }
   }, [user]);
 
@@ -65,3 +65,16 @@ const Profile = (): ReactElement => {
 };
 
 export default Profile;
+
+/*
+useEffect(() => {
+  getUser();
+}, []);
+
+ return (
+  <div>
+    <h1>{user?.name}</h1>
+    <img src={user?.picture} alt={user?.name} />
+  </div>
+);
+ */
