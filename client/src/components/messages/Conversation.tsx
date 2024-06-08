@@ -1,9 +1,15 @@
 import React, { ReactElement } from 'react';
 
-const Conversation = (): ReactElement => {
+interface PropsType {
+    id: number;
+}
+
+const Conversation: React.FC<PropsType> = (props): ReactElement => {
+  const { id } = props;
+
   return (
     <div>
-      <h6>A Conversation component will be here</h6>
+      <button>Conversation {id}</button>
     </div>
   );
 }
