@@ -9,10 +9,16 @@ const USER_ID = 3;
 
 // add a post to logged in user
 posts.post('/', (req: any, res: any) => {
-  const { title, body}: { title: string; body: string} = req.body.newPost;
-  prisma.post.create({data: { title, body, author: { connect: { id: USER_ID } } }})
-    .then((post: any) => {
-      res.status(201).send(post.id);
+  //image in files & title and body in body
+  const { img } = req.files;
+  const { title, body } = req.body;
+  awsS3Upload(img)
+    .then((data) => {
+      console.log(data)
+      return prisma.post.create({data: { title, body, author: { connect: { id: USER_ID } } }})
+    })
+    .then((post) => {
+      console.log(post)
     })
     .catch((err: { name: string }) => {
       console.error(err);
@@ -21,6 +27,7 @@ posts.post('/', (req: any, res: any) => {
     .finally(async () => {
       await prisma.$disconnect();
     });
+  res.sendStatus(500)
 });
 
 // get all users posts
@@ -134,20 +141,5 @@ posts.delete('/:id', (req: any, res: any) => {
       await prisma.$disconnect();
     });
 });
-
-// add image to post
-posts.put('/:id/image', (req: express.Request, res: express.Response):void => {
-  const { id } = req.params;
-  const {file}: {file: FormData} = req.body;
-  awsS3Upload(file)
-    .then((data:any) => {
-      console.log(data);
-      res.sendStatus(200);
-    })
-    .catch((err: { name: string }) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
-})
 
 export default posts;
