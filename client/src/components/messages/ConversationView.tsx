@@ -29,7 +29,6 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
     axios
       .get(`/api/messages/${conId}`)
       .then(({ data }) => {
-        console.log('array of messages in db', data);
         setAllMsgs(data);
       })
       .catch((err) => {

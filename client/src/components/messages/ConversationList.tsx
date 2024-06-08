@@ -5,17 +5,22 @@ interface PropTypes {
   allCons: {
     id: number;
   }[],
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
-  const { allCons } = props;
+  const { allCons, select } = props;
 
   return (
     <div>
       {
         allCons.map((con, i) => {
           return (
-            <Conversation id={ con.id } key={ `${con.id}-${i}` }/>
+            <Conversation
+              id={ con.id }
+              key={ `${con.id}-${i}` }
+              select={ select }
+            />
           )
         })
       }
