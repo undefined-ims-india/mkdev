@@ -13,12 +13,12 @@ posts.post('/', (req: any, res: any) => {
   const { img } = req.files;
   const { title, body } = req.body;
   awsS3Upload(img)
-    .then((data) => {
-      console.log(data)
-      return prisma.post.create({data: { title, body, author: { connect: { id: USER_ID } } }})
+    .then((s3Obj) => {
+      return prisma.post.create({data: { title, body, s3_Etag: s3Obj.ETag, author: { connect: { id: USER_ID } } }})
     })
     .then((post) => {
       console.log(post)
+      res.sendStatus(201);
     })
     .catch((err: { name: string }) => {
       console.error(err);
@@ -27,7 +27,6 @@ posts.post('/', (req: any, res: any) => {
     .finally(async () => {
       await prisma.$disconnect();
     });
-  res.sendStatus(500)
 });
 
 // get all users posts
