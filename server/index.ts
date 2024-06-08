@@ -5,6 +5,9 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import { auth, requiresAuth } from 'express-openid-connect';
 import routes from './routes';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 const { CLIENT_ID, SECRET, PORT = 3000 } = process.env;
 
@@ -46,8 +49,39 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 // get the logged in user
-app.get('/user', requiresAuth(), (req: any, res: any) => {
-  res.send(req.oidc.user);
+app.get('/user', requiresAuth(), async (req: any, res: any) => {
+  const userData = req.oidc.user;
+  //
+  const currentUser = {
+    id: userData.id,
+    name: userData.name,
+    email: userData.email,
+    picture: userData.picture,
+  };
+
+  prisma.user
+    .findUnique({
+      where: {
+        id: userData.id,
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        prisma.user
+          .create({
+            data: currentUser,
+          })
+          .then((newUser) => {
+            res.send(newUser);
+          });
+      } else {
+        res.send(user);
+      }
+    })
+    .catch((err) => {
+      console.error('Failed to save user:', err);
+      res.sendStatus(500);
+    });
 });
 
 // get logged in user profile
@@ -55,7 +89,7 @@ app.get('/user', requiresAuth(), (req: any, res: any) => {
 app.get('/profile', requiresAuth(), (req: any, res: any) => {
   const user = req.oidc.user;
   const currentUser = {
-    sid: user.sid,
+    id: user.id,
     name: user.name,
     email: user.email,
     picture: user.picture,
