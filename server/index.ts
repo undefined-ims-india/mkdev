@@ -49,52 +49,38 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 // get the logged in user
-app.get('/user', requiresAuth(), async (req: any, res: any) => {
+app.get('/', requiresAuth(), async (req: any, res: any) => {
   const userData = req.oidc.user;
-  //
-  const currentUser = {
-    id: userData.id,
-    name: userData.name,
-    email: userData.email,
-    picture: userData.picture,
-  };
-
-  prisma.user
-    .findUnique({
-      where: {
-        id: userData.id,
-      },
-    })
-    .then((user) => {
-      if (!user) {
-        prisma.user
-          .create({
-            data: currentUser,
-          })
-          .then((newUser) => {
-            res.send(newUser);
-          });
-      } else {
-        res.send(user);
-      }
-    })
-    .catch((err) => {
-      console.error('Failed to save user:', err);
-      res.sendStatus(500);
-    });
+  res.send(userData);
 });
 
 // get logged in user profile
 // * Must be /profile for Auth0 to work
-app.get('/profile', requiresAuth(), (req: any, res: any) => {
-  const user = req.oidc.user;
+app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
+  const jason = JSON.stringify(req.oidc.user, null, 2);
+  const user = JSON.parse(jason);
+
   const currentUser = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
+    firstName: user.given_name,
+    lastName: user.family_name,
+    username: user.nickname, // NUll???
     picture: user.picture,
   };
-  res.send(JSON.stringify(currentUser, null, 2));
+
+  prisma.user
+    .upsert({
+      where: { username: currentUser.username },
+      update: currentUser,
+      create: currentUser,
+      // .create({
+      //   data: currentUser,
+      // })
+    })
+    .catch((err) => {
+      console.error('Failed to save user:', err);
+    });
+
+  res.send(JSON.stringify(req.oidc.user, null, 2));
 });
 app.use('/api', routes);
 
