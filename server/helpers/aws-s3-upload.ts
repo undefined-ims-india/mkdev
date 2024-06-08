@@ -10,7 +10,7 @@ const awsS3Upload = (file:any):Promise<any> => {
   return new Promise((resolve, reject) => {
     s3.putObject(params, (err, data) => {
       if (err) { reject(err); }
-      else { console.log('resolved: ', data); resolve(data); }
+      else { resolve(data); }
     })
   })
 }

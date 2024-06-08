@@ -17,7 +17,6 @@ posts.post('/', (req: any, res: any) => {
       return prisma.post.create({data: { title, body, s3_Etag: s3Obj.ETag, author: { connect: { id: USER_ID } } }})
     })
     .then((post) => {
-      console.log(post)
       res.sendStatus(201);
     })
     .catch((err: { name: string }) => {
