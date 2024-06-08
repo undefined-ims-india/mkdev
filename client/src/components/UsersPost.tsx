@@ -9,7 +9,7 @@ interface PostProps {
 }
 
 const UsersPost = ({ post }: PostProps): React.ReactElement => {
-  console.log('post', post);
+  // console.log('post', post);
   return (
     <>
       <h2>{post.title}</h2>

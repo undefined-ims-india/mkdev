@@ -1,50 +1,65 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, ReactElement } from 'react';
 import axios from 'axios';
+import Nav from './Nav';
+import UserPosts from './UserPosts';
 interface User {
+  userId: number;
   name: string;
   picture: string;
 }
 
-const Profile = () => {
+const Profile = (): ReactElement => {
   const [user, setUser] = useState<User | null>(null);
   const [posts, setPosts] = useState([]);
   const userRef = useRef(user);
+  const postsRef = useRef(posts);
 
-  useEffect(() => {
+  const getUser = () => {
     axios
       .get('/profile')
       .then(({ data }) => {
         setUser(data);
-        // console.log('user', data);
+        getPosts(data);
+        console.log('user', data);
       })
-      .catch((error) => {
-        console.error('Failed to get user:', error);
-      });
+      .catch((error) => console.error('Failed to get user:', error));
+  };
+
+  const getPosts = (userId: number) => {
+    if (user) {
+      axios
+        .get(`/api/posts/user/${userId}`)
+        .then(({ data }) => {
+          setPosts(data);
+          console.log('userId', data);
+        })
+        .catch((error) => console.error("Failed to get user's posts:", error));
+    }
+  };
+  useEffect(() => {
+    getUser();
   }, []);
 
   useEffect(() => {
     if (user) {
-      axios
-        .get(`/api/posts/${user.name}`)
-        .then(({ data }) => {
-          setPosts(data);
-          console.log("user's posts", data);
-        })
-        .catch((error) => {
-          console.error("Failed to get use's posts:", error);
-        });
+      // getPosts(user.userId);
     }
-  }, [userRef]);
+  }, [user]);
 
   return (
     <div>
-      <h1>Profile</h1>
+      <Nav />
       {user && (
         <div>
           <h1>{user.name}</h1>
-          <img src={user.picture} alt={user.name} />
+          <img
+            src={user.picture}
+            alt={user.name}
+            style={{ width: 100, height: 100 }}
+          />
         </div>
       )}
+      {/* <UserPosts posts={posts} /> */}
     </div>
   );
 };
