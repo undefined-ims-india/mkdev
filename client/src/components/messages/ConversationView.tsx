@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import axios from 'axios';
 import MessagesList from './MessagesList';
 import MessageInput from './MessageInput';
@@ -15,8 +15,8 @@ const ConversationView = (): ReactElement => {
 
   const [allMsgs, setAllMsgs] = useState<Message[]>([]);
 
-  const getAllMsgs = (): void => {
-    // send request to backend GET messages route
+  // TODO: change to only get messages from certain conversation passed down from Messages
+  useEffect(() => {
     axios
       .get('/api/messages')
       .then(({ data }) => {
@@ -26,13 +26,7 @@ const ConversationView = (): ReactElement => {
       .catch((err) => {
         console.error('Failed to retrieve messages from db:\n', err);
       })
-
-    // results from GET /api/messages are in array
-
-
-    // set allMsgs to result of query
-  }
-  // getAllMsgs();
+  }, [])
 
   socket.on('message', (msg: Message): void => {
     // console.log('msg emitted from server:', msg);
