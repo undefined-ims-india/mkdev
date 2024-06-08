@@ -4,8 +4,15 @@ import axios from 'axios';
 
 const socket = io('http://localhost:4000');
 
-const MessageInput = (): ReactElement => {
+interface PropsType {
+  conId: number;
+}
+
+const MessageInput: React.FC<PropsType> = (props): ReactElement => {
+  const { conId } = props;
+
   const [text, setText] = useState('');
+  const [emptyText, setEmptyText] = useState(false);
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
@@ -14,28 +21,29 @@ const MessageInput = (): ReactElement => {
 
   const sendMessage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault();
-    // console.log('sent text', text);
-    // broadcast the message to all the clients (through server)
-    socket.emit('message', {
-      body: text
-      // senderId -> how to include here?
-    });
-    setText('');
 
-    // send POST request to /api/messages
-    // TODO: need to get conversation id and interpolate it into post url
-    axios
-      .post('/api/messages/1', {
-        message: {
-          body: text
-        }
-      })
-      .then(() => {
-        // console.log('message posted to db');
-      })
-      .catch((err) => {
-        console.error('Failed to post message to db', err.cause);
+    // only send message if there is text in input field
+    if (text) {
+      // broadcast the message to all the clients (through server)
+      socket.emit('message', {
+        body: text
+        // senderId -> how to include here?
       });
+      setText('');
+
+      // send message to database with current conversation
+      axios
+        .post(`/api/messages/${conId}`, {
+          message: {
+            body: text
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to post message to db', err.cause);
+        });
+
+    }
+
   }
 
   return (

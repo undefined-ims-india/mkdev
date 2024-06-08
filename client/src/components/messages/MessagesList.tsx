@@ -14,12 +14,11 @@ const MessagesList: React.FC<PropsType> = (props): ReactElement => {
 
   return (
     <div>
-      <h4>List of messages below</h4>
       {
         allMsgs.map((msg, i) => {
           // console.log('msg in map', msg);
           return (
-            <Message msg={msg} key={`${msg}-${i}`}/>
+            <Message msg={ msg } key={ `${msg}-${i}` }/>
           )
         })
       }
