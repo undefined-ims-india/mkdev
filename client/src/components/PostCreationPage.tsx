@@ -16,6 +16,7 @@ const PostCreationPage = () :ReactElement => {
   const [body, setBody]: [string, Function] = useState('');
   const [titleFieldTooltip, setTitleFieldTooltip] = useState(false);
   const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
+  const [file, setFile]: [any, Function] = useState();
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>) :void => {
     let setStateFunc :Function
@@ -39,11 +40,16 @@ const PostCreationPage = () :ReactElement => {
       if (!body.length) {setBodyFieldTooltip(true);}
       return
     }
-    const newPost:{title:string, body:string} = {title, body};
+    const newPost:{title:string, body:string, file:any} = {title, body, file};
     axios.post('/api/posts', {newPost})
       .then(() :void => {
         navigate('/dashboard')
       })
+  }
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>):void => {
+    console.log(e.target.files)
+    setFile(e.target.files![0]);
   }
 
   return (
@@ -51,6 +57,7 @@ const PostCreationPage = () :ReactElement => {
     <h1>Create Post</h1>
     <Stack>
       <Stack>
+        <input type='file' accept='image/*' onChange={handleFile} />
         <Tooltip title="Please provide a title" open={titleFieldTooltip} enterDelay={500} leaveDelay={200}>
           <TextField
             value={title}

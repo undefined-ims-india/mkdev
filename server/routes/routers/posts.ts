@@ -1,4 +1,4 @@
-import { Router, Request } from 'express';
+import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
 
@@ -9,15 +9,10 @@ const USER_ID = 3;
 
 // add a post to logged in user
 posts.post('/', (req: any, res: any) => {
-  const { title, body, file }: { title: string; body: string, file:string } = req.body.newPost;
-  awsS3Upload(file)
-  .then((data: any) => {
-    console.log(data);
-    return prisma.post.create({data: { title, body, author: { connect: { id: USER_ID } } }})
-  })
-    .then((data: any) => {
-      console.log(data);
-      res.sendStatus(201);
+  const { title, body}: { title: string; body: string} = req.body.newPost;
+  prisma.post.create({data: { title, body, author: { connect: { id: USER_ID } } }})
+    .then((post: any) => {
+      res.status(201).send(post.id);
     })
     .catch((err: { name: string }) => {
       console.error(err);
@@ -139,5 +134,20 @@ posts.delete('/:id', (req: any, res: any) => {
       await prisma.$disconnect();
     });
 });
+
+// add image to post
+posts.put('/:id/image', (req: express.Request, res: express.Response):void => {
+  const { id } = req.params;
+  const {file}: {file: FormData} = req.body;
+  awsS3Upload(file)
+    .then((data:any) => {
+      console.log(data);
+      res.sendStatus(200);
+    })
+    .catch((err: { name: string }) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+})
 
 export default posts;
