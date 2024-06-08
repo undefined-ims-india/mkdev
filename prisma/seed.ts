@@ -9,15 +9,17 @@ async function main() {
 
   const user1 = await prisma.user.create({
     data: {
-      username: 'Squidward Tentacles',
+      username: 'cody.h.daigle',
       firstName: 'Cody',
-      lastName: 'D',
+      lastName: 'Daigle',
+      picture:
+        'https://lh3.googleusercontent.com/a/ACg8ocLq9dLuYghfrz_g9CIA6VoMalKNDq6ouj6cjbctqYkfoeTwmQ=s96-c',
       follower_count: 10,
       post_count: 2,
 
       posts: {
         create: [
-          { title: 'Intersting day!', body: 'This is the first post.' },
+          { title: 'Interesting day!', body: 'This is the first post.' },
           { title: 'Typescript', body: 'A love/hate language.' },
         ],
       },
