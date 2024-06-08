@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import { auth, requiresAuth } from 'express-openid-connect';
 import routes from './routes';
+import fileUpload from 'express-fileupload';
 
 const { CLIENT_ID, SECRET, PORT = 3000 } = process.env;
 
@@ -22,8 +23,9 @@ const io = new Server(server, {
   },
 });
 
+app.use(fileUpload())
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
 
 /*** AUTH ***/
