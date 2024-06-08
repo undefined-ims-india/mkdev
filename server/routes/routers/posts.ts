@@ -1,7 +1,9 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
 
+// to remove the maintenance warning in the console...
+require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const posts = Router();
 const prisma = new PrismaClient();
 
@@ -21,7 +23,7 @@ posts.post('/', (req: any, res: any) => {
           s3_Etag: s3Obj.ETag,
           author: { connect: { id: USER_ID } },
         },
-      });
+      } as any);
     })
     .then((post) => {
       res.sendStatus(201);
@@ -37,8 +39,9 @@ posts.post('/', (req: any, res: any) => {
 
 // get all users posts
 posts.get('/', (req: any, res: any) => {
+  const userId = req.params.userId;
   prisma.post
-    .findMany({ where: { userId: USER_ID } })
+    .findMany({ where: { userId: +userId } })
     .then((posts: {}[]) => {
       res.send(posts);
     })
