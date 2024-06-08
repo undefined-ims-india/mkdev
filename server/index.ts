@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import { auth, requiresAuth } from 'express-openid-connect';
 import routes from './routes';
+import fileUpload from 'express-fileupload';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -25,8 +26,9 @@ const io = new Server(server, {
   },
 });
 
+app.use(fileUpload());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
 
 /*** AUTH ***/
