@@ -1,12 +1,13 @@
-import path from 'path';
 import passport from 'passport';
+import app from './index';
+
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 import { PrismaClient, User } from '@prisma/client';
+import { NextFunction } from 'express';
 const prisma = new PrismaClient();
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
-const CLIENT = path.resolve(__dirname, '../dist');
 
 //Local Strategy
 // passport.use(
@@ -20,26 +21,30 @@ passport.use(
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: '/auth/google/callback',
     },
-    (accessToken: string, refreshToken: string, profile: any, done: any) => {
+    (accessToken: any, refreshToken: any, profile: any, next: NextFunction) => {
       prisma.user
         .findUnique({
-          where: { googleId: user.googleId },
+          where: { googleId: profile.id },
         })
-        .then((user) => {
+        .then((user: User | null) => {
           console.log('auth user', user); // Undefined...
           if (!user) {
             return prisma.user.create({
               data: {
-                googleId: profile.id,
-                // picture:,
+                id: profile.id,
+                googleId: profile.sub,
+                firstName: profile.name.givenName,
+                lastName: profile.name.familyName,
+                picture: profile.picture,
+                username: profile.nickname,
               },
             });
           }
-          done(null, user);
+          next(user);
         })
         .catch((err) => {
           console.error('Failed to find or create user:', err);
-          done(err);
+          next(err);
         });
     }
   )
