@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ReactElement } from 'react';
 import axios from 'axios';
+import Nav from './Nav';
 
 interface User {
   id: number;
@@ -30,16 +31,19 @@ const Profile = (): ReactElement => {
   //     .catch((error) => console.error('Failed to get user:', error));
   // };
   useEffect(() => {
-    const userId = 1;
-    axios
-      .get<Post[]>(`/api/posts/user/${userId}`)
-      .then((response) => {
-        setPosts(response.data);
-      })
-      .catch((error) => {
-        console.error('Failed to fetch posts:', error);
-      });
-  }, []);
+    const userId = user?.id;
+    if (userId) {
+      axios
+        .get<Post[]>(`/api/posts/user/${userId}`)
+        .then(({ data }) => {
+          setPosts(data);
+          console.log('posts', data);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch posts:', error);
+        });
+    }
+  }, [user]);
 
   // const getPosts = (userId: number) => {
   //   axios
@@ -57,7 +61,8 @@ const Profile = (): ReactElement => {
 
   return (
     <div>
-      <h1>{user?.username}'s Posts</h1>
+      <Nav />
+      <h1>{user?.username} Profile Page</h1>
       {<img src={user?.picture} alt={user?.username} />}
       {posts.map((post, i) => (
         <div key={`${post}-${i}`}>
