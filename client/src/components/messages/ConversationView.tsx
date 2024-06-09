@@ -34,12 +34,10 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
       .catch((err) => {
         console.error('Failed to retrieve messages from db:\n', err);
       })
-  }, [])
+  }, [conId])
 
   socket.on('message', (msg: Message): void => {
-    // console.log('msg emitted from server:', msg);
-    // allMsgs.push(msg);
-    // console.log('allMsgs from socket server', allMsgs);
+    // add emitted messages to allMsgs
     setAllMsgs([...allMsgs, msg]);
   })
 

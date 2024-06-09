@@ -5,7 +5,7 @@ interface PropTypes {
   allCons: {
     id: number;
   }[],
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number) => void;
 }
 
 const ConversationList: React.FC<PropTypes> = (props): ReactElement => {

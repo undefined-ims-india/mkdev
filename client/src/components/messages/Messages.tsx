@@ -28,8 +28,6 @@ const Messages = (): ReactElement => {
     getAllConversations();
   }, [])
 
-  // TODO: upon user click of conversationList item, conversation id should be changed and passed down to conversation view
-  // TODO: use similar logic for a selectConversation function
   const handleAddConversation = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
 
     // create conversation, get conversation id
@@ -47,11 +45,8 @@ const Messages = (): ReactElement => {
       });
   }
 
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-    // value can be id from props or conId from state
-    console.log('clicked: ', conId);
-    // set conversationId and pass it: up to Messages, over to conversationView, and down to MessageInput
-    setConId(conId);
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number): void => {
+    setConId(newId);
   }
 
   return (
