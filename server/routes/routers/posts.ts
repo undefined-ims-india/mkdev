@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
-
+require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const posts = Router();
 const prisma = new PrismaClient();
 
@@ -14,7 +14,14 @@ posts.post('/', (req: any, res: any) => {
   const { title, body } = req.body;
   awsS3Upload(img)
     .then((s3Obj) => {
-      return prisma.post.create({data: { title, body, s3_Etag: s3Obj.ETag, author: { connect: { id: USER_ID } } }})
+      return prisma.post.create({
+        data: {
+          title,
+          body,
+          s3_Etag: s3Obj.ETag,
+          author: { connect: { id: USER_ID } },
+        },
+      });
     })
     .then((post) => {
       res.sendStatus(201);

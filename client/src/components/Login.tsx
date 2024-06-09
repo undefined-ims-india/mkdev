@@ -1,12 +1,20 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
-
-const Login = (): ReactElement => {
+import React from 'react';
+import { Button, Box, Typography } from '@mui/material';
+const Login = () => {
   return (
-    <>
-      <h2> Login page</h2>
-      <h3>Now if you really want to log in hit refresh...</h3>
-    </>
+    <div>
+      <Box>
+        <Typography variant='h2' align='center' gutterBottom>
+          MkDev
+        </Typography>
+      </Box>
+      <form action='/auth/google' method='GET'>
+        <h3>Login to through Google!</h3>
+        <Button variant='contained' type='submit'>
+          Sign-In
+        </Button>
+      </form>
+    </div>
   );
 };
 

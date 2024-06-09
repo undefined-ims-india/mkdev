@@ -1,18 +1,40 @@
 import path from 'path';
 import dotEnv from 'dotenv';
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import session from 'express-session';
+import passport from './auth';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { auth, requiresAuth } from 'express-openid-connect';
 import routes from './routes';
 import fileUpload from 'express-fileupload';
 
-const { CLIENT_ID, SECRET, PORT = 3000 } = process.env;
+const PORT = 3000 || process.env.PORT;
 
 dotEnv.config();
 const CLIENT = path.resolve(__dirname, '..', 'dist');
 
 const app = express();
+
+app.use(
+  session({
+    secret: 'Some really long string that no one will ever guess...',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET, POST, PUT, DELETE',
+    credentials: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 const socket = express();
 const server = createServer(socket);
 const io = new Server(server, {
@@ -23,53 +45,17 @@ const io = new Server(server, {
   },
 });
 
-app.use(fileUpload())
+app.use(fileUpload());
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
 
-/*** AUTH ***/
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  baseURL: `http://localhost:${PORT}`,
-  clientID: CLIENT_ID,
-  secret: SECRET,
-  issuerBaseURL: 'https://dev-uatvgw7p2cq7mmm0.us.auth0.com',
-};
-
-// * Auth * //
-//Everything below this middleware will require authentication to access
-app.use(auth(config));
-/**********************/
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.locals.user = req.oidc.user;
-  next();
-});
-// get the logged in user
-app.get('/user', requiresAuth(), (req: any, res: any) => {
-  res.send(req.oidc.user);
-});
-
-// get logged in user profile
-// * Must be /profile for Auth0 to work
-app.get('/profile', requiresAuth(), (req: any, res: any) => {
-  const user = req.oidc.user;
-  const currentUser = {
-    sid: user.sid,
-    name: user.name,
-    email: user.email,
-    picture: user.picture,
-  };
-  res.send(JSON.stringify(currentUser, null, 2));
-});
 app.use('/api', routes);
 
-app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(CLIENT, 'index.html'));
-});
-// * Auth * //
+// * Do we need this here?
+// app.get('*', (req: Request, res: Response) => {
+//   res.sendFile(path.join(CLIENT, 'index.html'));
+// });
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
@@ -89,7 +75,6 @@ io.on('connection', (socket) => {
   });
 });
 // socket handling ----------------------------------------- //
-
 // websocket server
 io.listen(4000);
 
