@@ -16,8 +16,8 @@ conversations.post('/', async (req: Request, res: Response) => {
 
   // a conversation is created, then the id is sent back to frontend
   prisma.conversations.create({})
-    .then(({ id }) => {
-      res.status(201).send(JSON.stringify(id));
+    .then((conversation) => {
+      res.status(201).send(conversation);
     })
     .catch((err: Error) => {
       console.error('Failed to create new conversation', err);

@@ -26,6 +26,9 @@ const App = (): ReactElement => {
       <Link to='/messages'>
         <button>Messages</button>
       </Link>
+      <Link to='/search'>
+        <button>Search</button>
+      </Link>
     </>
   );
 };
