@@ -60,16 +60,20 @@ passport.use(
       callbackURL: '/auth/google/callback',
     },
     (accessToken: string, refreshToken: string, profile: any, done: any) => {
+      const {name, given_name, family_name, sub, picture} = profile._json
       prisma.user
         .findUnique({
-          where: { googleId: profile.id },
+          where: { googleId: sub },
         })
         .then((user) => {
-          console.log('68', user);
           if (!user) {
             return prisma.user.create({
               data: {
-                googleId: profile.id,
+                username: name,
+                googleId: sub,
+                picture,
+                firstName: given_name,
+                lastName: family_name,
               },
             });
           }
@@ -85,17 +89,15 @@ passport.use(
 
 // Serialization
 passport.serializeUser((user: any, done) => {
-  console.log('88', user);
   done(null, user.id);
 });
 
 passport.deserializeUser((id:number, done) => {
-  console.log(id)
   prisma.user
     .findUnique({
       where: { id },
     })
-    .then((user: User | null) => {console.log('98', user); done(null, user)})
+    .then((user: User | null) => {done(null, user)})
     .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
 });
 
@@ -108,7 +110,7 @@ app.get(
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/dashboard',
+    successRedirect: '/profile',
     failureRedirect: '/login',
   })
 );
