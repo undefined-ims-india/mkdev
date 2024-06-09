@@ -31,6 +31,8 @@ async function main() {
       username: 'Patrick Star',
       firstName: 'Mike',
       lastName: 'S',
+      picture:
+        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
       post_count: 2,
       posts: {
@@ -49,6 +51,8 @@ async function main() {
       username: 'Plankton the Evil Genius',
       firstName: 'Patrick',
       lastName: 'H',
+      picture:
+        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
       post_count: 2,
 
@@ -69,6 +73,8 @@ async function main() {
       username: 'Larry the Lobster',
       firstName: 'Alex',
       lastName: 'H',
+      picture:
+        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
       post_count: 2,
 
