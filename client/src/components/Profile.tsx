@@ -4,15 +4,14 @@ import Nav from './Nav';
 // import UserPosts from './UserPosts';
 interface User {
   userId: number;
+  sub: string;
   name: string;
   picture: string;
 }
 
 const Profile = (): ReactElement => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>();
   const [posts, setPosts] = useState([]);
-  const userRef = useRef(user);
-  const postsRef = useRef(posts);
 
   const getUser = () => {
     axios
@@ -41,24 +40,21 @@ const Profile = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    if (user) {
-      getPosts(user.userId);
-    }
+    // getPosts(user.userId);
   }, [user]);
 
   return (
     <div>
       <Nav />
-      {user && (
-        <div>
-          <h1>{user.name}</h1>
-          <img
-            src={user.picture}
-            alt={user.name}
-            style={{ width: 100, height: 100 }}
-          />
-        </div>
-      )}
+      <div>
+        <h1>{user?.name}</h1>
+        <img
+          src={user?.picture}
+          alt={user?.name}
+          style={{ width: 100, height: 100 }}
+        />
+      </div>
+
       {/* <UserPosts posts={posts} /> */}
     </div>
   );

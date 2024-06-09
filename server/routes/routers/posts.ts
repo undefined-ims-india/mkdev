@@ -38,10 +38,10 @@ posts.post('/', (req: any, res: any) => {
 
 // get all users posts
 posts.get('/', (req: any, res: any) => {
-  const { userId } = req.params;
+  console.log(req.user);
 
   prisma.post
-    .findMany({ where: { userId: userId } })
+    .findMany({ where: { userId: USER_ID } })
     .then((posts: {}[]) => {
       res.send(posts);
     })
@@ -57,9 +57,11 @@ posts.get('/', (req: any, res: any) => {
 // get current user's posts for Profile page
 posts.get('/user/:userId', (req: any, res: any) => {
   const { userId } = req.params;
+  console.log(req.user);
+  // prisma.user.findUnique({ where: { id: id } });
   prisma.post
     .findMany({
-      where: { userId: userId },
+      where: { userId: +userId },
     })
     .then((userPosts: any) => {
       res.status(200).send(userPosts);

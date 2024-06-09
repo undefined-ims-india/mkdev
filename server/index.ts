@@ -6,7 +6,7 @@ import { Server } from 'socket.io';
 import { auth, requiresAuth } from 'express-openid-connect';
 import routes from './routes';
 import fileUpload from 'express-fileupload';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -51,10 +51,17 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 // get the logged in user
-app.get('/', requiresAuth(), async (req: any, res: any) => {
-  const userData = req.oidc.user;
-  res.send(userData);
+app.get('/', (req: Request, res: Response) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
+
+declare global {
+  namespace Express {
+    interface Request {
+      user: User;
+    }
+  }
+}
 
 // get logged in user profile
 // * Must be /profile for Auth0 to work
@@ -63,9 +70,10 @@ app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
   const user = JSON.parse(jason);
 
   const currentUser = {
+    userId: user.sub,
     firstName: user.given_name,
     lastName: user.family_name,
-    username: user.nickname, // NUll???
+    username: user.nickname,
     picture: user.picture,
   };
 
@@ -74,14 +82,12 @@ app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
       where: { username: currentUser.username },
       update: currentUser,
       create: currentUser,
-      // .create({
-      //   data: currentUser,
-      // })
     })
+    .then((data) => (req.user = data))
     .catch((err) => {
       console.error('Failed to save user:', err);
     });
-
+  console.log(currentUser);
   res.send(JSON.stringify(req.oidc.user, null, 2));
 });
 app.use('/api', routes);
