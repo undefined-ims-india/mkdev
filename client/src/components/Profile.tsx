@@ -87,8 +87,16 @@ const Profile = (): ReactElement => {
         />
       }
       <div>
-        <Typography align='center'> {user?.firstName}'s Posts</Typography>
-        <UserPosts posts={posts} />
+        <div
+          style={{
+            border: '1px solid black',
+            padding: '10px',
+            borderRadius: '5px',
+          }}
+        >
+          <Typography align='center'>{user?.firstName}'s Posts</Typography>
+          <UserPosts posts={posts} />
+        </div>
       </div>
     </div>
   );
