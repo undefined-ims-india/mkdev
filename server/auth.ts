@@ -12,24 +12,24 @@ const prisma = new PrismaClient();
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 const CLIENT = path.resolve(__dirname, '../dist');
 
-app.use(
-  session({
-    secret: 'Some really long string that no one will ever guess...',
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// app.use(
+//   session({
+//     secret: 'Some really long string that no one will ever guess...',
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-    methods: 'GET, POST, PUT, DELETE',
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'http://localhost:3000',
+//     methods: 'GET, POST, PUT, DELETE',
+//     credentials: true,
+//   })
+// );
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 //Local Strategy
 // passport.use(
@@ -68,6 +68,22 @@ passport.use(
   )
 );
 
+// Serialization
+passport.serializeUser((user: any, done) => {
+  console.log(user);
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  prisma.user
+    .findUnique({
+      where: { id: Number(id) },
+    })
+    .then((user: User | null) => done(null, user))
+    .then((data) => console.log(data))
+    .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
+});
+
 // Auth Routes
 app.get(
   '/auth/google',
@@ -84,22 +100,6 @@ app.get(
 
 app.get('/login', (req, res) => {
   res.render('login');
-});
-
-// Serialization
-passport.serializeUser((user: any, done) => {
-  console.log(user);
-  done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-  prisma.user
-    .findUnique({
-      where: { id: Number(id) },
-    })
-    .then((user: User | null) => done(null, user))
-    .then((data) => console.log(data))
-    .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
 });
 
 app.get('*', (req, res) => {

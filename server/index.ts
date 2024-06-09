@@ -1,6 +1,9 @@
 import path from 'path';
 import dotEnv from 'dotenv';
 import express, { Request, Response } from 'express';
+import cors from 'cors';
+import session from 'express-session';
+import passport from './auth';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import routes from './routes';
@@ -12,6 +15,26 @@ dotEnv.config();
 const CLIENT = path.resolve(__dirname, '..', 'dist');
 
 const app = express();
+
+app.use(
+  session({
+    secret: 'Some really long string that no one will ever guess...',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: 'GET, POST, PUT, DELETE',
+    credentials: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 const socket = express();
 const server = createServer(socket);
 const io = new Server(server, {
