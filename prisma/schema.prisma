@@ -1,5 +1,3 @@
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,28 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//Enum for types of tags, If want a new tag Type change here 
-enum tagType {
-  postTag
-  userTag
-}
-
-//Posts that will show up on feed based on the tags a user has saved 
 model Post {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(255)
   body      String
-  author    User     @relation(fields: [userId], references: [id], "UserPosts") // Post has one Author
   userId    Int
   s3_Etag   String?
   repoLink  String?  @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  liked     User[]   @relation("LikedPosts") // Liked posts Table 
-  tags      Tags[] // Post Tags Table
+  author    User     @relation("UserPosts", fields: [userId], references: [id])
+  liked     User[]   @relation("LikedPosts")
+  tags      Tags[]   @relation("PostToTags")
 }
 
-//User has a gh username and has many relationships
 model User {
   id             Int             @id @default(autoincrement())
   username       String?         @unique
@@ -40,45 +30,40 @@ model User {
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
-  posts          Post[]          @relation("UserPosts") // User Posts Join Table
-  following      User[]          @relation("UserFollows") // Follower and Following tables
-  followedBy     User[]          @relation("UserFollows") // Follower and Following tables
-  likedPosts     Post[]          @relation("LikedPosts") // Liked posts Table 
-  tags           Tags[] // User Tags Table
-  messages       Messages[] //User has many Messages
-  conversations  Conversations[] // User has many Conversations
+  messages       Messages[]
+  posts          Post[]          @relation("UserPosts")
+  conversations  Conversations[] @relation("ConversationsToUser")
+  likedPosts     Post[]          @relation("LikedPosts")
+  tags           Tags[]          @relation("TagsToUser")
+  User_A         User[]          @relation("UserFollows")
+  User_B         User[]          @relation("UserFollows")
 }
 
-//Tags used for searching and interacting with the user and Posts tables.
 model Tags {
   id       Int     @id @default(autoincrement())
   tagType  tagType
   name     String
   category String?
-  posts    Post[] // Post Tags Table
-  user     User[] // User Tags Table
+  posts    Post[]  @relation("PostToTags")
+  user     User[]  @relation("TagsToUser")
 }
 
-//what posts does a user Like keeping until we know we don't need
-// model Likes {
-//   id        Int      @id @default(autoincrement())
-//   postId Int 
-//   userId Int
-// }
-
-//Messages are what are in our dm feature and a messae has one sender
 model Messages {
   id             Int           @id @default(autoincrement())
   body           String
   senderId       Int
-  sender         User          @relation(fields: [senderId], references: [id]) // Message has one sender
   conversationId Int
-  conversation   Conversations @relation(fields: [conversationId], references: [id]) // Conversation it is tied to 
+  conversation   Conversations @relation(fields: [conversationId], references: [id])
+  sender         User          @relation(fields: [senderId], references: [id])
 }
 
-//Conversations is where we have our entire conversations made up of individual messages
 model Conversations {
   id           Int        @id @default(autoincrement())
-  messages     Messages[] // all the messages in this conversation
-  participants User[] //Conversation has many participants
+  messages     Messages[]
+  participants User[]     @relation("ConversationsToUser")
+}
+
+enum tagType {
+  postTag
+  userTag
 }

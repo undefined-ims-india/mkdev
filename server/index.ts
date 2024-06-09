@@ -65,7 +65,7 @@ passport.use(
           where: { googleId: profile.id },
         })
         .then((user) => {
-          console.log(user);
+          console.log('68', user);
           if (!user) {
             return prisma.user.create({
               data: {
@@ -85,17 +85,17 @@ passport.use(
 
 // Serialization
 passport.serializeUser((user: any, done) => {
-  console.log(user);
+  console.log('88', user);
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser((id:number, done) => {
+  console.log(id)
   prisma.user
     .findUnique({
-      where: { id: Number(id) },
+      where: { id },
     })
-    .then((user: User | null) => done(null, user))
-    .then((data) => console.log(data))
+    .then((user: User | null) => {console.log('98', user); done(null, user)})
     .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
 });
 
@@ -108,15 +108,14 @@ app.get(
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/home',
-    failureRedirect: '/',
+    successRedirect: '/dashboard',
+    failureRedirect: '/login',
   })
 );
 
-app.get('/login', (req, res) => {
-  res.render('login');
+app.get('*', (req: Request, res: Response) => {
+  res.sendFile(path.join(CLIENT, 'index.html'));
 });
-
 
 const socket = express();
 const server = createServer(socket);
@@ -128,11 +127,6 @@ const io = new Server(server, {
     },
     });
 
-
-// * Do we need this here?
-// app.get('*', (req: Request, res: Response) => {
-//   res.sendFile(path.join(CLIENT, 'index.html'));
-// });
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
@@ -154,10 +148,7 @@ io.on('connection', (socket) => {
   // socket handling ----------------------------------------- //
   // websocket server
   io.listen(4000);
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(CLIENT, 'index.html'));
-  });
+
 
   app.listen(PORT, () => {
     console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
