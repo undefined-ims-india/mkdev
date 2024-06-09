@@ -1,38 +1,36 @@
-// import React, { useState, ReactElement, useEffect } from 'react';
-// import axios from 'axios';
-// import UsersPost from './UsersPost';
-// // interface Post {
-// //   id: number;
-// //   title: string;
-// //   body: string;
-// // }
-// // interface ProfileProps {
-// //   posts: Post[];
-// // }
+import React, { useState, ReactElement, useEffect } from 'react';
+import axios from 'axios';
+import UsersPost from './UsersPost';
+import { PortalProps } from '@mui/material';
+interface User {
+  id: number;
+  email: string;
+  sub: string;
+  username: string;
+  picture: string;
+}
 
-// const UserPosts = ({ userId }: { userId: number }): ReactElement => {
-//   const [posts, setPosts] = useState([]);
+interface Post {
+  id: number;
+  userId: number;
+  title: string;
+  body: string;
+}
 
-//   useEffect(() => {
-//     const getPosts = async () => {
-//       try {
-//         const response = await axios.get(`/posts/user/${userId}`);
-//         setPosts(response.data);
-//       } catch (error) {
-//         console.error('Failed to fetch user posts:', error);
-//         // Here you can handle the error, for example, set an error state
-//       }
-//     };
+interface ProfileProps {
+  posts: Post[];
+}
 
-//     getPosts();
-//   }, [userId]);
-//   return (
-//     <>
-//       {posts.map((post) => (
-//         <UsersPost key={post.id} post={post} />
-//       ))}
-//     </>
-//   );
-// };
+const UserPosts = ({ posts }: ProfileProps): ReactElement => {
+  // const [posts, setPosts] = useState([]);
 
-// export default UserPosts;
+  return (
+    <>
+      {posts.map((post: any) => (
+        <UsersPost key={post.id} post={post} />
+      ))}
+    </>
+  );
+};
+
+export default UserPosts;
