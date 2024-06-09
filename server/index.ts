@@ -52,9 +52,10 @@ app.use(express.static(CLIENT));
 
 app.use('/api', routes);
 
-app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(CLIENT, 'index.html'));
-});
+// * Do we need this here?
+// app.get('*', (req: Request, res: Response) => {
+//   res.sendFile(path.join(CLIENT, 'index.html'));
+// });
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {

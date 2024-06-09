@@ -1,6 +1,4 @@
 import path from 'path';
-import cors from 'cors';
-import session from 'express-session';
 import passport from 'passport';
 import app from './index';
 
@@ -11,25 +9,6 @@ const prisma = new PrismaClient();
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 const CLIENT = path.resolve(__dirname, '../dist');
-
-// app.use(
-//   session({
-//     secret: 'Some really long string that no one will ever guess...',
-//     resave: false,
-//     saveUninitialized: false,
-//   })
-// );
-
-// app.use(
-//   cors({
-//     origin: 'http://localhost:3000',
-//     methods: 'GET, POST, PUT, DELETE',
-//     credentials: true,
-//   })
-// );
-
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 //Local Strategy
 // passport.use(
