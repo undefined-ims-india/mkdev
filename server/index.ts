@@ -70,9 +70,9 @@ app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
   const user = JSON.parse(jason);
 
   const currentUser = {
-    firstName: user.given_name,
-    lastName: user.family_name,
-    username: user.nickname,
+    sid: user.sid,
+    name: user.name,
+    email: user.email,
     picture: user.picture,
   };
 
