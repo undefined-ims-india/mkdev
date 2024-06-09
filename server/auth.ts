@@ -1,4 +1,4 @@
-import passport from 'passport';
+import passport, { serializeUser } from 'passport';
 import app from './index';
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -27,7 +27,6 @@ passport.use(
           where: { googleId: profile.id },
         })
         .then((user: User | null) => {
-          console.log('auth user', user); // Undefined...
           if (!user) {
             return prisma.user.create({
               data: {
@@ -40,7 +39,7 @@ passport.use(
               },
             });
           }
-          next(user);
+          next(JSON.stringify(user));
         })
         .catch((err) => {
           console.error('Failed to find or create user:', err);
@@ -52,7 +51,7 @@ passport.use(
 
 // Serialization
 passport.serializeUser((user: any, done) => {
-  console.log(user);
+  console.log('serializeUser', user);
   done(null, user.id);
 });
 
@@ -62,8 +61,11 @@ passport.deserializeUser((id, done) => {
       where: { id: Number(id) },
     })
     .then((user: User | null) => done(null, user))
-    .then((data) => console.log(data))
-    .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
+    .then((data) => console.log('deserialize User', data))
+    .catch((err) => {
+      console.error('Failed to deserialize User:', err);
+      done(err);
+    });
 });
 
 export default passport;
