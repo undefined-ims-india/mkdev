@@ -4,8 +4,14 @@ import { PrismaClient } from '@prisma/client';
 const messages = Router();
 const prisma = new PrismaClient();
 
-messages.get('/', async (req, res) => {
-  const allMessages = await prisma.messages.findMany();
+messages.get('/:conversationId', async (req, res) => {
+  const { conversationId } = req.params;
+
+  const allMessages = await prisma.messages.findMany({
+    where: {
+      conversationId: +conversationId,
+    }
+  });
   res.status(200).send(allMessages);
 });
 
@@ -14,7 +20,7 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
   // sender: from frontend based on who's logged in
   const { body, sender } = req.body.message;
   // from frontend based on conversation POST response
-  const conversationId: number = Number(req.params.conversationId);
+  const conversationId: number = +req.params.conversationId;
 
   // create message with data from request body and params
   prisma.messages.create({
@@ -30,7 +36,7 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
   })
   .then(() => { res.sendStatus(201) })
   .catch((err: Error) => {
-    console.error('Failed to create new message', err);
+    console.error('Failed to create new message:\n', err);
     res.sendStatus(500);
   });
 

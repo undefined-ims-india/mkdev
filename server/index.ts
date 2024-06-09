@@ -1,126 +1,167 @@
 import path from 'path';
 import dotEnv from 'dotenv';
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import session from 'express-session';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
-import { auth, requiresAuth } from 'express-openid-connect';
 import routes from './routes';
 import fileUpload from 'express-fileupload';
+import passport from 'passport';
 import { PrismaClient, User } from '@prisma/client';
+import {Strategy} from 'passport-google-oauth20';
 
+const GoogleStrategy = Strategy;
 const prisma = new PrismaClient();
 
-const { CLIENT_ID, SECRET, PORT = 3000 } = process.env;
-
-dotEnv.config();
+const PORT = 3000 || process.env.PORT;
 const CLIENT = path.resolve(__dirname, '..', 'dist');
 
+dotEnv.config();
+
 const app = express();
-const socket = express();
-const server = createServer(socket);
-const io = new Server(server, {
-  connectionStateRecovery: {},
-  cors: {
+
+const GOOGLE_CLIENT_ID : string = process.env.GOOGLE_CLIENT_ID || "";
+const GOOGLE_CLIENT_SECRET : string = process.env.GOOGLE_CLIENT_SECRET || "";
+
+app.use(
+  session({
+    secret: 'Some really long string that no one will ever guess...',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(
+  cors({
     origin: 'http://localhost:3000',
-    methods: ['GET', 'POST'],
-  },
-});
+    methods: 'GET, POST, PUT, DELETE',
+    credentials: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(fileUpload());
 app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
 
-/*** AUTH ***/
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  baseURL: `http://localhost:${PORT}`,
-  clientID: CLIENT_ID,
-  secret: SECRET,
-  issuerBaseURL: 'https://dev-uatvgw7p2cq7mmm0.us.auth0.com',
-};
-
-// * Auth * //
-//Everything below this middleware will require authentication to access
-app.use(auth(config));
-/**********************/
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.locals.user = req.oidc.user;
-  next();
-});
-// get the logged in user
-app.get('/', (req: Request, res: Response) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
-
-declare global {
-  namespace Express {
-    interface Request {
-      user: User;
-    }
-  }
-}
-
-// get logged in user profile
-// * Must be /profile for Auth0 to work
-app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
-  const jason = JSON.stringify(req.oidc.user, null, 2);
-  const user = JSON.parse(jason);
-
-  const currentUser = {
-    userId: user.sub,
-    firstName: user.given_name,
-    lastName: user.family_name,
-    username: user.nickname,
-    picture: user.picture,
-  };
-
-  prisma.user
-    .upsert({
-      where: { username: currentUser.username },
-      update: currentUser,
-      create: currentUser,
-    })
-    .then((data) => (req.user = data))
-    .catch((err) => {
-      console.error('Failed to save user:', err);
-    });
-  console.log(currentUser);
-  res.send(JSON.stringify(req.oidc.user, null, 2));
-});
 app.use('/api', routes);
 
-app.get('*', (req: Request, res: Response) => {
-  res.sendFile(path.join(CLIENT, 'index.html'));
+
+// Google Strategy
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
+    },
+    (accessToken: string, refreshToken: string, profile: any, done: any) => {
+      prisma.user
+        .findUnique({
+          where: { googleId: profile.id },
+        })
+        .then((user) => {
+          console.log(user);
+          if (!user) {
+            return prisma.user.create({
+              data: {
+                googleId: profile.id,
+              },
+            });
+          }
+          done(null, user);
+        })
+        .catch((err) => {
+          console.error('Failed to find or create user:', err);
+          done(err);
+        });
+    }
+  )
+);
+
+// Serialization
+passport.serializeUser((user: any, done) => {
+  console.log(user);
+  done(null, user.id);
 });
-// * Auth * //
+
+passport.deserializeUser((id, done) => {
+  prisma.user
+    .findUnique({
+      where: { id: Number(id) },
+    })
+    .then((user: User | null) => done(null, user))
+    .then((data) => console.log(data))
+    .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
+});
+
+// Auth Routes
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/home',
+    failureRedirect: '/',
+  })
+);
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+
+const socket = express();
+const server = createServer(socket);
+const io = new Server(server, {
+  connectionStateRecovery: {},
+  cors: {
+    origin: [`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`],
+    methods: ['GET', 'POST'],
+    },
+    });
+
+
+// * Do we need this here?
+// app.get('*', (req: Request, res: Response) => {
+//   res.sendFile(path.join(CLIENT, 'index.html'));
+// });
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
-  // console.log('A user has connected');
-
-  // on disconnection
-  socket.on('disconnect', () => {
-    // console.log('A user has disconnected');
-  });
-
+  
   // on 'message' event
   socket.on('message', (message) => {
-    // console.log(`message: ${message}`);
-
     // broadcast message to all clients
     io.emit('message', message);
   });
-});
-// socket handling ----------------------------------------- //
 
-// websocket server
-io.listen(4000);
+  socket.on('add-conversation', () => {
+    io.emit('add-conversation');
+    })
+    
+    // on disconnection
+  socket.on('disconnect', () => {
+  });
+  });
+  // socket handling ----------------------------------------- //
+  // websocket server
+  io.listen(4000);
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(CLIENT, 'index.html'));
+  });
 
-app.listen(PORT, () => {
-  console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
-});
-
-export default app;
+  app.listen(PORT, () => {
+    console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
+    });
+    
+    export default app;
+    
