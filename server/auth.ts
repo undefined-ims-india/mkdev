@@ -1,24 +1,20 @@
 import path from 'path';
-import express from 'express';
 import cors from 'cors';
-import routes from './routes';
 import session from 'express-session';
-import passport, { Done } from 'passport';
-import { LocalStrategy } from 'passport-local';
-import { GoogleStrategy, Profile } from 'passport-google-oauth20';
-import bcrypt from 'bcryptjs';
+import passport from 'passport';
+import app from './index';
+
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 import { PrismaClient, User } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
-const distPath = path.resolve(__dirname, '../dist');
-
-const app = express();
+const CLIENT = path.resolve(__dirname, '../dist');
 
 app.use(
   session({
-    secret: 'your-session-secret',
+    secret: 'Some really long string that no one will ever guess...',
     resave: false,
     saveUninitialized: false,
   })
@@ -32,39 +28,12 @@ app.use(
   })
 );
 
-// Init passport
 app.use(passport.initialize());
-// restore authentication state if there was previously a login session
 app.use(passport.session());
 
-declare global {
-  namespace Express {
-    interface Request {
-      user: User;
-    }
-  }
-}
-
 //Local Strategy
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    // Fetch user and validate credentials as before
-    // Here, you should fetch the user from your database using the username
-    // For the sake of this example, let's assume you have a function `findUserByUsername` that does this
-    const user = await findUserByUsername(username);
-
-    if (!user) {
-      return done(null, false, { message: 'Incorrect username.' });
-    }
-
-    // Compare the provided password with the stored hash
-    if (!bcrypt.compareSync(password, user.password)) {
-      return done(null, false, { message: 'Incorrect password.' });
-    }
-
-    return done(null, user);
-  })
-);
+// passport.use(
+//   new LocalStrategy(async (username, password, done) => {}))
 
 // Google Strategy
 passport.use(
@@ -74,32 +43,27 @@ passport.use(
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: '/auth/google/callback',
     },
-    async (
-      accessToken: string,
-      refreshToken: string,
-      profile: Profile,
-      done: Done
-    ) => {
-      console.log(profile.photos[0].value);
-      try {
-        let user = await prisma.user.findUnique({
+    (accessToken: string, refreshToken: string, profile: any, done: any) => {
+      prisma.user
+        .findUnique({
           where: { googleId: profile.id },
+        })
+        .then((user) => {
+          console.log(user);
+          if (!user) {
+            return prisma.user.create({
+              data: {
+                googleId: profile.id,
+                // picture:,
+              },
+            });
+          }
+          done(null, user);
+        })
+        .catch((err) => {
+          console.error('Failed to find or create user:', err);
+          done(err);
         });
-
-        if (!user) {
-          user = await prisma.user.create({
-            data: {
-              googleId: profile.id,
-              picture: profile.photos[0].value.toString(),
-            },
-          });
-        }
-
-        done(null, user);
-      } catch (err) {
-        console.error('Failed to find or create user:', err);
-        done(err);
-      }
     }
   )
 );
@@ -112,35 +76,34 @@ app.get(
 
 app.get(
   '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/');
-  }
+  passport.authenticate('google', {
+    successRedirect: '/home',
+    failureRedirect: '/',
+  })
 );
 
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
 // Serialization
-passport.serializeUser((user, done) => {
+passport.serializeUser((user: any, done) => {
+  console.log(user);
   done(null, user.id);
 });
 
-passport.deserializeUser(async (id, done) => {
-  // Here, you should fetch the user from your database using the id
-  // For the sake of this example, let's assume you have a function `findUserById` that does this
-  const user = await findUserById(id);
-  done(null, user);
+passport.deserializeUser((id, done) => {
+  prisma.user
+    .findUnique({
+      where: { id: Number(id) },
+    })
+    .then((user: User | null) => done(null, user))
+    .then((data) => console.log(data))
+    .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
 });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(distPath));
-
-app.use('/', routes);
-
-app.listen(3000, () => {
-  console.log(`\
-  \nCheck it out:\
-  \nhttp://127.0.0.1:3000 |\
-  http://localhost:3000
-  `);
+app.get('*', (req, res) => {
+  res.sendFile(path.join(CLIENT, 'index.html'));
 });
+
+export default passport;
