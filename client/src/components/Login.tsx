@@ -49,14 +49,13 @@ const Login = (): ReactElement => {
           </Button>
         </Box>
       </form>
-      <form action='/auth/google' method='GET'>
-        <h3>Or login through Google!</h3>
-        <GoogleButton
-          onClick={() => {
-            console.log('Google button clicked');
-          }}
-        />
-      </form>
+      <div>
+        <form action='/auth/google' method='GET'>
+          <button type='submit'>
+            <GoogleButton />
+          </button>
+        </form>
+      </div>
     </Box>
   );
 };
