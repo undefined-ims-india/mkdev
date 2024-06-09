@@ -71,14 +71,18 @@ app.get('*', (req: Request, res: Response) => {
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
 
-  // on disconnection
-  socket.on('disconnect', () => {
-  });
-
   // on 'message' event
   socket.on('message', (message) => {
     // broadcast message to all clients
     io.emit('message', message);
+  });
+
+  socket.on('add-conversation', () => {
+    io.emit('add-conversation');
+  })
+
+  // on disconnection
+  socket.on('disconnect', () => {
   });
 });
 // socket handling ----------------------------------------- //
