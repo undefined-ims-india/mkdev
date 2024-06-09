@@ -1,17 +1,14 @@
-import passport, { serializeUser } from 'passport';
+import path from 'path';
 import app from './index';
+import passport from 'passport';
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 import { PrismaClient, User } from '@prisma/client';
-import { NextFunction } from 'express';
 const prisma = new PrismaClient();
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
-
-//Local Strategy
-// passport.use(
-//   new LocalStrategy(async (username, password, done) => {}))
+const CLIENT = path.resolve(__dirname, '../dist');
 
 // Google Strategy
 passport.use(
@@ -21,29 +18,26 @@ passport.use(
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: '/auth/google/callback',
     },
-    (accessToken: any, refreshToken: any, profile: any, next: NextFunction) => {
+    (accessToken: string, refreshToken: string, profile: any, done: any) => {
       prisma.user
         .findUnique({
           where: { googleId: profile.id },
         })
-        .then((user: User | null) => {
+        .then((user) => {
+          console.log(user);
           if (!user) {
             return prisma.user.create({
               data: {
-                id: profile.id,
-                googleId: profile.sub,
-                firstName: profile.name.givenName,
-                lastName: profile.name.familyName,
-                picture: profile.picture,
-                username: profile.nickname,
+                googleId: profile.id,
+                // picture:,
               },
             });
           }
-          next(JSON.stringify(user));
+          done(null, user);
         })
         .catch((err) => {
           console.error('Failed to find or create user:', err);
-          next(err);
+          done(err);
         });
     }
   )
@@ -51,7 +45,7 @@ passport.use(
 
 // Serialization
 passport.serializeUser((user: any, done) => {
-  console.log('serializeUser', user);
+  console.log(user);
   done(null, user.id);
 });
 
@@ -61,11 +55,34 @@ passport.deserializeUser((id, done) => {
       where: { id: Number(id) },
     })
     .then((user: User | null) => done(null, user))
-    .then((data) => console.log('deserialize User', data))
-    .catch((err) => {
-      console.error('Failed to deserialize User:', err);
-      done(err);
-    });
+    .then((data) => console.log(data))
+    .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
 });
+
+// Auth Routes
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/home',
+    failureRedirect: '/',
+  })
+);
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(CLIENT, 'index.html'));
+});
+
+//Local Strategy
+// passport.use(
+//   new LocalStrategy(async (username, password, done) => {}))
 
 export default passport;
