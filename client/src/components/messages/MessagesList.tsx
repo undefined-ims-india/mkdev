@@ -9,14 +9,13 @@ interface PropsType {
 }
 
 const MessagesList: React.FC<PropsType> = (props): ReactElement => {
-  // console.log('props.allMsgs', props.allMsgs)
+
   const { allMsgs } = props;
 
   return (
     <div>
       {
         allMsgs.map((msg, i) => {
-          // console.log('msg in map', msg);
           return (
             <Message msg={ msg } key={ `${msg}-${i}` }/>
           )

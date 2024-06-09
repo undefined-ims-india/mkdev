@@ -8,11 +8,8 @@ interface PropsType {
 const Conversation: React.FC<PropsType> = (props): ReactElement => {
   const { id, select } = props;
 
+  // pass selected conversation id to Messages component to change conId state
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number): void => {
-    // value can be id from props
-    
-    // get value from button
-    // set conversationId and pass it: up to Messages, over to conversationView, and down to MessageInput
     select(e, newId);
   }
 

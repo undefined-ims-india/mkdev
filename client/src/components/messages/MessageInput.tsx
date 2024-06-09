@@ -12,11 +12,9 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
   const { conId } = props;
 
   const [text, setText] = useState('');
-  const [emptyText, setEmptyText] = useState(false);
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
-    // console.log('text input: ', text);
   }
 
   const sendMessage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -24,10 +22,10 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
 
     // only send message if there is text in input field
     if (text) {
-      // broadcast the message to all the clients (through server)
+      // broadcast the message to all the clients
       socket.emit('message', {
         body: text
-        // senderId -> how to include here?
+        // senderId -> how to include here? TODO:
       });
       setText('');
 
