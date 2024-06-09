@@ -55,12 +55,12 @@ posts.get('/', (req: any, res: any) => {
 });
 
 // get current user's posts for Profile page
-posts.get('/user/:id', (req: any, res: any) => {
-  const { id } = req.params;
+posts.get('/user/:userId', (req: any, res: any) => {
+  const { userId } = req.params;
   console.log(req.user);
   prisma.post
     .findMany({
-      where: { id: +id },
+      where: { userId: +userId },
     })
     .then((userPosts: any) => {
       res.status(200).send(userPosts);
