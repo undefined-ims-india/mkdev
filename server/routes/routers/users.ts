@@ -37,19 +37,18 @@ users.get('/', (req: any, res: any) => {
     });
 });
 
-users.get('/posts/:id', (req: any, res: any) => {
+users.get('/:id', (req: any, res: any) => {
   const { id } = req.params;
-  console.log(id);
-  // prisma.user.findUnique({ where: { id: id } });
-  prisma.post
-    .findMany({
+  // console.log(id);
+  prisma.user
+    .findUnique({
       where: { id: +id },
     })
-    .then((userPosts: any) => {
-      res.status(200).send(userPosts);
+    .then((user: any) => {
+      res.status(200).send(user);
     })
     .catch((err: any) => {
-      console.error('Failed to get user posts:', err);
+      console.error('Failed to get user:', err);
       res.sendStatus(500);
     })
     .finally(async () => {
