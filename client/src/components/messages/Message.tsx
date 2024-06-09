@@ -12,11 +12,12 @@ interface PropsType {
   msg: {
     body: string;
     senderId: number;
+    conversationId: number;
   }
 }
 
 const Message: React.FC<PropsType> = (props): ReactElement => {
-  const { body, senderId } = props.msg;
+  const { body, senderId } = props.msg; // TODO: senderId will be used for styling and/or including picture
 
   return (
     <div>

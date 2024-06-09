@@ -9,22 +9,18 @@ const socket = io('http://localhost:4000');
 interface Message {
     body: string;
     senderId: number;
-} 
+    conversationId: number;
+}
 
 interface PropsType {
   conId: number;
 }
 
-// TODO: pass a conversation into ConversationView, ConversationView will only render messages from that conversation
-// pass conversation down from Messages
 const ConversationView: React.FC<PropsType> = (props): ReactElement => {
   const { conId } = props;
 
   const [allMsgs, setAllMsgs] = useState<Message[]>([]);
 
-  // TODO: change to only get messages from certain conversation passed down from Messages
-  // pass this down? or have same effect on MessagesList?
-  // conversation id to be used in endpoint can come from props
   useEffect(() => {
     axios
       .get(`/api/messages/${conId}`)
@@ -44,7 +40,7 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
   return (
     <div>
       <h2>Conversation { conId }</h2>
-      <MessagesList allMsgs={ allMsgs }/>
+      <MessagesList allMsgs={ allMsgs } conId={ conId }/>
       <MessageInput conId={ conId }/>
     </div>
   );

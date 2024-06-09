@@ -12,6 +12,7 @@ const Messages = (): ReactElement => {
   const [conId, setConId] = useState<number>(0);
   const [allConversations, setAllConversations] = useState<Conversation[]>([])
 
+  // get all current conversations
   const getAllConversations = (): void => {
     axios
       .get('/api/conversations')
@@ -23,7 +24,7 @@ const Messages = (): ReactElement => {
       })
   }
 
-  // get array of conversations upon page load
+  // get list of conversations upon page load
   useEffect(() => {
     getAllConversations();
   }, [])
