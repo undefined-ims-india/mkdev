@@ -3,18 +3,26 @@ import dotEnv from 'dotenv';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import session from 'express-session';
-import passport from './auth';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import routes from './routes';
 import fileUpload from 'express-fileupload';
+import passport from 'passport';
+import { PrismaClient, User } from '@prisma/client';
+import {Strategy} from 'passport-google-oauth20';
+
+const GoogleStrategy = Strategy;
+const prisma = new PrismaClient();
 
 const PORT = 3000 || process.env.PORT;
-
-dotEnv.config();
 const CLIENT = path.resolve(__dirname, '..', 'dist');
 
+dotEnv.config();
+
 const app = express();
+
+const GOOGLE_CLIENT_ID : string = process.env.GOOGLE_CLIENT_ID || "";
+const GOOGLE_CLIENT_SECRET : string = process.env.GOOGLE_CLIENT_SECRET || "";
 
 app.use(
   session({
@@ -35,6 +43,81 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(fileUpload());
+app.use(express.json());
+//app.use(express.urlencoded({ extended: true }));
+app.use(express.static(CLIENT));
+
+app.use('/api', routes);
+
+
+// Google Strategy
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: '/auth/google/callback',
+    },
+    (accessToken: string, refreshToken: string, profile: any, done: any) => {
+      prisma.user
+        .findUnique({
+          where: { googleId: profile.id },
+        })
+        .then((user) => {
+          console.log(user);
+          if (!user) {
+            return prisma.user.create({
+              data: {
+                googleId: profile.id,
+              },
+            });
+          }
+          done(null, user);
+        })
+        .catch((err) => {
+          console.error('Failed to find or create user:', err);
+          done(err);
+        });
+    }
+  )
+);
+
+// Serialization
+passport.serializeUser((user: any, done) => {
+  console.log(user);
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  prisma.user
+    .findUnique({
+      where: { id: Number(id) },
+    })
+    .then((user: User | null) => done(null, user))
+    .then((data) => console.log(data))
+    .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
+});
+
+// Auth Routes
+app.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/home',
+    failureRedirect: '/',
+  })
+);
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+
 const socket = express();
 const server = createServer(socket);
 const io = new Server(server, {
@@ -42,15 +125,9 @@ const io = new Server(server, {
   cors: {
     origin: [`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`],
     methods: ['GET', 'POST'],
-  },
-});
+    },
+    });
 
-app.use(fileUpload());
-app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
-app.use(express.static(CLIENT));
-
-app.use('/api', routes);
 
 // * Do we need this here?
 // app.get('*', (req: Request, res: Response) => {
@@ -59,7 +136,7 @@ app.use('/api', routes);
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
-
+  
   // on 'message' event
   socket.on('message', (message) => {
     // broadcast message to all clients
@@ -68,18 +145,23 @@ io.on('connection', (socket) => {
 
   socket.on('add-conversation', () => {
     io.emit('add-conversation');
-  })
-
-  // on disconnection
+    })
+    
+    // on disconnection
   socket.on('disconnect', () => {
   });
-});
-// socket handling ----------------------------------------- //
-// websocket server
-io.listen(4000);
+  });
+  // socket handling ----------------------------------------- //
+  // websocket server
+  io.listen(4000);
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(CLIENT, 'index.html'));
+  });
 
-app.listen(PORT, () => {
-  console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
-});
-
-export default app;
+  app.listen(PORT, () => {
+    console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
+    });
+    
+    export default app;
+    

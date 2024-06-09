@@ -1,6 +1,6 @@
 import path from 'path';
-import passport from 'passport';
 import app from './index';
+import passport from 'passport';
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -10,9 +10,6 @@ const prisma = new PrismaClient();
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 const CLIENT = path.resolve(__dirname, '../dist');
 
-//Local Strategy
-// passport.use(
-//   new LocalStrategy(async (username, password, done) => {}))
 
 // Google Strategy
 passport.use(
@@ -84,5 +81,9 @@ app.get('/login', (req, res) => {
 app.get('*', (req, res) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
 });
+
+//Local Strategy
+// passport.use(
+//   new LocalStrategy(async (username, password, done) => {}))
 
 export default passport;
