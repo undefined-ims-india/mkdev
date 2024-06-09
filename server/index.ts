@@ -70,7 +70,6 @@ app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
   const user = JSON.parse(jason);
 
   const currentUser = {
-    userId: user.sub,
     firstName: user.given_name,
     lastName: user.family_name,
     username: user.nickname,
@@ -80,15 +79,14 @@ app.get('/profile', requiresAuth(), (req: Request, res: Response) => {
   prisma.user
     .upsert({
       where: { username: currentUser.username },
-      update: currentUser,
+      update: {},
       create: currentUser,
     })
-    .then((data) => (req.user = data))
+    .then((data) => console.log('user', data))
+    .then(() => console.log('auth', user))
     .catch((err) => {
       console.error('Failed to save user:', err);
     });
-  console.log(currentUser);
-  res.send(JSON.stringify(req.oidc.user, null, 2));
 });
 app.use('/api', routes);
 
