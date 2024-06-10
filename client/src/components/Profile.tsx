@@ -28,17 +28,6 @@ const Profile = (): ReactElement => {
   const [user, setUser] = useState<User>();
   const [posts, setPosts] = useState<Post[]>([]);
 
-  const getUser = () => {
-    axios
-      .get('/profile')
-      .then(({ data }) => {
-        setUser(data);
-        getPosts(data);
-        console.log('user', data);
-      })
-      .catch((error) => console.error('Failed to get user:', error));
-  };
-
   useEffect(() => {
     const id = 6;
     // const id = user?.id;

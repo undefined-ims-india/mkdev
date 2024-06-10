@@ -160,7 +160,7 @@ io.on('connection', (socket) => {
 
   socket.on('add-conversation', () => {
     io.emit('add-conversation');
-
+    })
   // on disconnection
   socket.on('disconnect', () => {});
 });
@@ -171,6 +171,5 @@ io.listen(4000);
   app.listen(PORT, () => {
     console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
     });
-    
     export default app;
     
