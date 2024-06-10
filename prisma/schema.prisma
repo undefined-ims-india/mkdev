@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//Enum for types of tags, If want a new tag Type change here
+enum tagType {
+  post
+  user
+}
+
+//Posts that will show up on feed based on the tags a user has saved
 model Post {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(255)
