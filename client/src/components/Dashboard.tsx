@@ -1,7 +1,15 @@
 import React, { ReactElement } from 'react';
+import Nav from './Nav';
 
-const App = (): ReactElement => {
-  return <p> This is the Dashboard! </p>;
+const Dashboard = (): ReactElement => {
+  return (
+    <>
+      <div>
+        <Nav />
+      </div>
+      <p> This is the Dashboard! </p>
+    </>
+  );
 };
 
-export default App;
+export default Dashboard;
