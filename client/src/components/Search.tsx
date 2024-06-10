@@ -58,8 +58,6 @@ export default function SearchComponent(): ReactElement {
             <FormControl variant='outlined' fullWidth>
                 <InputLabel id='tagType-label'>Search By a Tag</InputLabel>
                 <Select
-                    labelId='tagType-label'
-                    id='tagType'
                     value={tagType}
                     onChange={handleChangeTagType}
                     input={<OutlinedInput label='Search By a Tag' />}
@@ -78,7 +76,6 @@ export default function SearchComponent(): ReactElement {
             </FormControl>
             <Autocomplete
                 multiple
-                id='people-select'
                 options={tags}
                 getOptionLabel={(option) => option.name}
                 value={selectedTags}
@@ -87,8 +84,8 @@ export default function SearchComponent(): ReactElement {
                     <TextField
                         {...params}
                         variant='outlined'
-                        label='Select People'
-                        placeholder='Add People'
+                        label='Select Categories'
+                        placeholder='Add Categories'
                     />
                 )}
                 renderTags={(value, getTagProps) =>
@@ -102,7 +99,7 @@ export default function SearchComponent(): ReactElement {
                 }
             />
             <div>
-                Selected People: {selectedTags.map((tag) => tag.name).join(', ')}
+                Selected Categories: {selectedTags.map((tag) => tag.name).join(', ')}
             </div>
             <button type="button" onClick={handleSearch}>Search</button>
         </form>
