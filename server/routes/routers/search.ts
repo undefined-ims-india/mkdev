@@ -5,7 +5,8 @@ const prisma = new PrismaClient();
 
 
 
-search.get('/:tagType/:tags', async (req: Request, res: Response) => {
+
+search.get('/filter/:tagType/:tags', async (req: Request, res: Response) => {
     const { tagType: tagTypeParam, tags } = req.params;
     const splitTags = tags.split('-');
     console.log(splitTags, tagTypeParam, tags);
@@ -34,11 +35,32 @@ search.get('/:tagType/:tags', async (req: Request, res: Response) => {
     }
 });
 
-search.post('/', (req: Request, res: Response) => {
-    res.status(200).send('you rang!');
+//Give a user or a post a tag
+search.put('/addTag/:tagType/:existingTag', async (req: Request, res: Response) => {
+    // Fallback to a default user ID if req.user is not set
+    //const userId = req.user?.id || 1; // Default user ID for testing purposes
+    const userId = 1 // TODO I have to fix this. !!!!
+    const { tagType, existingTag } = req.params;
+
+    try {
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                tags: {
+                    connect: { id: +existingTag},
+                },
+            },
+        });
+
+        res.status(200).send('Tag added successfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
-search.put('/', (req: Request, res: Response) => {
+//add a tag to a user or a
+search.post('/', (req: Request, res: Response) => {
     res.status(200).send('you rang!');
 });
 
