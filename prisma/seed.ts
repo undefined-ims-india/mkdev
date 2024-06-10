@@ -9,7 +9,8 @@ async function main() {
 
   const user1 = await prisma.user.create({
     data: {
-      username: 'cody.h.daigle',
+      username: 'cody.h.daigle'
+      googleId: '1234567890',
       firstName: 'Cody',
       lastName: 'Daigle',
       picture:
@@ -29,8 +30,11 @@ async function main() {
   const user2 = await prisma.user.create({
     data: {
       username: 'Patrick Star',
+      googleId: '0987654321',
       firstName: 'Mike',
       lastName: 'S',
+      picture:
+        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
       post_count: 2,
       posts: {
@@ -47,8 +51,11 @@ async function main() {
   const user3 = await prisma.user.create({
     data: {
       username: 'Plankton the Evil Genius',
+      googleId: '1XXXXXXXXX',
       firstName: 'Patrick',
       lastName: 'H',
+      picture:
+        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
       post_count: 2,
 
@@ -67,8 +74,11 @@ async function main() {
   const user4 = await prisma.user.create({
     data: {
       username: 'Larry the Lobster',
+      googleId: 'XXXXXXXXX0',
       firstName: 'Alex',
       lastName: 'H',
+      picture:
+        'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
       post_count: 2,
 

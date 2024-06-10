@@ -10,7 +10,6 @@ const prisma = new PrismaClient();
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
 const CLIENT = path.resolve(__dirname, '../dist');
 
-
 // Google Strategy
 passport.use(
   new GoogleStrategy(

@@ -9,7 +9,7 @@ import routes from './routes';
 import fileUpload from 'express-fileupload';
 import passport from 'passport';
 import { PrismaClient, User } from '@prisma/client';
-import {Strategy} from 'passport-google-oauth20';
+import { Strategy } from 'passport-google-oauth20';
 
 const GoogleStrategy = Strategy;
 const prisma = new PrismaClient();
@@ -21,8 +21,8 @@ dotEnv.config();
 
 const app = express();
 
-const GOOGLE_CLIENT_ID : string = process.env.GOOGLE_CLIENT_ID || "";
-const GOOGLE_CLIENT_SECRET : string = process.env.GOOGLE_CLIENT_SECRET || "";
+const GOOGLE_CLIENT_ID: string = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_SECRET: string = process.env.GOOGLE_CLIENT_SECRET || '';
 
 app.use(
   session({
@@ -60,24 +60,29 @@ passport.use(
       callbackURL: '/auth/google/callback',
     },
     (accessToken: string, refreshToken: string, profile: any, done: any) => {
-      const {name, given_name, family_name, sub, picture} = profile._json
+      const { nickname, given_name, family_name, sub, picture } = profile._json;
       prisma.user
         .findUnique({
           where: { googleId: sub },
         })
         .then((user) => {
           if (!user) {
-            return prisma.user.create({
-              data: {
-                username: name,
-                googleId: sub,
-                picture,
-                firstName: given_name,
-                lastName: family_name,
-              },
-            });
+            return prisma.user
+              .create({
+                data: {
+                  username: nickname,
+                  googleId: sub,
+                  picture: picture,
+                  firstName: given_name,
+                  lastName: family_name,
+                },
+              })
+              .then((newUser) => {
+                done(null, newUser);
+              });
+          } else {
+            done(null, user);
           }
-          done(null, user);
         })
         .catch((err) => {
           console.error('Failed to find or create user:', err);
@@ -92,12 +97,14 @@ passport.serializeUser((user: any, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id:number, done) => {
+passport.deserializeUser((id: number, done) => {
   prisma.user
     .findUnique({
       where: { id },
     })
-    .then((user: User | null) => {done(null, user)})
+    .then((user: User | null) => {
+      done(null, user);
+    })
     .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
 });
 
@@ -107,13 +114,27 @@ app.get(
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
+app.get('/profile', (req, res) => {
+  if (req.user) {
+    res.json(req.user);
+  } else {
+    res.status(401).json({ message: 'Not authenticated' });
+  }
+});
+
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/profile',
+    successRedirect: '/dashboard',
     failureRedirect: '/login',
   })
 );
+// app.get('/login', (req: Request, res: Response) => {
+//   res.render('login');
+// });
+// app.get('/logout', (req: Request, res: Response) => {
+//   res.redirect('/');
+// });
 
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
@@ -126,13 +147,11 @@ const io = new Server(server, {
   cors: {
     origin: [`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`],
     methods: ['GET', 'POST'],
-    },
-    });
-
+  },
+});
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
-  
   // on 'message' event
   socket.on('message', (message) => {
     // broadcast message to all clients
@@ -141,16 +160,13 @@ io.on('connection', (socket) => {
 
   socket.on('add-conversation', () => {
     io.emit('add-conversation');
-    })
-    
-    // on disconnection
-  socket.on('disconnect', () => {
-  });
-  });
-  // socket handling ----------------------------------------- //
-  // websocket server
-  io.listen(4000);
 
+  // on disconnection
+  socket.on('disconnect', () => {});
+});
+// socket handling ----------------------------------------- //
+// websocket server
+io.listen(4000);
 
   app.listen(PORT, () => {
     console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);

@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
+// to remove the maintenance warning in the console...
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const posts = Router();
 const prisma = new PrismaClient();
@@ -56,8 +57,6 @@ posts.get('/', (req: any, res: any) => {
 // get current user's posts for Profile page
 posts.get('/user/:userId', (req: any, res: any) => {
   const { userId } = req.params;
-  console.log(req.user);
-  // prisma.user.findUnique({ where: { id: id } });
   prisma.post
     .findMany({
       where: { userId: +userId },
