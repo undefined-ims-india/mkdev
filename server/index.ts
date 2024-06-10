@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import { auth, requiresAuth } from 'express-openid-connect';
 import routes from './routes';
+import fileUpload from 'express-fileupload';
 
 const { CLIENT_ID, SECRET, PORT = 3000 } = process.env;
 
@@ -17,13 +18,14 @@ const server = createServer(socket);
 const io = new Server(server, {
   connectionStateRecovery: {},
   cors: {
-    origin: 'http://localhost:3000',
+    origin: [`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`],
     methods: ['GET', 'POST'],
   },
 });
 
+app.use(fileUpload())
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
 
 /*** AUTH ***/
@@ -55,6 +57,7 @@ app.get('/user', requiresAuth(), (req: any, res: any) => {
 app.get('/profile', requiresAuth(), (req: any, res: any) => {
   const user = req.oidc.user;
   const currentUser = {
+    sid: user.sid,
     name: user.name,
     email: user.email,
     picture: user.picture,
@@ -70,19 +73,19 @@ app.get('*', (req: Request, res: Response) => {
 
 // socket handling ----------------------------------------- //
 io.on('connection', (socket) => {
-  // console.log('A user has connected');
-
-  // on disconnection
-  socket.on('disconnect', () => {
-    // console.log('A user has disconnected');
-  });
 
   // on 'message' event
   socket.on('message', (message) => {
-    // console.log(`message: ${message}`);
-
     // broadcast message to all clients
     io.emit('message', message);
+  });
+
+  socket.on('add-conversation', () => {
+    io.emit('add-conversation');
+  })
+
+  // on disconnection
+  socket.on('disconnect', () => {
   });
 });
 // socket handling ----------------------------------------- //

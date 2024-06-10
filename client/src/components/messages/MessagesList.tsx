@@ -1,13 +1,32 @@
 import React, { ReactElement } from 'react';
 import Message from './Message';
 
-const MessagesList = (): ReactElement => {
+interface PropsType {
+  allMsgs: {
+    body: string;
+    senderId: number;
+    conversationId: number;
+  }[],
+  conId: number;
+}
+
+const MessagesList: React.FC<PropsType> = (props): ReactElement => {
+
+  const { allMsgs, conId } = props;
+
   return (
-    <>
-      <h4>The MessagesList component will be here</h4>
-      {/** map Message */}
-      <Message />
-    </>
+    <div>
+      {
+        allMsgs.map((msg, i) => {
+          if (msg.conversationId === conId) {
+            return (
+              <Message msg={ msg } key={ `${msg}-${i}` }/>
+            )
+          }
+        })
+      }
+
+    </div>
   );
 }
 
