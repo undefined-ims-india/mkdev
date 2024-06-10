@@ -27,7 +27,7 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
     data: {
       body,
       sender: {
-        connect: { id: 2 } // TODO: userId ideally from request, Auth0 g
+        connect: { id: 3 } // TODO: userId ideally from request with auth user
       },
       conversation: {
         connect: { id: conversationId }
