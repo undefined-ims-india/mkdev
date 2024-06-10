@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+//Enum for types of tags, If want a new tag Type change here
+enum tagType {
+  post
+  user
+}
+
+//Posts that will show up on feed based on the tags a user has saved
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  body      String
+  userId    Int
+  s3_Etag   String?
+  repoLink  String?  @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation("UserPosts", fields: [userId], references: [id])
+  liked     User[]   @relation("LikedPosts")
+  tags      Tags[]   @relation("PostToTags")
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  username       String?         @unique
+  googleId       String?         @unique
+  picture        String?
+  firstName      String?
+  lastName       String?
+  follower_count Int?            @default(0)
+  post_count     Int?            @default(0)
+  messages       Messages[]
+  posts          Post[]          @relation("UserPosts")
+  conversations  Conversations[] @relation("ConversationsToUser")
+  likedPosts     Post[]          @relation("LikedPosts")
+  tags           Tags[]          @relation("TagsToUser")
+  User_A         User[]          @relation("UserFollows")
+  User_B         User[]          @relation("UserFollows")
+}
+
+model Tags {
+  id       Int     @id @default(autoincrement())
+  tagType  tagType
+  name     String
+  category String?
+  posts    Post[]  @relation("PostToTags")
+  user     User[]  @relation("TagsToUser")
+}
+
+model Messages {
+  id             Int           @id @default(autoincrement())
+  body           String
+  senderId       Int
+  conversationId Int
+  conversation   Conversations @relation(fields: [conversationId], references: [id])
+  sender         User          @relation(fields: [senderId], references: [id])
+}
+
+model Conversations {
+  id           Int        @id @default(autoincrement())
+  messages     Messages[]
+  participants User[]     @relation("ConversationsToUser")
+}
+
+enum tagType {
+  postTag
+  userTag
+}
