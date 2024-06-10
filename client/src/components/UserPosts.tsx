@@ -4,7 +4,11 @@ import UsersPost from './UsersPost';
 import { PortalProps } from '@mui/material';
 interface User {
   id: number;
+  firstName: string;
+  lastName: string;
   email: string;
+  linkedIn: string;
+  github: string;
   sub: string;
   username: string;
   picture: string;
@@ -22,8 +26,6 @@ interface ProfileProps {
 }
 
 const UserPosts = ({ posts }: ProfileProps): ReactElement => {
-  // const [posts, setPosts] = useState([]);
-
   return (
     <>
       {posts.map((post: any) => (

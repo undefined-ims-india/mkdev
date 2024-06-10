@@ -8,6 +8,17 @@ import {
 } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  linkedIn: string;
+  github: string;
+  sub: string;
+  username: string;
+  picture: string;
+}
 interface Post {
   title: string;
   body: string;
