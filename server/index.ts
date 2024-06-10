@@ -129,12 +129,12 @@ app.get(
     failureRedirect: '/login',
   })
 );
-app.get('/login', (req: Request, res: Response) => {
-  res.render('login');
-});
-app.get('/logout', (req: Request, res: Response) => {
-  res.redirect('/');
-});
+// app.get('/login', (req: Request, res: Response) => {
+//   res.render('login');
+// });
+// app.get('/logout', (req: Request, res: Response) => {
+//   res.redirect('/');
+// });
 
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
