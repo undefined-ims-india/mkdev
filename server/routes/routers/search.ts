@@ -4,8 +4,6 @@ const search = Router();
 const prisma = new PrismaClient();
 
 
-
-
 search.get('/filter/:tagType/:tags', async (req: Request, res: Response) => {
     const { tagType: tagTypeParam, tags } = req.params;
     const splitTags = tags.split('-');
