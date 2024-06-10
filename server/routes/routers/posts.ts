@@ -6,8 +6,6 @@ require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const posts = Router();
 const prisma = new PrismaClient();
 
-const USER_ID = 3;
-
 // add a post to logged in user
 posts.post('/', (req: any, res: any) => {
   //image in files & title and body in body
@@ -20,7 +18,7 @@ posts.post('/', (req: any, res: any) => {
           title,
           body,
           s3_Etag: s3Obj.ETag,
-          author: { connect: { id: USER_ID } },
+          author: { connect: { id: req.user.id } },
         },
       });
     })
@@ -41,7 +39,7 @@ posts.get('/', (req: any, res: any) => {
   console.log(req.user);
 
   prisma.post
-    .findMany({ where: { userId: USER_ID } })
+    .findMany({ where: { userId: req.user.id } })
     .then((posts: {}[]) => {
       res.send(posts);
     })
@@ -122,7 +120,7 @@ posts.patch('/:id', (req: any, res: any) => {
 posts.delete('/:id', (req: any, res: any) => {
   const { id }: { id: string } = req.params;
   prisma.post
-    .delete({ where: { userId: USER_ID, id: +id } })
+    .delete({ where: { userId: req.user.id, id: +id } })
     .then(() => {
       res.sendStatus(200);
     })
