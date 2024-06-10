@@ -37,4 +37,23 @@ users.get('/', (req: any, res: any) => {
     });
 });
 
+users.get('/:id', (req: any, res: any) => {
+  const { id } = req.params;
+  // console.log(id);
+  prisma.user
+    .findUnique({
+      where: { id: +id },
+    })
+    .then((user: any) => {
+      res.status(200).send(user);
+    })
+    .catch((err: any) => {
+      console.error('Failed to get user:', err);
+      res.sendStatus(500);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+});
+
 export default users;
