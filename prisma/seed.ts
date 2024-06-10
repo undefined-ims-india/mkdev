@@ -18,6 +18,9 @@ async function main() {
     data: {
       username: 'cody.h.daigle',
       googleId: '1234567890',
+      linkedinId: '1234567810',
+      githubId: 'XXXXXXXXXX',
+      blogs: ['blog1, blog2'],
       firstName: 'Cody',
       lastName: 'Daigle',
       picture:
@@ -46,6 +49,9 @@ async function main() {
     data: {
       username: 'Patrick Star',
       googleId: '0987654321',
+      linkedinId: '1234567444',
+      githubId: 'XXXXXXXX333',
+      blogs: ['blog1, blog2'],
       firstName: 'Mike',
       lastName: 'S',
       picture:
@@ -78,6 +84,9 @@ async function main() {
     data: {
       username: 'Plankton the Evil Genius',
       googleId: '1XXXXXXXXX',
+      linkedinId: '1234567855',
+      githubId: 'XXXXXXX666',
+      blogs: ['blog1, blog2'],
       firstName: 'Patrick',
       lastName: 'H',
       picture:
@@ -114,6 +123,9 @@ async function main() {
     data: {
       username: 'Larry the Lobster',
       googleId: 'XXXXXXXXX0',
+      linkedinId: '1234569999',
+      githubId: 'XXXXXXX664',
+      blogs: ['blog1, blog2'],
       firstName: 'Alex',
       lastName: 'H',
       picture:
