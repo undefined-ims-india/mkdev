@@ -70,7 +70,3 @@ model Conversations {
   participants User[]     @relation("ConversationsToUser")
 }
 
-enum tagType {
-  postTag
-  userTag
-}
