@@ -2,6 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { Button, Box, Typography, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import GoogleButton from 'react-google-button';
+import axios from 'axios';
 
 const Login = (): ReactElement => {
   const [username, setUsername] = useState('');
@@ -10,6 +11,18 @@ const Login = (): ReactElement => {
   const handleLogin = (event: React.FormEvent) => {
     event.preventDefault();
     // If/ when we plan to do the local strategy...
+    // axios
+    //   .get('/profile')
+    //   .then(({ data }) => {
+    //     console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     if (error.response && error.response.status === 401) {
+    //       window.location.href = '/login';
+    //     } else {
+    //       console.error('Error:', error);
+    //     }
+    //   });
   };
 
   return (
@@ -27,28 +40,7 @@ const Login = (): ReactElement => {
           </Link>
         </Typography>
       </Box>
-      <form onSubmit={handleLogin}>
-        <h3>Username</h3>
-        <TextField
-          label='Username'
-          variant='outlined'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <h3>Password</h3>
-        <TextField
-          label='Password'
-          variant='outlined'
-          type='password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Box mt={2}>
-          <Button variant='contained' type='submit'>
-            Login
-          </Button>
-        </Box>
-      </form>
+
       <div>
         <form action='/auth/google' method='GET'>
           <button type='submit'>
