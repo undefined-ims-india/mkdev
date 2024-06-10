@@ -48,7 +48,8 @@ app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
 
-// app.use('/api', routes);
+app.use('/api', routes);
+
 
 // Google Strategy
 passport.use(
@@ -112,7 +113,6 @@ app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
-app.use('/api', routes);
 
 app.get('/profile', (req, res) => {
   if (req.user) {
@@ -160,8 +160,7 @@ io.on('connection', (socket) => {
 
   socket.on('add-conversation', () => {
     io.emit('add-conversation');
-  });
-
+    })
   // on disconnection
   socket.on('disconnect', () => {});
 });
@@ -169,8 +168,8 @@ io.on('connection', (socket) => {
 // websocket server
 io.listen(4000);
 
-app.listen(PORT, () => {
-  console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
-});
-
-export default app;
+  app.listen(PORT, () => {
+    console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
+    });
+    export default app;
+    
