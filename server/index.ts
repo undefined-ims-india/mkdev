@@ -48,7 +48,7 @@ app.use(express.json());
 //app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
 
-app.use('/api', routes);
+// app.use('/api', routes);
 
 // Google Strategy
 passport.use(
@@ -66,17 +66,22 @@ passport.use(
         })
         .then((user) => {
           if (!user) {
-            return prisma.user.create({
-              data: {
-                username: nickname,
-                googleId: sub,
-                picture: picture,
-                firstName: given_name,
-                lastName: family_name,
-              },
-            });
+            return prisma.user
+              .create({
+                data: {
+                  username: nickname,
+                  googleId: sub,
+                  picture: picture,
+                  firstName: given_name,
+                  lastName: family_name,
+                },
+              })
+              .then((newUser) => {
+                done(null, newUser);
+              });
+          } else {
+            done(null, user);
           }
-          done(null, user);
         })
         .catch((err) => {
           console.error('Failed to find or create user:', err);
@@ -107,14 +112,29 @@ app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
+app.use('/api', routes);
+
+app.get('/profile', (req, res) => {
+  if (req.user) {
+    res.json(req.user);
+  } else {
+    res.status(401).json({ message: 'Not authenticated' });
+  }
+});
 
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/profile',
+    successRedirect: '/dashboard',
     failureRedirect: '/login',
   })
 );
+app.get('/login', (req: Request, res: Response) => {
+  res.render('login');
+});
+app.get('/logout', (req: Request, res: Response) => {
+  res.redirect('/');
+});
 
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
