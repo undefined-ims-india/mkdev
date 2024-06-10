@@ -1,47 +1,47 @@
-/*
-  Warnings:
-
-  - You are about to drop the column `authorId` on the `Post` table. All the data in the column will be lost.
-  - You are about to drop the column `content` on the `Post` table. All the data in the column will be lost.
-  - You are about to drop the column `published` on the `Post` table. All the data in the column will be lost.
-  - You are about to drop the column `email` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the column `name` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the `Profile` table. If the table is not empty, all the data it contains will be lost.
-  - Added the required column `repoLink` to the `Post` table without a default value. This is not possible if the table is not empty.
-  - Added the required column `userId` to the `Post` table without a default value. This is not possible if the table is not empty.
-
-*/
 -- CreateEnum
-CREATE TYPE "tagType" AS ENUM ('postTag', 'userTag');
+CREATE TYPE "tagType" AS ENUM ('post', 'user');
 
--- DropForeignKey
-ALTER TABLE "Post" DROP CONSTRAINT "Post_authorId_fkey";
+-- CreateTable
+CREATE TABLE "Post" (
+    "id" SERIAL NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "body" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "s3_Etag" TEXT,
+    "repoLink" UUID,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
--- DropForeignKey
-ALTER TABLE "Profile" DROP CONSTRAINT "Profile_userId_fkey";
+    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
+);
 
--- DropIndex
-DROP INDEX "User_email_key";
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "username" TEXT,
+    "googleId" TEXT,
+    "linkedinId" TEXT,
+    "githubId" TEXT,
+    "picture" TEXT,
+    "firstName" TEXT,
+    "lastName" TEXT,
+    "follower_count" INTEGER DEFAULT 0,
+    "post_count" INTEGER DEFAULT 0,
 
--- AlterTable
-ALTER TABLE "Post" DROP COLUMN "authorId",
-DROP COLUMN "content",
-DROP COLUMN "published",
-ADD COLUMN     "body" TEXT,
-ADD COLUMN     "repoLink" UUID NOT NULL,
-ADD COLUMN     "userId" INTEGER NOT NULL;
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
--- AlterTable
-ALTER TABLE "User" DROP COLUMN "email",
-DROP COLUMN "name",
-ADD COLUMN     "firstName" TEXT,
-ADD COLUMN     "follower_count" INTEGER,
-ADD COLUMN     "lastName" TEXT,
-ADD COLUMN     "post_count" INTEGER,
-ADD COLUMN     "username" TEXT;
+-- CreateTable
+CREATE TABLE "Blog" (
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "body" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
--- DropTable
-DROP TABLE "Profile";
+    CONSTRAINT "Blog_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Tags" (
@@ -101,6 +101,18 @@ CREATE TABLE "_ConversationsToUser" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_googleId_key" ON "User"("googleId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_linkedinId_key" ON "User"("linkedinId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_githubId_key" ON "User"("githubId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_LikedPosts_AB_unique" ON "_LikedPosts"("A", "B");
 
 -- CreateIndex
@@ -134,10 +146,13 @@ CREATE INDEX "_ConversationsToUser_B_index" ON "_ConversationsToUser"("B");
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Messages" ADD CONSTRAINT "Messages_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Blog" ADD CONSTRAINT "Blog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Messages" ADD CONSTRAINT "Messages_conversationId_fkey" FOREIGN KEY ("conversationId") REFERENCES "Conversations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Messages" ADD CONSTRAINT "Messages_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_LikedPosts" ADD CONSTRAINT "_LikedPosts_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
