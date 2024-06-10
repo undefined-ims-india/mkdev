@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, ReactElement } from 'react';
 import axios from 'axios';
 import Nav from './Nav';
@@ -13,6 +14,7 @@ interface User {
   github: string;
   sub: string;
   username: string;
+
   picture: string;
 }
 interface Post {
@@ -26,17 +28,16 @@ const Profile = (): ReactElement => {
   const [user, setUser] = useState<User>();
   const [posts, setPosts] = useState<Post[]>([]);
 
-  useEffect(() => {
+  const getUser = () => {
     axios
       .get('/profile')
       .then(({ data }) => {
         setUser(data);
-        // console.log('user', data);
+        getPosts(data);
+        console.log('user', data);
       })
-      .catch((error) => {
-        console.error('Failed to get user:', error);
-      });
-  }, []);
+      .catch((error) => console.error('Failed to get user:', error));
+  };
 
   useEffect(() => {
     const id = 6;
@@ -99,3 +100,16 @@ const Profile = (): ReactElement => {
 };
 
 export default Profile;
+
+/*
+useEffect(() => {
+  getUser();
+}, []);
+
+ return (
+  <div>
+    <h1>{user?.name}</h1>
+    <img src={user?.picture} alt={user?.name} />
+  </div>
+);
+ */
