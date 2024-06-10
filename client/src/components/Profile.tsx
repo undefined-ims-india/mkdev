@@ -1,20 +1,20 @@
-
 import React, { useState, useEffect, ReactElement } from 'react';
 import axios from 'axios';
 import Nav from './Nav';
 import UserPosts from './UserPosts';
-import { Typography, Box } from '@mui/material';
+import Blogs from './Blogs';
+import Typography from '@mui/material';
+import Box from '@mui/material';
 
 interface User {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
-  linkedIn: string;
-  github: string;
+  linkedinId: string;
+  githubId: string;
   sub: string;
   username: string;
-
   picture: string;
 }
 interface Post {
@@ -24,13 +24,20 @@ interface Post {
   body: string;
 }
 
+interface Blog {
+  id: number;
+  title: string;
+  body: string;
+  userId: number;
+}
+
 const Profile = (): ReactElement => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User>({} as User);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {
-    const id = 6;
-    // const id = user?.id;
+    const id = user?.id;
     axios
       .get(`/api/users/${id}`)
       .then(({ data }) => {
@@ -43,9 +50,8 @@ const Profile = (): ReactElement => {
   }, []);
 
   const getUser = () => {
-    // const userId = user?.id;
-    const userId = 6;
-    if (userId) {
+    const userId = user?.id;
+    if (user) {
       axios
         .get<Post[]>(`/api/posts/user/${userId}`)
         .then(({ data }) => {
@@ -64,7 +70,6 @@ const Profile = (): ReactElement => {
   return (
     <div>
       <Nav />
-      <h1>{user?.username}'s Profile</h1>
       <div>{/* <p>{user?.aboutMe}</p> */}</div>
       <p>{`${user?.firstName} ${user?.lastName}`}</p>
       <img
@@ -72,8 +77,8 @@ const Profile = (): ReactElement => {
         alt={user?.username}
         style={{ width: 100, height: 100 }}
       />
-      <p>{user?.linkedIn}LinkedIn Link</p>
-      <p>{user?.github}Github Link</p>
+      <p>{user?.linkedinId}LinkedIn Link</p>
+      <p>{user?.githubId}Github Link</p>
       <div
         style={{
           border: '1px solid black',
@@ -84,21 +89,9 @@ const Profile = (): ReactElement => {
         {/* <Typography align='center'>{user?.firstName}'s Posts</Typography> */}
         <UserPosts posts={posts} />
       </div>
+      <Blogs />
     </div>
   );
 };
 
 export default Profile;
-
-/*
-useEffect(() => {
-  getUser();
-}, []);
-
- return (
-  <div>
-    <h1>{user?.name}</h1>
-    <img src={user?.picture} alt={user?.name} />
-  </div>
-);
- */
