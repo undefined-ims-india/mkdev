@@ -7,13 +7,14 @@ const posts = Router();
 const prisma = new PrismaClient();
 
 // add a post to logged in user
-posts.post('/', (req: any, res: any) => {
+posts.post('/', async (req: any, res: any) => {
   //image in files & title and body in body
-  const { img } = req.files;
+  // const { img } = req.files;
   const { title, body } = req.body;
-  awsS3Upload(img)
-    .then((s3Obj) => {
-      return prisma.post.create({
+  try {
+    if (req.files && req.files.img) {
+      const s3Obj = await awsS3Upload(req.files.img);
+      const post = await prisma.post.create({
         data: {
           title,
           body,
@@ -21,17 +22,25 @@ posts.post('/', (req: any, res: any) => {
           author: { connect: { id: req.user.id } },
         },
       });
-    })
-    .then((post) => {
+    }
+    else {
+      const post = await prisma.post.create({
+        data: {
+          title,
+          body,
+          author: { connect: { id: req.user.id } },
+        },
+      });
+    }
       res.sendStatus(201);
-    })
-    .catch((err: { name: string }) => {
+  }
+  catch(err){
       console.error(err);
       res.sendStatus(500);
-    })
-    .finally(async () => {
+    }
+  finally{
       await prisma.$disconnect();
-    });
+    };
 });
 
 // get all users posts
