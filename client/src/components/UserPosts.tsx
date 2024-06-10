@@ -58,4 +58,4 @@ const UserPosts = ({ posts }: ProfileProps): ReactElement => {
 //   );
 // };
 
-// export default UserPosts;
+ export default UserPosts;
