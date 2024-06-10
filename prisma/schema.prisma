@@ -20,12 +20,32 @@ model Post {
   body      String
   userId    Int
   s3_Etag   String?
-  repoLink  String?  @db.Uuid
+  repoId    Int      @unique
+  repoLink  Repo?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation("UserPosts", fields: [userId], references: [id])
   liked     User[]   @relation("LikedPosts")
   tags      Tags[]   @relation("PostToTags")
+}
+
+model Repo {
+  id          Int     @id @default(autoincrement())
+  postId      Int     @unique
+  post        Post    @relation(fields: [postId], references: [id])
+  link        String
+  files       File[]
+  name        String
+  creatorName String
+}
+
+model File {
+  id        Int       @id @default(autoincrement())
+  repoId    Int       @unique
+  repo      Repo      @relation(fields: [repoId], references: [id])
+  star      Boolean   @default(false)
+  contents  String
+  createdAt DateTime  @default(now())
 }
 
 model User {
@@ -68,9 +88,4 @@ model Conversations {
   id           Int        @id @default(autoincrement())
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
-}
-
-enum tagType {
-  postTag
-  userTag
 }
