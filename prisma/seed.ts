@@ -16,13 +16,12 @@ async function main() {
 
   const user1 = await prisma.user.create({
     data: {
-      username: 'cody.h.daigle',
+      username: 'Squidy',
       googleId: '1234567890',
       linkedinId: '1234567810',
       githubId: 'XXXXXXXXXX',
-      blogs: ['blog1, blog2'],
-      firstName: 'Cody',
-      lastName: 'Daigle',
+      firstName: 'Squidward J.Q.',
+      lastName: 'Tentacles',
       picture:
         'https://lh3.googleusercontent.com/a/ACg8ocLq9dLuYghfrz_g9CIA6VoMalKNDq6ouj6cjbctqYkfoeTwmQ=s96-c',
       follower_count: 10,
@@ -51,9 +50,8 @@ async function main() {
       googleId: '0987654321',
       linkedinId: '1234567444',
       githubId: 'XXXXXXXX333',
-      blogs: ['blog1, blog2'],
-      firstName: 'Mike',
-      lastName: 'S',
+      firstName: 'Patrick',
+      lastName: 'Star',
       picture:
         'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
@@ -86,9 +84,8 @@ async function main() {
       googleId: '1XXXXXXXXX',
       linkedinId: '1234567855',
       githubId: 'XXXXXXX666',
-      blogs: ['blog1, blog2'],
-      firstName: 'Patrick',
-      lastName: 'H',
+      firstName: 'Sheldon James',
+      lastName: 'Plankton',
       picture:
         'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
@@ -121,13 +118,12 @@ async function main() {
 
   const user4 = await prisma.user.create({
     data: {
-      username: 'Larry the Lobster',
+      username: 'Bubble Buddy',
       googleId: 'XXXXXXXXX0',
       linkedinId: '1234569999',
       githubId: 'XXXXXXX664',
-      blogs: ['blog1, blog2'],
-      firstName: 'Alex',
-      lastName: 'H',
+      firstName: 'Larry',
+      lastName: 'The Lobster',
       picture:
         'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
@@ -159,7 +155,7 @@ async function main() {
     },
   });
 
-  console.log({ user1, user2, user3, user4 });
+  // console.log({ user1, user2, user3, user4 });
   console.log('Database seeded with 4 users and 8 posts');
 }
 
