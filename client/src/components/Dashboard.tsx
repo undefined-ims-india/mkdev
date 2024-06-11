@@ -58,8 +58,6 @@ const Dashboard = (): ReactElement => {
       : user.username;
   };
 
-  // useEffect(() => {}, [user]);
-
   useEffect(() => {
     setUsername(checkUsername());
     getUser();
