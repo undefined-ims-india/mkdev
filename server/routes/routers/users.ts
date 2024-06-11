@@ -1,3 +1,4 @@
+import passport from 'passport';
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
@@ -37,9 +38,22 @@ users.get('/', (req: any, res: any) => {
     });
 });
 
+const ensureAuthenticated = (req: any, res: any, next: any) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    console.error('User is not authenticated'), res.sendStatus(401);
+  }
+};
+
+users.get('/me', ensureAuthenticated, (req: any, res: any) => {
+  const user = req.user;
+  res.json(user);
+});
+
 users.get('/:id', (req: any, res: any) => {
   const { id } = req.params;
-  // console.log(id);
+  // console.log('user id', +id);
   prisma.user
     .findUnique({
       where: { id: +id },
