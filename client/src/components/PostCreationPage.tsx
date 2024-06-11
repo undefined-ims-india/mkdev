@@ -3,16 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import MarkDown from './MarkDown'
 
-import {
-  Tooltip,
-  Button,
-  TextField,
-  Stack,
-  Divider,
-  FormControl,
-  Input,
-  InputLabel
-} from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
 
 const PostCreationPage = () :ReactElement => {
 
