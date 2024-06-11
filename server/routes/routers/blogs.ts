@@ -6,7 +6,7 @@ const blog = Router();
 
 blog.get('/:username', (req, res) => {
   const { username } = req.params;
-  `/https://dev.to/api/articles?username=${username}&per_page=8`;
+  console.log(req.params);
 });
 
 export default blog;
