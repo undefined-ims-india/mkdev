@@ -1,5 +1,4 @@
-import React, { useState, ReactElement, useEffect } from 'react';
-import axios from 'axios';
+import React, { ReactElement } from 'react';
 import UsersPost from './UsersPost';
 
 interface User {
