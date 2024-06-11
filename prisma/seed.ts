@@ -16,11 +16,12 @@ async function main() {
 
   const user1 = await prisma.user.create({
     data: {
+      name: 'Squidward J.Q. Tentacles',
       username: 'Squidy',
       googleId: '1234567890',
       linkedinId: '1234567810',
       githubId: 'XXXXXXXXXX',
-      firstName: 'Squidward J.Q.',
+      firstName: 'Squidward',
       lastName: 'Tentacles',
       picture: 'XXXXXXXX',
       follower_count: 10,
@@ -45,6 +46,7 @@ async function main() {
 
   const user2 = await prisma.user.create({
     data: {
+      name: 'Patrick Star',
       username: 'Patrick Star',
       googleId: '0987654321',
       linkedinId: '1234567444',
@@ -79,6 +81,7 @@ async function main() {
   });
   const user3 = await prisma.user.create({
     data: {
+      name: 'Sheldon James Plankton',
       username: 'Plankton the Evil Genius',
       googleId: '1XXXXXXXXX',
       linkedinId: '1234567855',
@@ -117,12 +120,13 @@ async function main() {
 
   const user4 = await prisma.user.create({
     data: {
+      name: 'Larry The Lobster',
       username: 'Bubble Buddy',
       googleId: 'XXXXXXXXX0',
       linkedinId: '1234569999',
       githubId: 'XXXXXXX664',
       firstName: 'Larry',
-      lastName: 'The Lobster',
+      lastName: 'Lobster',
       picture:
         'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
       follower_count: 10,
@@ -155,7 +159,7 @@ async function main() {
   });
 
   // console.log({ user1, user2, user3, user4 });
-  console.log('Database seeded with 4 users and 8 posts');
+  console.log('Database seeded');
 }
 
 main()
