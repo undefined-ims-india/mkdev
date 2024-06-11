@@ -2,6 +2,7 @@ import React, { ReactElement, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import MarkDown from './MarkDown'
+import Repo from './post creation/Repo';
 
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
@@ -78,6 +79,7 @@ const PostCreationPage = () :ReactElement => {
           <Button onClick={handleSubmit} disabled={canSubmit}>Submit</Button>
         </FormControl>
       </form>
+      <Repo />
       <Divider />
       <Stack>
         <MarkDown text={title} />
