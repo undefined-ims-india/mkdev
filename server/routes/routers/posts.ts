@@ -6,34 +6,41 @@ require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const posts = Router();
 const prisma = new PrismaClient();
 
-const USER_ID = 3;
-
 // add a post to logged in user
-posts.post('/', (req: any, res: any) => {
+posts.post('/', async (req: any, res: any) => {
   //image in files & title and body in body
-  const { img } = req.files;
+  // const { img } = req.files;
   const { title, body } = req.body;
-  awsS3Upload(img)
-    .then((s3Obj) => {
-      return prisma.post.create({
+  try {
+    if (req.files && req.files.img) {
+      const s3Obj = await awsS3Upload(req.files.img);
+      const post = await prisma.post.create({
         data: {
           title,
           body,
           s3_Etag: s3Obj.ETag,
-          author: { connect: { id: USER_ID } },
+          author: { connect: { id: req.user.id } },
         },
       });
-    })
-    .then((post) => {
+    }
+    else {
+      const post = await prisma.post.create({
+        data: {
+          title,
+          body,
+          author: { connect: { id: req.user.id } },
+        },
+      });
+    }
       res.sendStatus(201);
-    })
-    .catch((err: { name: string }) => {
+  }
+  catch(err){
       console.error(err);
       res.sendStatus(500);
-    })
-    .finally(async () => {
+    }
+  finally{
       await prisma.$disconnect();
-    });
+    };
 });
 
 // get all users posts
@@ -41,7 +48,7 @@ posts.get('/', (req: any, res: any) => {
   console.log(req.user);
 
   prisma.post
-    .findMany({ where: { userId: USER_ID } })
+    .findMany({ where: { userId: req.user.id } })
     .then((posts: {}[]) => {
       res.send(posts);
     })
@@ -122,7 +129,7 @@ posts.patch('/:id', (req: any, res: any) => {
 posts.delete('/:id', (req: any, res: any) => {
   const { id }: { id: string } = req.params;
   prisma.post
-    .delete({ where: { userId: USER_ID, id: +id } })
+    .delete({ where: { userId: req.user.id, id: +id } })
     .then(() => {
       res.sendStatus(200);
     })
