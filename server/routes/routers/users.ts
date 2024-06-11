@@ -6,7 +6,9 @@ const users = Router();
 const prisma = new PrismaClient();
 
 users.post('/', (req: any, res: any) => {
-  const { newUser }: { newUser: { firstName: string; lastName: string } } =
+  const {
+    newUser,
+  }: { newUser: { name: string; firstName: string; lastName: string } } =
     req.body;
   prisma.user
     .create({ data: newUser })
@@ -43,7 +45,8 @@ const ensureAuthenticated = (req: any, res: any, next: any) => {
   if (req.isAuthenticated()) {
     return next();
   } else {
-    console.error('User is not authenticated'), res.sendStatus(401);
+    console.error('User is not authenticated, please Log in'),
+      res.sendStatus(401);
   }
 };
 
