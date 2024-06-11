@@ -4,8 +4,8 @@ import axios from 'axios';
 import Nav from './Nav';
 import UserPosts from './UserPosts';
 import Blogs from './Blogs';
-import Typography from '@mui/material';
-import Box from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 interface User {
   id: number;
@@ -56,7 +56,7 @@ const Profile = (): ReactElement => {
   };
   useEffect(() => {
     getUser();
-  }, []);
+  }, [user]);
 
   // const getPosts = () => {
   //   axios
