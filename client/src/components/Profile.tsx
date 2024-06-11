@@ -39,6 +39,7 @@ const Profile = (): ReactElement => {
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
+  // * The real get user function. DO NOT REMOVE!
   const getUser = () => {
     if (user) {
       axios
@@ -53,29 +54,23 @@ const Profile = (): ReactElement => {
         });
     }
   };
-
   useEffect(() => {
     getUser();
   }, []);
 
-  const getPosts = () => {
-    const userId = user?.id;
-    axios
-      .get<Post[]>(`/api/posts/user/${userId}`)
-      .then(({ data }) => {
-        setPosts(data);
-        console.log('posts', data);
-      })
-      .catch((error) => {
-        console.error('Failed to fetch posts:', error);
-      });
-  };
-  useEffect(() => {
-    getPosts();
-  }, []);
-
+  // const getPosts = () => {
+  //   axios
+  //     .get(`/api/posts/user/${user?.id}`)
+  //     .then(({ data }) => {
+  //       setPosts(data);
+  //       console.log('posts', data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Failed to fetch posts:', error);
+  //     });
+  // };
   // useEffect(() => {
-  //   getUser(user?.id);
+  //   getPosts();
   // }, [user]);
 
   return (
