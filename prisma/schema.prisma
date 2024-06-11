@@ -30,14 +30,15 @@ model Post {
 
 model User {
   id             Int             @id @default(autoincrement())
-  username       String?         @unique
+  name           String
+  username       String          @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
   githubId       String?         @unique
   blogs          Blog[]          @relation("UserBlogs")
   picture        String?
-  firstName      String?
-  lastName       String?
+  firstName      String
+  lastName       String
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
   messages       Messages[]
