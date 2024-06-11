@@ -9,7 +9,7 @@ repos.get('/:user/:repo/tree', async (req:express.Request, res:express.Response)
   const {user, repo} = req.params
   try {
     const { data } = await axios.get(`https://api.github.com/repos/${user}/${repo}/branches/main`);
-    const tree : {tree: []} = (await axios.get(data.commit.commit.tree.url)).data.tree;
+    const tree : {tree: []} = (await axios.get(data.commit.commit.tree.url+"?recursive=true")).data.tree;
     res.send(tree);
   }
   catch (err) {
