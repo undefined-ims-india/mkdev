@@ -21,7 +21,8 @@ const PostCreationPage = () :ReactElement => {
   const [body, setBody]: [string, Function] = useState('');
   const [titleFieldTooltip, setTitleFieldTooltip] = useState(false);
   const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
-  const [file, setFile]: [any, Function] = useState();
+  const [img, setImg]: [any, Function] = useState();
+  const [canSubmit, setCanSubmit]: [boolean, Function] = useState(false);
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>) :void => {
     let setStateFunc :Function
@@ -41,7 +42,16 @@ const PostCreationPage = () :ReactElement => {
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>):void => {
     console.log(e.target.files)
-    setFile(e.target.files![0]);
+    setImg(e.target.files![0]);
+  };
+
+  const handleSubmit = (e:any) => {
+    e.preventDefault()
+    setCanSubmit(true)
+    axios.postForm('/api/posts', {title, body, img})
+      .then(({data}) => {
+        navigate('/dashboard');
+      })
   }
 
   return (
@@ -67,7 +77,7 @@ const PostCreationPage = () :ReactElement => {
               placeholder="Body Text"
               rows={4}
               />
-          <Button type='submit' >Submit</Button>
+          <Button onClick={handleSubmit} disabled={canSubmit}>Submit</Button>
         </FormControl>
       </form>
       <Divider />
