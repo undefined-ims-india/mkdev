@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ReactElement } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Nav from './Nav';
 import UserPosts from './UserPosts';
@@ -34,62 +35,74 @@ interface Blog {
 const Profile = (): ReactElement => {
   const [user, setUser] = useState<User>({} as User);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [postsCount, setPostsCount] = useState<number>(0);
+  const [followersCount, setFollowersCount] = useState<number>(0);
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
-  useEffect(() => {
-    const id = user?.id;
-    axios
-      .get(`/api/users/${id}`)
-      .then(({ data }) => {
-        setUser(data);
-        // console.log('user', data);
-      })
-      .catch((error) => {
-        console.error('Failed to get user:', error);
-      });
-  }, []);
-
   const getUser = () => {
-    const userId = user?.id;
     if (user) {
       axios
-        .get<Post[]>(`/api/posts/user/${userId}`)
+        .get('/api/users/loggedIn')
         .then(({ data }) => {
-          setPosts(data);
-          // console.log('posts', data);
+          setUser(data);
+          setPostsCount(data.postsCount);
+          setFollowersCount(data.followersCount);
         })
         .catch((error) => {
-          console.error('Failed to fetch posts:', error);
+          console.error('Failed to get user:', error);
         });
     }
   };
+
   useEffect(() => {
     getUser();
-  }, [user]);
+  }, []);
+
+  const getPosts = () => {
+    const userId = user?.id;
+    axios
+      .get<Post[]>(`/api/posts/user/${userId}`)
+      .then(({ data }) => {
+        setPosts(data);
+        console.log('posts', data);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch posts:', error);
+      });
+  };
+  useEffect(() => {
+    getPosts();
+  }, []);
+
+  // useEffect(() => {
+  //   getUser(user?.id);
+  // }, [user]);
 
   return (
     <div>
       <Nav />
-      <div>{/* <p>{user?.aboutMe}</p> */}</div>
-      <p>{`${user?.firstName} ${user?.lastName}`}</p>
-      <img
-        src={user?.picture}
-        alt={user?.username}
-        style={{ width: 100, height: 100 }}
-      />
-      <p>{user?.linkedinId}LinkedIn Link</p>
-      <p>{user?.githubId}Github Link</p>
-      <div
-        style={{
-          border: '1px solid black',
-          padding: 1,
-          borderRadius: 12,
-        }}
-      >
-        {/* <Typography align='center'>{user?.firstName}'s Posts</Typography> */}
-        <UserPosts posts={posts} />
-      </div>
-      <Blogs />
+      {user && (
+        <div>
+          <p>{`${user?.username}`}</p>
+          <img
+            src={user?.picture}
+            alt={user?.username}
+            style={{ width: 100, height: 100 }}
+          />
+          <p>{user?.linkedinId} LinkedIn Link</p>
+          <p>{user?.githubId} Github Link</p>
+          <div
+            style={{
+              border: '1px solid black',
+              padding: 1,
+              borderRadius: 12,
+            }}
+          >
+            <UserPosts posts={posts} />
+          </div>
+          {/* <Blogs /> */}
+        </div>
+      )}
     </div>
   );
 };
