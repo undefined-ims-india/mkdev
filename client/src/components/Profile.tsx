@@ -6,9 +6,11 @@ import UserPosts from './UserPosts';
 import Blogs from './Blogs';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { use } from 'passport';
 
 interface User {
   id: number;
+  name: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -38,6 +40,7 @@ const Profile = (): ReactElement => {
   const [postsCount, setPostsCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [username, setUsername] = useState<string>('');
 
   // * The real get user function. DO NOT REMOVE!
   const getUser = () => {
@@ -56,6 +59,16 @@ const Profile = (): ReactElement => {
   };
   useEffect(() => {
     getUser();
+  }, [user]);
+
+  const checkUsername = () => {
+    return user.username === null || user.username === ''
+      ? user.name
+      : user.username;
+  };
+
+  useEffect(() => {
+    setUsername(checkUsername());
   }, [user]);
 
   // const getPosts = () => {
@@ -78,10 +91,10 @@ const Profile = (): ReactElement => {
       <Nav />
       {user && (
         <div>
-          <p>{`${user?.username}`}</p>
+          <p>{`${username}`}</p>
           <img
             src={user?.picture}
-            alt={user?.username}
+            alt={user?.name}
             style={{ width: 100, height: 100 }}
           />
           <p>{user?.linkedinId} LinkedIn Link</p>
