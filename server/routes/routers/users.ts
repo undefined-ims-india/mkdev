@@ -46,7 +46,7 @@ const ensureAuthenticated = (req: any, res: any, next: any) => {
   }
 };
 
-users.get('/me', ensureAuthenticated, (req: any, res: any) => {
+users.get('/loggedIn', ensureAuthenticated, (req: any, res: any) => {
   const user = req.user;
   res.json(user);
 });
