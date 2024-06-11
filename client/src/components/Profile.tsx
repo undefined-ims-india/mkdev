@@ -6,6 +6,8 @@ import UserPosts from './UserPosts';
 import Blogs from './Blogs';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 
 interface User {
   id: number;
@@ -41,6 +43,11 @@ const Profile = (): ReactElement => {
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [username, setUsername] = useState<string>('');
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const getUser = () => {
     if (user) {
@@ -56,9 +63,6 @@ const Profile = (): ReactElement => {
         });
     }
   };
-  useEffect(() => {
-    getUser();
-  }, [user]);
 
   const checkUsername = () => {
     return user.username === null || user.username === ''
@@ -68,6 +72,7 @@ const Profile = (): ReactElement => {
 
   useEffect(() => {
     setUsername(checkUsername());
+    getUser();
   }, [user]);
 
   // const getPosts = () => {
@@ -107,7 +112,13 @@ const Profile = (): ReactElement => {
           >
             <UserPosts posts={posts} />
           </div>
-          {/* <Blogs /> */}
+          <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+            <Tabs value={value} onChange={handleChange} centered>
+              <Tab label='Item One' />
+              <Tab label='Item Two' />
+              <Tab label='Item Three' />
+            </Tabs>
+          </Box>
         </div>
       )}
     </div>
