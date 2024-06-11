@@ -42,7 +42,6 @@ const Profile = (): ReactElement => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [username, setUsername] = useState<string>('');
 
-  // * The real get user function. DO NOT REMOVE!
   const getUser = () => {
     if (user) {
       axios

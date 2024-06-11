@@ -4,6 +4,7 @@ import axios from 'axios';
 import Container from '@mui/material/Container';
 interface User {
   id: number;
+  name: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -15,6 +16,7 @@ interface User {
 }
 interface Post {
   id: number;
+  author: string;
   userId: number;
   title: string;
   body: string;
@@ -33,8 +35,8 @@ const Dashboard = (): ReactElement => {
   const [postsCount, setPostsCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [username, setUsername] = useState<string>('');
 
-  // * The real get user function. DO NOT REMOVE!
   const getUser = () => {
     if (user) {
       axios
@@ -49,6 +51,17 @@ const Dashboard = (): ReactElement => {
         });
     }
   };
+
+  const checkUsername = () => {
+    return user.username === null || user.username === ''
+      ? user.name
+      : user.username;
+  };
+
+  useEffect(() => {
+    setUsername(checkUsername());
+  }, [user]);
+
   useEffect(() => {
     getUser();
   }, [user]);
@@ -59,7 +72,7 @@ const Dashboard = (): ReactElement => {
       <h1>user dashboard page</h1>
       {user && (
         <div>
-          <p>{`${user?.username}`}</p>
+          <p>{`${`${username}`}`}</p>
           <img
             src={user?.picture}
             alt={user?.username}
