@@ -7,7 +7,7 @@ const awsS3Upload = async (file:any):Promise<any> => {
     Bucket: "mkdev-ims-india",
     Key: `${Date.now().toString()}-${file.name}`
   }
-  return await s3.putObject(params);
+  return s3.putObject(params).promise();
 }
 
 export default awsS3Upload;
