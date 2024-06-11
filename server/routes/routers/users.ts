@@ -38,6 +38,7 @@ users.get('/', (req: any, res: any) => {
     });
 });
 
+// Authenticated route to verify a user is logged in
 const ensureAuthenticated = (req: any, res: any, next: any) => {
   if (req.isAuthenticated()) {
     return next();
@@ -50,6 +51,8 @@ users.get('/loggedIn', ensureAuthenticated, (req: any, res: any) => {
   const user = req.user;
   res.json(user);
 });
+
+// Get user by id
 
 users.get('/:id', (req: any, res: any) => {
   const { id } = req.params;
