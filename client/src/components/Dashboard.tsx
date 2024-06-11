@@ -58,11 +58,10 @@ const Dashboard = (): ReactElement => {
       : user.username;
   };
 
-  useEffect(() => {
-    setUsername(checkUsername());
-  }, [user]);
+  // useEffect(() => {}, [user]);
 
   useEffect(() => {
+    setUsername(checkUsername());
     getUser();
   }, [user]);
 
