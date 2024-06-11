@@ -1,3 +1,4 @@
+import passport from 'passport';
 import { NextFunction, Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
@@ -40,15 +41,13 @@ users.get('/', (req: any, res: any) => {
 });
 
 // Authenticated route to verify a user is logged in
-users.get('/loggedIn', (req: any, res: any, next: NextFunction) => {
+users.get('/loggedIn', (req: any, res: any) => {
   const user = req.user;
   if (req.isAuthenticated()) {
     return res.json(user);
   } else {
-    console.error('User is not authenticated, please Log in'),
-      res.sendStatus(401);
+    console.error('Please Log in'), res.sendStatus(401);
   }
-  next(); // May not be needed
 });
 
 // Get user by id
