@@ -6,7 +6,6 @@ import UserPosts from './UserPosts';
 import Blogs from './Blogs';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { use } from 'passport';
 
 interface User {
   id: number;
@@ -23,6 +22,7 @@ interface User {
 interface Post {
   id: number;
   userId: number;
+  author: string;
   title: string;
   body: string;
 }
