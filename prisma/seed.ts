@@ -22,8 +22,7 @@ async function main() {
       githubId: 'XXXXXXXXXX',
       firstName: 'Squidward J.Q.',
       lastName: 'Tentacles',
-      picture:
-        'https://lh3.googleusercontent.com/a/ACg8ocLq9dLuYghfrz_g9CIA6VoMalKNDq6ouj6cjbctqYkfoeTwmQ=s96-c',
+      picture: 'https://lh',
       follower_count: 10,
       post_count: 2,
 
