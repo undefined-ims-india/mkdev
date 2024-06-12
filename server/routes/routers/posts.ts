@@ -9,12 +9,13 @@ const prisma = new PrismaClient();
 // add a post to logged in user
 posts.post('/', async (req: any, res: any) => {
   //image in files & title and body in body
-  // const { img } = req.files;
   const { title, body } = req.body;
+  const repoObj: string|null = req.body.repo ? JSON.parse(atob(req.body.repo)) : null;
   try {
+    let repoId, post;
     if (req.files && req.files.img) {
       const s3Obj = await awsS3Upload(req.files.img);
-      const post = await prisma.post.create({
+      post = await prisma.post.create({
         data: {
           title,
           body,
@@ -23,7 +24,7 @@ posts.post('/', async (req: any, res: any) => {
         },
       });
     } else {
-      const post = await prisma.post.create({
+      post = await prisma.post.create({
         data: {
           title,
           body,
