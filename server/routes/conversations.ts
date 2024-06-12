@@ -29,7 +29,7 @@ conversations.get('/', async (req: any, res: Response) => {
     });
     res.status(200).send(allConversations);
   } else {
-    res.status(200).send('You must be logged in to view direct messages');
+    res.status(401).send('You must be logged in to view direct messages');
   }
 
 });
@@ -49,7 +49,7 @@ conversations.post('/', async (req: Request, res: Response) => {
   prisma.conversations.create({
     data: {
       participants: {
-        connect: [{ id: 5 }, { id: 6 }]
+        connect: [{ id: 5 }, { id: 8 }]
         // connect: participants,
       }
     }
