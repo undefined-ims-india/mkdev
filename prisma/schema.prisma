@@ -31,7 +31,7 @@ model Post {
 model User {
   id             Int             @id @default(autoincrement())
   name           String
-  username       String          @unique
+  username       String?         @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
   devId          String?         @unique
@@ -39,7 +39,7 @@ model User {
   blogs          Blog[]          @relation("UserBlogs")
   picture        String?
   firstName      String
-  lastName       String
+  lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
   messages       Messages[]
