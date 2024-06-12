@@ -12,7 +12,7 @@ posts.post('/', async (req: any, res: any) => {
   const { title, body } = req.body;
   const repoObj: {link:string, files: {path:string, contents:string}[]}|null = req.body.repo ? JSON.parse(atob(req.body.repo)) : null;
   try {
-    let repoId, post;
+    let post;
     if (req.files && req.files.img) {
       const s3Obj = await awsS3Upload(req.files.img);
       post = await prisma.post.create({
