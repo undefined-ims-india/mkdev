@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import UsersPost from './UsersPost';
 
 interface User {
@@ -19,15 +19,19 @@ interface Post {
   body: string;
 }
 
-interface ProfileProps {
+interface PostProps {
   posts: Post[];
+  getPosts(): void;
 }
 
-const UserPosts = ({ posts }: ProfileProps): ReactElement => {
+const UserPosts = ({ posts, getPosts }: PostProps): ReactElement => {
+  useEffect(() => {
+    getPosts();
+  }, [getPosts]);
   return (
     <>
       {posts.map((post: any) => (
-        <UsersPost key={post.id} post={post} />
+        <UsersPost key={post.id} post={post} getPosts={getPosts} />
       ))}
     </>
   );
