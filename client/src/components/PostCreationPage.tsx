@@ -17,7 +17,7 @@ const PostCreationPage = (): ReactElement => {
   const [titleFieldTooltip, setTitleFieldTooltip] = useState(false);
   const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
   const [img, setImg]: [any, Function] = useState();
-  const [cantSubmit, setcanttSubmit]: [boolean, Function] = useState(false);
+  const [cantSubmit, setCantSubmit]: [boolean, Function] = useState(false);
   const [repo, setRepo]: [{link: string, files: { path: string; contents: string }[]},Function] = useState({link:'', files:[]});
 
 
@@ -50,7 +50,7 @@ const PostCreationPage = (): ReactElement => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    setcanttSubmit(true);
+    setCantSubmit(true);
     axios.postForm('/api/posts', { title, body, img, repo:btoa(JSON.stringify(repo)) }).then(({ data }) => {
       navigate('/dashboard');
     });

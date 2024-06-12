@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 
 const Repo = ({ saveFile, saveRepo }: {saveFile: Function, saveRepo: Function}): ReactElement => {
   const [tree, setTree]: [{ path: string }[], Function] = useState([]);
-  const [repoLink, setRepoLink] = useState('https://github.com/AlexPHebert2000/blackjack');
+  const [repoLink, setRepoLink] = useState('');
   const [displayFile, setDisplayFile] = useState('');
   const [displayFilePath, setDisplayFilePath] = useState('');
 
