@@ -1,17 +1,41 @@
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, useContext, ReactElement } from 'react';
 import axios from 'axios';
 import BlogItem from './BlogItem';
+import { UserContext } from './User';
+interface User {
+  id: number;
+  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  linkedinId: string;
+  githubId: string;
+  sub: string;
+  username: string;
+  picture: string;
+}
+interface Post {
+  id: number;
+  userId: number;
+  author: string;
+  title: string;
+  body: string;
+}
+
+interface Blog {
+  id: number;
+  title: string;
+  body: string;
+  userId: number;
+}
 
 const Blogs = (): ReactElement => {
+  const { user, setUser } = useContext(UserContext);
   const [blogs, setBlogs] = useState([]);
 
-  // React.useEffect(() => {
-  //   getBlogs();
-  // }, [blogs]);
-
-  const getBlogs = (username: string) => {
+  const getBlogs = () => {
     axios
-      .get(`https://dev.to/api/articles?username=${username}&per_page=8`)
+      .get(`https://dev.to/api/articles?username=${user}&per_page=8`)
       .then(({ data }) => {
         setBlogs(data);
         console.log(data);
