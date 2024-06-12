@@ -49,7 +49,7 @@ model File {
 model User {
   id             Int             @id @default(autoincrement())
   name           String
-  username       String          @unique
+  username       String?          @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
   githubId       String?         @unique
