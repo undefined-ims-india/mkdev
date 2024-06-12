@@ -1,10 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  ReactElement,
-  useRef,
-  useContext,
-} from 'react';
+import React, { useState, useEffect, ReactElement, useRef } from 'react';
+import UserInfo from './UserInfo';
 
 import axios from 'axios';
 import Nav from './Nav';
@@ -50,8 +45,10 @@ const Profile = (): ReactElement => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [postsCount, setPostsCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
-  // const [blogs, setBlogs] = useState<Blog[]>([]);
   const [username, setUsername] = useState<string>('');
+  const [devId, setDevId] = useState<string>('');
+  const [githubId, setGithubId] = useState<string>('');
+  const [linkedinId, setLinkedinId] = useState<string>('');
   const userRef = useRef(user);
 
   const [tab, setTab] = useState('1');
@@ -59,6 +56,16 @@ const Profile = (): ReactElement => {
   const handleTab = (e: React.SyntheticEvent, newTab: string) => {
     setTab(newTab);
   };
+
+  useEffect(() => {
+    // console.log('info', user);
+    if (user) {
+      setUsername(user.username);
+      setDevId(user.devId);
+      setGithubId(user.githubId);
+      setLinkedinId(user.linkedinId);
+    }
+  }, [user]);
 
   const getUser = () => {
     if (user) {
@@ -114,15 +121,21 @@ const Profile = (): ReactElement => {
             alt={user?.name}
             style={{ width: 100, height: 100 }}
           />
-          <p>{user?.linkedinId} LinkedIn Link</p>
+          <p> LinkedIn: {user?.linkedinId}</p>
           <p>
-            {' '}
+            Dev.to:{' '}
+            <a href={`https://dev.to/api/users/{id}`} target='blank' rel=''>
+              {user?.devId}
+            </a>
+          </p>
+          <p>
+            GitHub:{' '}
             <a
               href={`https://github.com/${user?.githubId}`}
               target='blank'
-              rel='referrer'
+              rel=''
             >
-              {user?.githubId} GitHub
+              {user?.githubId}
             </a>
           </p>
           <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
@@ -137,10 +150,8 @@ const Profile = (): ReactElement => {
               <TabPanel value='1'>
                 {<UserPosts posts={posts} getPosts={getPosts} />}
               </TabPanel>
-              <TabPanel value='2'>
-                {<Blogs username={`${user.devId}`} />}
-              </TabPanel>
-              <TabPanel value='3'>Item Three</TabPanel>
+              <TabPanel value='2'>{<Blogs devId={`${user.devId}`} />}</TabPanel>
+              <TabPanel value='3'>{<UserInfo />}</TabPanel>
             </TabContext>
             <div
               style={{
