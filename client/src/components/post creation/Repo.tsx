@@ -8,16 +8,12 @@ import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-const Repo = (): ReactElement => {
+const Repo = ({ saveFile }: {saveFile: Function}): ReactElement => {
   const [tree, setTree]: [{ path: string }[], Function] = useState([]);
   const [username, setUsername] = useState('AlexPHebert2000');
   const [repoName, setRepoName] = useState('blackjack');
   const [displayFile, setDisplayFile] = useState('');
   const [displayFilePath, setDisplayFilePath] = useState('');
-  const [fileSave, setFileSave]: [
-    { path: string; contents: string }[],
-    Function,
-  ] = useState([]);
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     switch (e.target.name) {
@@ -48,15 +44,6 @@ const Repo = (): ReactElement => {
     setDisplayFilePath(e.target.name);
   };
 
-  const saveFile = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): Promise<void> => {
-    const file = { path: displayFilePath, contents: displayFile };
-    setFileSave((cur: { path: string; contents: string }[]) => {
-      cur.push(file);
-    });
-  };
-
   return (
     <>
       <TextField value={username} name="username" onChange={handleTextInput} />
@@ -73,7 +60,7 @@ const Repo = (): ReactElement => {
           ))}
         </List>
         <MarkDown text={displayFile} />
-        <Button onClick={saveFile}>Save file to post</Button>
+        <Button onClick={() => {saveFile(displayFilePath, displayFile)}}>Save file to post</Button>
       </Box>
     </>
   );

@@ -18,6 +18,8 @@ const PostCreationPage = (): ReactElement => {
   const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
   const [img, setImg]: [any, Function] = useState();
   const [canSubmit, setCanSubmit]: [boolean, Function] = useState(false);
+  const [fileSave, setFileSave]: [{ path: string; contents: string }[],Function] = useState([]);
+
 
   const handleTextInput = (
     e:
@@ -54,6 +56,12 @@ const PostCreationPage = (): ReactElement => {
     });
   };
 
+  const saveFile = (path: string, contents: string) => {
+    setFileSave([...fileSave, {path, contents}])
+  }
+
+  console.log(fileSave)
+
   return (
     <div>
       <h1>Create Post</h1>
@@ -66,6 +74,8 @@ const PostCreationPage = (): ReactElement => {
               name="img"
               onChange={handleFile}
             />
+          </FormControl>
+          <FormControl>
             <Input
               id="post-title"
               type="text"
@@ -74,6 +84,8 @@ const PostCreationPage = (): ReactElement => {
               name="title"
               placeholder="Title"
             />
+          </FormControl>
+          <FormControl>
             <Input
               id="post-body"
               type="text"
@@ -84,12 +96,14 @@ const PostCreationPage = (): ReactElement => {
               placeholder="Body Text"
               rows={4}
             />
+          </FormControl>
+          <FormControl>
             <Button onClick={handleSubmit} disabled={canSubmit}>
               Submit
             </Button>
           </FormControl>
         </form>
-        <Repo />
+        <Repo saveFile={saveFile} />
         <Divider />
         <Stack>
           <MarkDown text={title} />
