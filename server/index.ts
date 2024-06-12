@@ -8,8 +8,9 @@ import { Server } from 'socket.io';
 import routes from './routes';
 import fileUpload from 'express-fileupload';
 import passport from 'passport';
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { Strategy } from 'passport-google-oauth20';
+import cookieParser from 'cookie-parser';
 
 const GoogleStrategy = Strategy;
 const prisma = new PrismaClient();
@@ -23,14 +24,7 @@ const app = express();
 
 const GOOGLE_CLIENT_ID: string = process.env.GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET: string = process.env.GOOGLE_CLIENT_SECRET || '';
-
-app.use(
-  session({
-    secret: 'Some really long string that no one will ever guess...',
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+const SESSION_SECRET: string = process.env.SESSION_SECRET || '';
 
 app.use(
   cors({
@@ -40,16 +34,23 @@ app.use(
   })
 );
 
+app.use(fileUpload());
+app.use(express.json());
+// app.use(express.urlencoded({ extended: true })); //parses incoming requests with URL-encoded payloads.
+app.use(express.static(CLIENT));
+app.use(cookieParser());
+
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(fileUpload());
-app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
-app.use(express.static(CLIENT));
-
 app.use('/api', routes);
-
 
 // Google Strategy
 passport.use(
@@ -60,7 +61,7 @@ passport.use(
       callbackURL: '/auth/google/callback',
     },
     (accessToken: string, refreshToken: string, profile: any, done: any) => {
-      const { nickname, given_name, family_name, sub, picture } = profile._json;
+      const { name, given_name, family_name, sub, picture } = profile._json;
       prisma.user
         .findUnique({
           where: { googleId: sub },
@@ -70,11 +71,11 @@ passport.use(
             return prisma.user
               .create({
                 data: {
-                  username: nickname,
                   googleId: sub,
-                  picture: picture,
+                  name: name,
                   firstName: given_name,
                   lastName: family_name,
+                  picture: picture,
                 },
               })
               .then((newUser) => {
@@ -93,16 +94,45 @@ passport.use(
 );
 
 // Serialization
+// passport.serializeUser((user: any, done) => {
+//   done(null, user.id);
+// });
 passport.serializeUser((user: any, done) => {
-  done(null, user.id);
+  done(null, {
+    id: user.id,
+    username: user.username,
+    picture: user.picture,
+  });
 });
+
+passport.deserializeUser(async (serializedUser: { id: number }, done) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: serializedUser.id },
+    });
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
+
+// passport.deserializeUser(async (id: number, done) => {
+//   try {
+//     const user = await prisma.user.findUnique({
+//       where: { id },
+//     });
+//     done(null, user);
+//   } catch (err) {
+//     done(err);
+//   }
+// });
 
 passport.deserializeUser((id: number, done) => {
   prisma.user
     .findUnique({
       where: { id },
     })
-    .then((user: User | null) => {
+    .then((user) => {
       done(null, user);
     })
     .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
@@ -114,27 +144,23 @@ app.get(
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-app.get('/profile', (req, res) => {
-  if (req.user) {
-    res.json(req.user);
-  } else {
-    res.status(401).json({ message: 'Not authenticated' });
-  }
-});
-
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/dashboard',
     failureRedirect: '/login',
-  })
+  }),
+  (req, res) => {
+    res.redirect('/dashboard');
+  }
 );
-// app.get('/login', (req: Request, res: Response) => {
-//   res.render('login');
-// });
-// app.get('/logout', (req: Request, res: Response) => {
-//   res.redirect('/');
-// });
+app.get('/login', (req: Request, res: Response) => {
+  res.render('login');
+});
+
+app.post('/logout', (req: any, res: any) => {
+  req.logout();
+  res.redirect('/login');
+});
 
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
@@ -160,7 +186,7 @@ io.on('connection', (socket) => {
 
   socket.on('add-conversation', () => {
     io.emit('add-conversation');
-    })
+  });
   // on disconnection
   socket.on('disconnect', () => {});
 });
@@ -168,8 +194,7 @@ io.on('connection', (socket) => {
 // websocket server
 io.listen(4000);
 
-  app.listen(PORT, () => {
-    console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
-    });
-    export default app;
-    
+app.listen(PORT, () => {
+  console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
+});
+export default app;
