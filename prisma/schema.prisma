@@ -34,8 +34,6 @@ model Repo {
   post        Post    @relation(fields: [postId], references: [id])
   link        String
   files       File[]
-  name        String
-  creatorName String
 }
 
 model File {
