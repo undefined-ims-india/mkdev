@@ -1,6 +1,4 @@
 import React, { useState, useEffect, ReactElement, useRef } from 'react';
-import UserInfo from './UserInfo';
-
 import axios from 'axios';
 import Nav from './Nav';
 import UserPosts from './UserPosts';
@@ -57,16 +55,9 @@ const Profile = (): ReactElement => {
     setTab(newTab);
   };
 
-  useEffect(() => {
-    // console.log('info', user);
-    if (user) {
-      setUsername(user.username);
-      setDevId(user.devId);
-      setGithubId(user.githubId);
-      setLinkedinId(user.linkedinId);
-    }
-  }, [user]);
+  // Ger user information?
 
+  // get loggedIn user
   const getUser = () => {
     if (user) {
       axios
@@ -143,7 +134,7 @@ const Profile = (): ReactElement => {
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleTab} aria-label='lab API tabs example'>
                   <Tab label='Posts' value='1' />
-                  <Tab label='Item Two' value='2' />
+                  <Tab label='Dev.to Blogs' value='2' />
                   <Tab label='Item Three' value='3' />
                 </TabList>
               </Box>
@@ -151,7 +142,7 @@ const Profile = (): ReactElement => {
                 {<UserPosts posts={posts} getPosts={getPosts} />}
               </TabPanel>
               <TabPanel value='2'>{<Blogs devId={`${user.devId}`} />}</TabPanel>
-              <TabPanel value='3'>{<UserInfo />}</TabPanel>
+              <TabPanel value='3'>'Potentially user information'</TabPanel>
             </TabContext>
             <div
               style={{
