@@ -7,6 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Input from '@mui/material/Input';
+import Button from '@mui/material/Button';
+import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 interface User {
   id: number;
@@ -34,9 +37,36 @@ interface PostProps {
 
 const UsersPost = ({ post, getPosts }: PostProps): React.ReactElement => {
   const [like, setLike] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [editedPost, setEditedPost] = useState({ ...post });
 
   const handleLike = () => {
     setLike(!like);
+  };
+
+  const handleEdit = () => {
+    setEdit(true);
+  };
+
+  const handleTitleChange = (e: any) => {
+    setEditedPost({ ...editedPost, title: e.target.value });
+  };
+
+  const handleBodyChange = (e: any) => {
+    setEditedPost({ ...editedPost, body: e.target.value });
+  };
+
+  const editPost = (e: any) => {
+    e.preventDefault();
+
+    axios
+      .put(`/api/posts/${post.id}`, editedPost)
+      .then(() => {
+        getPosts();
+        console.log('Post updated');
+        setEdit(false);
+      })
+      .catch((err) => console.error(err));
   };
 
   const deletePost = () => {
@@ -53,19 +83,36 @@ const UsersPost = ({ post, getPosts }: PostProps): React.ReactElement => {
     <Container>
       <Card variant='outlined' style={{ margin: '20px 0' }}>
         <CardContent>
-          {post.author}
-          <Typography variant='h5' component='div'>
-            {post.title}
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
-            {post.body}
-          </Typography>
-          <IconButton aria-label='Like' onClick={handleLike}>
-            {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-          </IconButton>
-          <IconButton aria-label='Delete' onClick={deletePost}>
-            <DeleteIcon />
-          </IconButton>
+          {edit ? (
+            <form onSubmit={editPost}>
+              <Input
+                type='text'
+                value={editedPost.title}
+                onChange={handleTitleChange}
+              />
+              <textarea value={editedPost.body} onChange={handleBodyChange} />
+              <Button type='submit'>Save</Button>
+            </form>
+          ) : (
+            <>
+              {post.author}
+              <Typography variant='h5' component='div'>
+                {post.title}
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                {post.body}
+              </Typography>
+              <IconButton aria-label='Like' onClick={handleLike}>
+                {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              </IconButton>
+              <IconButton aria-label='Delete' onClick={deletePost}>
+                <DeleteIcon />
+              </IconButton>
+              <IconButton aria-label='Edit' onClick={editPost}>
+                <EditIcon />
+              </IconButton>
+            </>
+          )}
         </CardContent>
       </Card>
     </Container>

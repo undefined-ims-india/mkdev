@@ -1,13 +1,17 @@
-import React, { useState, useEffect, ReactElement, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {
+  useState,
+  useEffect,
+  ReactElement,
+  useRef,
+  useContext,
+} from 'react';
+
 import axios from 'axios';
 import Nav from './Nav';
 import UserPosts from './UserPosts';
 import Blogs from './Blogs';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -23,6 +27,7 @@ interface User {
   sub: string;
   username: string;
   picture: string;
+  postCount: string;
 }
 interface Post {
   id: number;
@@ -74,19 +79,21 @@ const Profile = (): ReactElement => {
       ? user.name
       : user.username;
   };
-  useEffect(() => {
+  const getPosts = () => {
     const userId = user?.id;
     if (userId) {
       axios
         .get<Post[]>(`/api/posts/user/${userId}`)
         .then(({ data }) => {
           setPosts(data);
-          // console.log('posts', data);
         })
         .catch((error) => {
           console.error('Failed to fetch posts:', error);
         });
     }
+  };
+  useEffect(() => {
+    getPosts();
   }, [user]);
 
   useEffect(() => {
@@ -106,7 +113,16 @@ const Profile = (): ReactElement => {
             style={{ width: 100, height: 100 }}
           />
           <p>{user?.linkedinId} LinkedIn Link</p>
-          <p>{user?.githubId} Github Link</p>
+          <p>
+            {' '}
+            <a
+              href={`https://github.com/${user?.githubId}`}
+              target='blank'
+              rel=''
+            >
+              {user?.githubId} GitHub
+            </a>
+          </p>
           <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
             <TabContext value={tab}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -117,7 +133,7 @@ const Profile = (): ReactElement => {
                 </TabList>
               </Box>
               <TabPanel value='1'>
-                {<UserPosts posts={posts} getPosts={function (): void {}} />}
+                {<UserPosts posts={posts} getPosts={getPosts} />}
               </TabPanel>
               <TabPanel value='2'>{<Blogs />}</TabPanel>
               <TabPanel value='3'>Item Three</TabPanel>
@@ -128,9 +144,7 @@ const Profile = (): ReactElement => {
                 padding: 1,
                 borderRadius: 12,
               }}
-            >
-              {/* <UserPosts posts={posts} /> */}
-            </div>
+            ></div>
           </Box>
         </div>
       )}

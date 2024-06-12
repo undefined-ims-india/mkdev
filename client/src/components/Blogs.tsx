@@ -1,7 +1,6 @@
 import React, { useState, useContext, ReactElement } from 'react';
 import axios from 'axios';
 import BlogItem from './BlogItem';
-import { UserContext } from './User';
 interface User {
   id: number;
   name: string;
@@ -30,10 +29,10 @@ interface Blog {
 }
 
 const Blogs = (): ReactElement => {
-  const { user, setUser } = useContext(UserContext);
   const [blogs, setBlogs] = useState([]);
 
   const getBlogs = () => {
+    const user = 'cody-daigle';
     axios
       .get(`https://dev.to/api/articles?username=${user}&per_page=8`)
       .then(({ data }) => {

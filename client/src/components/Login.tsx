@@ -2,11 +2,7 @@ import React, { ReactElement, useContext } from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import GoogleButton from 'react-google-button';
-import { UserContext } from './User';
-
 const Login = (): ReactElement => {
-  const { user, setUser } = useContext(UserContext);
-
   return (
     <Box
       display='flex'
