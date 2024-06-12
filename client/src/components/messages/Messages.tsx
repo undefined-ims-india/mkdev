@@ -10,13 +10,20 @@ interface Conversation {
   id: number;
 }
 
+interface User {
+  id: number; // refers to db generated id
+}
+
 const Messages = (): ReactElement => {
 
   const [conId, setConId] = useState<number>(0);
-  const [allConversations, setAllConversations] = useState<Conversation[]>([])
+  const [addingConversation, setAddingConversation] = useState<boolean>(false);
+  const [recipients, setRecipients] = useState<User[]>([]);
+  const [participants, setParticipants] = useState<string>('');
+  const [allConversations, setAllConversations] = useState<Conversation[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
 
-  // get all current conversations
+  // get all current conversations TODO: *** per user: the only conversations listed should be the ones the user is a part of
   const getAllConversations = (): void => {
     axios
       .get('/api/conversations')
@@ -34,25 +41,42 @@ const Messages = (): ReactElement => {
     getAllConversations();
   }, [])
 
-  const handleAddConversation = (e: React.MouseEvent<HTMLElement, MouseEvent>): void => {
+  const beginConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    e.preventDefault();
+
+    setAddingConversation(true);
+    setParticipants('');
+  }
+
+  const addConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    e.preventDefault();
+    // from input field, use input to look up user id
+    //    input should look up username or first name? to find user id
+    //    if input is not valid, prompt user to only send to valid user
 
     // create conversation, set new conversation id
     axios
-      .post('/api/conversations', {})
-      .then((conversation) => {
-        const { id } = conversation.data;
-        setConId(id);
-        socket.emit('add-conversation', {
-          id: conId
-        });
-      })
-      .then(() => {
-
-        getAllConversations();
-      })
-      .catch((err) => {
-        console.error('Failed to create a conversation:\n', err);
+    .post('/api/conversations', {
+      receivers: [] // users that sender enters TODO: state variable or use event to get input value
+    })
+    .then((conversation) => {
+      const { id } = conversation.data;
+      setConId(id);
+      socket.emit('add-conversation', {
+        id: conId
       });
+    })
+    .then(() => {
+
+      getAllConversations();
+    })
+    .catch((err) => {
+      console.error('Failed to create a conversation:\n', err);
+    });
+  }
+
+  const handleParticipantsInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setParticipants(e.target.value);
   }
 
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number): void => {
@@ -74,9 +98,22 @@ const Messages = (): ReactElement => {
         </>
       ) : (
         <>
-          <button onClick={ handleAddConversation }>➕</button>
+          <button onClick={ beginConversation }>➕</button>
           <ConversationList allCons={ allConversations } select={ selectConversation }/>
-          { conId ? <ConversationView conId={ conId }/> : '' }
+          { addingConversation ? (
+              <form>
+                <input value={ participants } onChange={ handleParticipantsInput } placeholder="username" />
+                <button onClick={ addConversation }>Add Conversation</button>
+              </form>
+            ) : ('')
+          }
+          { conId ?
+            <ConversationView
+              addingConversation={ addingConversation }
+              addConversation={ beginConversation }
+              conId={ conId }
+            /> : ''
+          }
         </>
       )
       }

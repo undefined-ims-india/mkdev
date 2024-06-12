@@ -14,12 +14,17 @@ interface Message {
 
 interface PropsType {
   conId: number;
+  addingConversation: boolean;
+  addConversation: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 const ConversationView: React.FC<PropsType> = (props): ReactElement => {
-  const { conId } = props;
+  const { conId, addingConversation, addConversation } = props;
+  // console.log('addingConversation', addingConversation);
 
   const [allMsgs, setAllMsgs] = useState<Message[]>([]);
+  const [recipientText, setRecipientText] = useState<string>('');
+  const [conversationCreated, setConversationCreated] = useState<boolean>(false);
 
   useEffect(() => {
     axios
@@ -37,9 +42,13 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
     setAllMsgs([...allMsgs, msg]);
   })
 
+  const handleRecipientsInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setRecipientText(e.target.value);
+  }
+
   return (
     <div>
-      <h2>Conversation { conId }</h2>
+      <h3>Names of participants should be here</h3>
       <MessagesList allMsgs={ allMsgs } conId={ conId }/>
       <MessageInput conId={ conId }/>
     </div>
