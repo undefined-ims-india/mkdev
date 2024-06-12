@@ -63,6 +63,25 @@ conversations.post('/', async (req: Request, res: Response) => {
       res.sendStatus(500);
     });
 
-})
+});
+
+// .patch -> delete a specific message from conversation? NO because if delete message, relationship will be gone
+
+conversations.delete('/:id', (req: Request, res: Response) => {
+  const { id } = req.params;
+  // delete a specific conversation
+  prisma.conversations.delete({
+    where: {
+      id: +id
+    }
+  })
+  .then(() => {
+    res.sendStatus(204);
+  })
+  .catch((err) => {
+    console.error('Failed to delete conversation', err)
+    res.sendStatus(500);
+  })
+});
 
 export default conversations;
