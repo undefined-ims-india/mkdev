@@ -25,9 +25,6 @@ interface PostProps {
 }
 
 const UserPosts = ({ posts, getPosts }: PostProps): ReactElement => {
-  useEffect(() => {
-    getPosts();
-  }, [getPosts]);
   return (
     <>
       {posts.map((post: any) => (
