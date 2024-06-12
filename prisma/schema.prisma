@@ -20,7 +20,7 @@ model Post {
   body      String
   userId    Int
   s3_Etag   String?
-  repoLink  String?  @db.Uuid
+  repoLink  Repo?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation("UserPosts", fields: [userId], references: [id])
@@ -28,10 +28,28 @@ model Post {
   tags      Tags[]   @relation("PostToTags")
 }
 
+model Repo {
+  id          Int     @id @default(autoincrement())
+  postId      Int     @unique
+  post        Post    @relation(fields: [postId], references: [id])
+  link        String
+  files       File[]
+}
+
+model File {
+  id        Int       @id @default(autoincrement())
+  repoId    Int       @unique
+  repo      Repo      @relation(fields: [repoId], references: [id])
+  star      Boolean   @default(false)
+  path      String
+  contents  String
+  createdAt DateTime  @default(now())
+}
+
 model User {
   id             Int             @id @default(autoincrement())
   name           String
-  username       String          @unique
+  username       String?          @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
   githubId       String?         @unique
