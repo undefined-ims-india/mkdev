@@ -1,20 +1,12 @@
-import React, {useState, useEffect, ReactElement} from 'react';
+import React, {useState, ReactElement} from 'react';
 import axios from 'axios';
 import MarkDown from '../MarkDown';
 
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
-import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-
-import MenuIcon from '@mui/icons-material/Menu';
 
 const Repo = ():ReactElement => {
 
@@ -22,6 +14,8 @@ const Repo = ():ReactElement => {
   const [username, setUsername] = useState('AlexPHebert2000');
   const [repoName, setRepoName] = useState('blackjack');
   const [displayFile, setDisplayFile] = useState('');
+  const [displayFilePath, setDisplayFilePath] = useState('');
+  const [fileSave, setFileSave]: [{path:string, contents:string}[], Function] = useState([]);
 
   const handleTextInput = (e:React.ChangeEvent<HTMLInputElement>):void => {
     switch(e.target.name) {
@@ -38,7 +32,13 @@ const Repo = ():ReactElement => {
   const changePath = async (e: React.MouseEvent<HTMLButtonElement> | any):Promise<void> => {
     const { data } = await axios.get(`/api/repos/${username}/${repoName}/${e.target.name}/contents`)
     setDisplayFile(`\`\`\`\n${data}\n\`\`\``);
-  }
+    setDisplayFilePath(e.target.name);
+  };
+
+  const saveFile = async (e:React.MouseEvent<HTMLButtonElement>):Promise<void> => {
+    const file = {path: displayFilePath, contents: displayFile}
+    setFileSave((cur:{path:string, contents:string}[]) => {cur.push(file)})
+  };
 
   return (
   <>
@@ -50,6 +50,7 @@ const Repo = ():ReactElement => {
           {tree.map((file, index) => (<ListItem key={index}><Button onClick={changePath} name={file.path}>{file.path}</Button></ListItem>))}
         </List>
         <MarkDown text={displayFile} />
+        <Button onClick={saveFile} >Save file to post</Button>
       </Box>
   </>
   )
