@@ -3,18 +3,7 @@ import axios from 'axios';
 import BlogItem from './BlogItem';
 
 interface User {
-  id: number;
-  name: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  linkedinId: string;
-  githubId: string;
   devId: string;
-  sub: string;
-  username: string;
-  picture: string;
-  postCount: string;
 }
 
 interface Blog {
@@ -36,7 +25,6 @@ const Blogs = ({ devId }: UserProps): ReactElement => {
       .get(`https://dev.to/api/articles?username=${devId}&per_page=5`)
       .then(({ data }) => {
         setBlogs(data);
-        console.log(data);
       });
   };
   useEffect(() => {
