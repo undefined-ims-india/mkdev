@@ -36,8 +36,8 @@ search.get('/filter/:tagType/:tags', async (req: Request, res: Response) => {
 //Give a user or a post a tag
 search.put('/addTag/:tagType/:existingTagId', async (req: Request, res: Response) => {
     // Fallback to a default user ID if req.user is not set
-    const userId = req.user?.id || 13; // Default user ID for testing purposes
-    //const userId = 13 // TODO I have to fix this. !!!!
+    //const userId = req.user?.id || 13; // Default user ID for testing purposes
+    const userId = 13 // TODO I have to fix this. !!!!
     const { tagType, existingTagId } = req.params;
 
     try {
