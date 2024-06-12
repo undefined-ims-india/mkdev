@@ -9,6 +9,7 @@ import PostCreationPage from './components/PostCreationPage';
 import Profile from './components/Profile';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Search from './components/Search';
+import Nav from './components/Nav';
 
 const router = createBrowserRouter([
     {
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')!).render(
-    <RouterProvider router={router} />,
+    <RouterProvider router={router} />
 );
 
 // root.render(<App />)
