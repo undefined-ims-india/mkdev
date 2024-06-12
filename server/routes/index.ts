@@ -2,15 +2,15 @@ import { Router } from 'express';
 import messages from './messages';
 import conversations from './conversations';
 import posts from './routers/posts';
+import blogs from './routers/blogs';
 import users from './routers/users';
-import search  from './routers/search';
-// const postsRouter = require('./routers/posts.ts');
-// const usersRouter = require('./routers/users.ts');
+import search from './routers/search';
 
 const api = Router();
 
 api.use('/posts', posts);
 api.use('/users', users);
+api.use('/blogs', blogs);
 
 api.use('/messages', messages);
 api.use('/conversations', conversations);

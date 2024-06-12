@@ -1,11 +1,14 @@
-import { Router } from 'express';
+import passport from 'passport';
+import { NextFunction, Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const users = Router();
 const prisma = new PrismaClient();
 
 users.post('/', (req: any, res: any) => {
-  const { newUser }: { newUser: { firstName: string; lastName: string } } =
+  const {
+    newUser,
+  }: { newUser: { name: string; firstName: string; lastName: string } } =
     req.body;
   prisma.user
     .create({ data: newUser })
@@ -37,9 +40,21 @@ users.get('/', (req: any, res: any) => {
     });
 });
 
+// Authenticated route to verify a user is logged in
+users.get('/loggedIn', (req: any, res: any) => {
+  const user = req.user;
+  if (req.isAuthenticated()) {
+    return res.json(user);
+  } else {
+    console.error('Please Log in'), res.sendStatus(401);
+  }
+});
+
+// Get user by id
+
 users.get('/:id', (req: any, res: any) => {
   const { id } = req.params;
-  // console.log(id);
+  // console.log('user id', +id);
   prisma.user
     .findUnique({
       where: { id: +id },
