@@ -14,6 +14,7 @@ const Messages = (): ReactElement => {
 
   const [conId, setConId] = useState<number>(0);
   const [allConversations, setAllConversations] = useState<Conversation[]>([])
+  const [loginError, setLoginError] = useState<boolean>(false);
 
   // get all current conversations
   const getAllConversations = (): void => {
@@ -23,6 +24,7 @@ const Messages = (): ReactElement => {
         setAllConversations(conversations.data);
       })
       .catch((err) => {
+        setLoginError(true);
         console.error('Failed to retrieve conversations:\n', err);
       })
   }
@@ -66,9 +68,18 @@ const Messages = (): ReactElement => {
   return (
     <div>
       <h1>Direct Messages</h1>
-      <button onClick={ handleAddConversation }>➕</button>
-      <ConversationList allCons={ allConversations } select={ selectConversation }/>
-      { conId ? <ConversationView conId={ conId }/> : '' }
+      { loginError ? (
+        <>
+          <h3> You must be logged in to view conversation</h3>
+        </>
+      ) : (
+        <>
+          <button onClick={ handleAddConversation }>➕</button>
+          <ConversationList allCons={ allConversations } select={ selectConversation }/>
+          { conId ? <ConversationView conId={ conId }/> : '' }
+        </>
+      )
+      }
     </div>
   );
 }
