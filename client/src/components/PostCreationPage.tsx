@@ -17,7 +17,7 @@ const PostCreationPage = (): ReactElement => {
   const [titleFieldTooltip, setTitleFieldTooltip] = useState(false);
   const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
   const [img, setImg]: [any, Function] = useState();
-  const [canSubmit, setCanSubmit]: [boolean, Function] = useState(false);
+  const [cantSubmit, setcanttSubmit]: [boolean, Function] = useState(false);
   const [fileSave, setFileSave]: [{ path: string; contents: string }[],Function] = useState([]);
 
 
@@ -50,8 +50,8 @@ const PostCreationPage = (): ReactElement => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    setCanSubmit(true);
-    axios.postForm('/api/posts', { title, body, img }).then(({ data }) => {
+    setcanttSubmit(true);
+    axios.postForm('/api/posts', { title, body, img, repo:btoa(JSON.stringify(fileSave)) }).then(({ data }) => {
       navigate('/dashboard');
     });
   };
@@ -98,7 +98,7 @@ const PostCreationPage = (): ReactElement => {
             />
           </FormControl>
           <FormControl>
-            <Button onClick={handleSubmit} disabled={canSubmit}>
+            <Button onClick={handleSubmit} disabled={cantSubmit}>
               Submit
             </Button>
           </FormControl>
