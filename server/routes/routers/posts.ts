@@ -9,12 +9,13 @@ const prisma = new PrismaClient();
 // add a post to logged in user
 posts.post('/', async (req: any, res: any) => {
   //image in files & title and body in body
-  // const { img } = req.files;
   const { title, body } = req.body;
+  const repoObj: {link:string, files: {path:string, contents:string}[]}|null = req.body.repo ? JSON.parse(atob(req.body.repo)) : null;
   try {
+    let post;
     if (req.files && req.files.img) {
       const s3Obj = await awsS3Upload(req.files.img);
-      const post = await prisma.post.create({
+      post = await prisma.post.create({
         data: {
           title,
           body,
@@ -23,13 +24,24 @@ posts.post('/', async (req: any, res: any) => {
         },
       });
     } else {
-      const post = await prisma.post.create({
+      post = await prisma.post.create({
         data: {
           title,
           body,
           author: { connect: { id: req.user.id } },
         },
       });
+    }
+    if(repoObj) {
+      await prisma.repo.create({
+        data:{
+          post: {connect: { id: post.id }},
+          link: repoObj.link,
+          files: {
+            create: [...repoObj.files]
+          }
+        }
+      })
     }
     res.sendStatus(201);
   } catch (err) {
