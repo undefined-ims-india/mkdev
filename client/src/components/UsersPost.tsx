@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+import MarkDown from './MarkDown';
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
@@ -23,6 +28,7 @@ interface Post {
   author: string;
   title: string;
   body: string;
+  createdAt: string;
 }
 interface PostProps {
   post: Post;
@@ -40,12 +46,9 @@ const UsersPost = ({ post }: PostProps): React.ReactElement => {
       <Card variant='outlined' style={{ margin: '20px 0' }}>
         <CardContent>
           {post.author}
-          <Typography variant='h5' component='div'>
-            {post.title}
-          </Typography>
-          <Typography variant='body2' color='text.secondary'>
-            {post.body}
-          </Typography>
+          <Typography> {dayjs(post.createdAt).fromNow()} </Typography>
+          <MarkDown text={post.title} />
+          <MarkDown text={post.body} />
           <IconButton aria-label='Like' onClick={handleLike}>
             {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>

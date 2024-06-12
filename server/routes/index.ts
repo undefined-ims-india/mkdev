@@ -5,6 +5,7 @@ import posts from './routers/posts';
 import blogs from './routers/blogs';
 import users from './routers/users';
 import search from './routers/search';
+import feed from './routers/feed';
 
 const api = Router();
 
@@ -15,5 +16,6 @@ api.use('/blogs', blogs);
 api.use('/messages', messages);
 api.use('/conversations', conversations);
 api.use('/search', search);
+api.use('/feed', feed);
 
 export default api;
