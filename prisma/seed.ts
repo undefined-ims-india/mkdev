@@ -3,16 +3,16 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-    // Clear the old seed data
-    await prisma.post.deleteMany().then(() => console.log('Deleted all posts'));
-    await prisma.user.deleteMany().then(() => console.log('Deleted all users'));
+  // Clear the old seed data
+  await prisma.post.deleteMany().then(() => console.log('Deleted all posts'));
+  await prisma.user.deleteMany().then(() => console.log('Deleted all users'));
 
-    const tagJavaScript = await prisma.tags.create({
-        data: { name: "javascript", tagType: "post" }
-    });
-    const tagTypescript = await prisma.tags.create({
-        data: { name: "typescript", tagType: "post" }
-    });
+  const tagJavaScript = await prisma.tags.create({
+    data: { name: 'javascript', tagType: 'post' },
+  });
+  const tagTypescript = await prisma.tags.create({
+    data: { name: 'typescript', tagType: 'post' },
+  });
 
     const user1 = await prisma.user.create({
         data: {
@@ -101,9 +101,20 @@ async function main() {
                     },
                 ],
             },
-        },
-    });
-
+          },
+          {
+            title: 'Dashboard',
+            body: 'Not sure who is doing that yet...',
+            tags: {
+              connect: {
+                id: tagTypescript.id,
+              },
+            },
+          },
+        ],
+      },
+    },
+  });
 
     const user4 = await prisma.user.create({
         data: {
@@ -136,18 +147,31 @@ async function main() {
                     },
                 ],
             },
-        },
-    });
+          },
 
-    console.log({ user1, user2, user3, user4 });
-    console.log('Database seeded with 4 users and 8 posts');
+          {
+            title: 'Scrum',
+            body: 'Boooo!',
+            tags: {
+              connect: {
+                id: tagTypescript.id,
+              },
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  // console.log({ user1, user2, user3, user4 });
+  console.log('Database seeded');
 }
 
 main()
-    .catch((e) => {
-        console.error(e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
