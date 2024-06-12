@@ -22,8 +22,7 @@ posts.post('/', async (req: any, res: any) => {
           author: { connect: { id: req.user.id } },
         },
       });
-    }
-    else {
+    } else {
       const post = await prisma.post.create({
         data: {
           title,
@@ -32,15 +31,13 @@ posts.post('/', async (req: any, res: any) => {
         },
       });
     }
-      res.sendStatus(201);
+    res.sendStatus(201);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  } finally {
+    await prisma.$disconnect();
   }
-  catch(err){
-      console.error(err);
-      res.sendStatus(500);
-    }
-  finally{
-      await prisma.$disconnect();
-    };
 });
 
 // get all users posts
