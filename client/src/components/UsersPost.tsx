@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
 interface User {
   id: number;
   firstName: string;
@@ -24,15 +26,27 @@ interface Post {
   title: string;
   body: string;
 }
+
 interface PostProps {
   post: Post;
+  getPosts: () => void;
 }
 
-const UsersPost = ({ post }: PostProps): React.ReactElement => {
+const UsersPost = ({ post, getPosts }: PostProps): React.ReactElement => {
   const [like, setLike] = useState(false);
 
   const handleLike = () => {
     setLike(!like);
+  };
+
+  const deletePost = () => {
+    axios
+      .delete(`/api/posts/${post.id}`)
+      .then(() => {
+        getPosts();
+        console.log('Post deleted');
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -48,6 +62,9 @@ const UsersPost = ({ post }: PostProps): React.ReactElement => {
           </Typography>
           <IconButton aria-label='Like' onClick={handleLike}>
             {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
+          <IconButton aria-label='Delete' onClick={deletePost}>
+            <DeleteIcon />
           </IconButton>
         </CardContent>
       </Card>
