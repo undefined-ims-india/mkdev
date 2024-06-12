@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 posts.post('/', async (req: any, res: any) => {
   //image in files & title and body in body
   const { title, body } = req.body;
-  const repoObj: string|null = req.body.repo ? JSON.parse(atob(req.body.repo)) : null;
+  const repoObj: {link:string, files: {path:string, contents:string}[]}|null = req.body.repo ? JSON.parse(atob(req.body.repo)) : null;
   try {
     let repoId, post;
     if (req.files && req.files.img) {
@@ -31,6 +31,17 @@ posts.post('/', async (req: any, res: any) => {
           author: { connect: { id: req.user.id } },
         },
       });
+    }
+    if(repoObj) {
+      await prisma.repo.create({
+        data:{
+          post: {connect: { id: post.id }},
+          link: repoObj.link,
+          files: {
+            create: [...repoObj.files]
+          }
+        }
+      })
     }
     res.sendStatus(201);
   } catch (err) {

@@ -18,7 +18,7 @@ const PostCreationPage = (): ReactElement => {
   const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
   const [img, setImg]: [any, Function] = useState();
   const [cantSubmit, setcanttSubmit]: [boolean, Function] = useState(false);
-  const [fileSave, setFileSave]: [{ path: string; contents: string }[],Function] = useState([]);
+  const [repo, setRepo]: [{link: string, files: { path: string; contents: string }[]},Function] = useState({link:'', files:[]});
 
 
   const handleTextInput = (
@@ -51,16 +51,18 @@ const PostCreationPage = (): ReactElement => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setcanttSubmit(true);
-    axios.postForm('/api/posts', { title, body, img, repo:btoa(JSON.stringify(fileSave)) }).then(({ data }) => {
+    axios.postForm('/api/posts', { title, body, img, repo:btoa(JSON.stringify(repo)) }).then(({ data }) => {
       navigate('/dashboard');
     });
   };
 
   const saveFile = (path: string, contents: string) => {
-    setFileSave([...fileSave, {path, contents}])
-  }
+    setRepo({...repo, files: [...repo.files, {path, contents}]})
+  };
 
-  console.log(fileSave)
+  const saveRepo = (link: string) => {
+    setRepo({...repo, link})
+  };
 
   return (
     <div>
@@ -103,7 +105,7 @@ const PostCreationPage = (): ReactElement => {
             </Button>
           </FormControl>
         </form>
-        <Repo saveFile={saveFile} />
+        <Repo saveFile={saveFile} saveRepo={saveRepo}/>
         <Divider />
         <Stack>
           <MarkDown text={title} />

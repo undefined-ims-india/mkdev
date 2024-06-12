@@ -8,20 +8,16 @@ import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-const Repo = ({ saveFile }: {saveFile: Function}): ReactElement => {
+const Repo = ({ saveFile, saveRepo }: {saveFile: Function, saveRepo: Function}): ReactElement => {
   const [tree, setTree]: [{ path: string }[], Function] = useState([]);
-  const [username, setUsername] = useState('AlexPHebert2000');
-  const [repoName, setRepoName] = useState('blackjack');
+  const [repoLink, setRepoLink] = useState('https://github.com/AlexPHebert2000/blackjack');
   const [displayFile, setDisplayFile] = useState('');
   const [displayFilePath, setDisplayFilePath] = useState('');
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
     switch (e.target.name) {
-      case 'username':
-        setUsername(e.target.value);
-        break;
-      case 'repo-name':
-        setRepoName(e.target.value);
+      case 'repo-link':
+        setRepoLink(e.target.value);
         break;
     }
   };
@@ -30,15 +26,16 @@ const Repo = ({ saveFile }: {saveFile: Function}): ReactElement => {
     e: React.MouseEvent<HTMLButtonElement>,
   ): Promise<void> => {
     const { data }: { data: { path: string; type: string }[] } =
-      await axios.get(`/api/repos/${username}/${repoName}/tree`);
+      await axios.get(`/api/repos/${repoLink.slice(19)}/tree`);
     setTree(data.filter(({ type }) => type === 'blob'));
+    saveRepo(repoLink);
   };
 
   const changePath = async (
     e: React.MouseEvent<HTMLButtonElement> | any,
   ): Promise<void> => {
     const { data } = await axios.get(
-      `/api/repos/${username}/${repoName}/${e.target.name}/contents`,
+      `/api/repos/${repoLink.slice(19)}/${e.target.name}/contents`,
     );
     setDisplayFile(`\`\`\`\n${data}\n\`\`\``);
     setDisplayFilePath(e.target.name);
@@ -46,8 +43,7 @@ const Repo = ({ saveFile }: {saveFile: Function}): ReactElement => {
 
   return (
     <>
-      <TextField value={username} name="username" onChange={handleTextInput} />
-      <TextField value={repoName} name="repo-name" onChange={handleTextInput} />
+      <TextField value={repoLink} name="repo-link" onChange={handleTextInput} />
       <Button onClick={handleLookup}>Add Repo</Button>
       <Box>
         <List>
