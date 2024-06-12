@@ -24,17 +24,16 @@ interface Blog {
   url: string;
 }
 interface UserProps {
-  username: string;
+  devId: string;
 }
 
-const Blogs = ({ username }: UserProps): ReactElement => {
+const Blogs = ({ devId }: UserProps): ReactElement => {
+  const [user, setUser] = useState<User>({} as User);
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  username = 'cody-daigle';
 
-  const getBlogs = () => {
-    const user = 'cody-daigle';
+  const getBlogs = async () => {
     axios
-      .get(`https://dev.to/api/articles?username=${username}&per_page=8`)
+      .get(`https://dev.to/api/articles?username=${devId}&per_page=5`)
       .then(({ data }) => {
         setBlogs(data);
         console.log(data);
@@ -42,7 +41,7 @@ const Blogs = ({ username }: UserProps): ReactElement => {
   };
   useEffect(() => {
     getBlogs();
-  }, [username]);
+  }, [user.devId]);
 
   return (
     <div>
