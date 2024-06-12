@@ -43,6 +43,8 @@ model File {
   repoId    Int       @unique
   repo      Repo      @relation(fields: [repoId], references: [id])
   star      Boolean   @default(false)
+  path      String
+  repo_path String    @unique
   contents  String
   createdAt DateTime  @default(now())
 }
