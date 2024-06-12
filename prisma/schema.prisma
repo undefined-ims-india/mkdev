@@ -7,13 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//Enum for types of tags, If want a new tag Type change here
-enum tagType {
-  post
-  user
-}
-
-//Posts that will show up on feed based on the tags a user has saved
 model Post {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(255)
@@ -35,12 +28,12 @@ model User {
   googleId       String?         @unique
   linkedinId     String?         @unique
   githubId       String?         @unique
-  blogs          Blog[]          @relation("UserBlogs")
   picture        String?
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
+  blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
   posts          Post[]          @relation("UserPosts")
   conversations  Conversations[] @relation("ConversationsToUser")
@@ -82,4 +75,9 @@ model Conversations {
   id           Int        @id @default(autoincrement())
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
+}
+
+enum tagType {
+  post
+  user
 }
