@@ -34,6 +34,7 @@ model User {
   username       String          @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
+  devId          String?         @unique
   githubId       String?         @unique
   blogs          Blog[]          @relation("UserBlogs")
   picture        String?
