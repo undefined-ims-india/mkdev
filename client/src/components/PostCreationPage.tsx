@@ -4,14 +4,11 @@ import axios from 'axios';
 import MarkDown from './MarkDown';
 import Repo from './post creation/Repo';
 
-import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
 
 const PostCreationPage = (): ReactElement => {
   const navigate = useNavigate();
