@@ -24,6 +24,7 @@ interface User {
   email: string;
   linkedinId: string;
   githubId: string;
+  devId: string;
   sub: string;
   username: string;
   picture: string;
@@ -49,13 +50,13 @@ const Profile = (): ReactElement => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [postsCount, setPostsCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
-  const [blogs, setBlogs] = useState<Blog[]>([]);
+  // const [blogs, setBlogs] = useState<Blog[]>([]);
   const [username, setUsername] = useState<string>('');
   const userRef = useRef(user);
 
   const [tab, setTab] = useState('1');
 
-  const handleTab = (event: React.SyntheticEvent, newTab: string) => {
+  const handleTab = (e: React.SyntheticEvent, newTab: string) => {
     setTab(newTab);
   };
 
@@ -68,8 +69,8 @@ const Profile = (): ReactElement => {
           setPostsCount(data.postsCount);
           setFollowersCount(data.followersCount);
         })
-        .catch((error) => {
-          console.error('Failed to get user:', error);
+        .catch((err) => {
+          console.error('Failed to get user:', err);
         });
     }
   };
@@ -79,6 +80,7 @@ const Profile = (): ReactElement => {
       ? user.name
       : user.username;
   };
+
   const getPosts = () => {
     const userId = user?.id;
     if (userId) {
@@ -87,17 +89,17 @@ const Profile = (): ReactElement => {
         .then(({ data }) => {
           setPosts(data);
         })
-        .catch((error) => {
-          console.error('Failed to fetch posts:', error);
+        .catch((err) => {
+          console.error('Failed to fetch posts:', err);
         });
     }
   };
   useEffect(() => {
+    setUsername(checkUsername());
     getPosts();
   }, [user]);
 
   useEffect(() => {
-    setUsername(checkUsername());
     getUser();
   }, [userRef]);
 
@@ -118,7 +120,7 @@ const Profile = (): ReactElement => {
             <a
               href={`https://github.com/${user?.githubId}`}
               target='blank'
-              rel=''
+              rel='referrer'
             >
               {user?.githubId} GitHub
             </a>
@@ -135,7 +137,9 @@ const Profile = (): ReactElement => {
               <TabPanel value='1'>
                 {<UserPosts posts={posts} getPosts={getPosts} />}
               </TabPanel>
-              <TabPanel value='2'>{<Blogs />}</TabPanel>
+              <TabPanel value='2'>
+                {<Blogs username={`${user.devId}`} />}
+              </TabPanel>
               <TabPanel value='3'>Item Three</TabPanel>
             </TabContext>
             <div

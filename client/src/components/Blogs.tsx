@@ -1,6 +1,7 @@
-import React, { useState, useContext, ReactElement } from 'react';
+import React, { useState, useContext, ReactElement, useEffect } from 'react';
 import axios from 'axios';
 import BlogItem from './BlogItem';
+
 interface User {
   id: number;
   name: string;
@@ -9,44 +10,50 @@ interface User {
   email: string;
   linkedinId: string;
   githubId: string;
+  devId: string;
   sub: string;
   username: string;
   picture: string;
-}
-interface Post {
-  id: number;
-  userId: number;
-  author: string;
-  title: string;
-  body: string;
+  postCount: string;
 }
 
 interface Blog {
   id: number;
   title: string;
-  body: string;
-  userId: number;
+  description: string;
+  url: string;
+}
+interface UserProps {
+  username: string;
 }
 
-const Blogs = (): ReactElement => {
-  const [blogs, setBlogs] = useState([]);
+const Blogs = ({ username }: UserProps): ReactElement => {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  username = 'cody-daigle';
 
   const getBlogs = () => {
     const user = 'cody-daigle';
     axios
-      .get(`https://dev.to/api/articles?username=${user}&per_page=8`)
+      .get(`https://dev.to/api/articles?username=${username}&per_page=8`)
       .then(({ data }) => {
         setBlogs(data);
         console.log(data);
       });
   };
+  useEffect(() => {
+    getBlogs();
+  }, [username]);
 
   return (
     <div>
       <h1>Blog Posts</h1>
       <div>
-        {blogs.map((blog, idx) => (
-          <BlogItem key={`${blog}-${idx}`} blog={blog} />
+        {blogs.map((blog) => (
+          <div key={blog.id}>
+            <h2>{blog.title}</h2>
+            <p>{blog.description}</p>
+            <a href={blog.url}>Click here to keep reading!</a>
+          </div>
         ))}
       </div>
     </div>
