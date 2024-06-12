@@ -34,21 +34,34 @@ search.get('/filter/:tagType/:tags', async (req: Request, res: Response) => {
 });
 
 //Give a user or a post a tag
-search.put('/addTag/:tagType/:existingTag', async (req: Request, res: Response) => {
+search.put('/addTag/:tagType/:existingTagId', async (req: Request, res: Response) => {
     // Fallback to a default user ID if req.user is not set
-    //const userId = req.user?.id || 1; // Default user ID for testing purposes
-    const userId = 1 // TODO I have to fix this. !!!!
-    const { tagType, existingTag } = req.params;
+    const userId = req.user?.id || 13; // Default user ID for testing purposes
+    //const userId = 13 // TODO I have to fix this. !!!!
+    const { tagType, existingTagId } = req.params;
 
     try {
-        await prisma.user.update({
-            where: { id: userId },
-            data: {
-                tags: {
-                    connect: { id: +existingTag},
+        if (tagType === 'user') {
+            await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    tags: {
+                        connect: { id: +existingTagId},
+                    },
                 },
-            },
-        });
+            });
+        } else {
+            await prisma.post.update({
+                where: { id: userId },
+                data: {
+                    tags: {
+                        connect: { id: +existingTagId},
+                    },
+                },
+            });
+        }
+
+
 
         res.status(200).send('Tag added successfully');
     } catch (error) {
@@ -59,7 +72,7 @@ search.put('/addTag/:tagType/:existingTag', async (req: Request, res: Response) 
 
 //add a tag to a user or a
 search.post('/', (req: Request, res: Response) => {
-    res.status(200).send('you rang!');
+
 });
 
 search.delete('/', (req: Request, res: Response) => {
