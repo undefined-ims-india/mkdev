@@ -9,6 +9,7 @@ import PostCreationPage from './components/PostCreationPage';
 import Profile from './components/Profile';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Search from './components/Search';
+import TemporaryDrawer from './components/Sidebar';
 
 const router = createBrowserRouter([
     {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
     {
         path: '/messages',
         element: <Messages />,
+    },
+    {
+        path: '/sidebar',
+        element: <TemporaryDrawer />
     },
 ]);
 
