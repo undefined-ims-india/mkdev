@@ -31,13 +31,6 @@ interface Post {
   body: string;
 }
 
-interface Blog {
-  id: number;
-  title: string;
-  body: string;
-  userId: number;
-}
-
 const Profile = (): ReactElement => {
   const [user, setUser] = useState<User>({} as User);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -55,8 +48,6 @@ const Profile = (): ReactElement => {
     setTab(newTab);
   };
 
-  // Ger user information?
-
   // get loggedIn user
   const getUser = () => {
     if (user) {
@@ -66,6 +57,11 @@ const Profile = (): ReactElement => {
           setUser(data);
           setPostsCount(data.postsCount);
           setFollowersCount(data.followersCount);
+          setUsername(data.username);
+          setDevId(data.devId);
+          setGithubId(data.githubId);
+          setLinkedinId(data.linkedinId);
+          console.log('user', data);
         })
         .catch((err) => {
           console.error('Failed to get user:', err);
