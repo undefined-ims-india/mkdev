@@ -8,9 +8,9 @@ datasource db {
 }
 
 //Enum for types of tags, If want a new tag Type change here
-enum tagType {
-  post
-  user
+enum TagType {
+  Post 
+  User 
 }
 
 //Posts that will show up on feed based on the tags a user has saved
@@ -80,11 +80,12 @@ model Blog {
 
 model Tags {
   id       Int     @id @default(autoincrement())
-  tagType  tagType
+  tagType  TagType
   name     String
-  category String?
   posts    Post[]  @relation("PostToTags")
   user     User[]  @relation("TagsToUser")
+
+  @@unique([name, tagType])
 }
 
 model Messages {
