@@ -37,6 +37,13 @@ conversations.get('/', async (req: any, res: Response) => {
           }
         }
       },
+      include: {
+        participants: {
+          select: {
+            name: true,
+          }
+        }
+      },
       orderBy: {
         id: 'desc'
       }
@@ -51,10 +58,6 @@ conversations.get('/', async (req: any, res: Response) => {
 conversations.post('/', async (req: any, res: Response) => {
   const { user } = req; // sends the message
   const { participants } = req.body; // array of user objects from frontend
-  console.log('req.user', user);
-  console.log('req.participants', participants);
-
-  const sender: User = { ...req.user }
 
   // array of objects with usernames from add convo input, users to be participants
   const connectArr = participants.map((user: User) => {
@@ -65,12 +68,19 @@ conversations.post('/', async (req: any, res: Response) => {
   prisma.conversations.create({
     data: {
       participants: {
-        connect: [ { id: req.user.id }, ...connectArr]
+        connect: [ { id: user.id }, ...connectArr],
+      }
+    },
+    include: {
+      participants: {
+        select: {
+          name: true,
+        }
       }
     }
   })
     .then((conversation) => {
-      console.log(conversation);
+      console.log('conversation created', conversation);
       res.status(201).send(conversation);
     })
     .catch((err: Error) => {
