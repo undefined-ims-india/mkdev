@@ -8,12 +8,11 @@ async function main() {
   await prisma.user.deleteMany().then(() => console.log('Deleted all users'));
 
   const tagJavaScript = await prisma.tags.create({
-    data: { name: 'javascript', tagType: 'post' },
+    data: { name: 'javascript', tagType: 'Post' },
   });
   const tagTypescript = await prisma.tags.create({
-    data: { name: 'typescript', tagType: 'post' },
+    data: { name: 'typescript', tagType: 'Post' },
   });
-
 
   const user1 = await prisma.user.create({
     data: {
@@ -119,7 +118,6 @@ async function main() {
     },
   });
 
-
   const user4 = await prisma.user.create({
     data: {
       name: 'Larry The Lobster',
@@ -171,4 +169,3 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-  });
