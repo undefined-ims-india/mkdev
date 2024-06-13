@@ -1,6 +1,5 @@
-import React, { useState, useContext, ReactElement, useEffect } from 'react';
+import React, { useState, ReactElement, useEffect } from 'react';
 import axios from 'axios';
-import BlogItem from './BlogItem';
 
 interface User {
   devId: string;
