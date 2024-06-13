@@ -4,11 +4,25 @@ import { PrismaClient } from '@prisma/client';
 const conversations = Router();
 const prisma = new PrismaClient();
 
+type User = {
+  id: number;
+  name: string;
+  username: string;
+  googleId: string;
+  linkedinId: string;
+  githubId: string;
+  picture: string;
+  firstName: string;
+  lastName: string;
+  follower_count: number;
+  post_count: number;
+}
+
 // Conversations routes
 
 // get conversations per user
 conversations.get('/', async (req: any, res: Response) => {
-  console.log('req from messages load:', req.user);
+
   // i want a list of conversations that have at least one match for the user.
   // use `some` option to filter records by the properties of related records on the "-to-many" side of the relation
   if (req.user !== undefined) {
@@ -34,23 +48,24 @@ conversations.get('/', async (req: any, res: Response) => {
 
 });
 
-conversations.post('/', async (req: Request, res: Response) => {
+conversations.post('/', async (req: any, res: Response) => {
   const { user } = req; // sends the message
-  const { receivers } = req.body; // many receive the message
+  const { participants } = req.body; // array of user objects from frontend
   console.log('req.user', user);
+  console.log('req.participants', participants);
 
-  // receivers can be an array of objects with usernames from add convo input
-  //  object.username would have to be matched to get a user's id to then add into the nested connect query
+  const sender: User = { ...req.user }
 
-  // make an array to use for the connect query
-  const participants = /* array of user id objects */[];
+  // array of objects with usernames from add convo input, users to be participants
+  const connectArr = participants.map((user: User) => {
+    return { id: user.id }
+  })
 
   // a conversation is created, then the id is sent back to frontend
   prisma.conversations.create({
     data: {
       participants: {
-        connect: [{ id: 5 }, { id: 8 }]
-        // connect: participants,
+        connect: [ { id: req.user.id }, ...connectArr]
       }
     }
   })
