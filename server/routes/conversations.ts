@@ -74,7 +74,7 @@ conversations.post('/', async (req: any, res: Response) => {
     include: {
       participants: {
         select: {
-          name: true,
+          username: true,
         }
       }
     }
