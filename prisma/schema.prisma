@@ -29,34 +29,35 @@ model Post {
 }
 
 model Repo {
-  id          Int     @id @default(autoincrement())
-  postId      Int     @unique
-  post        Post    @relation(fields: [postId], references: [id])
-  link        String
-  files       File[]
+  id     Int    @id @default(autoincrement())
+  postId Int    @unique
+  post   Post   @relation(fields: [postId], references: [id])
+  link   String
+  files  File[]
 }
 
 model File {
-  id        Int       @id @default(autoincrement())
-  repoId    Int       @unique
-  repo      Repo      @relation(fields: [repoId], references: [id])
-  star      Boolean   @default(false)
+  id        Int      @id @default(autoincrement())
+  repoId    Int      @unique
+  repo      Repo     @relation(fields: [repoId], references: [id])
+  star      Boolean  @default(false)
   path      String
   contents  String
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 }
 
 model User {
   id             Int             @id @default(autoincrement())
   name           String
-  username       String?          @unique
+  username       String?         @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
+  devId          String?         @unique
   githubId       String?         @unique
   blogs          Blog[]          @relation("UserBlogs")
   picture        String?
   firstName      String
-  lastName       String
+  lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
   messages       Messages[]
