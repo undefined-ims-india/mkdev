@@ -61,8 +61,7 @@ passport.use(
       callbackURL: '/auth/google/callback',
     },
     (accessToken: string, refreshToken: string, profile: any, done: any) => {
-      const { name, given_name, family_name, sub, picture, email } = profile._json;
-      console.log('profile', profile._json);
+      const { name, given_name, family_name, sub, picture } = profile._json;
       prisma.user
         .findUnique({
           where: { googleId: sub },
@@ -77,7 +76,6 @@ passport.use(
                   firstName: given_name,
                   lastName: family_name,
                   picture: picture,
-                  username: email
                 },
               })
               .then((newUser) => {
