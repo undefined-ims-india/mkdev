@@ -1,16 +1,5 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import UsersPost from './UsersPost';
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  linkedIn: string;
-  github: string;
-  sub: string;
-  username: string;
-  picture: string;
-}
 
 interface Post {
   id: number;
