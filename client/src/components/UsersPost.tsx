@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactElement } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
@@ -11,20 +11,8 @@ import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  linkedIn: string;
-  github: string;
-  sub: string;
-  username: string;
-  picture: string;
-}
 interface Post {
   id: number;
-  userId: number;
   author: string;
   title: string;
   body: string;
@@ -35,7 +23,7 @@ interface PostProps {
   getPosts: () => void;
 }
 
-const UsersPost = ({ post, getPosts }: PostProps): React.ReactElement => {
+const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
   const [like, setLike] = useState(false);
   const [edit, setEdit] = useState(false);
   const [editedPost, setEditedPost] = useState({ ...post });
@@ -48,11 +36,8 @@ const UsersPost = ({ post, getPosts }: PostProps): React.ReactElement => {
     setEdit(true);
   };
 
-  const handleTitleChange = (e: any) => {
+  const handlePostChange = (e: any) => {
     setEditedPost({ ...editedPost, title: e.target.value });
-  };
-
-  const handleBodyChange = (e: any) => {
     setEditedPost({ ...editedPost, body: e.target.value });
   };
 
@@ -61,9 +46,9 @@ const UsersPost = ({ post, getPosts }: PostProps): React.ReactElement => {
 
     axios
       .put(`/api/posts/${post.id}`, editedPost)
-      .then(() => {
-        getPosts();
+      .then(({ data }) => {
         console.log('Post updated');
+        setEditedPost(data);
         setEdit(false);
       })
       .catch((err) => console.error(err));
@@ -88,10 +73,10 @@ const UsersPost = ({ post, getPosts }: PostProps): React.ReactElement => {
               <Input
                 type='text'
                 value={editedPost.title}
-                onChange={handleTitleChange}
+                onChange={handlePostChange}
               />
-              <textarea value={editedPost.body} onChange={handleBodyChange} />
-              <Button type='submit'>Save</Button>
+              <textarea value={editedPost.body} onChange={handlePostChange} />
+              <Button onSubmit={handleEdit}>Save</Button>
             </form>
           ) : (
             <>
@@ -108,7 +93,7 @@ const UsersPost = ({ post, getPosts }: PostProps): React.ReactElement => {
               <IconButton aria-label='Delete' onClick={deletePost}>
                 <DeleteIcon />
               </IconButton>
-              <IconButton aria-label='Edit' onClick={editPost}>
+              <IconButton aria-label='Edit' onClick={handleEdit}>
                 <EditIcon />
               </IconButton>
             </>
