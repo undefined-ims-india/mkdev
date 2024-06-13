@@ -4,12 +4,14 @@ import Conversation from './Conversation';
 interface PropTypes {
   allCons: {
     id: number;
+    participants: { name: string }[];
   }[],
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number) => void;
+  // select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number) => void;
 }
 
 const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
-  const { allCons, select } = props;
+  // const { allCons, select } = props;
+  const { allCons } = props;
 
   return (
     <div>
@@ -17,9 +19,9 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
         allCons.map((con, i) => {
           return (
             <Conversation
-              id={ con.id }
+              con={ con }
               key={ `${con.id}-${i}` }
-              select={ select }
+              // select={ select }
             />
           )
         })

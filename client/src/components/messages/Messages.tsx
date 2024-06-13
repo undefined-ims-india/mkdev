@@ -9,8 +9,9 @@ import TextField from '@mui/material/TextField';
 
 const socket = io('http://localhost:4000');
 
-interface Conversation {
+type Conversation = {
   id: number;
+  participants: { name: string }[];
 }
 
 type User = {
@@ -29,7 +30,8 @@ type User = {
 
 const Messages = (): ReactElement => {
 
-  const [conId, setConId] = useState<number>(0);
+  const [con, setCon] = useState<Conversation>();
+  const [conUsers, setConUsers] = useState<{ name: string }[]>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantsEntry, setParticipantsEntry] = useState<string[]>([]);
@@ -43,6 +45,7 @@ const Messages = (): ReactElement => {
     axios
       .get('/api/conversations')
       .then((conversations) => {
+        // console.log('conversations from getAllConvos', conversations.data)
         setAllConversations(conversations.data);
       })
       .catch((err) => {
@@ -55,7 +58,7 @@ const Messages = (): ReactElement => {
     axios
       .get('/api/users')
       .then((users) => {
-        console.log('users to message', users.data);
+        // console.log('users to message', users.data);
         setAllUsers(users.data);
       })
       .catch((err) => {
@@ -88,10 +91,13 @@ const Messages = (): ReactElement => {
         participants: participants // users that sender enters
       })
       .then((conversation) => {
-        const { id } = conversation.data;
-        setConId(id);
+        // console.log('conversation', conversation)
+        // console.log('conversation.data', conversation.data)
+        const { participants } = conversation.data;
+        setCon(conversation.data);
+        setConUsers(participants);
         socket.emit('add-conversation', {
-          id: conId
+          id: conversation.data.id
         });
       })
       .then(() => {
@@ -104,7 +110,7 @@ const Messages = (): ReactElement => {
   }
 
   const changeParticipants = (e: React.ChangeEvent<{}>, newValues: string[]): void => {
-    console.log('parts newValue: ', newValues);
+    // console.log('parts newValue: ', newValues);
     setParticipantsEntry(newValues);
     // iterate through participants entry and find user objects from all users
     const participantsArr: User[] = [];
@@ -121,9 +127,9 @@ const Messages = (): ReactElement => {
     // console.log('participantsArr', participantsArr)
   }
 
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number): void => {
-    setConId(newId);
-  }
+  // const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number): void => {
+  //   setCon(newId);
+  // }
 
   socket.on('add-conversation', (conversation: Conversation): void => {
     // add emitted conversation to allConversations
@@ -141,7 +147,8 @@ const Messages = (): ReactElement => {
       ) : (
         <>
           <button onClick={ beginConversation }>➕ Start Conversation</button>
-          <ConversationList allCons={ allConversations } select={ selectConversation }/>
+          <ConversationList allCons={ allConversations } />
+          {/* <ConversationList allCons={ allConversations } select={ selectConversation }/> */}
           { addingConversation ? (
               <form>
                 <Autocomplete
@@ -173,11 +180,12 @@ const Messages = (): ReactElement => {
               </form>
             ) : ('')
           }
-          { conId ?
+          { con ?
             <ConversationView
               addingConversation={ addingConversation }
               addConversation={ beginConversation }
-              conId={ conId }
+              con={ con }
+              conUsers={ conUsers }
             /> : ''
           }
         </>

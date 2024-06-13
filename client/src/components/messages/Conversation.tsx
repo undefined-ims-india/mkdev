@@ -11,21 +11,30 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
 interface PropsType {
-    id: number;
-    select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number) => void;
+    con: {
+      id: number;
+      participants: { name: string }[];
+    };
+    // select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number) => void;
 }
 
 const Conversation: React.FC<PropsType> = (props): ReactElement => {
-  const { id, select } = props;
+  // const { id, select } = props;
+  const { con } = props;
+
+  const usersString = con.participants.reduce((acc, curr) => {
+    return acc.concat(`${curr.name}, `)
+  }, '');
 
   // pass selected conversation id to Messages component to change conId state
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number): void => {
-    select(e, newId);
+    // select(e, newId);
   }
 
   return (
     <div>
-      <button onClick={ (e)=> {selectConversation(e, id)} }>Conversation {id}</button>
+      {/* <button onClick={ (e)=> {selectConversation(e, id)} }>Conversation {con.id}</button> */}
+      <button>{ usersString.slice(0, usersString.length - 2) }</button>
     </div>
   );
 }

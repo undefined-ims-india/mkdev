@@ -5,11 +5,14 @@ import axios from 'axios';
 const socket = io('http://localhost:4000');
 
 interface PropsType {
-  conId: number;
+  con: {
+    id: number;
+    participants: { name: string }[];
+  };
 }
 
 const MessageInput: React.FC<PropsType> = (props): ReactElement => {
-  const { conId } = props;
+  const { con } = props;
 
   const [text, setText] = useState('');
 
@@ -26,13 +29,13 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
       socket.emit('message', {
         body: text,
         // senderId -> how to include here? TODO:
-        conversationId: conId
+        conversationId: con.id
       });
       setText('');
 
       // send message to database with current conversation
       axios
-        .post(`/api/messages/${conId}`, {
+        .post(`/api/messages/${con.id}`, {
           message: {
             body: text
           }
