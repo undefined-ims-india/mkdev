@@ -61,7 +61,6 @@ const Profile = (): ReactElement => {
           setDevId(data.devId);
           setGithubId(data.githubId);
           setLinkedinId(data.linkedinId);
-          console.log('user', data);
         })
         .catch((err) => {
           console.error('Failed to get user:', err);
