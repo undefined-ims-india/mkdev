@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { NextFunction, Router } from 'express';
+import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const users = Router();
@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 users.post('/', (req: any, res: any) => {
   const {
     newUser,
-  }: { newUser: { name: string; firstName: string; lastName: string, username:string } } =
+  }: { newUser: { name: string; username: string; firstName: string } } =
     req.body;
   prisma.user
     .create({ data: newUser })
@@ -64,6 +64,28 @@ users.get('/:id', (req: any, res: any) => {
     })
     .catch((err: any) => {
       console.error('Failed to get user:', err);
+      res.sendStatus(500);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+});
+
+// Update user by id
+users.patch('/:id', (req: any, res: any) => {
+  const { id } = req.params;
+  const { devId, username, githubId, linkedinId } = req.body;
+
+  prisma.user
+    .update({
+      where: { id: +id },
+      data: { devId, username, githubId, linkedinId },
+    })
+    .then((user: any) => {
+      res.status(200).send(user);
+    })
+    .catch((err: any) => {
+      console.error('Failed to update user:', err);
       res.sendStatus(500);
     })
     .finally(async () => {

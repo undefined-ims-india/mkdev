@@ -1,31 +1,8 @@
-
-import React, { ReactElement, useState } from 'react';
-import { Button, Box, Typography, TextField } from '@mui/material';
+import React, { ReactElement } from 'react';
+import { Button, Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import GoogleButton from 'react-google-button';
-import axios from 'axios';
-
 const Login = (): ReactElement => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleLogin = (event: React.FormEvent) => {
-    event.preventDefault();
-    // If/ when we plan to do the local strategy...
-    // axios
-    //   .get('/profile')
-    //   .then(({ data }) => {
-    //     console.log(data);
-    //   })
-    //   .catch((error) => {
-    //     if (error.response && error.response.status === 401) {
-    //       window.location.href = '/login';
-    //     } else {
-    //       console.error('Error:', error);
-    //     }
-    //   });
-  };
-
   return (
     <Box
       display='flex'
@@ -44,9 +21,9 @@ const Login = (): ReactElement => {
 
       <div>
         <form action='/auth/google' method='GET'>
-          <button type='submit'>
+          <Button type='submit'>
             <GoogleButton />
-          </button>
+          </Button>
         </form>
       </div>
     </Box>
