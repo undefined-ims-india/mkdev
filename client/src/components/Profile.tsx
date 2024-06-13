@@ -111,7 +111,7 @@ const Profile = (): ReactElement => {
           <p> LinkedIn: {user?.linkedinId}</p>
           <p>
             Dev.to:{' '}
-            <a href={`https://dev.to/api/users/{id}`} target='blank' rel=''>
+            <a href={`https://dev.to/${user?.devId}`} target='blank' rel=''>
               {user?.devId}
             </a>
           </p>
