@@ -1,13 +1,13 @@
-import React, { useState, useEffect, ReactElement } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, ReactElement, useRef } from 'react';
 import axios from 'axios';
 import Nav from './Nav';
 import UserPosts from './UserPosts';
 import Blogs from './Blogs';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
+import TabPanel from '@mui/lab/TabPanel';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
 
 interface User {
   id: number;
@@ -17,9 +17,11 @@ interface User {
   email: string;
   linkedinId: string;
   githubId: string;
+  devId: string;
   sub: string;
   username: string;
   picture: string;
+  postCount: string;
 }
 interface Post {
   id: number;
@@ -29,26 +31,24 @@ interface Post {
   body: string;
 }
 
-interface Blog {
-  id: number;
-  title: string;
-  body: string;
-  userId: number;
-}
-
 const Profile = (): ReactElement => {
   const [user, setUser] = useState<User>({} as User);
   const [posts, setPosts] = useState<Post[]>([]);
   const [postsCount, setPostsCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
-  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [username, setUsername] = useState<string>('');
-  const [value, setValue] = React.useState(0);
+  const [devId, setDevId] = useState<string>('');
+  const [githubId, setGithubId] = useState<string>('');
+  const [linkedinId, setLinkedinId] = useState<string>('');
+  const userRef = useRef(user);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const [tab, setTab] = useState('1');
+
+  const handleTab = (e: React.SyntheticEvent, newTab: string) => {
+    setTab(newTab);
   };
 
+  // get loggedIn user
   const getUser = () => {
     if (user) {
       axios
@@ -57,9 +57,13 @@ const Profile = (): ReactElement => {
           setUser(data);
           setPostsCount(data.postsCount);
           setFollowersCount(data.followersCount);
+          setUsername(data.username);
+          setDevId(data.devId);
+          setGithubId(data.githubId);
+          setLinkedinId(data.linkedinId);
         })
-        .catch((error) => {
-          console.error('Failed to get user:', error);
+        .catch((err) => {
+          console.error('Failed to get user:', err);
         });
     }
   };
@@ -70,54 +74,78 @@ const Profile = (): ReactElement => {
       : user.username;
   };
 
+  const getPosts = () => {
+    const userId = user?.id;
+    if (userId) {
+      axios
+        .get<Post[]>(`/api/posts/user/${userId}`)
+        .then(({ data }) => {
+          setPosts(data);
+        })
+        .catch((err) => {
+          console.error('Failed to fetch posts:', err);
+        });
+    }
+  };
   useEffect(() => {
     setUsername(checkUsername());
-    getUser();
+    getPosts();
   }, [user]);
 
-  // const getPosts = () => {
-  //   axios
-  //     .get(`/api/posts/user/${user?.id}`)
-  //     .then(({ data }) => {
-  //       setPosts(data);
-  //       console.log('posts', data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Failed to fetch posts:', error);
-  //     });
-  // };
-  // useEffect(() => {
-  //   getPosts();
-  // }, [user]);
+  useEffect(() => {
+    getUser();
+  }, [userRef]);
 
   return (
     <div>
       <Nav />
       {user && (
         <div>
-          <p>{`${username}`}</p>
+          <h4>{`${username}`}</h4>
           <img
             src={user?.picture}
             alt={user?.name}
             style={{ width: 100, height: 100 }}
           />
-          <p>{user?.linkedinId} LinkedIn Link</p>
-          <p>{user?.githubId} Github Link</p>
-          <div
-            style={{
-              border: '1px solid black',
-              padding: 1,
-              borderRadius: 12,
-            }}
-          >
-            <UserPosts posts={posts} />
-          </div>
+          <p> LinkedIn: {user?.linkedinId}</p>
+          <p>
+            Dev.to:{' '}
+            <a href={`https://dev.to/${user?.devId}`} target='blank' rel=''>
+              {user?.devId}
+            </a>
+          </p>
+          <p>
+            GitHub:{' '}
+            <a
+              href={`https://github.com/${user?.githubId}`}
+              target='blank'
+              rel=''
+            >
+              {user?.githubId}
+            </a>
+          </p>
           <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            <Tabs value={value} onChange={handleChange} centered>
-              <Tab label='Item One' />
-              <Tab label='Item Two' />
-              <Tab label='Item Three' />
-            </Tabs>
+            <TabContext value={tab}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <TabList onChange={handleTab} aria-label='lab API tabs example'>
+                  <Tab label='Posts' value='1' />
+                  <Tab label='Dev.to Blogs' value='2' />
+                  <Tab label='Item Three' value='3' />
+                </TabList>
+              </Box>
+              <TabPanel value='1'>
+                {<UserPosts posts={posts} getPosts={getPosts} />}
+              </TabPanel>
+              <TabPanel value='2'>{<Blogs devId={`${user.devId}`} />}</TabPanel>
+              <TabPanel value='3'>'Potentially user information'</TabPanel>
+            </TabContext>
+            <div
+              style={{
+                border: '1px solid black',
+                padding: 1,
+                borderRadius: 12,
+              }}
+            ></div>
           </Box>
         </div>
       )}

@@ -8,9 +8,9 @@ datasource db {
 }
 
 //Enum for types of tags, If want a new tag Type change here
-enum tagType {
-  post
-  user
+enum TagType {
+  Post 
+  User 
 }
 
 //Posts that will show up on feed based on the tags a user has saved
@@ -29,34 +29,35 @@ model Post {
 }
 
 model Repo {
-  id          Int     @id @default(autoincrement())
-  postId      Int     @unique
-  post        Post    @relation(fields: [postId], references: [id])
-  link        String
-  files       File[]
+  id     Int    @id @default(autoincrement())
+  postId Int    @unique
+  post   Post   @relation(fields: [postId], references: [id])
+  link   String
+  files  File[]
 }
 
 model File {
-  id        Int       @id @default(autoincrement())
-  repoId    Int       @unique
-  repo      Repo      @relation(fields: [repoId], references: [id])
-  star      Boolean   @default(false)
+  id        Int      @id @default(autoincrement())
+  repoId    Int      @unique
+  repo      Repo     @relation(fields: [repoId], references: [id])
+  star      Boolean  @default(false)
   path      String
   contents  String
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 }
 
 model User {
   id             Int             @id @default(autoincrement())
   name           String
-  username       String?          @unique
+  username       String?         @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
+  devId          String?         @unique
   githubId       String?         @unique
   blogs          Blog[]          @relation("UserBlogs")
   picture        String?
   firstName      String
-  lastName       String
+  lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
   messages       Messages[]
@@ -80,11 +81,12 @@ model Blog {
 
 model Tags {
   id       Int     @id @default(autoincrement())
-  tagType  tagType
+  tagType  TagType
   name     String
-  category String?
   posts    Post[]  @relation("PostToTags")
   user     User[]  @relation("TagsToUser")
+
+  @@unique([name, tagType])
 }
 
 model Messages {
@@ -101,4 +103,3 @@ model Conversations {
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
 }
-
