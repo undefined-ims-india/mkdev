@@ -1,25 +1,29 @@
 import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 
-const follows = Router();
+const follow = Router();
 const prisma = new PrismaClient();
 
-// follow user
-follows.post('/:userId/follow', async (req: Request, res: Response) => {
-  const { followerId, followedId } = req.body;
+// Follow user
+follow.post('/', async (req: Request, res: Response) => {
+  const { followedById, followingId } = req.body;
 
-  if (!followerId || !followedId || followerId === followedId) {
+  // Can't follow yourself...
+  if (!followedById || !followingId) {
     return res.sendStatus(400);
   }
 
+  if (followedById === followingId) {
+    return res.status(400).json({ error: 'Users cannot follow themselves' });
+  }
+
   try {
-    const follow = await prisma.follow.create({
+    const follow = await prisma.follows.create({
       data: {
-        followerId,
-        followedId,
+        followedById,
+        followingId,
       },
     });
-    return res.status(201).send(follow);
   } catch (err) {
     console.error('Failed to follow user:', err);
     res.sendStatus(500);
@@ -28,25 +32,66 @@ follows.post('/:userId/follow', async (req: Request, res: Response) => {
   }
 });
 
-// get followers
-follows.get('/:userId/followers', async (req: Request, res: Response) => {
+// Get followers
+follow.get('/:userId/following', async (req: Request, res: Response) => {
   const { userId } = req.params;
+
   if (!userId) {
-    res.sendStatus(400);
+    return res.sendStatus(400);
   }
+
   try {
-    const followers = await prisma.follow.findMany({
-      where: { followedId: +userId },
-      include: { follower: true },
+    const following = await prisma.follows.findMany({
+      where: { followedById: +userId },
+      include: { following: true },
     });
-    const followerList = followers.map((user) => user.follower);
-    return res.status(200).send(followerList);
+
+    const usersFollowing = following.map((follow) => follow.following);
+
+    return res.status(200).send(usersFollowing);
   } catch (err) {
-    console.error("Failed to get user's followers:", err);
+    console.error('Failed to get following users:', err);
     res.sendStatus(500);
   } finally {
     await prisma.$disconnect();
   }
 });
 
-export default follows;
+// Unfollow user
+follow.delete('/unfollow', async (req: Request, res: Response) => {
+  const { followedById, followingId } = req.body;
+
+  // Cant unfollow yourself....
+  if (!followedById || !followingId) {
+    return res.sendStatus(400);
+  }
+  if (followedById === followingId) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    await prisma.follows.delete({
+      where: {
+        followingId_followedById: {
+          followingId: followingId,
+          followedById: followedById,
+        },
+      },
+    });
+
+    //  Update the 'unfollowed' user
+    await prisma.user.update({
+      where: { id: followingId },
+      data: { follower_count: { decrement: 1 } }, // if we are stilling accounting for the follower count
+    });
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error('Failed to unfollow user:', err);
+    res.sendStatus(500);
+  } finally {
+    await prisma.$disconnect();
+  }
+});
+
+export default follow;
