@@ -82,31 +82,6 @@ const Messages = (): ReactElement => {
     setAddingConversation(true);
   }
 
-  const addConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-    e.preventDefault();
-    // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
-    // create conversation, set new conversation id
-    console.log('participants', participants)
-    axios
-      .post('/api/conversations', {
-        participants: participants, // users that sender enters
-        label: participantsLabel
-      })
-      .then((conversation) => {
-        setCon(conversation.data);
-
-        socket.emit('add-conversation', {
-          id: conversation.data.id
-        });
-      })
-      .then(() => {
-        getAllConversations();
-      })
-      .catch((err) => {
-        console.error('Failed to create a conversation:\n', err);
-      });
-  }
-
   const changeParticipants = (e: React.ChangeEvent<{}>, newValues: string[]): void => {
     setParticipantsEntry(newValues);
     // iterate through participants entry and find user objects from all users
@@ -129,7 +104,36 @@ const Messages = (): ReactElement => {
     setParticipantsLabel(label.slice(0, label.length - 2));
   }
 
+  const addConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    e.preventDefault();
+    // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
+    // create conversation, set new conversation id
+    axios
+      .post('/api/conversations', {
+        participants: participants, // users that sender enters
+        label: participantsLabel
+      })
+      .then((conversation) => {
+        setCon(conversation.data);
+
+        socket.emit('add-conversation', {
+          id: conversation.data.id
+        });
+      })
+      .then(() => {
+        setAddingConversation(false);
+        getAllConversations();
+        setParticipantsEntry([]);
+      })
+      .catch((err) => {
+        console.error('Failed to create a conversation:\n', err);
+      });
+  }
+
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversation): void => {
+    if (addingConversation) {
+      setAddingConversation(false);
+    }
     setCon(newCon);
     setParticipantsLabel(newCon.label);
   }

@@ -49,9 +49,14 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
 
   return (
     <div>
-      <h3>{ label }</h3>
-      <MessagesList allMsgs={ allMsgs } con={ con }/>
-      <MessageInput con={ con }/>
+      { !addingConversation ? (
+          <>
+            <h3>{ label }</h3>
+            <MessagesList allMsgs={ allMsgs } con={ con }/>
+            <MessageInput con={ con }/>
+          </>
+        ) : ('')
+      }
     </div>
   );
 }
