@@ -1,24 +1,21 @@
 import React, { ReactElement } from 'react';
 import Message from './Message';
 
+import { Messages, Conversations } from '@prisma/client';
+
 interface PropsType {
-  allMsgs: {
-    body: string;
-    senderId: number;
-    conversationId: number;
-  }[],
-  conId: number;
+  allMsgs: Messages[],
+  con: Conversations;
 }
 
 const MessagesList: React.FC<PropsType> = (props): ReactElement => {
-
-  const { allMsgs, conId } = props;
+  const { allMsgs, con } = props;
 
   return (
     <div>
       {
         allMsgs.map((msg, i) => {
-          if (msg.conversationId === conId) {
+          if (msg.conversationId === con.id) {
             return (
               <Message msg={ msg } key={ `${msg}-${i}` }/>
             )
