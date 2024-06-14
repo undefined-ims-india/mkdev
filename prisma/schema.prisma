@@ -43,14 +43,13 @@ model User {
   id             Int             @id @default(autoincrement())
   username       String?         @unique
   googleId       String?         @unique
+  linkedinId     String?         @unique
+  githubId       String?         @unique
   picture        String?
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
-  githubId       String?         @unique
-  linkedinId     String?         @unique
-  name           String
   devId          String?         @unique
   blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
