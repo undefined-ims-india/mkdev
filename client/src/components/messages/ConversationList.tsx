@@ -1,13 +1,11 @@
 import React, { ReactElement } from 'react';
 import Conversation from './Conversation';
 
+import { Conversations } from '@prisma/client';
+
 interface PropTypes {
-  allCons: {
-    id: number;
-    label: string;
-    participants: { username: string }[];
-  }[],
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversation) => void;
+  allCons: Conversations[],
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations) => void;
 }
 
 const ConversationList: React.FC<PropTypes> = (props): ReactElement => {

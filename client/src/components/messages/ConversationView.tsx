@@ -1,22 +1,15 @@
 import React, { useState, useEffect, ReactElement } from 'react';
-import axios from 'axios';
 import MessagesList from './MessagesList';
 import MessageInput from './MessageInput';
+
+import axios from 'axios';
 import io from 'socket.io-client';
+import { Messages, Conversations } from '@prisma/client';
 
 const socket = io('http://localhost:4000');
 
-interface Message {
-    body: string;
-    senderId: number;
-    conversationId: number;
-}
-
 interface PropsType {
-  con: {
-    id: number;
-    participants: { username: string }[];
-  };
+  con: Conversations;
   label: string;
   addingConversation: boolean;
 }
@@ -24,7 +17,7 @@ interface PropsType {
 const ConversationView: React.FC<PropsType> = (props): ReactElement => {
   const { con, label, addingConversation } = props;
 
-  const [allMsgs, setAllMsgs] = useState<Message[]>([]);
+  const [allMsgs, setAllMsgs] = useState<Messages[]>([]);
 
   // get messages in conversation
   useEffect(() => {
@@ -39,7 +32,7 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
   }, [con])
 
   // add any received message from websocket
-  socket.on('message', (msg: Message): void => {
+  socket.on('message', (msg: Messages): void => {
     // add emitted messages to allMsgs
     setAllMsgs([...allMsgs, msg]);
   })

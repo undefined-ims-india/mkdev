@@ -1,47 +1,29 @@
 import React, { useState, useEffect, ReactElement } from 'react';
-import axios from 'axios';
 import ConversationList from './ConversationList';
 import ConversationView from './ConversationView';
+
 import io from 'socket.io-client';
+import axios from 'axios';
+import { User, Conversations } from '@prisma/client';
+
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
 const socket = io('http://localhost:4000');
 
-type Conversation = {
-  id: number;
-  label: string;
-  participants: { username: string }[];
-}
-
-type User = {
-  id: number;
-  name: string;
-  username: string;
-  googleId: string;
-  linkedinId: string;
-  githubId: string;
-  picture: string;
-  firstName: string;
-  lastName: string;
-  follower_count: number;
-  post_count: number;
-}
-
 const Messages = (): ReactElement => {
 
-  const [con, setCon] = useState<Conversation>();
+  const [con, setCon] = useState<Conversations>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
-  const [participantsEntry, setParticipantsEntry] = useState<string[]>([]);
-  const [allConversations, setAllConversations] = useState<Conversation[]>([]);
+  const [participantsEntry, setParticipantsEntry] = useState<(string | null)[]>([]);
+  const [allConversations, setAllConversations] = useState<Conversations[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
 
-  // get all current conversations
-  // TODO: *** per user: the only conversations listed should be the ones the user is a part of
+  // get all current conversations for current user
   const getAllConversations = (): void => {
     axios
       .get('/api/conversations')
@@ -82,13 +64,13 @@ const Messages = (): ReactElement => {
     setAddingConversation(true);
   }
 
-  const changeParticipants = (e: React.ChangeEvent<{}>, newValues: string[]): void => {
-    setParticipantsEntry(newValues);
+  const changeParticipants = (e: any, value: (string | null)[] ): void => {
+    setParticipantsEntry(value);
     // iterate through participants entry and find user objects from all users
     const participantsArr: User[] = [];
 
     // store in array to then pass in request body
-    newValues.forEach((username) => {
+    value.forEach((username) => {
       for (let i = 0; i < allUsers.length; i++) {
         if ( allUsers[i].username === username) {
           participantsArr.push(allUsers[i]);
@@ -106,10 +88,12 @@ const Messages = (): ReactElement => {
 
   const addConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault();
+
     // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
     if (!participants.length) {
       return;
     }
+
     // create conversation, set new conversation id
     axios
       .post('/api/conversations', {
@@ -133,7 +117,7 @@ const Messages = (): ReactElement => {
       });
   }
 
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversation): void => {
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
     if (addingConversation) {
       setAddingConversation(false);
     }
@@ -142,7 +126,7 @@ const Messages = (): ReactElement => {
   }
 
   // add emitted conversation to allConversations
-  socket.on('add-conversation', (conversation: Conversation): void => {
+  socket.on('add-conversation', (conversation: Conversations): void => {
     setAllConversations([...allConversations, conversation]);
     getAllConversations();
   })

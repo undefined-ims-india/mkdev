@@ -1,14 +1,13 @@
 import React, { useState, ReactElement } from 'react';
+
 import io from 'socket.io-client';
 import axios from 'axios';
+import { Conversations } from '@prisma/client';
 
 const socket = io('http://localhost:4000');
 
 interface PropsType {
-  con: {
-    id: number;
-    participants: { username: string }[];
-  };
+  con: Conversations;
 }
 
 const MessageInput: React.FC<PropsType> = (props): ReactElement => {

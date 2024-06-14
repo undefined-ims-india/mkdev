@@ -1,20 +1,14 @@
 import React, { ReactElement } from 'react';
 import Message from './Message';
 
+import { Messages, Conversations } from '@prisma/client';
+
 interface PropsType {
-  allMsgs: {
-    body: string;
-    senderId: number;
-    conversationId: number;
-  }[],
-  con: {
-    id: number;
-    participants: { username: string }[];
-  };
+  allMsgs: Messages[],
+  con: Conversations;
 }
 
 const MessagesList: React.FC<PropsType> = (props): ReactElement => {
-
   const { allMsgs, con } = props;
 
   return (
