@@ -25,7 +25,6 @@ const Nav = (): ReactElement => {
       <Link to='/messages'>
         <button>Messages</button>
       </Link>
-      <Link to='/user/1/profile'>TEST</Link>
     </>
   );
 };
