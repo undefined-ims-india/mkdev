@@ -57,7 +57,7 @@ conversations.get('/', async (req: any, res: Response) => {
 
 conversations.post('/', async (req: any, res: Response) => {
   const { user } = req; // sends the message
-  const { participants } = req.body; // array of user objects from frontend
+  const { participants, label } = req.body; // array of user objects from frontend
 
   // array of objects with usernames from add convo input, users to be participants
   const connectArr = participants.map((user: User) => {
@@ -67,16 +67,17 @@ conversations.post('/', async (req: any, res: Response) => {
   // a conversation is created, then the id is sent back to frontend
   prisma.conversations.create({
     data: {
+      label,
       participants: {
         connect: [ { id: user.id }, ...connectArr],
-      }
+      },
     },
     include: {
       participants: {
         select: {
           username: true,
         }
-      }
+      },
     }
   })
     .then((conversation) => {

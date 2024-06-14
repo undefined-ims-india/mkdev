@@ -99,6 +99,7 @@ model Messages {
 
 model Conversations {
   id           Int        @id @default(autoincrement())
+  label        String
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
 }
