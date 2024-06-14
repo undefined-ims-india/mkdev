@@ -1,15 +1,17 @@
 import React, { useState, ReactElement } from 'react';
+
 import io from 'socket.io-client';
 import axios from 'axios';
+import { Conversations } from '@prisma/client';
 
 const socket = io('http://localhost:4000');
 
 interface PropsType {
-  conId: number;
+  con: Conversations;
 }
 
 const MessageInput: React.FC<PropsType> = (props): ReactElement => {
-  const { conId } = props;
+  const { con } = props;
 
   const [text, setText] = useState('');
 
@@ -25,14 +27,14 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
       // broadcast the message to all the clients
       socket.emit('message', {
         body: text,
-        // senderId -> how to include here? TODO:
-        conversationId: conId
+        // TODO: senderId -> how to include here?
+        conversationId: con.id
       });
       setText('');
 
       // send message to database with current conversation
       axios
-        .post(`/api/messages/${conId}`, {
+        .post(`/api/messages/${con.id}`, {
           message: {
             body: text
           }
