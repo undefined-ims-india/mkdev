@@ -18,7 +18,16 @@ users.get('/loggedIn', (req: any, res: any) => {
 //Get user profile
 users.get('/:id/profile', async (req: express.Request<{id:string}>, res: express.Response): Promise<void> => {
   try {
-    const userProfile = prisma.user.findUniqueOrThrow({where: {id: +req.params.id}, include:{tags: true, posts: true, blogs:true}});
+    const userProfile = await prisma.user.findUniqueOrThrow(
+      {
+        where: {id: +req.params.id},
+        include:{
+          tags: true,
+          posts: {include: {tags: true, repoLink: true, liked: {select: {id: true}}}},
+          blogs:true
+        }
+      }
+    );
     res.send(userProfile);
   }
   catch (err) {
