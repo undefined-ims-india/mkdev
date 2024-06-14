@@ -81,7 +81,6 @@ conversations.post('/', async (req: any, res: Response) => {
     }
   })
     .then((conversation) => {
-      console.log('conversation created', conversation);
       res.status(201).send(conversation);
     })
     .catch((err: Error) => {

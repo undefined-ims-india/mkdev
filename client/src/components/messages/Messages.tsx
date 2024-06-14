@@ -46,7 +46,6 @@ const Messages = (): ReactElement => {
     axios
       .get('/api/conversations')
       .then((conversations) => {
-        // console.log('conversations from getAllConvos', conversations.data)
         setAllConversations(conversations.data);
       })
       .catch((err) => {
@@ -54,6 +53,7 @@ const Messages = (): ReactElement => {
         console.error('Failed to retrieve conversations:\n', err);
       })
   }
+
   // get list of conversations upon page load
   useEffect(() => {
     getAllConversations();
@@ -64,7 +64,6 @@ const Messages = (): ReactElement => {
     axios
       .get('/api/users')
       .then((users) => {
-        // console.log('users to message', users.data);
         setAllUsers(users.data);
       })
       .catch((err) => {
@@ -94,9 +93,6 @@ const Messages = (): ReactElement => {
         label: participantsLabel
       })
       .then((conversation) => {
-        // console.log('conversation', conversation)
-        console.log('conversation.data', conversation.data)
-
         setCon(conversation.data);
 
         socket.emit('add-conversation', {
@@ -104,7 +100,6 @@ const Messages = (): ReactElement => {
         });
       })
       .then(() => {
-
         getAllConversations();
       })
       .catch((err) => {
@@ -113,7 +108,6 @@ const Messages = (): ReactElement => {
   }
 
   const changeParticipants = (e: React.ChangeEvent<{}>, newValues: string[]): void => {
-    // console.log('parts newValue: ', newValues);
     setParticipantsEntry(newValues);
     // iterate through participants entry and find user objects from all users
     const participantsArr: User[] = [];

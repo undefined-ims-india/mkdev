@@ -28,7 +28,7 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
       // broadcast the message to all the clients
       socket.emit('message', {
         body: text,
-        // senderId -> how to include here? TODO:
+        // TODO: senderId -> how to include here?
         conversationId: con.id
       });
       setText('');
