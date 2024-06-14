@@ -11,6 +11,7 @@ const socket = io('http://localhost:4000');
 
 type Conversation = {
   id: number;
+  label: string;
   participants: { username: string }[];
 }
 
@@ -89,7 +90,8 @@ const Messages = (): ReactElement => {
     console.log('participants', participants)
     axios
       .post('/api/conversations', {
-        participants: participants // users that sender enters
+        participants: participants, // users that sender enters
+        label: participantsLabel
       })
       .then((conversation) => {
         // console.log('conversation', conversation)
@@ -130,16 +132,15 @@ const Messages = (): ReactElement => {
     const label = participantsArr.reduce((acc, curr) => {
         return acc.concat(`${curr.username}, `)
     }, '');
-    setParticipantsLabel(label);
-    // console.log('participantsArr', participantsArr)
+    setParticipantsLabel(label.slice(0, label.length - 2));
   }
 
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversation): void => {
     setCon(newCon);
   }
 
+  // add emitted conversation to allConversations
   socket.on('add-conversation', (conversation: Conversation): void => {
-    // add emitted conversation to allConversations
     setAllConversations([...allConversations, conversation]);
     getAllConversations();
   })
