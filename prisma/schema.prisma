@@ -9,8 +9,8 @@ datasource db {
 
 //Enum for types of tags, If want a new tag Type change here
 enum TagType {
-  Post 
-  User 
+  Post
+  User
 }
 
 //Posts that will show up on feed based on the tags a user has saved
@@ -65,8 +65,8 @@ model User {
   conversations  Conversations[] @relation("ConversationsToUser")
   likedPosts     Post[]          @relation("LikedPosts")
   tags           Tags[]          @relation("TagsToUser")
-  followedBy     Follows[]       @relation("followedBy")
-  following      Follows[]       @relation("following")
+  followedBy     User[]          @relation("UserFollows")
+  following      User[]          @relation("UserFollows")
 }
 
 model Blog {
@@ -80,11 +80,11 @@ model Blog {
 }
 
 model Tags {
-  id       Int     @id @default(autoincrement())
-  tagType  TagType
-  name     String
-  posts    Post[]  @relation("PostToTags")
-  user     User[]  @relation("TagsToUser")
+  id      Int     @id @default(autoincrement())
+  tagType TagType
+  name    String
+  posts   Post[]  @relation("PostToTags")
+  user    User[]  @relation("TagsToUser")
 
   @@unique([name, tagType])
 }
@@ -102,13 +102,4 @@ model Conversations {
   id           Int        @id @default(autoincrement())
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
-}
-
-model Follows {
-  followedBy   User @relation("followedBy", fields: [followedById], references: [id])
-  followedById Int
-  following    User @relation("following", fields: [followingId], references: [id])
-  followingId  Int
-
-  @@id([followingId, followedById])
 }
