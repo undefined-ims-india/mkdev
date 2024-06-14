@@ -23,7 +23,7 @@ users.get('/:id/profile', async (req: express.Request<{id:string}>, res: express
         where: {id: +req.params.id},
         include:{
           tags: true,
-          posts: {include: {tags: true, repoLink: true, liked: {select: {id: true}}}},
+          posts: {include: {author: true, tags: true, repoLink: true, liked: {select: {id: true}}}},
           blogs:true
         }
       }
