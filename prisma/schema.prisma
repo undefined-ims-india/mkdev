@@ -25,7 +25,7 @@ model Repo {
   id     Int    @id @default(autoincrement())
   postId Int    @unique
   link   String
-  files  File?
+  files  File[]
   post   Post   @relation(fields: [postId], references: [id])
 }
 
@@ -98,7 +98,7 @@ model Conversations {
   participants User[]     @relation("ConversationsToUser")
 }
 
-enum tagType {
+enum TagType {
   post
   user
 }
