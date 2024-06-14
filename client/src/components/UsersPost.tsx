@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 interface Post {
-  id: number;
+  id: string;
   author: string;
   title: string;
   body: string;
@@ -36,16 +36,23 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
     setEdit(true);
   };
 
-  const handlePostChange = (e: any) => {
-    setEditedPost({ ...editedPost, title: e.target.value });
+  // const handlePostChange = (e: any) => {
+  //   // setEditedPost({ ...editedPost, title: e.target.value });
+  //   // setEditedPost({ ...editedPost, body: e.target.value });
+  // };
+
+  const handleBody = (e: any) => {
     setEditedPost({ ...editedPost, body: e.target.value });
+  };
+  const handleTitle = (e: any) => {
+    setEditedPost({ ...editedPost, title: e.target.value });
   };
 
   const editPost = (e: any) => {
     e.preventDefault();
 
     axios
-      .put(`/api/posts/${post.id}`, editedPost)
+      .patch(`/api/posts/${post.id}`, editedPost)
       .then(({ data }) => {
         console.log('Post updated');
         setEditedPost(data);
@@ -73,9 +80,9 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
               <Input
                 type='text'
                 value={editedPost.title}
-                onChange={handlePostChange}
+                onChange={handleTitle}
               />
-              <textarea value={editedPost.body} onChange={handlePostChange} />
+              <textarea value={editedPost.body} onChange={handleBody} />
               <Button onSubmit={handleEdit}>Save</Button>
             </form>
           ) : (
