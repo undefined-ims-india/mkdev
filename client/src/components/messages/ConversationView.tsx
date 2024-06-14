@@ -15,25 +15,21 @@ interface Message {
 interface PropsType {
   con: {
     id: number;
-    participants: { name: string }[];
+    participants: { username: string }[];
   };
-  conUsers: { name: string }[] | undefined;
+  label: string;
   addingConversation: boolean;
   addConversation: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 const ConversationView: React.FC<PropsType> = (props): ReactElement => {
-  const { con, conUsers, addingConversation, addConversation } = props;
+  const { con, label, addingConversation, addConversation } = props;
   // console.log('addingConversation', addingConversation);
-  // console.log('conUsers in conView', conUsers);
 
   const [allMsgs, setAllMsgs] = useState<Message[]>([]);
-  const [conversationCreated, setConversationCreated] = useState<boolean>(false);
+  const [conversationCreated, setConversationCreated] = useState<boolean>(false); // TODO: might be extraneous with addingConversation
 
-  // const usersString = conUsers?.reduce((acc, curr) => {
-  //   curr.partic
-  // }, '')
-
+  // get messages in conversation
   useEffect(() => {
     axios
       .get(`/api/messages/${con.id}`)
@@ -45,19 +41,16 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
       })
   }, [con])
 
+  // add any received message from websocket
   socket.on('message', (msg: Message): void => {
     // add emitted messages to allMsgs
     setAllMsgs([...allMsgs, msg]);
   })
 
-  // const handleRecipientsInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
-  //   setRecipientText(e.target.value);
-  // }
-
   return (
     <div>
-      {/* { usersString } */}
-      <h3>Names of participants should be here</h3>
+      {/* <h3>{ usersString.slice(0, usersString.length - 2) }</h3> */}
+      <h3>{ label.slice(0, label.length - 2) }</h3>
       <MessagesList allMsgs={ allMsgs } con={ con }/>
       <MessageInput con={ con }/>
     </div>

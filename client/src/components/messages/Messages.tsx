@@ -11,7 +11,7 @@ const socket = io('http://localhost:4000');
 
 type Conversation = {
   id: number;
-  participants: { name: string }[];
+  participants: { username: string }[];
 }
 
 type User = {
@@ -31,9 +31,9 @@ type User = {
 const Messages = (): ReactElement => {
 
   const [con, setCon] = useState<Conversation>();
-  const [conUsers, setConUsers] = useState<{ name: string }[]>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
+  const [participantsLabel, setParticipantsLabel] = useState<string>('')
   const [participantsEntry, setParticipantsEntry] = useState<string[]>([]);
   const [allConversations, setAllConversations] = useState<Conversation[]>([]);
   const [allUsers, setAllUsers] = useState<User[]>([]);
@@ -53,7 +53,12 @@ const Messages = (): ReactElement => {
         console.error('Failed to retrieve conversations:\n', err);
       })
   }
+  // get list of conversations upon page load
+  useEffect(() => {
+    getAllConversations();
+  }, [])
 
+  // get list of users for autocomplete
   const getAllUsers = (): void => {
     axios
       .get('/api/users')
@@ -65,11 +70,6 @@ const Messages = (): ReactElement => {
         console.error('Failed to get list of users:\n', err);
       })
   }
-
-  // get list of conversations upon page load
-  useEffect(() => {
-    getAllConversations();
-  }, [])
 
   // get list of available users upon load
   useEffect(() => {
@@ -84,18 +84,19 @@ const Messages = (): ReactElement => {
 
   const addConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault();
-
+    // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
     // create conversation, set new conversation id
+    console.log('participants', participants)
     axios
       .post('/api/conversations', {
         participants: participants // users that sender enters
       })
       .then((conversation) => {
         // console.log('conversation', conversation)
-        // console.log('conversation.data', conversation.data)
-        const { participants } = conversation.data;
+        console.log('conversation.data', conversation.data)
+
         setCon(conversation.data);
-        setConUsers(participants);
+
         socket.emit('add-conversation', {
           id: conversation.data.id
         });
@@ -124,12 +125,18 @@ const Messages = (): ReactElement => {
       }
     })
     setParticipants(participantsArr);
+
+    // set participants label
+    const label = participantsArr.reduce((acc, curr) => {
+        return acc.concat(`${curr.username}, `)
+    }, '');
+    setParticipantsLabel(label);
     // console.log('participantsArr', participantsArr)
   }
 
-  // const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number): void => {
-  //   setCon(newId);
-  // }
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversation): void => {
+    setCon(newCon);
+  }
 
   socket.on('add-conversation', (conversation: Conversation): void => {
     // add emitted conversation to allConversations
@@ -147,12 +154,10 @@ const Messages = (): ReactElement => {
       ) : (
         <>
           <button onClick={ beginConversation }>➕ Start Conversation</button>
-          <ConversationList allCons={ allConversations } />
-          {/* <ConversationList allCons={ allConversations } select={ selectConversation }/> */}
+          <ConversationList allCons={ allConversations } select={ selectConversation }/>
           { addingConversation ? (
               <form>
                 <Autocomplete
-                  // value={ participantsEntry }
                   multiple
                   id="tags-filled"
                   options={allUsers.map((option) => option.username)}
@@ -185,7 +190,7 @@ const Messages = (): ReactElement => {
               addingConversation={ addingConversation }
               addConversation={ beginConversation }
               con={ con }
-              conUsers={ conUsers }
+              label={ participantsLabel } // this should be a string, not an array that would have to be changed down the tree
             /> : ''
           }
         </>
