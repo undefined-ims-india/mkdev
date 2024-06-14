@@ -1,4 +1,10 @@
-import React, { useState, useEffect, ReactElement, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  ReactElement,
+  useRef,
+  SyntheticEvent,
+} from 'react';
 import axios from 'axios';
 import Nav from './Nav';
 import UserPosts from './UserPosts';
@@ -24,7 +30,7 @@ interface User {
   postCount: string;
 }
 interface Post {
-  id: number;
+  id: string;
   userId: number;
   author: string;
   title: string;
@@ -34,17 +40,13 @@ interface Post {
 const Profile = (): ReactElement => {
   const [user, setUser] = useState<User>({} as User);
   const [posts, setPosts] = useState<Post[]>([]);
-  const [postsCount, setPostsCount] = useState<number>(0);
-  const [followersCount, setFollowersCount] = useState<number>(0);
   const [username, setUsername] = useState<string>('');
-  const [devId, setDevId] = useState<string>('');
-  const [githubId, setGithubId] = useState<string>('');
-  const [linkedinId, setLinkedinId] = useState<string>('');
+
   const userRef = useRef(user);
 
   const [tab, setTab] = useState('1');
 
-  const handleTab = (e: React.SyntheticEvent, newTab: string) => {
+  const handleTab = (e: SyntheticEvent, newTab: string) => {
     setTab(newTab);
   };
 
@@ -55,12 +57,6 @@ const Profile = (): ReactElement => {
         .get('/api/users/loggedIn')
         .then(({ data }) => {
           setUser(data);
-          setPostsCount(data.postsCount);
-          setFollowersCount(data.followersCount);
-          setUsername(data.username);
-          setDevId(data.devId);
-          setGithubId(data.githubId);
-          setLinkedinId(data.linkedinId);
         })
         .catch((err) => {
           console.error('Failed to get user:', err);
@@ -76,9 +72,9 @@ const Profile = (): ReactElement => {
 
   const getPosts = () => {
     const userId = user?.id;
-    if (userId) {
+    if (user) {
       axios
-        .get<Post[]>(`/api/posts/user/${userId}`)
+        .get<Post[]>(`/api/posts/`)
         .then(({ data }) => {
           setPosts(data);
         })
@@ -95,6 +91,8 @@ const Profile = (): ReactElement => {
   useEffect(() => {
     getUser();
   }, [userRef]);
+
+  console.log('posts', posts);
 
   return (
     <div>
