@@ -20,19 +20,17 @@ type User = {
 
 // Conversations routes
 
-// get conversations per user
+// get conversations per logged in user
 conversations.get('/', async (req: any, res: Response) => {
 
-  // i want a list of conversations that have at least one match for the user.
-  // use `some` option to filter records by the properties of related records on the "-to-many" side of the relation
   if (req.user !== undefined) {
-    // use req.user.id for findMany query in _ConversationsToUsers table
+    // find many conversation IDs associated with logged in user
     const allConversations = await prisma.conversations.findMany({
       where: {
         participants: {
           some: {
             id: {
-              equals: req.user.id // TODO: req.user.id
+              equals: req.user.id
             }
           }
         }
@@ -57,9 +55,9 @@ conversations.get('/', async (req: any, res: Response) => {
 
 conversations.post('/', async (req: any, res: Response) => {
   const { user } = req; // sends the message
-  const { participants, label } = req.body; // array of user objects from frontend
+  const { participants, label } = req.body;
 
-  // array of objects with usernames from add convo input, users to be participants
+  // map new array from submitted usernames
   const connectArr = participants.map((user: User) => {
     return { id: user.id }
   })
