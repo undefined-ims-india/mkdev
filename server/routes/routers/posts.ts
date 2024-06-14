@@ -57,7 +57,7 @@ posts.post('/', async (req: any, res: any) => {
 
 // get all users posts
 posts.get('/', (req: any, res: any) => {
-  console.log(req.user);
+  // console.log(req.user);
 
   prisma.post
     .findMany({ where: { userId: req.user.id } })
@@ -66,25 +66,6 @@ posts.get('/', (req: any, res: any) => {
     })
     .catch((err: { name: string }) => {
       console.error(err);
-      res.sendStatus(500);
-    })
-    .finally(async () => {
-      await prisma.$disconnect();
-    });
-});
-
-// get current user's posts for Profile page
-posts.get('/user/:userId', (req: any, res: any) => {
-  const { userId } = req.params;
-  prisma.post
-    .findMany({
-      where: { userId: +userId },
-    })
-    .then((userPosts: any) => {
-      res.status(200).send(userPosts);
-    })
-    .catch((err: any) => {
-      console.error('Failed to get user posts:', err);
       res.sendStatus(500);
     })
     .finally(async () => {
