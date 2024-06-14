@@ -19,15 +19,12 @@ interface PropsType {
   };
   label: string;
   addingConversation: boolean;
-  addConversation: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 const ConversationView: React.FC<PropsType> = (props): ReactElement => {
-  const { con, label, addingConversation, addConversation } = props;
-  // console.log('addingConversation', addingConversation);
+  const { con, label, addingConversation } = props;
 
   const [allMsgs, setAllMsgs] = useState<Message[]>([]);
-  const [conversationCreated, setConversationCreated] = useState<boolean>(false); // TODO: might be extraneous with addingConversation
 
   // get messages in conversation
   useEffect(() => {
