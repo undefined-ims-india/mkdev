@@ -107,6 +107,7 @@ const Messages = (): ReactElement => {
   const addConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault();
     // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
+
     // create conversation, set new conversation id
     axios
       .post('/api/conversations', {
@@ -188,9 +189,8 @@ const Messages = (): ReactElement => {
           { con ?
             <ConversationView
               addingConversation={ addingConversation }
-              addConversation={ beginConversation }
               con={ con }
-              label={ participantsLabel } // this should be a string, not an array that would have to be changed down the tree
+              label={ participantsLabel }
             /> : ''
           }
         </>
