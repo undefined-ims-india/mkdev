@@ -137,6 +137,7 @@ const Messages = (): ReactElement => {
 
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversation): void => {
     setCon(newCon);
+    setParticipantsLabel(newCon.label);
   }
 
   // add emitted conversation to allConversations

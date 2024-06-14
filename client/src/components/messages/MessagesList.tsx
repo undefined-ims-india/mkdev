@@ -9,7 +9,7 @@ interface PropsType {
   }[],
   con: {
     id: number;
-    participants: { name: string }[];
+    participants: { username: string }[];
   };
 }
 

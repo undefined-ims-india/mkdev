@@ -7,7 +7,7 @@ const socket = io('http://localhost:4000');
 interface PropsType {
   con: {
     id: number;
-    participants: { name: string }[];
+    participants: { username: string }[];
   };
 }
 

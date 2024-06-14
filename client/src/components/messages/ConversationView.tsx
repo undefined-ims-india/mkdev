@@ -50,7 +50,7 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
   return (
     <div>
       {/* <h3>{ usersString.slice(0, usersString.length - 2) }</h3> */}
-      <h3>{ label.slice(0, label.length - 2) }</h3>
+      <h3>{ label }</h3>
       <MessagesList allMsgs={ allMsgs } con={ con }/>
       <MessageInput con={ con }/>
     </div>
