@@ -5,20 +5,19 @@ const follow = Router();
 const prisma = new PrismaClient();
 
 // Follow user
-follow.post('/follow', async (req: any, res: any) => {
-  const { id, followingId } = req.body;
-  console.log('followingId', followingId);
+follow.post('/follow/:followingId', async (req: any, res: any) => {
+  const { id, followingId } = req.params;
 
   try {
     // Add to user's following list
     await prisma.user.update({
       where: { id: +id },
-      data: { following: { connect: { id: followingId } } },
+      data: { following: { connect: { id: +followingId } } },
     });
 
     // Add user to followed user's follower list
     await prisma.user.update({
-      where: { id: followingId },
+      where: { id: +followingId },
       data: { followedBy: { connect: { id: +id } } },
     });
 
@@ -74,19 +73,19 @@ follow.get('/followers/:id', async (req: any, res: any) => {
   }
 });
 
-follow.delete('/unfollow', async (req: any, res: any) => {
-  const { id, followingId } = req.body;
+follow.delete('/unfollow/:id/:unfollowingId', async (req: any, res: any) => {
+  const { id, unfollowingId } = req.params;
 
   try {
     // Remove from user's following list
     await prisma.user.update({
       where: { id: +id },
-      data: { following: { disconnect: { id: followingId } } },
+      data: { following: { disconnect: { id: +unfollowingId } } },
     });
 
     // Remove user to followed user's follower list
     await prisma.user.update({
-      where: { id: followingId },
+      where: { id: +unfollowingId },
       data: { followedBy: { disconnect: { id: +id } } },
     });
 
