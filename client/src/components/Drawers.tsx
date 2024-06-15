@@ -8,6 +8,7 @@ interface Props {
   onTransitionEnd: () => void;
   handleDrawerClose: () => void;
   handleDrawerTransitionEnd: () => void;
+  handleDrawerToggle: () => void;
 }
 
 const drawerWidth = 240;
