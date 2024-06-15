@@ -21,11 +21,18 @@ const Profile = (): React.ReactElement => {
   const [profileData, setProfileData]: [UserProfile | null, Function] =
     useState(null);
   const profileDataREF = useRef(profileData);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
   const [tab, setTab] = useState('1');
 
   useEffect(() => {
     axios.get(`/api/users/${id}/profile`).then(({ data }): void => {
       setProfileData(data);
+    });
+
+    axios.get(`/api/follows/count/${id}`).then(({ data }): void => {
+      setFollowerCount(data.follower_count);
+      setFollowingCount(data.following_count);
     });
   }, [profileDataREF]);
 

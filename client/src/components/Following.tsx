@@ -7,21 +7,31 @@ const Following = (): React.ReactElement => {
   const { id } = useParams();
   const [followingData, setFollowingData]: [UserProfile[] | null, Function] =
     useState<UserProfile[] | null>(null);
+  const [followingCount, setFollowingCount] = useState(0);
 
   useEffect(() => {
     axios.get(`/api/follows/following/${id}`).then(({ data }) => {
       console.log('following', data);
       setFollowingData(data);
     });
+    axios.get(`/api/follows/count/${id}`).then(({ data }) => {
+      setFollowingCount(data.following_count);
+    });
   }, [id]);
 
   return (
     <div>
       <h3>Following</h3>
+      <p>
+        {followingData
+          ? `Number of followers: ${followingData.length}`
+          : 'Loading...'}
+      </p>
       <ul>
-        {followingData!.map((following) => (
-          <li key={following.id}>{following.name}</li>
-        ))}
+        {followingData &&
+          followingData.map((following) => (
+            <div key={following.id}>{following.name}</div>
+          ))}
       </ul>
     </div>
   );

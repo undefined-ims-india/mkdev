@@ -6,13 +6,17 @@ import axios from 'axios';
 const Followers = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const [followerData, setFollowerData] = useState<UserProfile[] | null>(null);
+  const [followerCount, setFollowerCount] = useState(0);
 
   useEffect(() => {
+    axios.get(`/api/follows/followers/${id}`).then(({ data }): void => {
+      console.log('followers', data);
+      setFollowerData(data);
+    });
     axios
-      .get(`/api/follows/followers/${id}`)
+      .get(`/api/follows/count/${id}`)
       .then(({ data }) => {
-        console.log('followers', data);
-        setFollowerData(data);
+        setFollowerCount(data.follower_count);
       })
       .catch((err) => console.error(err));
   }, [id]);
