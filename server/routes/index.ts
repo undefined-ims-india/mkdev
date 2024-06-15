@@ -4,6 +4,7 @@ import conversations from './conversations';
 import posts from './routers/posts';
 import users from './routers/users';
 import search from './routers/search';
+import feed from './routers/feed';
 import repos from './routers/repos';
 
 const api = Router();
@@ -15,5 +16,6 @@ api.use('/repos', repos);
 api.use('/messages', messages);
 api.use('/conversations', conversations);
 api.use('/search', search);
+api.use('/feed', feed);
 
 export default api;
