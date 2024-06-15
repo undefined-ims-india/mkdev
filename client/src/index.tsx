@@ -21,5 +21,3 @@ createRoot(document.getElementById('root')!).render(
         </BrowserRouter>
     </ThemeProvider>
 );
-
-// root.render(<App />)
