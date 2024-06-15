@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../types';
-import Nav from './Nav';
 import Post from './Post';
 import Blogs from './Blogs';
 import Followers from './Followers';
 import Following from './Following';
+import Follow from './Follow';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -29,11 +29,6 @@ const Profile = (): React.ReactElement => {
     axios.get(`/api/users/${id}/profile`).then(({ data }): void => {
       setProfileData(data);
     });
-
-    axios.get(`/api/follows/count/${id}`).then(({ data }): void => {
-      setFollowerCount(data.follower_count);
-      setFollowingCount(data.following_count);
-    });
   }, [profileDataREF]);
 
   const handleTab = (
@@ -49,6 +44,7 @@ const Profile = (): React.ReactElement => {
         <Box>
           <h4>{profileData!.username}</h4>
           <Avatar
+            sx={{ width: 80, height: 80 }}
             src={profileData!.picture !== null ? profileData!.picture : ''}
             alt={
               profileData!.username !== null
@@ -60,7 +56,7 @@ const Profile = (): React.ReactElement => {
           >
             {/*profileData!.username![0]*/}
           </Avatar>
-          <p>LinkedIn</p>
+          <Follow />
           <p>
             <a href={`https://dev.to/${profileData!.devId}`}>Dev.to</a>
           </p>
