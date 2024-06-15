@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { UserProfileType } from '../../../types';
+import { UserProfile } from '../../../types';
 
 const Following = (): React.ReactElement => {
   const { id } = useParams();
-  let [followingData, setFollowingData]: [UserProfileType[] | null, Function] =
-    useState<UserProfileType[] | null>(null);
+  let [followingData, setFollowingData]: [UserProfile[] | null, Function] =
+    useState<UserProfile[] | null>(null);
 
   useEffect(() => {
     axios.get(`/api/follows/following${id}`).then(({ data }) => {

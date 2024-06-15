@@ -1,13 +1,11 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserProfileType } from '../../../types';
+import { UserProfile } from '../../../types';
 import axios from 'axios';
 
 const Followers = (): ReactElement => {
   const { id } = useParams();
-  const [followerData, setFollowerData] = useState<UserProfileType[] | null>(
-    null
-  );
+  const [followerData, setFollowerData] = useState<UserProfile[] | null>(null);
 
   useEffect(() => {
     axios
