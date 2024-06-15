@@ -72,6 +72,7 @@ passport.use(
               .create({
                 data: {
                   googleId: sub,
+                  username: `user-${crypto.randomUUID()}`,
                   name: name,
                   firstName: given_name,
                   lastName: family_name,

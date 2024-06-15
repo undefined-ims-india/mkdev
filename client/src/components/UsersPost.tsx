@@ -16,6 +16,7 @@ interface Post {
   author: string;
   title: string;
   body: string;
+  createdAt: string;
 }
 
 interface PostProps {
