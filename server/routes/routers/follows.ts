@@ -6,20 +6,20 @@ const prisma = new PrismaClient();
 
 // Follow user
 follow.post('/follow', async (req: any, res: any) => {
-  const { followingId } = req.params;
+  const { id, followingId } = req.params;
   console.log('followingId', followingId);
 
   try {
     // Add to user's following list
     await prisma.user.update({
-      where: { id: req.user.id },
+      where: { id: +id },
       data: { following: { connect: { id: followingId } } },
     });
 
     // Add user to followed user's follower list
     await prisma.user.update({
       where: { id: followingId },
-      data: { followedBy: { connect: { id: req.user.id } } },
+      data: { followedBy: { connect: { id: +id } } },
     });
 
     res.sendStatus(201);
@@ -35,14 +35,15 @@ follow.get('/following/:id', async (req: any, res: any) => {
   const { id } = req.params;
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: id },
+    const userFollowing = await prisma.user.findUnique({
+      where: { id: +id },
       include: { following: true },
     });
-    if (user) {
-      return res.json(user?.following);
+    if (userFollowing) {
+      res.status(200).send(userFollowing?.following);
+    } else {
+      res.sendStatus(404);
     }
-    res.sendStatus(404);
   } catch (err) {
     res.sendStatus(500);
   } finally {
@@ -55,12 +56,16 @@ follow.get('/followers/:id', async (req: any, res: any) => {
   const { id } = req.params;
 
   try {
-    const userWithFollowers = await prisma.user.findUnique({
+    const userFollowers = await prisma.user.findUnique({
       where: { id: +id },
       include: { followedBy: true },
     });
 
-    res.status(200).send(userWithFollowers);
+    if (userFollowers) {
+      res.status(200).send(userFollowers.followedBy);
+    } else {
+      res.sendStatus(404);
+    }
   } catch (err) {
     console.error('Failed to get user with followers:', err);
     res.sendStatus(500);
