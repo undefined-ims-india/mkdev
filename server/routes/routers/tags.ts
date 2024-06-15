@@ -21,6 +21,27 @@ tags.get('/',async (req: Request, res: Response) => {
     }
 });
 
+tags.post('/:tagId', async (req: Request, res: Response) => {
+    const { tagId } = req.params;
+    // const { id } = req.user.id;
+    const id = 1; 
+  
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { id: +id },
+        data: {
+          tags: {
+            connect: { id: +tagId },
+          },
+        },
+        select: { tags: true },
+      });
+      console.log('tag post', updatedUser);
+      res.status(200).send(updatedUser);
+    } catch (error) {
+      res.status(500).send('Error adding tag to user');
+    }
+  });
 tags.patch('/:tagId', async (req: Request, res: Response) => {
     const { tagId } = req.params;
     // const { id } = req.user.id;
