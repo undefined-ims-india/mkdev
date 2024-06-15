@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { UserProfileType } from '../../../types';
+import { UserProfile } from '../../../types';
 import Nav from './Nav';
 import Post from './Post';
 import Blogs from './Blogs';
@@ -15,10 +15,10 @@ import TabPanel from '@mui/lab/TabPanel';
 import Skeleton from '@mui/material/Skeleton';
 
 
-const UserProfile = ():React.ReactElement => {
+const Profile = ():React.ReactElement => {
 
   const { id } = useParams();
-  const [profileData, setProfileData]: [UserProfileType | null, Function] = useState(null);
+  const [profileData, setProfileData]: [UserProfile | null, Function] = useState(null);
   const profileDataREF = useRef(profileData)
   const [tab, setTab] = useState('1');
 
@@ -83,4 +83,4 @@ const UserProfile = ():React.ReactElement => {
   }
 }
 
-export default UserProfile;
+export default Profile;

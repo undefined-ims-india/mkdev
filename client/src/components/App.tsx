@@ -1,16 +1,16 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import '../styling/index.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Nav from './Nav';
+import { UserProvider } from './UserContext';
 
 import Dashboard from './Dashboard';
 import PostCreationPage from './PostCreationPage';
 import Login from './Login';
 import Logout from './Logout';
 import Search from './Search';
-import Profile from './Profile';
 import Messages from './messages/Messages';
-import UserProfile from './UserProfile';
+import Profile from './UserProfile';
 
 const routes = [
   {
@@ -34,27 +34,23 @@ const routes = [
       element: <Search />,
   },
   {
-      path: '/profile',
-      element: <Profile />,
-  },
-  {
       path: '/messages',
       element: <Messages />,
   },
   {
-      path:'/user/:id/profile',
-      element: <UserProfile />
+    path: '/user/:id/profile',
+    element: <Profile />
   }
 ]
 
 const App = (): ReactElement => {
   return (
-    <>
+    <UserProvider>
       <Nav />
-        <Routes>
-          {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
-        </Routes>
-    </>
+      <Routes>
+        {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
+      </Routes>
+    </UserProvider>
   );
 };
 
