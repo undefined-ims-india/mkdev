@@ -70,7 +70,6 @@ const Profile = ():React.ReactElement => {
   catch (err) {
     return (
       <>
-        <Nav />
         <Skeleton />
         <Skeleton variant='circular' width={50} height={50}/>
         <Skeleton />
