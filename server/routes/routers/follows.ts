@@ -31,12 +31,12 @@ follow.post('/follow', async (req: any, res: any) => {
 });
 
 // Get following list
-follow.get('/following/:userId', async (req: any, res: any) => {
-  const { userId } = req.params;
+follow.get('/following/:id', async (req: any, res: any) => {
+  const { id } = req.params;
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: +id },
       // where: { id: req.user.id },
       include: { following: true },
     });
@@ -52,19 +52,18 @@ follow.get('/following/:userId', async (req: any, res: any) => {
 });
 
 // Get followers lists
-follow.get('/followers/:userId', async (req: any, res: any) => {
-  const { userId } = req.params;
+follow.get('/followers/:id', async (req: any, res: any) => {
+  const { id } = req.params;
+
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      // where: { id: req.user.id },
+    const userWithFollowers = await prisma.user.findUnique({
+      where: { id: +id },
       include: { followedBy: true },
     });
-    if (user) {
-      return res.json(user?.followedBy);
-    }
-    res.sendStatus(404);
+
+    res.status(200).send(userWithFollowers);
   } catch (err) {
+    console.error('Failed to get user with followers:', err);
     res.sendStatus(500);
   } finally {
     await prisma.$disconnect();
@@ -92,6 +91,33 @@ follow.post('/unfollow', async (req: any, res: any) => {
     res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
+  }
+});
+
+// Not sure If this will be needed at the moment
+
+// Get followers and following
+follow.get('/user/:id', async (req: any, res: any) => {
+  const { id } = req.params;
+
+  try {
+    const followersAndFollowing = await prisma.user.findUnique({
+      where: { id: +id },
+      include: {
+        followedBy: true,
+        following: true,
+      },
+    });
+
+    if (followersAndFollowing) {
+      return res.json(followersAndFollowing);
+    }
+
+    res.sendStatus(404);
+  } catch (err) {
+    res.sendStatus(500);
+  } finally {
+    await prisma.$disconnect();
   }
 });
 export default follow;
