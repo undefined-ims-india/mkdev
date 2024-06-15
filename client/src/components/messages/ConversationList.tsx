@@ -1,11 +1,11 @@
 import React, { ReactElement } from 'react';
 import Conversation from './Conversation';
 
+import { Conversations } from '@prisma/client';
+
 interface PropTypes {
-  allCons: {
-    id: number;
-  }[],
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number) => void;
+  allCons: Conversations[],
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations) => void;
 }
 
 const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
@@ -17,7 +17,7 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
         allCons.map((con, i) => {
           return (
             <Conversation
-              id={ con.id }
+              con={ con }
               key={ `${con.id}-${i}` }
               select={ select }
             />

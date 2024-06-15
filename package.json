@@ -36,6 +36,7 @@
     "cli-color": "^2.0.4",
     "connect-ensure-login": "^0.1.1",
     "cookie-parser": "^1.4.6",
+    "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
     "eslint-config-airbnb": "^19.0.4",
     "express": "^4.19.2",
