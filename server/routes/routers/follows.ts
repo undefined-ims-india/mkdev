@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const follow = Router();
@@ -6,15 +6,17 @@ const prisma = new PrismaClient();
 
 // Follow user
 follow.post('/follow', async (req: any, res: any) => {
-  const { id, followingId } = req.params;
+  const { id, followingId } = req.body;
   console.log('followingId', followingId);
 
   try {
+    // Add to user's following list
     await prisma.user.update({
       where: { id: +id },
       data: { following: { connect: { id: followingId } } },
     });
 
+    // Add user to followed user's follower list
     await prisma.user.update({
       where: { id: followingId },
       data: { followedBy: { connect: { id: +id } } },
@@ -72,23 +74,51 @@ follow.get('/followers/:id', async (req: any, res: any) => {
   }
 });
 
-follow.post('/unfollow', async (req: any, res: any) => {
-  const { followingId } = req.body;
-  const { userId } = req.params;
+follow.delete('/unfollow', async (req: any, res: any) => {
+  const { id, followingId } = req.body;
 
   try {
+    // Remove from user's following list
     await prisma.user.update({
-      where: { id: userId },
+      where: { id: +id },
       data: { following: { disconnect: { id: followingId } } },
     });
+
+    // Remove user to followed user's follower list
     await prisma.user.update({
       where: { id: followingId },
-      data: { followedBy: { disconnect: { id: userId } } },
+      data: { followedBy: { disconnect: { id: +id } } },
     });
 
     res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
+  }
+});
+
+// Get the user's follower count / Following count
+follow.get('/counts/:id', async (req: any, res: any) => {
+  const { id } = req.params;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: +id },
+      select: {
+        followedBy: true,
+        following: true,
+      },
+    });
+    if (user) {
+      res.status(200).send({
+        follower_count: user.followedBy.length,
+        following_count: user.following.length,
+      });
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    res.sendStatus(500);
+  } finally {
+    await prisma.$disconnect();
   }
 });
 export default follow;
