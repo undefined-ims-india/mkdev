@@ -20,10 +20,10 @@ model Post {
   body      String
   userId    Int
   s3_Etag   String?
-  repoLink  Repo?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation("UserPosts", fields: [userId], references: [id])
+  repoLink  Repo?
   liked     User[]   @relation("LikedPosts")
   tags      Tags[]   @relation("PostToTags")
 }
@@ -39,11 +39,11 @@ model Repo {
 model File {
   id        Int      @id @default(autoincrement())
   repoId    Int      @unique
-  repo      Repo     @relation(fields: [repoId], references: [id])
   star      Boolean  @default(false)
   path      String
   contents  String
   createdAt DateTime @default(now())
+  repo      Repo     @relation(fields: [repoId], references: [id])
 }
 
 model User {
@@ -52,14 +52,14 @@ model User {
   username       String?         @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
-  devId          String?         @unique
   githubId       String?         @unique
-  blogs          Blog[]          @relation("UserBlogs")
   picture        String?
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
+  devId          String?         @unique
+  blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
   posts          Post[]          @relation("UserPosts")
   conversations  Conversations[] @relation("ConversationsToUser")
@@ -94,12 +94,18 @@ model Messages {
   body           String
   senderId       Int
   conversationId Int
-  conversation   Conversations @relation(fields: [conversationId], references: [id])
+  conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         User          @relation(fields: [senderId], references: [id])
 }
 
 model Conversations {
   id           Int        @id @default(autoincrement())
+  label        String
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
+}
+
+enum tagType {
+  post
+  user
 }

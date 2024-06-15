@@ -6,23 +6,23 @@ const prisma = new PrismaClient();
 
 // Follow user
 follow.post('/follow', async (req: any, res: any) => {
-  const { userId, followingId } = req.params;
-  console.log(followingId, userId);
+  const { followingId } = req.params;
+  console.log('followingId', followingId);
 
   try {
     // Add to user's following list
     await prisma.user.update({
       where: { id: req.user.id },
-      data: { following: { connect: { id: +followingId } } },
+      data: { following: { connect: { id: followingId } } },
     });
 
     // Add user to followed user's follower list
     await prisma.user.update({
-      where: { id: +followingId },
+      where: { id: followingId },
       data: { followedBy: { connect: { id: req.user.id } } },
     });
 
-    res.sendStatus(200);
+    res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
   } finally {
@@ -30,19 +30,40 @@ follow.post('/follow', async (req: any, res: any) => {
   }
 });
 
-// Get followers
+// Get following list
 follow.get('/following/:userId', async (req: any, res: any) => {
   const { userId } = req.params;
 
   try {
     const user = await prisma.user.findUnique({
-      where: { id: +userId },
+      where: { id: userId },
+      // where: { id: req.user.id },
       include: { following: true },
     });
-    if (!user) {
-      return res.sendStatus(404);
+    if (user) {
+      return res.json(user?.following);
     }
-    res.json(user.following);
+    res.sendStatus(404);
+  } catch (err) {
+    res.sendStatus(500);
+  } finally {
+    await prisma.$disconnect();
+  }
+});
+
+// Get followers lists
+follow.get('/followers/:userId', async (req: any, res: any) => {
+  const { userId } = req.params;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      // where: { id: req.user.id },
+      include: { followedBy: true },
+    });
+    if (user) {
+      return res.json(user?.followedBy);
+    }
+    res.sendStatus(404);
   } catch (err) {
     res.sendStatus(500);
   } finally {
@@ -51,22 +72,24 @@ follow.get('/following/:userId', async (req: any, res: any) => {
 });
 
 follow.post('/unfollow', async (req: any, res: any) => {
-  const { followingId } = req.params;
+  const { followingId } = req.body;
+  const { userId } = req.params;
 
   try {
     // Remove from user's following list
     await prisma.user.update({
-      where: { id: req.user.id },
-      data: { following: { disconnect: { id: +followingId } } },
+      where: { id: userId },
+      // where: { id: req.user.id },
+      data: { following: { disconnect: { id: followingId } } },
     });
 
     // Remove user to followed user's follower list
     await prisma.user.update({
-      where: { id: +followingId },
-      data: { followedBy: { disconnect: { id: req.user.id } } },
+      where: { id: followingId },
+      data: { followedBy: { disconnect: { id: userId } } },
     });
 
-    res.sendStatus(200);
+    res.sendStatus(201);
   } catch (err) {
     res.sendStatus(500);
   }

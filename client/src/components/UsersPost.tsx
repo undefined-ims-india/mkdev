@@ -36,16 +36,11 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
     setEdit(true);
   };
 
-  // const handlePostChange = (e: any) => {
-  //   // setEditedPost({ ...editedPost, title: e.target.value });
-  //   // setEditedPost({ ...editedPost, body: e.target.value });
-  // };
-
-  const handleBody = (e: any) => {
-    setEditedPost({ ...editedPost, body: e.target.value });
-  };
-  const handleTitle = (e: any) => {
-    setEditedPost({ ...editedPost, title: e.target.value });
+  const handlePostChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setEditedPost({ ...editedPost, [name]: value });
   };
 
   const editPost = (e: any) => {
@@ -54,7 +49,6 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
     axios
       .patch(`/api/posts/${post.id}`, editedPost)
       .then(({ data }) => {
-        console.log('Post updated');
         setEditedPost(data);
         setEdit(false);
       })
@@ -64,10 +58,7 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
   const deletePost = () => {
     axios
       .delete(`/api/posts/${post.id}`)
-      .then(() => {
-        getPosts();
-        console.log('Post deleted');
-      })
+      .then(() => getPosts())
       .catch((err) => console.error(err));
   };
 
@@ -79,11 +70,16 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
             <form onSubmit={editPost}>
               <Input
                 type='text'
+                name='title'
                 value={editedPost.title}
-                onChange={handleTitle}
+                onChange={handlePostChange}
               />
-              <textarea value={editedPost.body} onChange={handleBody} />
-              <Button onSubmit={handleEdit}>Save</Button>
+              <textarea
+                name='body'
+                value={editedPost.body}
+                onChange={handlePostChange}
+              />
+              <Button type='submit'>Save</Button>
             </form>
           ) : (
             <>

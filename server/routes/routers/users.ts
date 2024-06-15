@@ -1,44 +1,9 @@
 import passport from 'passport';
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const users = Router();
 const prisma = new PrismaClient();
-
-users.post('/', (req: any, res: any) => {
-  const {
-    newUser,
-  }: { newUser: { name: string; username: string; firstName: string } } =
-    req.body;
-  prisma.user
-    .create({ data: newUser })
-    .then((user: any) => {
-      console.log(user);
-      res.sendStatus(201);
-    })
-    .catch((err: { name: string }) => {
-      console.error(err);
-      res.sendStatus(500);
-    })
-    .finally(async () => {
-      await prisma.$disconnect();
-    });
-});
-
-users.get('/', (req: any, res: any) => {
-  prisma.user
-    .findMany()
-    .then((users: {}[]) => {
-      res.send(users);
-    })
-    .catch((err: { name: string }) => {
-      console.error(err);
-      res.sendStatus(500);
-    })
-    .finally(async () => {
-      await prisma.$disconnect();
-    });
-});
 
 // Authenticated route to verify a user is logged in
 users.get('/loggedIn', (req: any, res: any) => {
@@ -50,8 +15,31 @@ users.get('/loggedIn', (req: any, res: any) => {
   }
 });
 
-// Get user by id
+//Get user profile
+users.get('/:id/profile', async (req: express.Request<{id:string}>, res: express.Response): Promise<void> => {
+  try {
+    const userProfile = await prisma.user.findUniqueOrThrow(
+      {
+        where: {id: +req.params.id},
+        include:{
+          tags: true,
+          posts: {include: {author: true, tags: true, repoLink: true, liked: {select: {id: true}}}},
+          blogs:true
+        }
+      }
+    );
+    res.send(userProfile);
+  }
+  catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+  finally{
+    await prisma.$disconnect();
+  }
+})
 
+// Get user by id
 users.get('/:id', (req: any, res: any) => {
   const { id } = req.params;
   // console.log('user id', +id);
