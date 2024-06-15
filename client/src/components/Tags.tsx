@@ -24,16 +24,21 @@ const Tags = () => {
     getUserTags();
   }, []);
 
-  const handleClick = (e: any) => {
-    console.log(e.target.key, 'YOU CLICKED!!');
-    // axios.delete(`/api/tags/${}`)
+  const handleClick = async (id: number) => {
+    console.log(id, 'YOU CLICKED!!');
+    try {
+      await axios.patch(`/api/tags/${id}`);
+      setUserTags((prevTags) => prevTags.filter((tag) => tag.id !== id));
+    } catch (error) {
+      console.error('Error deleting tag:', error);
+    }
   };
 
   return (
     <div>
-      <Chip onClick={handleClick} label='testing' />
+      {/* <Chip onClick={handleClick} label='testing' /> */}
       {userTags.map((tag) => (
-        <Chip onClick={handleClick} key={tag.id} label={tag.name} />
+     <Chip key={tag.id} label={tag.name} onClick={() => handleClick(tag.id)} />
       ))}
     </div>
   );
