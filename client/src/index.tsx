@@ -11,13 +11,14 @@ import PostCreationPage from './components/PostCreationPage';
 import Profile from './components/Profile';
 import Search from './components/Search';
 import UserProfile from './components/UserProfile';
-import { ThemeProvider } from '@emotion/react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-const theme = {
-    colors: {
-        primary: 'hotpink'
-    }
-};
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 const router = createBrowserRouter([
     {
@@ -59,7 +60,10 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')!).render(
-      <RouterProvider router={router} />
+    <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+    </ThemeProvider>
 );
 
 // root.render(<App />)
