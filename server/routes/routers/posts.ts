@@ -41,7 +41,7 @@ posts.post('/', async (req: any, res: any) => {
           post: { connect: { id: post.id } },
           link: repoObj.link,
           files: {
-            create: [...repoObj.files],
+            create: repoObj.files,
           },
         },
       });
