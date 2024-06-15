@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import Nav from './Nav';
 import axios from 'axios';
 import Sidebar from './Sidebar';
+import Box  from '@mui/material/Box';
 
 interface User {
   id: number;
@@ -65,21 +66,23 @@ const Dashboard = (): ReactElement => {
   }, [user]);
 
   return (
-    <div>
-      <Nav />
+    <Box sx={{ display: 'flex' }}>
       <Sidebar />
-      <h1>user dashboard page</h1>
-      {user && (
-        <div>
-          <p>{`${`${username}`}`}</p>
-          <img
-            src={user?.picture}
-            alt={user?.username}
-            style={{ width: 100, height: 100 }}
-          />
-        </div>
-      )}
-    </div>
+      <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
+      <Nav />
+        <h1>user dashboard page</h1>
+        {user && (
+          <div>
+            <p>{`${`${username}`}`}</p>
+            <img
+              src={user?.picture}
+              alt={user?.username}
+              style={{ width: 100, height: 100 }}
+            />
+          </div>
+        )}
+      </Box>
+    </Box>
   );
 };
 
