@@ -11,6 +11,13 @@ import PostCreationPage from './components/PostCreationPage';
 import Profile from './components/Profile';
 import Search from './components/Search';
 import UserProfile from './components/UserProfile';
+import { ThemeProvider } from '@emotion/react';
+
+const theme = {
+    colors: {
+        primary: 'hotpink'
+    }
+};
 
 const router = createBrowserRouter([
     {

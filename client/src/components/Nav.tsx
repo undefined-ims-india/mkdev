@@ -9,7 +9,7 @@ const Nav = (): ReactElement => {
         <h1>mkDev</h1>
       </Link>
       <Link to='/dashboard'>
-        <Button color='primary'>Dashboard</Button>
+        <Button>Dashboard</Button>
       </Link>
       <Link to='/create-post'>
         <Button>Create Post</Button>
