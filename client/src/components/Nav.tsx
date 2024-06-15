@@ -1,31 +1,41 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
+import { UserContext } from './UserContext';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
+import Box from '@mui/material/Box'
+
 const Nav = (): ReactElement => {
+
+  const id = useContext(UserContext);
+
   return (
     <>
-      <Link to='/'>
+      <Link to='/dashboard'>
         <h1>mkDev</h1>
       </Link>
-      <Link to='/dashboard'>
-        <Button>Dashboard</Button>
-      </Link>
-      <Link to='/create-post'>
-        <Button>Create Post</Button>
-      </Link>
-      <Link to='/login'>
-        <Button>Login</Button>
-      </Link>
-      <Link to='/logout'>
-        <Button>Logout</Button>
-      </Link>
-      <Link to='/profile'>
-        <Button>Profile</Button>
-      </Link>
-      <Link to='/messages'>
-        <Button>Messages</Button>
-      </Link>
+      {!!id ?
+        <Box sx={{flexDirection:'row'}}>
+          <Link to='/create-post'>
+            <button>Create Post</button>
+          </Link>
+          <Link to='/logout'>
+            <button>Logout</button>
+          </Link>
+          <Link to={`/user/${id}/profile`}>
+            <button>Profile</button>
+          </Link>
+          <Link to='/messages'>
+            <button>Messages</button>
+          </Link>
+        </Box>
+      :
+        <Box sx={{flexDirection:'row'}}>
+          <Link to='/login'>
+            <button>Login</button>
+          </Link>
+        </Box>
+      }
     </>
   );
 };

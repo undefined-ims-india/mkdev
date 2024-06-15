@@ -37,35 +37,34 @@ const Dashboard = (): ReactElement => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [username, setUsername] = useState<string>('');
 
-  const getUser = () => {
-    if (user) {
-      axios
-        .get('/api/users/loggedIn')
-        .then(({ data }) => {
-          setUser(data);
-          setPostsCount(data.postsCount);
-          setFollowersCount(data.followersCount);
-        })
-        .catch((error) => {
-          console.error('Failed to get user:', error);
-        });
-    }
-  };
+  // const getUser = () => {
+  //   if (user) {
+  //     axios
+  //       .get('/api/users/loggedIn')
+  //       .then(({ data }) => {
+  //         setUser(data);
+  //         setPostsCount(data.postsCount);
+  //         setFollowersCount(data.followersCount);
+  //       })
+  //       .catch((error) => {
+  //         console.error('Failed to get user:', error);
+  //       });
+  //   }
+  // };
 
-  const checkUsername = () => {
-    return user.username === null || user.username === ''
-      ? user.name
-      : user.username;
-  };
+  // const checkUsername = () => {
+  //   return user.username === null || user.username === ''
+  //     ? user.name
+  //     : user.username;
+  // };
 
-  useEffect(() => {
-    setUsername(checkUsername());
-    getUser();
-  }, [user]);
+  // useEffect(() => {
+  //   setUsername(checkUsername());
+  //   getUser();
+  // }, [user]);
 
   return (
     <div>
-      <Nav />
       <h1>user dashboard page</h1>
       {user && (
         <div>
