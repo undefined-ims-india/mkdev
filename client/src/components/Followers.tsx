@@ -4,14 +4,14 @@ import { UserProfile } from '../../../types';
 import axios from 'axios';
 
 const Followers = (): ReactElement => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [followerData, setFollowerData] = useState<UserProfile[] | null>(null);
 
   useEffect(() => {
     axios
       .get(`/api/follows/followers/${id}`)
       .then(({ data }) => {
-        console.log(data);
+        console.log('followers', data);
         setFollowerData(data);
       })
       .catch((err) => console.error(err));
@@ -20,12 +20,17 @@ const Followers = (): ReactElement => {
   return (
     <div>
       <h3>Followers</h3>
-      <ul>
+      <p>
+        {followerData
+          ? `Number of followers: ${followerData.length}`
+          : 'Loading...'}
+      </p>
+      <div>
         {followerData &&
           followerData.map((follower) => (
-            <li key={follower.id}>{follower.name}</li>
+            <div key={follower.id}>{follower.name}</div>
           ))}
-      </ul>
+      </div>
     </div>
   );
 };
