@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
 const Nav = (): ReactElement => {
@@ -8,22 +9,22 @@ const Nav = (): ReactElement => {
         <h1>mkDev</h1>
       </Link>
       <Link to='/dashboard'>
-        <button>Dashboard</button>
+        <Button color='primary'>Dashboard</Button>
       </Link>
       <Link to='/create-post'>
-        <button>Create Post</button>
+        <Button>Create Post</Button>
       </Link>
       <Link to='/login'>
-        <button>Login</button>
+        <Button>Login</Button>
       </Link>
       <Link to='/logout'>
-        <button>Logout</button>
+        <Button>Logout</Button>
       </Link>
       <Link to='/profile'>
-        <button>Profile</button>
+        <Button>Profile</Button>
       </Link>
       <Link to='/messages'>
-        <button>Messages</button>
+        <Button>Messages</Button>
       </Link>
     </>
   );
