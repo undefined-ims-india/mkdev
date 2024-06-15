@@ -12,6 +12,10 @@ import Search from './Search';
 import Messages from './messages/Messages';
 import Profile from './UserProfile';
 
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ColorModeContext } from '../styling/ThemeToggle';
+
 const routes = [
   {
       path: '/dashboard',
@@ -44,13 +48,39 @@ const routes = [
 ]
 
 const App = (): ReactElement => {
+
+  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
   return (
-    <UserProvider>
-      <Nav />
-      <Routes>
-        {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
-      </Routes>
-    </UserProvider>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <UserProvider>
+          <Nav />
+          <Routes>
+            {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
+          </Routes>
+        </UserProvider>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 };
 
