@@ -1,6 +1,6 @@
 import { User, Post, Tags, Blog } from '@prisma/client';
 
-export interface UserProfileType extends User {
+export interface UserProfile extends User {
   posts: PostWithRelations[];
   tags: Tags[];
   blogs: Blog[];
