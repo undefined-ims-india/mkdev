@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import Nav from './Nav';
 import axios from 'axios';
+import Sidebar from './Sidebar';
 
 interface User {
   id: number;
@@ -66,6 +67,7 @@ const Dashboard = (): ReactElement => {
   return (
     <div>
       <Nav />
+      <Sidebar />
       <h1>user dashboard page</h1>
       {user && (
         <div>

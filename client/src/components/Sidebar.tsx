@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Chip } from '@mui/material';
 import Drawers from './Drawers';
 
-export default function ResponsiveDrawer() {
+export default function Sidebar() {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [isClosing, setIsClosing] = React.useState(false);
 
