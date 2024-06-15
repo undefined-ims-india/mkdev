@@ -37,7 +37,6 @@ follow.get('/following/:id', async (req: any, res: any) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: +id },
-      // where: { id: req.user.id },
       include: { following: true },
     });
     if (user) {
@@ -78,7 +77,6 @@ follow.post('/unfollow', async (req: any, res: any) => {
     // Remove from user's following list
     await prisma.user.update({
       where: { id: userId },
-      // where: { id: req.user.id },
       data: { following: { disconnect: { id: followingId } } },
     });
 
