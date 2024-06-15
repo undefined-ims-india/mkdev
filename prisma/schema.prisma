@@ -7,16 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//Enum for types of tags, If want a new tag Type change here
+enum TagType {
+  Post 
+  User 
+}
+
+//Posts that will show up on feed based on the tags a user has saved
 model Post {
   id        Int      @id @default(autoincrement())
   title     String   @db.VarChar(255)
   body      String
   userId    Int
   s3_Etag   String?
+  repoLink  Repo?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation("UserPosts", fields: [userId], references: [id])
-  repoLink  Repo?
   liked     User[]   @relation("LikedPosts")
   tags      Tags[]   @relation("PostToTags")
 }
@@ -24,19 +31,19 @@ model Post {
 model Repo {
   id     Int    @id @default(autoincrement())
   postId Int    @unique
+  post   Post   @relation(fields: [postId], references: [id])
   link   String
   files  File[]
-  post   Post   @relation(fields: [postId], references: [id])
 }
 
 model File {
   id        Int      @id @default(autoincrement())
   repoId    Int      @unique
+  repo      Repo     @relation(fields: [repoId], references: [id])
   star      Boolean  @default(false)
   path      String
   contents  String
   createdAt DateTime @default(now())
-  repo      Repo     @relation(fields: [repoId], references: [id])
 }
 
 model User {
@@ -45,14 +52,14 @@ model User {
   username       String?         @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
+  devId          String?         @unique
   githubId       String?         @unique
+  blogs          Blog[]          @relation("UserBlogs")
   picture        String?
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
-  devId          String?         @unique
-  blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
   posts          Post[]          @relation("UserPosts")
   conversations  Conversations[] @relation("ConversationsToUser")
@@ -87,18 +94,12 @@ model Messages {
   body           String
   senderId       Int
   conversationId Int
-  conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation   Conversations @relation(fields: [conversationId], references: [id])
   sender         User          @relation(fields: [senderId], references: [id])
 }
 
 model Conversations {
   id           Int        @id @default(autoincrement())
-  label        String
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
-}
-
-enum TagType {
-  post
-  user
 }
