@@ -3,6 +3,7 @@ import { Router, Response, Request } from 'express';
 const tags = Router();
 const prisma = new PrismaClient();
 
+// get tags for the given user
 tags.get('/',async (req: Request, res: Response) => {
     // const { id } = req.user.id;
     const id = 1;
@@ -21,6 +22,7 @@ tags.get('/',async (req: Request, res: Response) => {
     }
 });
 
+// Handler to add tags to the user
 tags.post('/:tagId', async (req: Request, res: Response) => {
     const { tagId } = req.params;
     // const { id } = req.user.id;
@@ -42,6 +44,9 @@ tags.post('/:tagId', async (req: Request, res: Response) => {
       res.status(500).send('Error adding tag to user');
     }
   });
+
+
+//patch request to remove a tag from a users array of tags
 tags.patch('/:tagId', async (req: Request, res: Response) => {
     const { tagId } = req.params;
     // const { id } = req.user.id;
