@@ -9,9 +9,10 @@ const prisma = new PrismaClient();
 users.get('/loggedIn', (req: any, res: any) => {
   const user = req.user;
   if (req.isAuthenticated()) {
-    return res.json(user);
+    res.send({id: user.id});
   } else {
-    console.error('Please Log in'), res.sendStatus(401);
+    res.send({id: 0})
+    console.error('Please Log in');
   }
 });
 
