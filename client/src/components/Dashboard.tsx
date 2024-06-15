@@ -65,7 +65,6 @@ const Dashboard = (): ReactElement => {
 
   return (
     <div>
-      <Nav />
       <h1>user dashboard page</h1>
       {user && (
         <div>

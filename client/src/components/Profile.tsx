@@ -98,7 +98,6 @@ const Profile = (): ReactElement => {
 
   return (
     <div>
-      <Nav />
       {user && (
         <div>
           <h4>{`${username}`}</h4>
