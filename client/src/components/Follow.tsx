@@ -8,41 +8,25 @@ const Follow = (): ReactElement => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
 
-  useEffect(() => {
-    axios.get(`/api/follows/${id}`).then(({ data }) => {
-      setUser(data);
-      setIsFollowing(data.followedBy.includes(id));
-    });
-  }, [id]);
-
   const follow = () => {
-    axios
-      .post(`/api/follows/follow`, {
-        id: user,
-        followingId: id,
-      })
-      .then(() => {
-        setIsFollowing(true);
-      });
+    axios.post(`/api/follows/follow/${id}`).then(() => {
+      setIsFollowing(true);
+    });
   };
 
   const unfollow = () => {
-    axios.delete(`/api/follows/unfollow`).then(() => {
+    axios.delete(`/api/follows/unfollow/${id}/${id}`).then(() => {
       setIsFollowing(false);
     });
   };
 
   return (
     <div>
-      {!user ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          <button onClick={isFollowing ? unfollow : follow}>
-            {isFollowing ? 'Unfollow' : 'Follow'}
-          </button>
-        </>
-      )}
+      <>
+        <button onClick={isFollowing ? unfollow : follow}>
+          {isFollowing ? 'Unfollow' : 'Follow'}
+        </button>
+      </>
     </div>
   );
 };
