@@ -1,58 +1,45 @@
 # mkdev
 
-_Description of mkdev, targeted audience, what the app is used for_
+**_mkdev_ is by Developers for Developers.**
 
-MkDev is a social networking platform for software developer's that want to connect with each other and share
-projects and aspirations in a community. Developers can showcase demos of their projects, source code,....
+_mkdev_ is a social networking platform for software developers to connect and share projects. In mkdev posts and users have tags that are searchable to find users and showcases that use a technology, If you are interested in a technology or topic you can follow tags to see popular posts
 
-_Additional line of information text about what the project does. Your introduction should be around 2 or 3 sentences. Don't go overboard, people won't read it._
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 
 - You have installed `node 22.1.0`.
-- You have locally installed `PostgreSQL@16`.
+- You have a `PostgreSQL` server to connect to, we reccomend [Neon](https://neon.tech).
 - You have read `CONTRIBUTING.md` for the git workflow.
+
+## Helpful VS Code extensions
+
+- `Primsa` for code highlighting and formatting for .prisma files
+
+- `Pretty TypeScript Errors` for easier to read Typescript errors
 
 ### .ENV Configuration
 
-Google Cloud
+**[Template](.env.example)**
 
-```
-GOOGLE_CLIENT_ID="GOOGLE CLIENT ID HERE"
-GOOGLE_CLIENT_Secret="GOOGLE SECRET HERE"
-```
+#### You will need API keys from the following resources
 
-Auth0
-
-```
-CLIENT_ID="0AUTH ID HERE"
-SECRET="OAUTH SECRET HERE"
-ISSUER_BASE_URL="OAUTH BASE URL PATH HERE"
-PORT=3000
-```
-
-PostgreSQL Database
-
-```
-DATABASE_URL="postgresql://USER:PASWORD@localhost:5432/DBNAME"
-```
+- [Google Cloud Console](https://console.cloud.google.com/) => OAuth 2.0 Client IDs
+- [AWS IAM](https://us-east-1.console.aws.amazon.com/iam) => AWS Access Keys
 
 ## Running mkdev
 
 To install `mkdev`, follow these steps:
 
-```
-npm install
-npm run build
-npm run start
-```
+- `npm install` => install dependencies
+- `npx prisma migrate dev` => builds database with prisma and generates ORM
+- `npm run seed` => add some default data to db
 
-## helpful VS Code extensions
+To run `mkdev`, follow these steps:
 
-`Primsa`
-`Prettier TypeScript`
+- `npm run build` => check client types and generate dist folder for client
+- `npm start` => run server
 
 ### DB Commands
 
@@ -62,11 +49,15 @@ _Add run commands and examples you think users will find useful. Provide an opti
 
 To update prisma db
 
-- prima migrate dev / prisma db push
+- `npx prima migrate dev` / `npx prisma db push`
 
 To seed the database from Prisma/seed.ts
 
 - `npm run seed`
+
+To inspect database with GUI
+
+- `npx prisma studio`
 
 [To Query Database Follow these steps](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/querying-the-database-typescript-postgresql)
 

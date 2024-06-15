@@ -24,11 +24,16 @@ const Tags = () => {
     getUserTags();
   }, []);
 
+  const handleClick = (e: any) => {
+    console.log(e.target.key, 'YOU CLICKED!!');
+    // axios.delete(`/api/tags/${}`)
+  };
+
   return (
     <div>
-      <Chip label='testing' />
+      <Chip onClick={handleClick} label='testing' />
       {userTags.map((tag) => (
-        <Chip key={tag.id} label={tag.name} />
+        <Chip onClick={handleClick} key={tag.id} label={tag.name} />
       ))}
     </div>
   );
