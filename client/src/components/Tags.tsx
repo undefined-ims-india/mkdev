@@ -28,7 +28,7 @@ const Tags = () => {
     console.log(id, 'YOU CLICKED!!');
     try {
       await axios.patch(`/api/tags/${id}`);
-      setUserTags((prevTags) => prevTags.filter((tag) => tag.id !== id));
+      getUserTags();
     } catch (error) {
       console.error('Error deleting tag:', error);
     }
