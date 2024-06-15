@@ -24,7 +24,7 @@ const Profile = ():React.ReactElement => {
 
   useEffect(() => {
     axios.get(`/api/users/${id}/profile`)
-      .then(({data}) => {
+      .then(({data}):void => {
         setProfileData(data);
       })
   }, [profileDataREF])
@@ -36,39 +36,38 @@ const Profile = ():React.ReactElement => {
   try {
     return (
       <>
-        <Nav />
-          <Box>
-            <h4>{profileData!.username}</h4>
-            <Avatar
-              src={profileData!.picture !== null ? profileData!.picture : ''}
-              alt={profileData!.username !== null ? profileData!.username : profileData!.name !== null ? profileData!.name : ''}
-            >
-              {profileData!.username![0]}
-            </Avatar>
-            <p>LinkedIn</p>
-            <p><a href={`https://dev.to/${profileData!.devId}`}>Dev.to</a></p>
-            <p><a href={`https://github.com/${profileData!.githubId}`}>Github</a></p>
-          </Box>
-          <Box>
-            <TabContext value={tab}>
-              <Box>
-                <TabList onChange={handleTab}>
-                  <Tab label='Posts' value='1'/>
-                  <Tab label='Dev.to BLogs' value='2' />
-                </TabList>
-              </Box>
-              <TabPanel value='1'>
-                {profileData!.posts.map((post) => <Post key={post.title + crypto.randomUUID()} content={post} />)}
-              </TabPanel>
-              <TabPanel value='2'>
-                <Blogs devId={profileData!.devId !== null ? profileData!.devId : ''} />
-              </TabPanel>
-            </TabContext>
-          </Box>
+        <Box>
+          <h4>{profileData!.username}</h4>
+          <Avatar
+            src={profileData!.picture !== null ? profileData!.picture : ''}
+            alt={profileData!.username !== null ? profileData!.username : profileData!.name !== null ? profileData!.name : ''}
+          >
+            {/*profileData!.username![0]*/}
+          </Avatar>
+          <p>LinkedIn</p>
+          <p><a href={`https://dev.to/${profileData!.devId}`}>Dev.to</a></p>
+          <p><a href={`https://github.com/${profileData!.githubId}`}>Github</a></p>
+        </Box>
+        <Box>
+          <TabContext value={tab}>
+            <Box>
+              <TabList onChange={handleTab}>
+                <Tab label='Posts' value='1'/>
+                <Tab label='Dev.to BLogs' value='2' />
+              </TabList>
+            </Box>
+            <TabPanel value='1'>
+              {profileData!.posts.map((post) => <Post key={post.title + crypto.randomUUID()} content={post} />)}
+            </TabPanel>
+            <TabPanel value='2'>
+              <Blogs devId={profileData!.devId !== null ? profileData!.devId : ''} />
+            </TabPanel>
+          </TabContext>
+        </Box>
       </>
     )
   }
-  catch {
+  catch (err) {
     return (
       <>
         <Nav />
