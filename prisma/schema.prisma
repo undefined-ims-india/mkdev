@@ -54,12 +54,12 @@ model User {
   linkedinId     String?         @unique
   devId          String?         @unique
   githubId       String?         @unique
-  blogs          Blog[]          @relation("UserBlogs")
   picture        String?
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
+  blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
   posts          Post[]          @relation("UserPosts")
   conversations  Conversations[] @relation("ConversationsToUser")
