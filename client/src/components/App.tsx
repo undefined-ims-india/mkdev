@@ -40,7 +40,7 @@ const routes = [
   {
     path: '/user/:id/profile',
     element: <Profile />
-  }
+  },
 ]
 
 const App = (): ReactElement => {
