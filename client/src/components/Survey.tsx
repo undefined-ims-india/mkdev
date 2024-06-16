@@ -23,8 +23,8 @@ export default function Signup() {
       console.log('allmaps', data);
 
       // Assuming the response structure is { User: [], Post: [] }
-      setUserTags(data.User);
-      setPostTags(data.Post);
+      setUserTags(data.User || []);
+      setPostTags(data.Post || []);
     } catch (error) {
       console.error("Error fetching tags:", error);
     }
