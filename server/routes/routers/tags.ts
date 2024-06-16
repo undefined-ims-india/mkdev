@@ -24,9 +24,17 @@ tags.get('/', async (req: Request, res: Response) => {
 
 tags.get('/all', async (req: Request, res: Response) => {
 	try {
-    const tags = await prisma.tags.findMany()
-
-    res.status(200).send(tags)
+		const tags = await prisma.tags.findMany();
+		const groupedTags = tags.reduce((groups: any, tag: any) => {
+			const groupKey = tag.tagType; // Grouping by tagType
+			if (!groups[groupKey]) {
+				groups[groupKey] = [];
+			}
+			groups[groupKey].push(tag);
+			return groups;
+		}, {});
+		console.log(groupedTags);
+		res.status(200).send(groupedTags);
 	} catch (error) {
 		res.status(500).send('Error getting all tags from user');
 	}
