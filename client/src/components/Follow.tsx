@@ -9,13 +9,13 @@ const Follow = (): ReactElement => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const follow = () => {
-    axios.post(`/api/follows/follow/${id}`).then(() => {
+    axios.post(`/api/follows/follow/${user?.id}/${id}`).then(() => {
       setIsFollowing(true);
     });
   };
 
   const unfollow = () => {
-    axios.delete(`/api/follows/unfollow/${id}/${id}`).then(() => {
+    axios.delete(`/api/follows/unfollow/${user?.id}/${id}`).then(() => {
       setIsFollowing(false);
     });
   };
