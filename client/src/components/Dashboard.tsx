@@ -4,7 +4,6 @@ import SearchComponent from './Search';
 import Post from './Post';
 import axios from 'axios';
 import Sidebar from './Sidebar';
-import Box  from '@mui/material/Box';
 import { PostWithRelations } from '../../../types';
 import Box from '@mui/material/Box';
 
@@ -17,32 +16,20 @@ const Dashboard = (): ReactElement => {
     axios.get('/api/feed')
       .then(({data}) => {
         setFeed(data);
-        console.log('hi')
       })
   }, [feedRef])
 
   return (
     <Box sx={{ display: 'flex' }}>
       <Sidebar />
-      <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
-      <Nav />
-        <h1>user dashboard page</h1>
-        {user && (
-          <div>
-            <p>{`${`${username}`}`}</p>
-            <img
-              src={user?.picture}
-              alt={user?.username}
-              style={{ width: 100, height: 100 }}
-            />
-          </div>
-        )}
-      </Box>
-      <SearchComponent />
+      <Box component='main' sx={{ flexGrow: 1, p: 3}}>
+        <Nav />
+        <SearchComponent />
         {feed.map((post) => (
           <Post key={post.id + post.title} content={post} />
         ))}
       </Box>
+    </Box>
   );
 };
 
