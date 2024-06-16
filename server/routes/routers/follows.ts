@@ -5,8 +5,9 @@ const follow = Router();
 const prisma = new PrismaClient();
 
 // Follow user
-follow.post('/follow/:followingId', async (req: any, res: any) => {
-  const { id, followingId } = req.params;
+follow.post('/follow/:id/:followingId', async (req: any, res: any) => {
+  const { followingId } = req.params;
+  const { id } = req.body;
 
   try {
     // Add to user's following list
@@ -74,7 +75,8 @@ follow.get('/followers/:id', async (req: any, res: any) => {
 });
 
 follow.delete('/unfollow/:id/:unfollowingId', async (req: any, res: any) => {
-  const { id, unfollowingId } = req.params;
+  const { unfollowingId } = req.params;
+  const { id } = req.body;
 
   try {
     // Remove from user's following list
