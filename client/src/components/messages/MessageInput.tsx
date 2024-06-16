@@ -1,4 +1,5 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, useContext, ReactElement } from 'react';
+import { UserContext } from '../UserContext';
 
 import io from 'socket.io-client';
 import axios from 'axios';
@@ -14,6 +15,7 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
   const { con } = props;
 
   const [text, setText] = useState('');
+  const sender = useContext(UserContext);
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
@@ -36,7 +38,8 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
       axios
         .post(`/api/messages/${con.id}`, {
           message: {
-            body: text
+            body: text,
+            sender
           }
         })
         .catch((err) => {
