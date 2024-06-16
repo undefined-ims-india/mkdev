@@ -13,10 +13,10 @@ const Post = ({content} : {content: PostWithRelations}): ReactElement => {
       <Box sx={{display: 'flex', flexDirection:'row'}}>
         <Link to={`/user/${content.author.id}/profile`}>
         <Avatar alt={content.author.username!} src={content.author.picture!}>
-          {content.author.username![0]}
+          {'?'}
           </Avatar>
         </Link>
-        {content.author.username}
+        {content.author.username || content.author.name}
       </Box>
       <Box sx={{display:"flex", flexDirection:'column'}}>
         <MarkDown text={content.title} />
