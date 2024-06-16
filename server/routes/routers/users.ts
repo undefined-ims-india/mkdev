@@ -60,6 +60,7 @@ users.get('/:id', (req: any, res: any) => {
     });
 });
 
+// get all users
 users.get('/', (req: any, res: any) => {
   prisma.user
     .findMany()
