@@ -9,7 +9,7 @@ import Box from '@mui/material/Box'
 
 const Post = ({content} : {content: PostWithRelations}): ReactElement => {
   return (
-    <Card>
+    <Card sx={{marginBottom: 5}}>
       <Box sx={{display: 'flex', flexDirection:'row'}}>
         <Link to={`/user/${content.author.id}/profile`}>
         <Avatar alt={content.author.username!} src={content.author.picture!}>
