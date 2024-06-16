@@ -6,6 +6,7 @@ import users from './routers/users';
 import search from './routers/search';
 import feed from './routers/feed';
 import repos from './routers/repos';
+import tags from './routers/tags';
 
 const api = Router();
 
@@ -16,6 +17,7 @@ api.use('/repos', repos);
 api.use('/messages', messages);
 api.use('/conversations', conversations);
 api.use('/search', search);
+api.use('/tags', tags);
 api.use('/feed', feed);
 
 export default api;

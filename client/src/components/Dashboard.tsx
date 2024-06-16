@@ -3,8 +3,8 @@ import Nav from './Nav';
 import SearchComponent from './Search';
 import Post from './Post';
 import axios from 'axios';
+import Sidebar from './Sidebar';
 import { PostWithRelations } from '../../../types';
-
 import Box from '@mui/material/Box';
 
 const Dashboard = (): ReactElement => {
@@ -16,19 +16,20 @@ const Dashboard = (): ReactElement => {
     axios.get('/api/feed')
       .then(({data}) => {
         setFeed(data);
-        console.log('hi')
       })
   }, [feedRef])
 
   return (
-    <>
-      <SearchComponent />
-      <Box>
+    <Box sx={{ display: 'flex' }}>
+      <Sidebar />
+      <Box component='main' sx={{ flexGrow: 1, p: 3}}>
+        <Nav />
+        <SearchComponent />
         {feed.map((post) => (
           <Post key={post.id + post.title} content={post} />
         ))}
       </Box>
-    </>
+    </Box>
   );
 };
 

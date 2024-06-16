@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext } from 'react';
 import '../styling/index.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Nav from './Nav';
 import { UserProvider } from './UserContext';
 
@@ -40,13 +40,16 @@ const routes = [
   {
     path: '/user/:id/profile',
     element: <Profile />
-  }
+  },
 ]
 
 const App = (): ReactElement => {
+
+  const location = useLocation();
+
   return (
     <UserProvider>
-      <Nav />
+      {location.pathname === '/dashboard'? <></> : <Nav />}
       <Routes>
         {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
       </Routes>
