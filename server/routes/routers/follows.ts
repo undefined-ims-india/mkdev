@@ -74,20 +74,20 @@ follow.get('/followers/:id', async (req: any, res: any) => {
   }
 });
 
-follow.delete('/unfollow/:id/:unfollowingId', async (req: any, res: any) => {
-  const { unfollowingId } = req.params;
+follow.delete('/unfollow/:id/:followingId', async (req: any, res: any) => {
+  const { followingId } = req.params;
   const { id } = req.body;
 
   try {
     // Remove from user's following list
     await prisma.user.update({
       where: { id: +id },
-      data: { following: { disconnect: { id: +unfollowingId } } },
+      data: { following: { disconnect: { id: +followingId } } },
     });
 
     // Remove user to followed user's follower list
     await prisma.user.update({
-      where: { id: +unfollowingId },
+      where: { id: +followingId },
       data: { followedBy: { disconnect: { id: +id } } },
     });
 
