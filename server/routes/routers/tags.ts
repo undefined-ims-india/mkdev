@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 // get tags for the given user
 tags.get('/', async (req: any, res: Response) => {
     const { id } = req.user.id;
-    //const id = 1;
+    // const id = 9;
+
     try {
         const tagResponse = await prisma.user.findUnique({
             where: {
@@ -24,6 +25,9 @@ tags.get('/', async (req: any, res: Response) => {
 
 //get all tags sorted by tagType
 tags.get('/all', async (req: Request, res: Response) => {
+    // const { id } = req.user.id;
+    // const id = 9
+
     try {
         const tags = await prisma.tags.findMany();
         const groupedTags = tags.reduce((groups: any, tag: any) => {
@@ -45,6 +49,8 @@ tags.get('/all', async (req: Request, res: Response) => {
 tags.post('/all', async (req: any, res: any) => {
     const { tags } = req.body;
     const { id } = req.user.id;
+    // const id = 9
+
     try {
         const mappedTags = tags.map((tag: { id: number }) => ({ id: +tag.id }));
         await prisma.user.update({
@@ -67,6 +73,7 @@ tags.post('/all', async (req: any, res: any) => {
 tags.post('/:tagId', async (req: any, res: Response) => {
     const { tagId } = req.params;
      const { id } = req.user.id;
+    // const id = 9;
 
     try {
         const updatedUser = await prisma.user.update({
@@ -89,6 +96,7 @@ tags.post('/:tagId', async (req: any, res: Response) => {
 tags.patch('/:tagId', async (req: any, res: Response) => {
     const { tagId } = req.params;
     const { id } = req.user.id;
+    // const id = 9;
 
     try {
         const updatedUser = await prisma.user.update({
