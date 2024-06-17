@@ -21,8 +21,6 @@ const Profile = (): React.ReactElement => {
   const [profileData, setProfileData]: [UserProfile | null, Function] =
     useState(null);
   const profileDataREF = useRef(profileData);
-  const [followerCount, setFollowerCount] = useState(0);
-  const [followingCount, setFollowingCount] = useState(0);
   const [tab, setTab] = useState('1');
 
   useEffect(() => {
