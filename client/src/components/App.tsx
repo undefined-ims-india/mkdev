@@ -15,6 +15,8 @@ import Profile from './UserProfile';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ColorModeContext } from '../styling/ThemeToggle';
+import Box from '@mui/material/Box';
+
 
 const routes = [
   {
@@ -76,12 +78,14 @@ const App = (): ReactElement => {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <UserProvider>
-          {location.pathname === '/dashboard'? <></> : <Nav />}
-          <Routes>
-            {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
-          </Routes>
-        </UserProvider>
+        <Box sx={{fontFamily: 'Roboto'}}>
+          <UserProvider>
+            {location.pathname === '/dashboard'? <></> : <Nav />}
+            <Routes>
+              {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
+            </Routes>
+          </UserProvider>
+        </Box>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
