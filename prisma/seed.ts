@@ -6,6 +6,7 @@ async function main() {
   // Clear the old seed data
   await prisma.post.deleteMany().then(() => console.log('Deleted all posts'));
   await prisma.user.deleteMany().then(() => console.log('Deleted all users'));
+  await prisma.tags.deleteMany().then(() => console.log('Deleted all tags'));
 
   const tagJavaScript = await prisma.tags.create({
     data: { name: 'javascript', tagType: 'Post' },
@@ -169,3 +170,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
+  });

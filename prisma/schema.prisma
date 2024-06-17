@@ -9,8 +9,8 @@ datasource db {
 
 //Enum for types of tags, If want a new tag Type change here
 enum TagType {
-  Post 
-  User 
+  Post
+  User
 }
 
 //Posts that will show up on feed based on the tags a user has saved
@@ -54,37 +54,37 @@ model User {
   linkedinId     String?         @unique
   devId          String?         @unique
   githubId       String?         @unique
-  blogs          Blog[]          @relation("UserBlogs")
   picture        String?
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
+  blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
   posts          Post[]          @relation("UserPosts")
   conversations  Conversations[] @relation("ConversationsToUser")
   likedPosts     Post[]          @relation("LikedPosts")
   tags           Tags[]          @relation("TagsToUser")
-  User_A         User[]          @relation("UserFollows")
-  User_B         User[]          @relation("UserFollows")
+  followedBy     User[]          @relation("UserFollows")
+  following      User[]          @relation("UserFollows")
 }
 
 model Blog {
-  id        Int      @id @default(autoincrement())
-  title     String
-  body      String
-  userId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  author    User     @relation("UserBlogs", fields: [userId], references: [id])
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User     @relation("UserBlogs", fields: [userId], references: [id])
 }
 
 model Tags {
-  id       Int     @id @default(autoincrement())
-  tagType  TagType
-  name     String
-  posts    Post[]  @relation("PostToTags")
-  user     User[]  @relation("TagsToUser")
+  id      Int     @id @default(autoincrement())
+  tagType TagType
+  name    String
+  posts   Post[]  @relation("PostToTags")
+  user    User[]  @relation("TagsToUser")
 
   @@unique([name, tagType])
 }

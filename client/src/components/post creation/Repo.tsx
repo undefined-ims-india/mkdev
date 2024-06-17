@@ -43,21 +43,25 @@ const Repo = ({ saveFile, saveRepo }: {saveFile: Function, saveRepo: Function}):
 
   return (
     <>
-      <TextField value={repoLink} name="repo-link" onChange={handleTextInput} />
-      <Button onClick={handleLookup}>Add Repo</Button>
-      <Box>
-        <List>
-          {tree.map((file, index) => (
-            <ListItem key={index}>
-              <Button onClick={changePath} name={file.path}>
-                {file.path}
-              </Button>
-            </ListItem>
-          ))}
-        </List>
-        <MarkDown text={displayFile} />
-        <Button onClick={() => {saveFile(displayFilePath, displayFile)}}>Save file to post</Button>
+    <Box sx={{display:'flex', flexDirection: 'row'}}>
+      <TextField value={repoLink} name="repo-link" onChange={handleTextInput} sx={{width: 1/3}}/>
+      <Box sx={{display:'flex', flexDirection: 'column'}}>
+        <Button onClick={handleLookup} size='small'>Add Repo</Button>
+        <Button disabled={!tree.length || !displayFile.length} onClick={() => {saveFile(displayFilePath, displayFile)}}>Save file to post</Button>
       </Box>
+    </Box>
+    <Box sx={{display:'flex', flexDirection:'row'}}>
+      <List>
+        {tree.map((file, index) => (
+          <ListItem key={index}>
+            <Button onClick={changePath} name={file.path}>
+              {file.path}
+            </Button>
+          </ListItem>
+        ))}
+      </List>
+      <MarkDown text={displayFile} />
+    </Box>
     </>
   );
 };
