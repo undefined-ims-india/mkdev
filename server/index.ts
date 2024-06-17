@@ -172,7 +172,11 @@ const server = createServer(socket);
 const io = new Server(server, {
   connectionStateRecovery: {},
   cors: {
-    origin: [`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`],
+    origin: [
+      `http://localhost:${PORT}`,
+      `http://127.0.0.1:${PORT}`,
+      `http://ec2-3-19-237-1.us-east-2.compute.amazonaws.com:${PORT}/`
+    ],
     methods: ['GET', 'POST'],
   },
 });
