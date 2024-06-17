@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import UsersPost from './UsersPost';
 
 interface Post {
-  id: number;
+  id: string;
   userId: number;
   title: string;
   body: string;

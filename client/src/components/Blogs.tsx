@@ -1,5 +1,6 @@
 import React, { useState, ReactElement, useEffect } from 'react';
 import axios from 'axios';
+import { Typography, Grid, Card, CardMedia, CardContent } from '@mui/material';
 
 interface User {
   devId: string;
@@ -10,6 +11,7 @@ interface Blog {
   title: string;
   description: string;
   url: string;
+  cover_image: string;
 }
 interface UserProps {
   devId: string;
@@ -21,7 +23,7 @@ const Blogs = ({ devId }: UserProps): ReactElement => {
 
   const getBlogs = async () => {
     axios
-      .get(`https://dev.to/api/articles?username=${devId}&per_page=5`)
+      .get(`https://dev.to/api/articles?username=${devId}&per_page=6`)
       .then(({ data }) => {
         setBlogs(data);
       });
@@ -32,16 +34,31 @@ const Blogs = ({ devId }: UserProps): ReactElement => {
 
   return (
     <div>
-      <h1>Blog Posts</h1>
-      <div>
+      <Typography variant='h4' component='h1' gutterBottom>
+        Blog Posts
+      </Typography>
+      <Grid container spacing={4}>
         {blogs.map((blog) => (
-          <div key={blog.id}>
-            <h2>{blog.title}</h2>
-            <p>{blog.description}</p>
-            <a href={blog.url}>Click here to keep reading!</a>
-          </div>
+          <Grid item key={blog.id} xs={12} sm={6} md={4}>
+            <Card>
+              <CardMedia
+                component='img'
+                height='140'
+                image={blog.cover_image}
+                alt={blog.title}
+              />
+              <CardContent>
+                <Typography variant='h5' component='h2'>
+                  <a href={blog.url}>{blog.title}</a>
+                </Typography>
+                <Typography variant='body2' color='textSecondary' component='p'>
+                  {blog.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </div>
+      </Grid>
     </div>
   );
 };
