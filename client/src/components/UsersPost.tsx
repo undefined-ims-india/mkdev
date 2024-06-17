@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 interface Post {
-  id: number;
+  id: string;
   author: string;
   title: string;
   body: string;
@@ -37,18 +37,19 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
     setEdit(true);
   };
 
-  const handlePostChange = (e: any) => {
-    setEditedPost({ ...editedPost, title: e.target.value });
-    setEditedPost({ ...editedPost, body: e.target.value });
+  const handlePostChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setEditedPost({ ...editedPost, [name]: value });
   };
 
   const editPost = (e: any) => {
     e.preventDefault();
 
     axios
-      .put(`/api/posts/${post.id}`, editedPost)
+      .patch(`/api/posts/${post.id}`, editedPost)
       .then(({ data }) => {
-        console.log('Post updated');
         setEditedPost(data);
         setEdit(false);
       })
@@ -58,10 +59,7 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
   const deletePost = () => {
     axios
       .delete(`/api/posts/${post.id}`)
-      .then(() => {
-        getPosts();
-        console.log('Post deleted');
-      })
+      .then(() => getPosts())
       .catch((err) => console.error(err));
   };
 
@@ -73,11 +71,16 @@ const UsersPost = ({ post, getPosts }: PostProps): ReactElement => {
             <form onSubmit={editPost}>
               <Input
                 type='text'
+                name='title'
                 value={editedPost.title}
                 onChange={handlePostChange}
               />
-              <textarea value={editedPost.body} onChange={handlePostChange} />
-              <Button onSubmit={handleEdit}>Save</Button>
+              <textarea
+                name='body'
+                value={editedPost.body}
+                onChange={handlePostChange}
+              />
+              <Button type='submit'>Save</Button>
             </form>
           ) : (
             <>

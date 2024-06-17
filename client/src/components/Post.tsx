@@ -7,7 +7,7 @@ dayjs.extend(relativeTime);
 
 import MarkDown from "./MarkDown";
 
-import Card from "@mui/material/Card";
+import Card from '@mui/material/Card';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
@@ -48,7 +48,7 @@ const Post = ({content} : {content: PostWithRelations}): ReactElement => {
       <CommentIcon sx={{color: 'grey'}} />
       </Box>
     </Card>
-  )
+  );
 };
 
 export default Post;
