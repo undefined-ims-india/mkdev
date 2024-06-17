@@ -16,10 +16,7 @@ messages.get('/:conversationId', async (req, res) => {
 });
 
 messages.post('/:conversationId', (req: Request, res: Response) => {
-  // body: from frontend input field
-  // sender: from frontend based on who's logged in
   const { body, sender } = req.body.message;
-  // from frontend based on conversation POST response
   const conversationId: number = +req.params.conversationId;
 
   // create message with data from request body and params
@@ -27,7 +24,7 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
     data: {
       body,
       sender: {
-        connect: { id: 3 } // TODO: userId ideally from request with auth user
+        connect: { id: sender }
       },
       conversation: {
         connect: { id: conversationId }
