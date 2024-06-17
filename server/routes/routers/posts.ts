@@ -1,8 +1,12 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { PostWithRelations } from '../../../types';
+
 import awsS3Upload from '../../helpers/aws-s3-upload';
 // to remove the maintenance warning in the console...
-require('aws-sdk/lib/maintenance_mode_message').suppress = true;
+import * as awsMaintMessage from 'aws-sdk/lib/maintenance_mode_message';
+awsMaintMessage.suppress = true;
+
 const posts = Router();
 const prisma = new PrismaClient();
 
@@ -78,7 +82,7 @@ posts.get('/:id', (req: any, res: any) => {
   const { id }: { id: string } = req.params;
   prisma.post
     .findFirstOrThrow({ where: { id: +id }, include: {author: true, tags: true} })
-    .then((post: any) => {
+    .then((post: PostWithRelations) => {
       res.send(post);
     })
     .catch((err: { name: string }) => {
