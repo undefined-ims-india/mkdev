@@ -7,7 +7,7 @@ search.get(
   '/filter/:tagType/:tags',
   async (
     req: Request<{ tagType: 'User' | 'Post'; tags: string }>,
-    res: Response,
+    res: Response
   ) => {
     const { tagType, tags } = req.params;
     const splitTags = tags.toLowerCase().split('-');
@@ -35,7 +35,7 @@ search.get(
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
-  },
+  }
 );
 
 //Give a user or a post a tag
@@ -62,7 +62,7 @@ search.put(
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
-  },
+  }
 );
 
 //add a tag to a user or a
