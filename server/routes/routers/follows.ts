@@ -46,6 +46,7 @@ follow.get('/following/:id', async (req: any, res: any) => {
       res.sendStatus(404);
     }
   } catch (err) {
+    console.error('Failed to get list of following:', err);
     res.sendStatus(500);
   } finally {
     await prisma.$disconnect();
@@ -68,7 +69,7 @@ follow.get('/followers/:id', async (req: any, res: any) => {
       res.sendStatus(404);
     }
   } catch (err) {
-    console.error('Failed to get user with followers:', err);
+    console.error('Failed to get list of followers:', err);
     res.sendStatus(500);
   } finally {
     await prisma.$disconnect();
@@ -77,7 +78,6 @@ follow.get('/followers/:id', async (req: any, res: any) => {
 
 follow.delete('/unfollow/:followingId', async (req: any, res: any) => {
   const { followingId } = req.params;
-  // const { id } = req.body;
 
   try {
     // Remove from user's following list
@@ -94,33 +94,8 @@ follow.delete('/unfollow/:followingId', async (req: any, res: any) => {
 
     res.sendStatus(201);
   } catch (err) {
+    console.error('Failed to unfollow user:', err);
     res.sendStatus(500);
-  }
-});
-
-// Get the user's follower count / Following count
-follow.get('/counts/:id', async (req: any, res: any) => {
-  const { id } = req.params;
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: +id },
-      select: {
-        followedBy: true,
-        following: true,
-      },
-    });
-    if (user) {
-      res.status(200).send({
-        follower_count: user.followedBy.length,
-        following_count: user.following.length,
-      });
-    } else {
-      res.sendStatus(404);
-    }
-  } catch (err) {
-    res.sendStatus(500);
-  } finally {
-    await prisma.$disconnect();
   }
 });
 export default follow;
