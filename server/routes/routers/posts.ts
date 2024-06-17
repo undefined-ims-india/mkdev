@@ -77,7 +77,7 @@ posts.get('/', (req: any, res: any) => {
 posts.get('/:id', (req: any, res: any) => {
   const { id }: { id: string } = req.params;
   prisma.post
-    .findFirstOrThrow({ where: { id: +id } })
+    .findFirstOrThrow({ where: { id: +id }, include: {author: true, tags: true} })
     .then((post: any) => {
       res.send(post);
     })
