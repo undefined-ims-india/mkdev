@@ -10,10 +10,20 @@ import MarkDown from "./MarkDown";
 import Card from "@mui/material/Card";
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import CommentIcon from '@mui/icons-material/Comment';
 
 const Post = ({content} : {content: PostWithRelations}): ReactElement => {
+
+  const [like, setLike] = useState(false);
+
+  const handleLike = () => {
+    setLike(!like);
+  }
+
   return (
     <Card sx={{marginBottom: 5}}>
       <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
@@ -27,7 +37,15 @@ const Post = ({content} : {content: PostWithRelations}): ReactElement => {
       </Box>
       <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
         <MarkDown text={content.title} />
-        <MarkDown text={content.body} />
+        <Box sx={{maxHeight: 200, overflow: 'hidden'}}>
+          <MarkDown text={content.body} />
+        </Box>
+      </Box>
+      <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
+      <IconButton aria-label='Like' onClick={handleLike}>
+        {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+      </IconButton>
+      <CommentIcon sx={{color: 'grey'}} />
       </Box>
     </Card>
   )
