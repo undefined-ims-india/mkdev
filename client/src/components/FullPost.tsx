@@ -5,7 +5,9 @@ import { PostWithRelations } from "../../../types";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
+
 import MarkDown from "./MarkDown";
+import RepoDisplay from "./RepoDisplay";
 
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
@@ -53,6 +55,9 @@ const FullPost = ():React.ReactElement => {
         <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
           <MarkDown text={content!.title} />
           <MarkDown text={content!.body} />
+        </Box>
+        <Box>
+          <RepoDisplay content={content!.repo} />
         </Box>
       </>
     )
