@@ -12,6 +12,8 @@ import Search from './Search';
 import Messages from './messages/Messages';
 import Profile from './UserProfile';
 
+import Box from '@mui/material/Box';
+
 const routes = [
   {
       path: '/dashboard',
@@ -48,12 +50,14 @@ const App = (): ReactElement => {
   const location = useLocation();
 
   return (
-    <UserProvider>
-      {location.pathname === '/dashboard'? <></> : <Nav />}
-      <Routes>
-        {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
-      </Routes>
-    </UserProvider>
+    <Box sx={{fontFamily: 'Roboto'}}>
+      <UserProvider>
+        {location.pathname === '/dashboard'? <></> : <Nav />}
+        <Routes>
+          {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
+        </Routes>
+      </UserProvider>
+    </Box>
   );
 };
 
