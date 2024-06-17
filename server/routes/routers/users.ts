@@ -64,6 +64,22 @@ users.get('/:id', async (req: any, res: any) => {
   }
 });
 
+// get all users
+users.get('/', (req: any, res: any) => {
+  prisma.user
+    .findMany()
+    .then((users: {}[]) => {
+      res.send(users);
+    })
+    .catch((err: { name: string }) => {
+      console.error(err);
+      res.sendStatus(500);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+});
+
 // Update user by id
 users.patch('/:id', async (req: any, res: any) => {
   const { id } = req.params;
