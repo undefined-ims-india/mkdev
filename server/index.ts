@@ -1,6 +1,6 @@
 import path from 'path';
 import dotEnv from 'dotenv';
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import session from 'express-session';
 import { createServer } from 'node:http';
@@ -133,9 +133,13 @@ app.get('/login', (req: Request, res: Response) => {
   res.render('login');
 });
 
-app.post('/logout', (req: any, res: any) => {
-  req.logout();
-  res.redirect('/login');
+app.post('/logout', function (req: Request, res: Response, next: NextFunction) {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/login');
+  });
 });
 
 app.get('*', (req: Request, res: Response) => {
