@@ -17,27 +17,27 @@ const Nav = (): ReactElement => {
       <Link to='/dashboard' style={{textDecoration: 'none'}}>
         <Typography variant='h1' sx={{fontSize: 36}}>mkDev</Typography>
       </Link>
-      <ThemeToggle />
       {!!id ?
       <>
-        <Link to='/create-post'>
-          <Button>Create Post</Button>
-        </Link>
-        <Link to='/logout'>
-          <Button>Logout</Button>
-        </Link>
         <Link to={`/user/${id}/profile`}>
           <Button>Profile</Button>
         </Link>
         <Link to='/messages'>
           <Button>Messages</Button>
         </Link>
+        <Link to='/create-post'>
+          <Button>Create Post</Button>
+        </Link>
+        <Link to='/logout'>
+          <Button>Logout</Button>
+        </Link>
       </>
       :
-        <Link to='/login'>
+      <Link to='/login'>
           <Button>Login</Button>
         </Link>
       }
+      <ThemeToggle />
       </Box>
     </>
   );
