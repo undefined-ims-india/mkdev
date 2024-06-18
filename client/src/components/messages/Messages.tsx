@@ -10,7 +10,7 @@ import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
-const socket = io('http://ec2-3-19-237-1.us-east-2.compute.amazonaws.com:4000/');
+const socket = io('http://localhost:4000');
 
 const Messages = (): ReactElement => {
 
