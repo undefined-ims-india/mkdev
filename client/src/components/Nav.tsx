@@ -8,11 +8,17 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
+import Skeleton from '@mui/material/Skeleton'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const Nav = (): ReactElement => {
 
   const id = useContext(UserContext);
-  const [profileImage, setProfileImage]: [string, Function] = useState('null');
+  const [profileImage, setProfileImage]: [string, Function] = useState('');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = !!anchorEl;
+
   useEffect(() => {
     axios.get(`/api/users/${id}/image`)
       .then(({data}):void => {
@@ -24,6 +30,13 @@ const Nav = (): ReactElement => {
       });
   }, [profileImage, id])
 
+  const handleOpen = (e: React.MouseEvent<HTMLButtonElement>):void => {
+    setAnchorEl(e.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null);
+  }
+
   return (
     <Box sx={{display: 'flex', flexDirection:'row', alignItems:'center', width: '100%', justifyContent: 'space-between'}}>
       <Box>
@@ -34,26 +47,51 @@ const Nav = (): ReactElement => {
       <Box sx={{display: 'flex', flexDirection:'row'}}>
         {!!id ?
         <>
-          <Link to={`/user/${id}/profile`}>
-            <Button>Profile</Button>
-          </Link>
-          <Link to='/messages'>
-            <Button>Messages</Button>
-          </Link>
-          <Link to='/create-post'>
-            <Button>Create Post</Button>
-          </Link>
-          <Link to='/logout'>
-            <Button>Logout</Button>
-          </Link>
-          <Avatar src={profileImage} >?</Avatar>
+          {profileImage.length ?
+            <button onClick={handleOpen} style={{padding: 0, border: 'none', background:'none'}}>
+              <Avatar src={profileImage}/>
+            </button>
+            :
+            <Skeleton variant='circular' />
+            }
+          <Menu
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+          >
+            <MenuItem>
+              <Link to={`/user/${id}/profile`}>
+                <Button>Profile</Button>
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to='/messages'>
+                <Button>Messages</Button>
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to='/create-post'>
+                <Button>Create Post</Button>
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to='/logout'>
+                <Button>Logout</Button>
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <ThemeToggle />
+            </MenuItem>
+          </Menu>
         </>
         :
-        <Link to='/login'>
-            <Button>Login</Button>
-          </Link>
+        <>
+          <Link to='/login'>
+              <Button>Login</Button>
+            </Link>
+          <ThemeToggle />
+        </>
         }
-      <ThemeToggle />
       </Box>
     </Box>
   );
