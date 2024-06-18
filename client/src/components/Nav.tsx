@@ -12,32 +12,32 @@ const Nav = (): ReactElement => {
 
   return (
     <>
+      <Box sx={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
       <Link to='/dashboard'>
         <h1>mkDev</h1>
       </Link>
       <ThemeToggle />
       {!!id ?
-        <Box sx={{flexDirection:'row'}}>
-          <Link to='/create-post'>
-            <Button>Create Post</Button>
-          </Link>
-          <Link to='/logout'>
-            <Button>Logout</Button>
-          </Link>
-          <Link to={`/user/${id}/profile`}>
-            <Button>Profile</Button>
-          </Link>
-          <Link to='/messages'>
-            <Button>Messages</Button>
-          </Link>
-        </Box>
+      <>
+        <Link to='/create-post'>
+          <Button>Create Post</Button>
+        </Link>
+        <Link to='/logout'>
+          <Button>Logout</Button>
+        </Link>
+        <Link to={`/user/${id}/profile`}>
+          <Button>Profile</Button>
+        </Link>
+        <Link to='/messages'>
+          <Button>Messages</Button>
+        </Link>
+      </>
       :
-        <Box sx={{flexDirection:'row'}}>
-          <Link to='/login'>
-            <Button>Login</Button>
-          </Link>
-        </Box>
+        <Link to='/login'>
+          <Button>Login</Button>
+        </Link>
       }
+      </Box>
     </>
   );
 };
