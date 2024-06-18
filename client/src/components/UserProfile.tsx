@@ -58,7 +58,10 @@ const Profile = (): React.ReactElement => {
     return (
       <>
         {edit ? (
-          <UserInfo UpdateUserInfo={UpdateUserInfo} profileData={profileData} />
+          <UserInfo
+            UpdateUserInfo={UpdateUserInfo}
+            profileData={profileData!}
+          />
         ) : (
           <>
             {userId === profileData!.id && (

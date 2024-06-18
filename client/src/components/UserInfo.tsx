@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
 interface UserInfoProps {
-  profileData: UserProfile | null;
+  profileData: UserProfile;
   UpdateUserInfo: (userInfo: UserProfile) => void;
 }
 
@@ -20,23 +20,13 @@ const UserInfo = ({
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleUpdate = (e: React.FormEvent): void => {
     e.preventDefault();
-    if (userInfo) {
-      UpdateUserInfo(userInfo);
-    }
+    UpdateUserInfo(userInfo!);
   };
 
   return (
-    <Box
-      component='form'
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete='off'
-      onSubmit={handleSubmit}
-    >
+    <Box component='form' sx={{ m: 1, width: '16' }} onSubmit={handleUpdate}>
       <Box>
         <TextField
           name='username'
