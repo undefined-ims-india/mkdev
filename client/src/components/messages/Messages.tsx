@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { User, Conversations } from '@prisma/client';
 
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -140,8 +141,8 @@ const Messages = (): ReactElement => {
         </>
       ) : (
         <>
-          <button onClick={ beginConversation }>➕ Start Conversation</button>
-          <ConversationList allCons={ allConversations } select={ selectConversation }/>
+          <Button onClick={ beginConversation }>➕ Start Conversation</Button>
+          <ConversationList allCons={ allConversations } setCons={ getAllConversations } select={ selectConversation }/>
           { addingConversation ? (
               <form>
                 <Autocomplete
