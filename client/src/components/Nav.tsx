@@ -12,31 +12,35 @@ const Nav = (): ReactElement => {
   const id = useContext(UserContext);
 
   return (
-    <Box sx={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
-      <Link to='/dashboard' style={{textDecoration: 'none'}}>
-        <Typography variant='h1' sx={{fontSize: 36}}>mkDev</Typography>
-      </Link>
-      {!!id ?
-      <>
-        <Link to={`/user/${id}/profile`}>
-          <Button>Profile</Button>
+    <Box sx={{display: 'flex', flexDirection:'row', alignItems:'center', width: '100%', justifyContent: 'space-between'}}>
+      <Box>
+        <Link to='/dashboard' style={{textDecoration: 'none'}}>
+          <Typography variant='h1' sx={{fontSize: 36}}>mkDev</Typography>
         </Link>
-        <Link to='/messages'>
-          <Button>Messages</Button>
-        </Link>
-        <Link to='/create-post'>
-          <Button>Create Post</Button>
-        </Link>
-        <Link to='/logout'>
-          <Button>Logout</Button>
-        </Link>
-      </>
-      :
-      <Link to='/login'>
-          <Button>Login</Button>
-        </Link>
-      }
+      </Box>
+      <Box>
+        {!!id ?
+        <>
+          <Link to={`/user/${id}/profile`}>
+            <Button>Profile</Button>
+          </Link>
+          <Link to='/messages'>
+            <Button>Messages</Button>
+          </Link>
+          <Link to='/create-post'>
+            <Button>Create Post</Button>
+          </Link>
+          <Link to='/logout'>
+            <Button>Logout</Button>
+          </Link>
+        </>
+        :
+        <Link to='/login'>
+            <Button>Login</Button>
+          </Link>
+        }
       <ThemeToggle />
+      </Box>
     </Box>
   );
 };
