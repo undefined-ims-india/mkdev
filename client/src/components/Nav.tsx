@@ -5,6 +5,7 @@ import { ThemeToggle } from '../styling/ThemeToggle';
 
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 const Nav = (): ReactElement => {
 
@@ -13,8 +14,8 @@ const Nav = (): ReactElement => {
   return (
     <>
       <Box sx={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
-      <Link to='/dashboard'>
-        <h1>mkDev</h1>
+      <Link to='/dashboard' style={{textDecoration: 'none'}}>
+        <Typography variant='h1' sx={{fontSize: 36}}>mkDev</Typography>
       </Link>
       <ThemeToggle />
       {!!id ?
