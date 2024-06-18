@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const follow = Router();
@@ -7,7 +7,6 @@ const prisma = new PrismaClient();
 // Follow user
 follow.post('/follow/:followingId', async (req: any, res: any) => {
   const { followingId } = req.params;
-  // const { id } = req.body;
 
   try {
     // Add to user's following list
