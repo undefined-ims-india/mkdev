@@ -44,7 +44,7 @@ const Profile = (): React.ReactElement => {
           <Avatar
             sx={{ width: 80, height: 80 }}
             src={profileData!.picture !== null ? profileData!.picture : ''}
-            alt={profileData!.username ? profileData!.name : ''}
+            alt={profileData.username || profileData.name || ''}
           ></Avatar>
           <Follow />
           <p>
