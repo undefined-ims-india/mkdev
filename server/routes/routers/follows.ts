@@ -38,7 +38,12 @@ follow.get('/following/:id', async (req: any, res: any) => {
   try {
     const userFollowing = await prisma.user.findUnique({
       where: { id: +id },
-      include: { following: true },
+      select: {
+        id: true,
+        username: true,
+        picture: true,
+        following: true,
+      },
     });
     if (userFollowing) {
       res.status(200).send(userFollowing?.following);
@@ -60,7 +65,12 @@ follow.get('/followers/:id', async (req: any, res: any) => {
   try {
     const userFollowers = await prisma.user.findUnique({
       where: { id: +id },
-      include: { followedBy: true },
+      select: {
+        id: true,
+        username: true,
+        picture: true,
+        followedBy: true,
+      },
     });
 
     if (userFollowers) {
