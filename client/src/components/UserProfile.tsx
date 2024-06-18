@@ -7,6 +7,7 @@ import Blogs from './Blogs';
 import Followers from './Followers';
 import Following from './Following';
 import Follow from './Follow';
+import { UserContext } from './UserContext';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -17,7 +18,6 @@ import TabPanel from '@mui/lab/TabPanel';
 import Skeleton from '@mui/material/Skeleton';
 import UserInfo from './UserInfo';
 import Button from '@mui/material/Button';
-import { UserContext } from './UserContext';
 
 const Profile = (): React.ReactElement => {
   const userId = useContext(UserContext);
@@ -31,25 +31,20 @@ const Profile = (): React.ReactElement => {
   const [tab, setTab] = useState('1');
 
   useEffect(() => {
-    axios.get(`/api/users/${id}/profile`).then(({ data }): void => {
-      setProfileData(data);
-    });
+    axios
+      .get(`/api/users/${id}/profile`)
+      .then(({ data }): void => setProfileData(data));
   }, [profileDataREF]);
 
-  const handleEdit = () => {
-    setEdit(true);
-  };
+  const handleEdit = () => setEdit(true);
 
   const UpdateUserInfo = (userInfo: UserProfile) => {
     axios
       .patch(`/api/users/${userInfo.id}`, userInfo)
-      .then(({ data }) => {
-        setUserInfo(data);
-      })
-      .catch((error) => {
-        console.error('Error updating user info:', error);
-      });
+      .then(({ data }): void => setUserInfo(data))
+      .catch((error) => console.error('Error updating user info:', error));
     setEdit(false);
+    setProfileData(userInfo);
   };
 
   const handleTab = (
@@ -63,7 +58,7 @@ const Profile = (): React.ReactElement => {
     return (
       <>
         {edit ? (
-          <UserInfo profileData={profileData} UpdateUserInfo={UpdateUserInfo} />
+          <UserInfo UpdateUserInfo={UpdateUserInfo} profileData={profileData} />
         ) : (
           <>
             {userId === profileData!.id && (
@@ -80,9 +75,10 @@ const Profile = (): React.ReactElement => {
               <p>
                 <a href={`https://dev.to/${profileData!.devId}`}>Dev.to</a>
               </p>
+              Github
               <p>
                 <a href={`https://github.com/${profileData!.githubId}`}>
-                  Github
+                  {profileData!.githubId}
                 </a>
               </p>
             </Box>
