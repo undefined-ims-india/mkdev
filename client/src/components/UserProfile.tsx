@@ -20,7 +20,7 @@ import Button from '@mui/material/Button';
 import { UserContext } from './UserContext';
 
 const Profile = (): React.ReactElement => {
-  useContext(UserContext);
+  const userId = useContext(UserContext);
   const { id } = useParams();
   const [profileData, setProfileData]: [UserProfile | null, Function] =
     useState(null);
@@ -66,8 +66,7 @@ const Profile = (): React.ReactElement => {
           <UserInfo profileData={profileData} UpdateUserInfo={UpdateUserInfo} />
         ) : (
           <>
-           // Needs to be refactored. UserContext is not being used correctly.
-            {UserContext === profileData && (
+            {userId === profileData!.id && (
               <Button onClick={handleEdit}>Edit Profile</Button>
             )}
             <Box>
