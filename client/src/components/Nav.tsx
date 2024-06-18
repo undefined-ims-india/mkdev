@@ -12,8 +12,7 @@ const Nav = (): ReactElement => {
   const id = useContext(UserContext);
 
   return (
-    <>
-      <Box sx={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
+    <Box sx={{display: 'flex', flexDirection:'row', alignItems:'center'}}>
       <Link to='/dashboard' style={{textDecoration: 'none'}}>
         <Typography variant='h1' sx={{fontSize: 36}}>mkDev</Typography>
       </Link>
@@ -38,8 +37,7 @@ const Nav = (): ReactElement => {
         </Link>
       }
       <ThemeToggle />
-      </Box>
-    </>
+    </Box>
   );
 };
 
