@@ -69,16 +69,16 @@ const Profile = (): React.ReactElement => {
               <Avatar
                 sx={{ width: 80, height: 80 }}
                 src={profileData!.picture !== null ? profileData!.picture : ''}
-                alt={profileData!.username ? profileData!.name : ''}
+                alt={profileData!.username || profileData!.name || ''}
               ></Avatar>
               <Follow />
               <p>
                 <a href={`https://dev.to/${profileData!.devId}`}>Dev.to</a>
               </p>
-              Github
+
               <p>
                 <a href={`https://github.com/${profileData!.githubId}`}>
-                  {profileData!.githubId}
+                  Github
                 </a>
               </p>
             </Box>
