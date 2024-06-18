@@ -1,11 +1,9 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserProfile } from '../../../types';
 import axios from 'axios';
 
 const Follow = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
-  const [user, setUser] = useState<UserProfile | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
 
   const follow = () => {
