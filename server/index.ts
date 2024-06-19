@@ -16,7 +16,7 @@ const GoogleStrategy = Strategy;
 const prisma = new PrismaClient();
 
 const PORT = 3000 || process.env.PORT;
-const CLIENT = path.resolve(__dirname, '..');
+const CLIENT = path.resolve(__dirname, '..', '..');
 
 dotEnv.config();
 
