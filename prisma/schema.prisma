@@ -92,6 +92,7 @@ model Tags {
 model Messages {
   id             Int           @id @default(autoincrement())
   body           String
+  liked          Boolean       @default(false)
   senderId       Int
   conversationId Int
   conversation   Conversations @relation(fields: [conversationId], references: [id],  onDelete: Cascade)
