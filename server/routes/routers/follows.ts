@@ -37,11 +37,8 @@ follow.get('/following/:id', async (req: any, res: any) => {
   try {
     const userFollowing = await prisma.user.findUnique({
       where: { id: +id },
-      select: {
-        id: true, 
-        username: true, 
-        picture: true,
-        following: true
+      include: {
+        following: { select: { id: true } },
       },
     });
     if (userFollowing) {
@@ -63,11 +60,8 @@ follow.get('/followers/:id', async (req: any, res: any) => {
   try {
     const userFollowers = await prisma.user.findUnique({
       where: { id: +id },
-      select: {
-        id: true, 
-        username: true, 
-        picture: true,
-        followedBy: true
+      include: {
+        followedBy: { select: { id: true } },
       },
     });
 
