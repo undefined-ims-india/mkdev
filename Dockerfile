@@ -19,6 +19,5 @@ RUN npm run seed
 RUN npm run build
 
 CMD [ "node", "dist/server/index.js" ]
-# RUN npm i -g ts-node
 
-# CMD ["ts-node", "server/index.ts"]
+# To Build run docker build -t <Name of Build> . [ie. directory]
