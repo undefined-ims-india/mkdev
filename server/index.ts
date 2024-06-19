@@ -15,7 +15,8 @@ import cookieParser from 'cookie-parser';
 const GoogleStrategy = Strategy;
 const prisma = new PrismaClient();
 
-const PORT = 3000 || process.env.PORT;
+const PORT = process.env.PORT || 3000;
+const WS_PORT = process.env.WS_PORT || 4000;
 const CLIENT = path.resolve(__dirname, '..', '..');
 
 dotEnv.config();
@@ -172,7 +173,7 @@ io.on('connection', (socket) => {
 });
 // socket handling ----------------------------------------- //
 // websocket server
-io.listen(4000);
+io.listen(+WS_PORT);
 
 app.listen(PORT, () => {
   console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);
