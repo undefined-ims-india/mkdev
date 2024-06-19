@@ -14,10 +14,8 @@ EXPOSE 3000
 
 RUN npx prisma generate
 
-RUN npm run seed
-
 RUN npm run build
 
-CMD [ "node", "dist/server/index.js" ]
+CMD [ "node", "dist/server/server/index.js" ]
 
 # To Build run docker build -t <Name of Build> . [ie. directory]
