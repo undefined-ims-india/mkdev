@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import SurveyTag from './SurveyTag';
+import { redirect } from 'react-router-dom';
 
 interface TagsResponse {
   id: number;
@@ -12,17 +14,16 @@ export default function Signup() {
   const [allPostTags, setPostTags] = useState<TagsResponse[]>([]);
   const [selectedTags, setSelectedTags] = useState<TagsResponse[]>([]);
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Handle form submission here
+  const handleSubmit = (selectedTags: TagsResponse[]) => {
+    axios.post('/api/tags/all', selectedTags)
+      .then(getAllTags)
+      .then(() => redirect('/dashboard'));
   };
 
   const getAllTags = async () => {
     try {
       const { data } = await axios.get('/api/tags/all');
-      console.log('allmaps', data);
-
-      // Assuming the response structure is { User: [], Post: [] }
+      console.log(data);
       setUserTags(data.User || []);
       setPostTags(data.Post || []);
     } catch (error) {
@@ -45,20 +46,11 @@ export default function Signup() {
   return (
     <div>
       <h1>Signup</h1>
-      <form onSubmit={handleSubmit}>
+      <form> 
         <div>
           <h2>Select User Tags</h2>
           {allUserTags.map(tag => (
-            <div key={tag.id}>
-              <label>
-                <input 
-                  type="checkbox" 
-                  checked={selectedTags.includes(tag)} 
-                  onChange={() => toggleTag(tag)} 
-                />
-                {tag.name}
-              </label>
-            </div>
+            <SurveyTag tag={tag} selectedTags={selectedTags} toggleTag={toggleTag}/>
           ))}
         </div>
         <div>
@@ -76,7 +68,7 @@ export default function Signup() {
             </div>
           ))}
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" onClick={() => handleSubmit(selectedTags)}>Submit Selected Tags</button>
       </form>
     </div>
   );
