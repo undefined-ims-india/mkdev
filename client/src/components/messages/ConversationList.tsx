@@ -3,6 +3,8 @@ import Conversation from './Conversation';
 
 import { Conversations } from '@prisma/client';
 
+import Stack from '@mui/material/Stack';
+
 interface PropTypes {
   allCons: Conversations[],
   select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations) => void;
@@ -14,7 +16,7 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
 
   return (
     <div>
-      { /* TODO: use Stack to stack buttons */}
+      <Stack>
       {
         allCons.map((con, i) => {
           return (
@@ -27,7 +29,7 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
           )
         })
       }
-
+      </Stack>
     </div>
   );
 }
