@@ -5,12 +5,10 @@ const prisma = new PrismaClient();
 
 // get tags for the given user
 tags.get('/', async (req: any, res: Response) => {
-
   try {
     const tagResponse = await prisma.user.findUnique({
       where: {
         id: req.user.id,
-
       },
       select: {
         tags: true,
@@ -24,7 +22,6 @@ tags.get('/', async (req: any, res: Response) => {
 
 //get all tags sorted by tagType
 tags.get('/all', async (req: Request, res: Response) => {
-
   try {
     const tags = await prisma.tags.findMany();
     const groupedTags = tags.reduce((groups: any, tag: any) => {
@@ -49,6 +46,7 @@ tags.post('/all', async (req: any, res: any) => {
   try {
     const mappedTags = tags.map((tag: { id: number }) => ({ id: +tag.id }));
     await prisma.user.update({
+      where: { id: req.user.id },
       data: {
         tags: {
           connect: mappedTags,
