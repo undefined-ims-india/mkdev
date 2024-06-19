@@ -20,15 +20,18 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
   const [allMsgs, setAllMsgs] = useState<Messages[]>([]);
 
   // get messages in conversation
-  useEffect(() => {
+  const getAllMsgs = (): void => {
     axios
-      .get(`/api/messages/${con.id}`)
-      .then(({ data }) => {
-        setAllMsgs(data);
-      })
-      .catch((err) => {
-        console.error('Failed to retrieve messages from db:\n', err);
-      })
+    .get(`/api/messages/${con.id}`)
+    .then(({ data }) => {
+      setAllMsgs(data);
+    })
+    .catch((err) => {
+      console.error('Failed to retrieve messages from db:\n', err);
+    })
+  }
+  useEffect(() => {
+    getAllMsgs();
   }, [con])
 
   // add any received message from websocket
@@ -42,7 +45,7 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
       { !addingConversation ? (
           <>
             <h3>{ label }</h3>
-            <MessagesList allMsgs={ allMsgs } con={ con }/>
+            <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
             <MessageInput con={ con }/>
           </>
         ) : ('')
