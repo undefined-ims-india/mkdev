@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "seed": "node prisma/seed.ts",
-    "dev:start": "nodemon dist/server/index.js",
-    "dev:frontend": "npx webpack",
-    "dev:server": "tsc",
-    "dev": "concurrently npm:dev:*",
+
+    "dev:start": "nodemon dist/server/server/index.js",
+    "dev:frontend": "npx webpack --watch",
+    "dev:server": "tsc --watch",
+    "dev": "concurrently npm:dev:* -c ##31E981,#55C3FF,#FFCA28",
+
     "build:types": "tsc ",
     "build:webpack": "npx webpack",
-    "build": "concurrently npm:build:* -c #FFCA28,#55C3FF "
+    "build": "concurrently npm:build:*  "
   },
   "keywords": [],
   "author": "",
