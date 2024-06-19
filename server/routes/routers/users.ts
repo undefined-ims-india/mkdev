@@ -26,7 +26,7 @@ users.get('/:id/profile', async ( req: express.Request<{ id: string }>, res: exp
             include: {
               author: true,
               tags: true,
-              repoLink: true,
+              repo: true,
               liked: { select: { id: true } },
             },
           },

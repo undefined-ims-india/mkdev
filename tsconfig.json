@@ -13,7 +13,7 @@
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied 'any' type. */,
-    "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+    "outDir": "./dist/server" /* Specify an output folder for all emitted files. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
 
     /* Projects */
@@ -108,5 +108,5 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["client/**/*"]
+  "include": ["server/**/*"]
 }

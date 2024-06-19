@@ -1,23 +1,37 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserProfile } from '../../../types';
 import axios from 'axios';
 
 const Follow = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
-  const [user, setUser] = useState<UserProfile | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
 
-  const follow = () => {
-    axios.post(`/api/follows/follow/${user?.id}/${id}`).then(() => {
-      setIsFollowing(true);
+  useEffect(() => {
+    axios.get(`/api/follows/isFollowing/${user?.id}/${id}`).then(() => {
+      if (isFollowing) {
+        setIsFollowing(true);
+      } else {
+        setIsFollowing(false);
+      }
     });
+  }, [id, user]);
+
+  const follow = () => {
+    axios
+      .post(`/api/follows/follow/${id}`)
+      .then((): void => {
+        setIsFollowing(true);
+      })
+      .catch((err) => console.error(err));
   };
 
   const unfollow = () => {
-    axios.delete(`/api/follows/unfollow/${user?.id}/${id}`).then(() => {
-      setIsFollowing(false);
-    });
+    axios
+      .delete(`/api/follows/unfollow/${id}`)
+      .then((): void => {
+        setIsFollowing(false);
+      })
+      .catch((err) => console.error(err));
   };
 
   return (

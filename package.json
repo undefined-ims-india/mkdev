@@ -5,15 +5,15 @@
   "main": "index.js",
   "scripts": {
     "seed": "node prisma/seed.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/index.ts",
-    "prod:build:compile": "npx webpack",
-    "prod:build:server": "npx babel server .ts --out-dir lib",
-    "prod:build:types": "tsc",
-    "prod:build": "concurrently npm:prod:build:*",
-    "build:types": "tsc --watch",
+
+    "dev:start": "nodemon dist/server/server/index.js",
+    "dev:frontend": "npx webpack --watch",
+    "dev:server": "tsc --watch",
+    "dev": "concurrently npm:dev:* -c ##31E981,#55C3FF,#FFCA28",
+
+    "build:types": "tsc ",
     "build:webpack": "npx webpack",
-    "build": "concurrently npm:build:* -c #FFCA28,#55C3FF "
+    "build": "concurrently npm:build:*  "
   },
   "keywords": [],
   "author": "",
