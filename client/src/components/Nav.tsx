@@ -11,6 +11,9 @@ import Avatar from '@mui/material/Avatar';
 import Skeleton from '@mui/material/Skeleton'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import InboxIcon from '@mui/icons-material/Inbox';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 const Nav = (): ReactElement => {
 
@@ -44,9 +47,19 @@ const Nav = (): ReactElement => {
           <Typography variant='h1' sx={{fontSize: 36}}>mkDev</Typography>
         </Link>
       </Box>
-      <Box sx={{display: 'flex', flexDirection:'row'}}>
+      <Box sx={{display: 'flex', flexDirection:'row', justifyContent:'space-evenly', alignItems: 'center'}}>
         {!!id ?
         <>
+          <IconButton>
+            <Link to='/create-post'>
+              <AddBoxIcon />
+            </Link>
+          </IconButton>
+          <IconButton>
+            <Link to='/messages'>
+              <InboxIcon />
+            </Link>
+          </IconButton>
           {profileImage.length ?
             <button onClick={handleOpen} style={{padding: 0, border: 'none', background:'none'}}>
               <Avatar src={profileImage}/>
@@ -79,9 +92,7 @@ const Nav = (): ReactElement => {
                 <Button>Logout</Button>
               </Link>
             </MenuItem>
-            <MenuItem>
-              <ThemeToggle />
-            </MenuItem>
+            <ThemeToggle />
           </Menu>
         </>
         :
