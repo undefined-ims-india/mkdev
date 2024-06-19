@@ -95,9 +95,6 @@ passport.use(
 );
 
 // Serialization
-// passport.serializeUser((user: any, done) => {
-//   done(null, user.id);
-// });
 passport.serializeUser((user: any, done) => {
   done(null, {
     id: user.id,
@@ -115,28 +112,6 @@ passport.deserializeUser(async (serializedUser: { id: number }, done) => {
   } catch (err) {
     done(err);
   }
-});
-
-// passport.deserializeUser(async (id: number, done) => {
-//   try {
-//     const user = await prisma.user.findUnique({
-//       where: { id },
-//     });
-//     done(null, user);
-//   } catch (err) {
-//     done(err);
-//   }
-// });
-
-passport.deserializeUser((id: number, done) => {
-  prisma.user
-    .findUnique({
-      where: { id },
-    })
-    .then((user) => {
-      done(null, user);
-    })
-    .catch((err) => done(err)); //console.error('Failed to deserialize User:', err));
 });
 
 // Auth Routes
@@ -175,7 +150,7 @@ const io = new Server(server, {
     origin: [
       `http://localhost:${PORT}`,
       `http://127.0.0.1:${PORT}`,
-      `http://ec2-3-19-237-1.us-east-2.compute.amazonaws.com:${PORT}/`
+      `http://ec2-3-19-237-1.us-east-2.compute.amazonaws.com:${PORT}/`,
     ],
     methods: ['GET', 'POST'],
   },

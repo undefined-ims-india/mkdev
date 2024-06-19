@@ -6,6 +6,16 @@ const Follow = (): ReactElement => {
   const { id } = useParams<{ id: string }>();
   const [isFollowing, setIsFollowing] = useState(false);
 
+  useEffect(() => {
+    axios.get(`/api/follows/isFollowing/${user?.id}/${id}`).then(() => {
+      if (isFollowing) {
+        setIsFollowing(true);
+      } else {
+        setIsFollowing(false);
+      }
+    });
+  }, [id, user]);
+
   const follow = () => {
     axios
       .post(`/api/follows/follow/${id}`)
