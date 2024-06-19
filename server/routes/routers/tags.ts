@@ -5,13 +5,12 @@ const prisma = new PrismaClient();
 
 // get tags for the given user
 tags.get('/', async (req: any, res: Response) => {
-  const { id } = req.user.id;
-  // const id = 9;
 
   try {
     const tagResponse = await prisma.user.findUnique({
       where: {
-        id: +id,
+        id: req.user.id,
+
       },
       select: {
         tags: true,
@@ -25,8 +24,6 @@ tags.get('/', async (req: any, res: Response) => {
 
 //get all tags sorted by tagType
 tags.get('/all', async (req: Request, res: Response) => {
-  // const { id } = req.user.id;
-  // const id = 9
 
   try {
     const tags = await prisma.tags.findMany();
@@ -48,13 +45,10 @@ tags.get('/all', async (req: Request, res: Response) => {
 //post all tags to the current user
 tags.post('/all', async (req: any, res: any) => {
   const { tags } = req.body;
-  const { id } = req.user.id;
-  // const id = 9
 
   try {
     const mappedTags = tags.map((tag: { id: number }) => ({ id: +tag.id }));
     await prisma.user.update({
-      where: { id: +id },
       data: {
         tags: {
           connect: mappedTags,
@@ -72,12 +66,11 @@ tags.post('/all', async (req: any, res: any) => {
 //Handler to add tags to the user
 tags.post('/:tagId', async (req: any, res: Response) => {
   const { tagId } = req.params;
-  const { id } = req.user.id;
-  // const id = 9;
 
   try {
     const updatedUser = await prisma.user.update({
-      where: { id: +id },
+      where: { id: req.user.id },
+
       data: {
         tags: {
           connect: { id: +tagId },
@@ -95,12 +88,10 @@ tags.post('/:tagId', async (req: any, res: Response) => {
 //patch request to remove a tag from a users array of tags
 tags.patch('/:tagId', async (req: any, res: Response) => {
   const { tagId } = req.params;
-  const { id } = req.user.id;
-  // const id = 9;
 
   try {
     const updatedUser = await prisma.user.update({
-      where: { id: +id },
+      where: { id: req.user.id },
       data: {
         tags: {
           disconnect: { id: +tagId },
