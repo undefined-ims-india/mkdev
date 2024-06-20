@@ -6,15 +6,16 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { User, Conversations } from '@prisma/client';
 
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
-const socket = io('http://ec2-3-19-237-1.us-east-2.compute.amazonaws.com:4000/');
+const socket = io('http://localhost:4000');
 
 const Messages = (): ReactElement => {
 
-  const [con, setCon] = useState<Conversations>();
+  const [con, setCon] = useState<Conversations | null>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
@@ -28,6 +29,7 @@ const Messages = (): ReactElement => {
     axios
       .get('/api/conversations')
       .then((conversations) => {
+        console.log('conversations loaded');
         setAllConversations(conversations.data);
       })
       .catch((err) => {
@@ -90,6 +92,7 @@ const Messages = (): ReactElement => {
     e.preventDefault();
 
     // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
+    // use mui textfield error
     if (!participants.length) {
       return;
     }
@@ -117,12 +120,19 @@ const Messages = (): ReactElement => {
       });
   }
 
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null): void => {
     if (addingConversation) {
       setAddingConversation(false);
     }
     setCon(newCon);
-    setParticipantsLabel(newCon.label);
+    if (newCon) {
+      setParticipantsLabel(newCon!.label);
+    }
+  }
+
+  const deleteConversation = () => {
+    setCon(null);
+    getAllConversations();
   }
 
   // add emitted conversation to allConversations
@@ -140,8 +150,13 @@ const Messages = (): ReactElement => {
         </>
       ) : (
         <>
-          <button onClick={ beginConversation }>➕ Start Conversation</button>
-          <ConversationList allCons={ allConversations } select={ selectConversation }/>
+          <Button onClick={ beginConversation }>➕ Start Conversation</Button>
+          <ConversationList 
+            allCons={ allConversations } 
+            setCons={ getAllConversations } 
+            select={ selectConversation }
+            deleteCon={ deleteConversation }
+          />
           { addingConversation ? (
               <form>
                 <Autocomplete
