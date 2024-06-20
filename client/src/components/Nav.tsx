@@ -1,7 +1,7 @@
 import React, { ReactElement, useContext, useState, useEffect } from 'react';
 import { UserContext } from './UserContext';
 import { Link } from 'react-router-dom';
-import { ThemeToggle } from '../styling/ThemeToggle';
+import { ThemeToggle } from './ThemeToggle';
 import axios from 'axios';
 
 import Box from '@mui/material/Box'

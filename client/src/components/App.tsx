@@ -15,7 +15,7 @@ import FullPost from './FullPost';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { ColorModeContext } from '../styling/ThemeToggle';
+import { ColorModeContext } from './ThemeToggle';
 import Box from '@mui/material/Box';
 
 
