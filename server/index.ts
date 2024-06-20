@@ -130,11 +130,12 @@ app.get(
     res.redirect('/dashboard');
   }
 );
+
 app.get('/login', (req: Request, res: Response) => {
   res.render('login');
 });
 
-app.post('/logout', function (req: Request, res: Response, next: NextFunction) {
+app.post('/logout', function (req: Request, res: Response, next) {
   req.logout((err) => {
     if (err) {
       return next(err);
