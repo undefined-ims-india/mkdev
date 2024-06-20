@@ -76,6 +76,15 @@ const Profile = (): React.ReactElement => {
               ></Avatar>
               <Follow />
               <p>
+                <a
+                  href={`https://www.linkedin.com/in/${
+                    profileData!.linkedinId
+                  }`}
+                >
+                  LinkedIn
+                </a>
+              </p>
+              <p>
                 <a href={`https://dev.to/${profileData!.devId}`}>Dev.to</a>
               </p>
 
