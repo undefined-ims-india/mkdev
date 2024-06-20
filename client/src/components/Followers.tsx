@@ -30,16 +30,16 @@ const Followers = (): ReactElement => {
         <List>
           {followerData &&
             followerData.map((follower) => (
-              <ListItem key={follower!.id}>
+              <ListItem key={follower.id}>
                 <ListItemAvatar>
-                  <a href={`/${follower!.id}/profile`}>
+                  <a href={`/user/${follower.id}/profile`}>
                     <Avatar
-                      alt={follower!.username || ''}
-                      src={follower!.picture || ''}
+                      alt={follower.username || ''}
+                      src={follower.picture || ''}
                     />
                   </a>
                 </ListItemAvatar>
-                <ListItemText primary={follower!.username} />
+                <ListItemText primary={follower.username} />
               </ListItem>
             ))}
         </List>

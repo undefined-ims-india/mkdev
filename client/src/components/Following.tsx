@@ -16,6 +16,7 @@ const Following = (): React.ReactElement => {
 
   useEffect(() => {
     axios.get(`/api/follows/following/${id}`).then(({ data }) => {
+      console.log(data);
       setFollowingData(data);
     });
   }, [id]);
@@ -28,16 +29,16 @@ const Following = (): React.ReactElement => {
         <List>
           {followingData &&
             followingData.map((following) => (
-              <ListItem key={following!.id}>
+              <ListItem key={following.id}>
                 <ListItemAvatar>
-                  <a href={`/${following!.id}/profile`}>
+                  <a href={`/user/${following.id}/profile`}>
                     <Avatar
-                      alt={following!.username || ''}
-                      src={following!.picture || ''}
+                      alt={following.username || ''}
+                      src={following.picture || '?'}
                     />
                   </a>
                 </ListItemAvatar>
-                <ListItemText primary={following!.username} />
+                <ListItemText primary={following.username} />
               </ListItem>
             ))}
         </List>
