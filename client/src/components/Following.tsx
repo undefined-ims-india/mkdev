@@ -3,6 +3,12 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../types';
 
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+
 const Following = (): React.ReactElement => {
   const { id } = useParams();
   const [followingData, setFollowingData]: [UserProfile[] | null, Function] =
@@ -19,12 +25,22 @@ const Following = (): React.ReactElement => {
       {followingData && followingData.length === 0 ? (
         `Not following any Developers`
       ) : (
-        <ul>
+        <List>
           {followingData &&
             followingData.map((following) => (
-              <li key={following.id}>{following.name}</li>
+              <ListItem key={following!.id}>
+                <ListItemAvatar>
+                  <a href={`/${following!.id}/profile`}>
+                    <Avatar
+                      alt={following!.username || ''}
+                      src={following!.picture || ''}
+                    />
+                  </a>
+                </ListItemAvatar>
+                <ListItemText primary={following!.username} />
+              </ListItem>
             ))}
-        </ul>
+        </List>
       )}
     </div>
   );
