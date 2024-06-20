@@ -1,18 +1,20 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 
 const Logout = (): ReactElement => {
-  React.useEffect(() => {
-    axios
-      .post('/logout')
-      .then(({ data }) => {
-        console.log(data);
-        if (!data.ok) {
-          console.log('Logout failed');
-        }
-        window.location.href = '/login';
-      })
-      .catch((err) => console.error('Logout failed:', err));
+  const navigate = useNavigate();
+
+  // Request to passport logout() function middleware
+  useEffect(() => {
+    axios.post('/logout').then(({ data }): void => {
+      console.log('logout', data);
+      if (!data.ok) {
+        console.log('Logout failed');
+      }
+      navigate('/login');
+    });
   }, []);
 
   return (
