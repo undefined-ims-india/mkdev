@@ -16,12 +16,7 @@ users.get('/loggedIn', (req: any, res: any) => {
 });
 
 //Get user profile
-users.get(
-  '/:id/profile',
-  async (
-    req: express.Request<{ id: string }>,
-    res: express.Response
-  ): Promise<void> => {
+users.get('/:id/profile', async ( req: express.Request<{ id: string }>, res: express.Response): Promise<void> => {
     try {
       const userProfile = await prisma.user.findUniqueOrThrow({
         where: { id: +req.params.id },
@@ -47,6 +42,22 @@ users.get(
     }
   }
 );
+
+//Get user image
+users.get('/:id/image', async (req: express.Request<{ id: string }>, res: express.Response) => {
+  try {
+    const { id } = req.params;
+    const userImg = await prisma.user.findUniqueOrThrow({where: {id: +id}, select: {picture: true}})
+    res.send(userImg);
+  }
+  catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+})
 
 // Get user by id
 users.get('/:id', async (req: any, res: any) => {
