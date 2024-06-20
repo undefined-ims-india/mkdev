@@ -15,7 +15,7 @@ const socket = io('http://localhost:4000');
 
 const Messages = (): ReactElement => {
 
-  const [con, setCon] = useState<Conversations>();
+  const [con, setCon] = useState<Conversations | null>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
@@ -29,6 +29,7 @@ const Messages = (): ReactElement => {
     axios
       .get('/api/conversations')
       .then((conversations) => {
+        console.log('conversations loaded');
         setAllConversations(conversations.data);
       })
       .catch((err) => {
@@ -91,6 +92,7 @@ const Messages = (): ReactElement => {
     e.preventDefault();
 
     // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
+    // use mui textfield error
     if (!participants.length) {
       return;
     }
@@ -118,12 +120,19 @@ const Messages = (): ReactElement => {
       });
   }
 
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null): void => {
     if (addingConversation) {
       setAddingConversation(false);
     }
     setCon(newCon);
-    setParticipantsLabel(newCon.label);
+    if (newCon) {
+      setParticipantsLabel(newCon!.label);
+    }
+  }
+
+  const deleteConversation = () => {
+    setCon(null);
+    getAllConversations();
   }
 
   // add emitted conversation to allConversations
@@ -142,7 +151,12 @@ const Messages = (): ReactElement => {
       ) : (
         <>
           <Button onClick={ beginConversation }>➕ Start Conversation</Button>
-          <ConversationList allCons={ allConversations } setCons={ getAllConversations } select={ selectConversation }/>
+          <ConversationList 
+            allCons={ allConversations } 
+            setCons={ getAllConversations } 
+            select={ selectConversation }
+            deleteCon={ deleteConversation }
+          />
           { addingConversation ? (
               <form>
                 <Autocomplete

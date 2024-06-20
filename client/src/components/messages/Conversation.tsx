@@ -5,24 +5,22 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
 import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import Typography from '@mui/material/Typography';
 
 import { Conversations } from '@prisma/client';
 
 interface PropsType {
     con: Conversations;
-    select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations) => void;
+    select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null) => void;
     setCons: () => void;
+    deleteCon: () => void;
 }
 
 const Conversation: React.FC<PropsType> = (props): ReactElement => {
-  const { con, setCons, select } = props;
+  const { con, select, setCons, deleteCon } = props;
 
   // const [open, setOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -35,7 +33,8 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
   const deleteConversation = () => {
     axios
       .delete(`/api/conversations/${con.id}`)
-      .then(() => { setCons(); }) // getAllConversations from props
+      .then(() => { deleteCon(); })
+      .then(() => { setCons(); })
       .catch((err) => {
         console.error('Failed to delete conversation', err);
       });
@@ -57,9 +56,7 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
 
   return (
     <>
-      <ButtonGroup
-        // ref={ anchorRef }
-      >
+      <ButtonGroup>
         <Button onClick={ (e)=> {selectConversation(e, con)} }>{ con.label }</Button>
         <Button onClick={ handleMenu }>
           <MoreVertIcon />

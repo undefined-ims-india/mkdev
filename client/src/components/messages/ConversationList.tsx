@@ -7,12 +7,13 @@ import Stack from '@mui/material/Stack';
 
 interface PropTypes {
   allCons: Conversations[],
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations) => void;
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null) => void;
   setCons: () => void;
+  deleteCon: () => void;
 }
 
 const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
-  const { allCons, setCons, select } = props;
+  const { allCons, select, setCons, deleteCon } = props;
 
   return (
     <div>
@@ -25,6 +26,7 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
               key={ `${con.id}-${i}` }
               setCons={ setCons }
               select={ select }
+              deleteCon={ deleteCon }
             />
           )
         })
