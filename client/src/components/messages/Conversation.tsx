@@ -8,8 +8,10 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
+import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import Typography from '@mui/material/Typography';
 
 import { Conversations } from '@prisma/client';
 
@@ -22,8 +24,8 @@ interface PropsType {
 const Conversation: React.FC<PropsType> = (props): ReactElement => {
   const { con, setCons, select } = props;
 
-  const [open, setOpen] = useState<boolean>(false);
-  const anchorRef = useRef<HTMLDivElement>(null);
+  // const [open, setOpen] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   // pass selected conversation id to Messages component to change conId state
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
@@ -43,56 +45,52 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
     deleteConversation();
   }
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+  const handleMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
   }
 
-  const handleClose = (e: Event) => {
-    setOpen(false);
+  const handleCloseMenu = (e: Event) => {
+    setAnchorEl(null);
   }
+
+  const open = Boolean(anchorEl);
 
   return (
     <>
       <ButtonGroup
-        ref={ anchorRef }
+        // ref={ anchorRef }
       >
         <Button onClick={ (e)=> {selectConversation(e, con)} }>{ con.label }</Button>
-        <Button onClick={ handleToggle }>
+        <Button onClick={ handleMenu }>
           <MoreVertIcon />
         </Button>
       </ButtonGroup>
-      <Popper
-        sx={{
-          zIndex: 1,
-        }}
+      <Popover
         open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        transition
-        disablePortal
+        anchorEl={ anchorEl }
+        onClose={ handleCloseMenu }
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
       >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === 'bottom' ? 'center top' : 'center bottom',
-            }}
-          >
-            <Paper>
-              <ClickAwayListener onClickAway={ handleClose }>
-                <MenuList id="split-button-menu" autoFocusItem>
-                  <MenuItem
-                    onClick={(event) => handleOptionClick(event)}
-                  >
-                    Delete Conversation
-                  </MenuItem>
-                </MenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
+        <Paper>
+          <ClickAwayListener onClickAway={ handleCloseMenu }>
+            <MenuList id="split-button-menu" autoFocusItem>
+              <MenuItem
+                onClick={(event) => handleOptionClick(event)}
+              >
+                Delete Conversation
+              </MenuItem>
+            </MenuList>
+          </ClickAwayListener>
+        </Paper>
+      </Popover>
+
     </>
   );
 }
