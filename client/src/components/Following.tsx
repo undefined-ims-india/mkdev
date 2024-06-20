@@ -16,7 +16,6 @@ const Following = (): React.ReactElement => {
 
   useEffect(() => {
     axios.get(`/api/follows/following/${id}`).then(({ data }) => {
-      console.log(data);
       setFollowingData(data);
     });
   }, [id]);
