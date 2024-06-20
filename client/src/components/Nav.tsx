@@ -26,7 +26,6 @@ const Nav = (): ReactElement => {
       .get(`/api/users/${id}/image`)
       .then(({ data }): void => {
         setProfileImage(data.picture);
-        // console.info(data)
       })
       .catch((err: Error) => {
         console.error(err);
