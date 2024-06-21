@@ -39,4 +39,38 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
 
 })
 
+// update liked status on specific message
+messages.patch('/:id', (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { liked }: { liked: boolean } = req.body;
+
+  prisma.messages.update({
+    where: { id: +id },
+    data: {
+      liked: liked
+    }
+  })
+  .then(() => {
+    res.sendStatus(201);
+  })
+  .catch((err) => {
+    console.error('Failed to update like field', err);
+  })
+})
+
+// delete specific message
+messages.delete('/:id', (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  prisma.messages.delete({
+    where: { id: +id }
+  })
+  .then(() => {
+    res.sendStatus(200);
+  })
+  .catch((err) => {
+    console.error('Failed to delete message', err)
+  });
+})
+
 export default messages;
