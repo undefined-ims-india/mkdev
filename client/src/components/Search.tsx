@@ -8,6 +8,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import axios from 'axios';
+import { Divider, Button } from '@mui/material';
+import { styled } from '@mui/system';
 
 const tagTypes = ['user', 'post', 'all'];
 
@@ -23,6 +25,32 @@ const tags = [
     { id: 9, name: 'Rust', tag: 'post' },
     { id: 10, name: 'HTML', tag: 'post' },
 ];
+
+const Form = styled('form')(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(2),
+}));
+
+const SelectContainer = styled(FormControl)(({ theme }) => ({
+    minWidth: 120,
+}));
+
+const AutocompleteContainer = styled(Autocomplete)(({ theme }) => ({
+    width: '100%',
+}));
+
+const SearchButton = styled(Button)(({ theme }) => ({
+    alignSelf: 'flex-start',
+}));
+
+const SelectedCategories = styled('div')(({ theme }) => ({
+    marginTop: theme.spacing(2),
+}));
+
+const CustomChip = styled(Chip)(({ theme }) => ({
+    margin: theme.spacing(0.5),
+}));
 
 export default function SearchComponent(): ReactElement {
     const [selectedTags, setSelectedTags] = useState<
@@ -54,8 +82,8 @@ export default function SearchComponent(): ReactElement {
     };
 
     return (
-        <form>
-            <FormControl variant='outlined' fullWidth>
+        <Form>
+            <SelectContainer variant='outlined' fullWidth>
                 <InputLabel id='tagType-label'>Search By a Tag</InputLabel>
                 <Select
                     value={tagType}
@@ -63,7 +91,7 @@ export default function SearchComponent(): ReactElement {
                     input={<OutlinedInput label='Search By a Tag' />}
                     renderValue={(selected) => (
                         <div>
-                            <Chip key={selected} label={selected} />
+                            <CustomChip key={selected} label={selected} />
                         </div>
                     )}
                 >
@@ -73,8 +101,8 @@ export default function SearchComponent(): ReactElement {
                         </MenuItem>
                     ))}
                 </Select>
-            </FormControl>
-            <Autocomplete
+            </SelectContainer>
+            <AutocompleteContainer
                 multiple
                 options={tags}
                 getOptionLabel={(option) => option.name}
@@ -90,7 +118,7 @@ export default function SearchComponent(): ReactElement {
                 )}
                 renderTags={(value, getTagProps) =>
                     value.map((option, index) => (
-                        <Chip
+                        <CustomChip
                             variant='outlined'
                             label={option.name}
                             {...getTagProps({ index })}
@@ -98,11 +126,14 @@ export default function SearchComponent(): ReactElement {
                     ))
                 }
             />
-            <div>
-                Selected Categories: {selectedTags.map((tag) => tag.name).join(', ')}
-            </div>
-            <button type="button" onClick={handleSearch}>Search</button>
-        </form>
+            <SearchButton
+                variant='contained'
+                color='primary'
+                onClick={handleSearch}
+            >
+                Search
+            </SearchButton>
+            <Divider />
+        </Form>
     );
-};
-
+}
