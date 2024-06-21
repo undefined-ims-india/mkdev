@@ -11,7 +11,7 @@ export interface UserProfile extends User {
 export interface PostWithRelations extends Post {
   author: User;
   tags: Tags[];
-  repo: RepoWithFiles | null;
+  repo?: RepoWithFiles | null;
 }
 
 export interface RepoWithFiles extends Repo {
