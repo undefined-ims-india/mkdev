@@ -88,8 +88,7 @@ conversations.post('/', async (req: any, res: Response) => {
 
 });
 
-// .patch -> delete a specific message from conversation? NO because if delete message, relationship will be gone
-
+// delete a specific conversation
 conversations.delete('/:id', (req: Request, res: Response) => {
   const { id } = req.params;
   // delete a specific conversation
