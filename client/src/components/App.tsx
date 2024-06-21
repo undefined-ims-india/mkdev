@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import '../styling/index.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Nav from './Nav';
@@ -14,8 +14,9 @@ import Profile from './UserProfile';
 import FullPost from './FullPost';
 
 import { CssBaseline } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { ColorModeContext } from './ThemeToggle';
+import { lightTheme, darkTheme } from '../styling/themes';
 import Box from '@mui/material/Box';
 
 
@@ -59,11 +60,12 @@ const App = (): ReactElement => {
   const location = useLocation();
 
 
-  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  const [mode, setMode] = React.useState<typeof lightTheme | typeof darkTheme>(lightTheme);
   const colorMode = React.useMemo(
+    // calculates value: returns an object, assigned to colorMode
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        setMode((prevMode) => (prevMode === lightTheme ? darkTheme : lightTheme));
       },
     }),
     [],
@@ -71,12 +73,8 @@ const App = (): ReactElement => {
 
   const theme = React.useMemo(
     () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode],
+      (mode),
+    [mode]
   );
 
   return (

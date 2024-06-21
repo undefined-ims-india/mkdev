@@ -1,6 +1,16 @@
-import { ThemeOptions } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
-export const light: ThemeOptions = {
+export const lightTheme = createTheme({
+  // using the components object, we can define default styling props for components
+  components: {
+    // Name of the component
+    MuiButtonBase: {
+      defaultProps: {
+        // The props to change the default for.
+        // disableRipple: true, // No more ripple, on the whole application
+      },
+    },
+  },
   palette: {
     mode: 'light',
     primary: {
@@ -18,41 +28,21 @@ export const light: ThemeOptions = {
       secondary: '#636c76',
       disabled: '#8c959f',
     },
-    info: {
-      main: '#0288d1',
-    },
   },
-  typography: {
-    fontFamily: 'Roboto',
-  },
-};
+});
 
-// returns theme based on mode chosen
-export const getDesignTokens = (mode: PaletteMode) => ({
+export const darkTheme = createTheme({
   palette: {
-    mode,
-    ...(mode === 'light'
-      ? {
-          // palette values for light mode
-          primary: amber,
-          divider: amber[200],
-          text: {
-            primary: grey[900],
-            secondary: grey[800],
-          },
-        }
-      : {
-          // palette values for dark mode
-          primary: deepOrange,
-          divider: deepOrange[700],
-          background: {
-            default: deepOrange[900],
-            paper: deepOrange[900],
-          },
-          text: {
-            primary: '#fff',
-            secondary: grey[500],
-          },
-        }),
+    mode: 'dark',
+    primary: {
+      main: '#90caf9',
+    },
+    secondary: {
+      main: '#ce93d8',
+    },
+    background: {
+      default: '#000000',
+      paper: '#060401',
+    },
   },
 });
