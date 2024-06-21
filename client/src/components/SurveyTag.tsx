@@ -1,4 +1,8 @@
 import React from 'react';
+import Chip from '@mui/material/Chip';
+import { SxProps } from '@mui/system';
+import { Theme } from '@mui/material/styles';
+
 interface Props {
 	tag: TagsResponse;
 	selectedTags: TagsResponse[];
@@ -11,19 +15,22 @@ interface TagsResponse {
 	name: string;
 }
 
-//want this to be a chip and it toggles to light color on select with sx element 
-export default function (props: Props) {
-	const { tag, toggleTag, selectedTags } = props;
+const TagChip: React.FC<Props> = ({ tag, selectedTags, toggleTag }) => {
+	const isSelected = selectedTags.includes(tag);
+
+	const chipStyles: SxProps<Theme> = {
+		backgroundColor: isSelected ? 'lightgray' : 'default',
+		borderColor: isSelected ? 'black' : 'default',
+	};
+
 	return (
-		<div key={tag.id}>
-			<label>
-				<input
-					type='checkbox'
-					checked={selectedTags.includes(tag)}
-					onChange={() => toggleTag(tag)}
-				/>
-				{tag.name}
-			</label>
-		</div>
+		<Chip
+			label={tag.name}
+			variant={isSelected ? 'outlined' : 'filled'}
+			onClick={() => toggleTag(tag)}
+			sx={chipStyles}
+		/>
 	);
-}
+};
+
+export default TagChip;
