@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import SurveyTag from './SurveyTag';
-import { redirect } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { Box, Button, Typography, Container, Grid, Paper } from '@mui/material';
 
 interface TagsResponse {
@@ -14,12 +14,14 @@ export default function Signup() {
 	const [allUserTags, setUserTags] = useState<TagsResponse[]>([]);
 	const [allPostTags, setPostTags] = useState<TagsResponse[]>([]);
 	const [selectedTags, setSelectedTags] = useState<TagsResponse[]>([]);
+	const navigate = useNavigate();
 
 	const handleSubmit = (selectedTags: TagsResponse[]) => {
+		console.log('hiii', selectedTags);
 		axios
-			.post('/api/tags/all', selectedTags)
+			.post('/api/tags/all',{tags: selectedTags})
 			.then(getAllTags)
-			.then(() => redirect('/dashboard'));
+			.then(() => navigate('/dashboard'));
 	};
 
 	const getAllTags = async () => {
@@ -88,6 +90,7 @@ export default function Signup() {
 						type="submit"
 						variant="contained"
 						color="primary"
+						onClick={() => handleSubmit(selectedTags)}
 					>
 						Submit Selected Tags
 					</Button>
