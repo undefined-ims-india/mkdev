@@ -10,10 +10,7 @@ const Logout = (): ReactElement => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .post('/logout')
-      .then(() => navigate('/login'))
-      .catch((err) => console.error(err));
+    axios.post('/logout').then((): void => navigate('/login'));
   }, [navigate]);
 
   return (
