@@ -35,14 +35,14 @@ follow.get('/following/:id', async (req: any, res: any) => {
   const { id } = req.params;
 
   try {
-    const userFollowing = await prisma.user.findUnique({
+    const isFollowing = await prisma.user.findUnique({
       where: { id: +id },
       include: {
-        following: { select: { id: true } },
+        following: { select: { id: true, username: true, picture: true } },
       },
     });
-    if (userFollowing) {
-      res.status(200).send(userFollowing?.following);
+    if (isFollowing) {
+      res.status(200).send(isFollowing?.following);
     } else {
       res.sendStatus(404);
     }
@@ -62,7 +62,7 @@ follow.get('/followers/:id', async (req: any, res: any) => {
     const userFollowers = await prisma.user.findUnique({
       where: { id: +id },
       include: {
-        followedBy: { select: { id: true } },
+        followedBy: { select: { id: true, username: true, picture: true } },
       },
     });
 
@@ -99,6 +99,35 @@ follow.delete('/unfollow/:followingId', async (req: any, res: any) => {
   } catch (err) {
     console.error('Failed to unfollow user:', err);
     res.sendStatus(500);
+  }
+});
+
+// Check if user is following another user
+follow.get('/isFollowing/:followingId', async (req: any, res: any) => {
+  const { followingId } = req.params;
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      include: {
+        following: { select: { id: true } },
+      },
+    });
+
+    if (user) {
+      const isFollowing = user.following.some(
+        (followedUser) => followedUser.id === +followingId
+      );
+      res.status(200).send({ isFollowing });
+    } else {
+      console.log('Failed to find user');
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    console.error('Failed to check if user is following:', err);
+    res.sendStatus(500);
+  } finally {
+    await prisma.$disconnect();
   }
 });
 export default follow;
