@@ -12,20 +12,23 @@ const Login = (): ReactElement => {
       minHeight='100vh'
     >
       <Box>
-        <Typography variant='h2' align='center' gutterBottom>
-          <Link to='/'>
-            <h1>mkDev</h1>
-          </Link>
+        <Typography
+          variant='h2'
+          align='center'
+          gutterBottom
+          sx={{ fontFamily: 'fangsong' }}
+        >
+          MKDEV
         </Typography>
       </Box>
 
-      <div>
+      <Box>
         <form action='/auth/google' method='GET'>
           <Button type='submit'>
             <GoogleButton />
           </Button>
         </form>
-      </div>
+      </Box>
     </Box>
   );
 };
