@@ -3,6 +3,12 @@ import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../types';
 import axios from 'axios';
 
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+
 const Followers = (): ReactElement => {
   const { id } = useParams();
   const [followerData, setFollowerData] = useState<UserProfile[] | null>(null);
@@ -21,12 +27,22 @@ const Followers = (): ReactElement => {
       {followerData && followerData.length === 0 ? (
         `No Followers`
       ) : (
-        <ul>
+        <List>
           {followerData &&
             followerData.map((follower) => (
-              <li key={follower.id}>{follower.name}</li>
+              <ListItem key={follower.id}>
+                <ListItemAvatar>
+                  <a href={`/user/${follower.id}/profile`}>
+                    <Avatar
+                      alt={follower.username || ''}
+                      src={follower.picture || ''}
+                    />
+                  </a>
+                </ListItemAvatar>
+                <ListItemText primary={follower.username} />
+              </ListItem>
             ))}
-        </ul>
+        </List>
       )}
     </div>
   );

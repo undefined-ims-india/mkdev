@@ -3,18 +3,14 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 const Follow = (): ReactElement => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
-    axios.get(`/api/follows/isFollowing/${user?.id}/${id}`).then(() => {
-      if (isFollowing) {
-        setIsFollowing(true);
-      } else {
-        setIsFollowing(false);
-      }
-    });
-  }, [id, user]);
+    axios.get(`/api/follows/isFollowing/${id}`).then(({ data }) => {
+      setIsFollowing(data.isFollowing);
+    }).catch;
+  }, []);
 
   const follow = () => {
     axios
@@ -36,11 +32,11 @@ const Follow = (): ReactElement => {
 
   return (
     <div>
-      <>
-        <button onClick={isFollowing ? unfollow : follow}>
-          {isFollowing ? 'Unfollow' : 'Follow'}
-        </button>
-      </>
+      {isFollowing ? (
+        <button onClick={unfollow}>Unfollow</button>
+      ) : (
+        <button onClick={follow}>Follow</button>
+      )}
     </div>
   );
 };
