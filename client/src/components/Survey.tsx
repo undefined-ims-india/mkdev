@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import SurveyTag from './SurveyTag';
 import { redirect } from 'react-router-dom';
+import { Box, Button, Typography, Container, Grid, Paper } from '@mui/material';
 
 interface TagsResponse {
 	id: number;
@@ -45,36 +46,53 @@ export default function Signup() {
 	}, []);
 
 	return (
-		<div>
-			<h1>Signup</h1>
-			<form>
-				<div>
-					<h2>Select User Tags</h2>
-					{allUserTags.map((tag) => (
-						<SurveyTag
-							tag={tag}
-							selectedTags={selectedTags}
-							toggleTag={toggleTag}
-						/>
-					))}
-				</div>
-				<div>
-					<h2>Select Post Tags</h2>
-					{allPostTags.map((tag) => (
-						<SurveyTag
-							tag={tag}
-							selectedTags={selectedTags}
-							toggleTag={toggleTag}
-						/>
-					))}
-				</div>
-				<button
-					type='submit'
-					onClick={() => handleSubmit(selectedTags)}
-				>
-					Submit Selected Tags
-				</button>
-			</form>
-		</div>
+		<Container maxWidth="md">
+			<Paper elevation={3} sx={{ padding: 3, marginTop: 4 }}>
+				<Typography variant="h4" gutterBottom>
+					Signup
+				</Typography>
+				<form onSubmit={(e) => { e.preventDefault(); handleSubmit(selectedTags); }}>
+					<Box marginBottom={3}>
+						<Typography variant="h5" gutterBottom>
+							Select User Tags
+						</Typography>
+						<Grid container spacing={2}>
+							{allUserTags.map((tag) => (
+								<Grid item key={tag.id}>
+									<SurveyTag
+										tag={tag}
+										selectedTags={selectedTags}
+										toggleTag={toggleTag}
+									/>
+								</Grid>
+							))}
+						</Grid>
+					</Box>
+					<Box marginBottom={3}>
+						<Typography variant="h5" gutterBottom>
+							Select Post Tags
+						</Typography>
+						<Grid container spacing={2}>
+							{allPostTags.map((tag) => (
+								<Grid item key={tag.id}>
+									<SurveyTag
+										tag={tag}
+										selectedTags={selectedTags}
+										toggleTag={toggleTag}
+									/>
+								</Grid>
+							))}
+						</Grid>
+					</Box>
+					<Button
+						type="submit"
+						variant="contained"
+						color="primary"
+					>
+						Submit Selected Tags
+					</Button>
+				</form>
+			</Paper>
+		</Container>
 	);
 }
