@@ -56,18 +56,6 @@ const UserInfo = ({
           sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
-        <Box sx={{ width: 500 }}>
-          <TextField
-            name='aboutMe'
-            label='About Me'
-            value={userInfo!.aboutMe || ''}
-            multiline
-            rows={5}
-            fullWidth
-            sx={{ my: 2, mx: 1 }}
-            onChange={handleChange}
-          />
-        </Box>
         <Button type='submit'>Update</Button>
       </Box>
     </Box>
