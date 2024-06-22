@@ -1,6 +1,6 @@
 import path from 'path';
 import dotEnv from 'dotenv';
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
 import session from 'express-session';
 import { createServer } from 'node:http';
