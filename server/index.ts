@@ -59,7 +59,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: '/auth/google/callback',
+      callbackURL: 'https://mkdev.dev/auth/google/callback',
     },
     (accessToken: string, refreshToken: string, profile: any, done: any) => {
       const { name, given_name, family_name, sub, picture } = profile._json;
