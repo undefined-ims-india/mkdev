@@ -44,7 +44,6 @@ interface Tag {
 export default function SearchComponent(): ReactElement {
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
     const [tags, setTags] = useState<Tag[]>([]);
-    const tagsRef = useRef(tags);
 
     const getAllTags = () => {
         axios.get('/api/tags')
@@ -59,7 +58,7 @@ export default function SearchComponent(): ReactElement {
 
     useEffect(() => {
         getAllTags();
-    }, []); // Corrected the dependency array
+    }, []); 
 
     const [tagType, setTagType] = useState<string>('all');
 
