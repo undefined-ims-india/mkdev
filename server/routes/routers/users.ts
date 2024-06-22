@@ -47,11 +47,12 @@ users.get('/:id/profile', async ( req: express.Request<{ id: string }>, res: exp
 users.get('/:id/image', async (req: express.Request<{ id: string }>, res: express.Response) => {
   try {
     const { id } = req.params;
+    if (id === '0'){ return }
     const userImg = await prisma.user.findUniqueOrThrow({where: {id: +id}, select: {picture: true}})
     res.send(userImg);
   }
   catch (err) {
-    console.error(err);
+    console.error('GET /api/users/:id/image', err);
     res.sendStatus(500);
   }
   finally {
