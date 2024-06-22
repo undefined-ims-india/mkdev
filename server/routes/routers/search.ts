@@ -10,7 +10,7 @@ search.get(
     res: Response
   ) => {
     const { tagType, tags } = req.params;
-    const splitTags = tags.toLowerCase().split('-');
+    const splitTags = tags.split('-');
     console.log(splitTags, tagType, tags);
 
     // Validate and cast tagTypeParam to tagType enum
@@ -22,11 +22,13 @@ search.get(
       const searchResults = await prisma.tags.findMany({
         where: {
           tagType: TagType[tagType],
-          name: { in: splitTags },
+          name: { in: splitTags},
         },
         include: {
           posts: true,
           user: true,
+          // posts: tagType === "Post" ? true : false,
+          // user: tagType === "User" ? true : false,
         },
       });
 
