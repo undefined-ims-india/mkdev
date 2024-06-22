@@ -20,6 +20,27 @@ tags.get('/', async (req: any, res: Response) => {
   }
 });
 
+//get all post tags
+tags.get('/all/post', async (req: Request, res: Response) => {
+  try {
+    const allPostTags = await prisma.tags.findMany(
+      {
+        where: {
+          tagType: 'Post'
+        }
+      }
+    )
+    res.send(allPostTags);
+  }
+  catch (err){
+    console.log('Error: GET /api/tags/all/post: ', err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+})
+
 //get all tags sorted by tagType
 tags.get('/all', async (req: Request, res: Response) => {
   try {
