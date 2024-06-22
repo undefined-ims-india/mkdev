@@ -12,6 +12,7 @@ import Search from './Search';
 import Messages from './messages/Messages';
 import Profile from './UserProfile';
 import FullPost from './FullPost';
+import SearchResults from './SearchResults';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -52,6 +53,10 @@ const routes = [
   {
     path: 'post/:id',
     element: <FullPost />
+  },
+  {
+    path: '/searchresults/:tagType/:tags',
+    element: <SearchResults />
   }
 ]
 
