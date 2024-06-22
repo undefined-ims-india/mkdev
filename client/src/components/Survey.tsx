@@ -22,7 +22,6 @@ export default function Signup() {
 	const navigate = useNavigate();
 
 	const handleSubmit = (selectedTags: TagsResponse[]) => {
-		console.log('hiii', selectedTags);
 		axios
 			.post('/api/tags/all',{tags: selectedTags})
 			.then(getAllTags)
