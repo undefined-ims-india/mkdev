@@ -78,7 +78,6 @@ tags.post('/:tagId', async (req: any, res: Response) => {
       },
       select: { tags: true },
     });
-    console.log('tag post', updatedUser);
     res.status(200).send(updatedUser);
   } catch (error) {
     res.status(500).send('Error adding tag to user');
