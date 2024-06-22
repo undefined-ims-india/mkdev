@@ -1,4 +1,9 @@
 import { User, Post, Tags, Blog, Repo, File } from '@prisma/client';
+import { Request } from 'express';
+
+export interface RequestWithUser extends Request {
+  user: User;
+}
 
 export interface UserProfile extends User {
   posts: PostWithRelations[];
