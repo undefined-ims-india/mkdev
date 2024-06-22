@@ -6,6 +6,7 @@ export interface UserProfile extends User {
   blogs: Blog[];
   followedBy: User[];
   following: User[];
+  aboutMe: string;
 }
 
 export interface PostWithRelations extends Post {
@@ -15,5 +16,5 @@ export interface PostWithRelations extends Post {
 }
 
 export interface RepoWithFiles extends Repo {
-  files: File[]
+  files: File[];
 }

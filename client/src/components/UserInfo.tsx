@@ -32,34 +32,39 @@ const UserInfo = ({
           name='username'
           label='Username'
           value={userInfo!.username || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
         <TextField
           name='githubId'
           label='Github Username'
           value={userInfo!.githubId || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
         <TextField
           name='devId'
           label='Dev.to Username'
           value={userInfo!.devId || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
         <TextField
           name='linkedinId'
           label='LinkedIn Username'
           value={userInfo!.linkedinId || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
-        <Box>
+        <Box sx={{ width: 500 }}>
           <TextField
             name='aboutMe'
             label='About Me'
             value={userInfo!.aboutMe || ''}
             multiline
-            size='medium'
             rows={5}
+            fullWidth
+            sx={{ my: 2, mx: 1 }}
             onChange={handleChange}
           />
         </Box>
