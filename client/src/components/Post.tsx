@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import CommentIcon from '@mui/icons-material/Comment';
+import Chip from '@mui/material/Chip'
 
 const Post = ({content} : {content: PostWithRelations}): ReactElement => {
 
@@ -42,14 +42,30 @@ const Post = ({content} : {content: PostWithRelations}): ReactElement => {
         </Box>
       </Box>
       <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
-      <IconButton aria-label='Like' onClick={handleLike}>
-        {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-      </IconButton>
-      <Typography variant="body2">
-        <Link to={`/post/${content.id}`}>
-          {'See More -->'}
-        </Link>
-      </Typography>
+        {
+          content.tags.length ?
+          content.tags.map((tag) => (
+            <Chip
+              label={tag.name}
+              variant="outlined"
+              size="small"
+            />
+          ))
+          :
+          <></>
+        }
+      </Box>
+      <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
+        <IconButton aria-label='Like' onClick={handleLike}>
+          {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        </IconButton>
+        <Box sx={{justifySelf: 'flex-end'}}>
+          <Typography variant="body2">
+            <Link to={`/post/${content.id}`}>
+              {'See More -->'}
+            </Link>
+          </Typography>
+        </Box>
       </Box>
     </Card>
   );
