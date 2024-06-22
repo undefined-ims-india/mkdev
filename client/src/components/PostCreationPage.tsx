@@ -57,20 +57,18 @@ const PostCreationPage = (): ReactElement => {
   };
 
   // const handleFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
-  //   console.log(e.target.files);
   //   setImg(e.target.files![0]);
   // };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setCantSubmit(true);
-    console.log(selectedTags);
     axios.postForm('/api/posts', { title, body, /*img,*/ tags: JSON.stringify(selectedTags), repo: btoa(JSON.stringify(repo)) })
       .then(({ data }) => {
         navigate('/dashboard');
     })
     .catch((err) => {
-      console.log(err)
+      console.error(err)
       setCantSubmit(false);
     });
   };

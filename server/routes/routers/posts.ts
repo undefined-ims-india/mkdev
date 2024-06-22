@@ -12,7 +12,6 @@ posts.post('/', async (req: any, res: any) => {
   //image in files & title and body in body
   const { title, body, tags } = req.body;
   const tagArr = tags.length ? JSON.parse(tags).map((tag:Tags) => ({id: tag.id})) : [];
-  console.log(tagArr);
   const repoObj: {
     link: string;
     files: { path: string; contents: string }[];
@@ -62,8 +61,6 @@ posts.post('/', async (req: any, res: any) => {
 
 // get all users posts
 posts.get('/', (req: any, res: any) => {
-  // console.log(req.user);
-
   prisma.post
     .findMany({ where: { userId: req.user.id } })
     .then((posts: {}[]) => {

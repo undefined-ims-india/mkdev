@@ -20,7 +20,7 @@ export default function Signup() {
   const getAllTags = async () => {
     try {
       const { data } = await axios.get('/api/tags/all');
-      console.log('allmaps', data);
+      // console.log('allmaps', data);
 
       // Assuming the response structure is { User: [], Post: [] }
       setUserTags(data.User || []);

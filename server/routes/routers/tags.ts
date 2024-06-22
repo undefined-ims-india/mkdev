@@ -53,7 +53,7 @@ tags.get('/all', async (req: Request, res: Response) => {
       groups[groupKey].push(tag);
       return groups;
     }, {});
-    console.log(groupedTags);
+    // console.log(groupedTags);
     res.status(200).send(groupedTags);
   } catch (error) {
     res.status(500).send('Error getting all tags from user');
@@ -97,7 +97,7 @@ tags.post('/:tagId', async (req: any, res: Response) => {
       },
       select: { tags: true },
     });
-    console.log('tag post', updatedUser);
+    // console.log('tag post', updatedUser);
     res.status(200).send(updatedUser);
   } catch (error) {
     res.status(500).send('Error adding tag to user');
