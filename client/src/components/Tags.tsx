@@ -25,7 +25,7 @@ const Tags = () => {
 	}, []);
 
 	const handleClick = async (id: number) => {
-		console.log(id, 'YOU CLICKED!!');
+		// console.log(id, 'YOU CLICKED!!');
 		try {
 			await axios.patch(`/api/tags/${id}`);
 			getUserTags();
