@@ -80,13 +80,61 @@ const Profile = (): React.ReactElement => {
             </Typography>
             <Card sx={{ maxWidth: 300, margin: 'auto', mt: 3 }}>
               <Box display='flex' justifyContent='center' mb={2}>
-                <Avatar
-                  sx={{ width: 100, height: 100, mt: 2 }}
-                  src={
-                    profileData!.picture !== null ? profileData!.picture : ''
-                  }
-                  alt={profileData!.username || profileData!.name || ''}
-                />
+                <Grid
+                  container
+                  direction='row'
+                  alignItems='center'
+                  justifyContent='center'
+                  spacing={3}
+                >
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Box
+                      display='flex'
+                      flexDirection='column'
+                      alignItems='flex-start'
+                    >
+                      <Typography variant='body1'>
+                        <Link
+                          href={`https://www.linkedin.com/in/${
+                            profileData!.linkedinId
+                          }`}
+                          target='_blank'
+                        >
+                          LinkedIn
+                        </Link>
+                      </Typography>
+                      <Typography variant='body1'>
+                        <Link
+                          href={`https://dev.to/${profileData!.devId}`}
+                          target='_blank'
+                        >
+                          Dev.to
+                        </Link>
+                      </Typography>
+                      <Typography variant='body1'>
+                        <Link
+                          href={`https://github.com/${profileData!.githubId}`}
+                          target='_blank'
+                        >
+                          Github
+                        </Link>
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item>
+                    <Box>
+                      <Avatar
+                        sx={{ width: 100, height: 100, mt: 2 }}
+                        src={
+                          profileData!.picture !== null
+                            ? profileData!.picture
+                            : ''
+                        }
+                        alt={profileData!.username || profileData!.name || ''}
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
               </Box>
               <Box display='flex' justifyContent='center' mt={2} mb={2}>
                 {userId === profileData!.id ? (
@@ -95,46 +143,6 @@ const Profile = (): React.ReactElement => {
                   <Follow />
                 )}
               </Box>
-              <Grid
-                container
-                spacing={3}
-                direction='row'
-                alignItems='center'
-                justifyContent={'space-evenly'}
-              >
-                <Grid item>
-                  <Typography variant='body1'>
-                    <Link
-                      href={`https://www.linkedin.com/in/${
-                        profileData!.linkedinId
-                      }`}
-                      target='_blank'
-                    >
-                      LinkedIn
-                    </Link>
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant='body1'>
-                    <Link
-                      href={`https://dev.to/${profileData!.devId}`}
-                      target='_blank'
-                    >
-                      Dev.to
-                    </Link>
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography variant='body1'>
-                    <Link
-                      href={`https://github.com/${profileData!.githubId}`}
-                      target='_blank'
-                    >
-                      Github
-                    </Link>
-                  </Typography>
-                </Grid>
-              </Grid>
             </Card>
             <Box>
               <TabContext value={tab}>
