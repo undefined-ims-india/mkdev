@@ -16,6 +16,9 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import { Tags } from '@prisma/client';
 
 const PostCreationPage = (): ReactElement => {
   const navigate = useNavigate();
@@ -27,8 +30,9 @@ const PostCreationPage = (): ReactElement => {
   const [cantSubmit, setCantSubmit]: [boolean, Function] = useState(false);
   const [repo, setRepo]: [{link: string, files: { path: string; contents: string }[]},Function] = useState({link:'', files:[]});
   const [currentTab, setCurrentTab] = useState('0');
-  const [allPostTags, setAllPostTags] = useState([]);
+  const [allPostTags, setAllPostTags]: [Tags[]|null, Function] = useState(null);
   const allPostTagsREF = useRef(allPostTags);
+  const [selectedTags, setSelectedTags]: [Tags[], Function] = useState([]);
 
   useEffect(() => {
     axios.get('/api/tags/all/post')
@@ -60,11 +64,13 @@ const PostCreationPage = (): ReactElement => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setCantSubmit(true);
-    axios.postForm('/api/posts', { title, body, /*img,*/ repo:btoa(JSON.stringify(repo)) })
+    console.log(selectedTags);
+    axios.postForm('/api/posts', { title, body, /*img,*/ tags: JSON.stringify(selectedTags), repo: btoa(JSON.stringify(repo)) })
       .then(({ data }) => {
         navigate('/dashboard');
     })
     .catch((err) => {
+      console.log(err)
       setCantSubmit(false);
     });
   };
@@ -77,16 +83,26 @@ const PostCreationPage = (): ReactElement => {
     setRepo({...repo, link})
   };
 
+  const handleTagSelect = (e: React.SyntheticEvent, newValue: Tags[]) => {
+    setSelectedTags(newValue);
+  }
+
   return (
     <Grid container spacing={0}>
       <Grid item xs />
-      <Grid item xs={8}>
+      <Grid item xs={10}>
         <Paper elevation={3}>
-          <Box sx={{ display:'flex', flexDirection: 'row', alignItems:'center'}}>
-            <Typography variant='h1'>Create Post</Typography>
-          </Box>
+          <Grid container>
+            <Grid item xs sx={{marginTop: 5, marginBottom: 5}}/>
+            <Grid item xs={6} sx={{display: 'flex', justifyContent:'center', alignItems:'center'}}>
+              <Typography variant='h1' sx={{fontSize:40}}>Create Post</Typography>
+            </Grid>
+            <Grid item xs={2} sx={{display: 'flex', justifyContent:'center', alignItems:'center'}}>
+                <Button onClick={handleSubmit} disabled={cantSubmit} >Submit</Button>
+            </Grid>
+            <Grid item xs/>
+          </Grid>
           <Divider orientation='horizontal' variant='middle'/>
-
           <TabContext value={currentTab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleTabChange}>
@@ -98,6 +114,24 @@ const PostCreationPage = (): ReactElement => {
             <TabPanel value="0">
               <Paper>
                 <Stack sx={{marginRight: 2, marginLeft: 2}}>
+                  {allPostTags ?
+                    <Autocomplete
+                      multiple
+                      options={allPostTags}
+                      value={selectedTags}
+                      onChange={handleTagSelect}
+                      getOptionLabel={(tag: Tags) => tag.name}
+                      renderInput={(params) => (
+                        <TextField
+                        {...params}
+                        label="Tags"
+                        placeholder={ selectedTags.length ? 'Choose more tags' : 'Choose tags to categorize your post'}
+                        />
+                      )}
+                    />
+                  :
+                    <></>
+                  }
                   <Input
                     id="post-title"
                     type="text"
@@ -115,7 +149,7 @@ const PostCreationPage = (): ReactElement => {
                     name="body"
                     placeholder="Body Text"
                     rows={30}
-                    />
+                  />
                 </Stack>
               </Paper>
             </TabPanel>
