@@ -4,11 +4,10 @@ import axios from 'axios';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Login from './Login';
-import { useNavigate } from 'react-router-dom';
 
 const Logout = (): ReactElement => {
   useEffect(() => {
-    axios.post('/logout').then(() => console.log('Logged out!'));
+    axios.post('/logout').catch((err) => console.error(err));
   }, []);
 
   return (
