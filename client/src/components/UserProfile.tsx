@@ -18,6 +18,10 @@ import TabPanel from '@mui/lab/TabPanel';
 import Skeleton from '@mui/material/Skeleton';
 import UserInfo from './UserInfo';
 import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
 
 const Profile = (): React.ReactElement => {
   const userId = useContext(UserContext);
@@ -64,40 +68,77 @@ const Profile = (): React.ReactElement => {
           />
         ) : (
           <>
-            {userId === profileData!.id && (
-              <Button onClick={handleEdit}>Edit Profile</Button>
-            )}
-            <Box>
-              <h4>{profileData!.username}</h4>
-              <Avatar
-                sx={{ width: 80, height: 80 }}
-                src={profileData!.picture !== null ? profileData!.picture : ''}
-                alt={profileData!.username || profileData!.name || ''}
-              ></Avatar>
-              <Follow />
-              <p>
-                <a
-                  href={`https://www.linkedin.com/in/${
-                    profileData!.linkedinId
-                  }`}
-                >
-                  LinkedIn
-                </a>
-              </p>
-              <p>
-                <a href={`https://dev.to/${profileData!.devId}`}>Dev.to</a>
-              </p>
-
-              <p>
-                <a href={`https://github.com/${profileData!.githubId}`}>
-                  Github
-                </a>
-              </p>
-            </Box>
+            <Typography
+              gutterBottom
+              variant='h5'
+              component='h4'
+              textAlign='center'
+              fontFamily={'fangsong'}
+            >
+              {profileData!.username}
+            </Typography>
+            <Card sx={{ maxWidth: 300, margin: 'auto', mt: 3 }}>
+              <Box display='flex' justifyContent='center' mb={2}>
+                <Avatar
+                  sx={{ width: 100, height: 100, mt: 2 }}
+                  src={
+                    profileData!.picture !== null ? profileData!.picture : ''
+                  }
+                  alt={profileData!.username || profileData!.name || ''}
+                />
+              </Box>
+              <Box display='flex' justifyContent='center' mt={2} mb={2}>
+                {userId === profileData!.id ? (
+                  <Button onClick={handleEdit}>Edit</Button>
+                ) : (
+                  <Follow />
+                )}
+              </Box>
+              <Grid
+                container
+                spacing={3}
+                direction='row'
+                alignItems='center'
+                justifyContent={'space-evenly'}
+              >
+                <Grid item>
+                  <Typography variant='body1'>
+                    <Link
+                      href={`https://www.linkedin.com/in/${
+                        profileData!.linkedinId
+                      }`}
+                      target='_blank'
+                    >
+                      LinkedIn
+                    </Link>
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant='body1'>
+                    <Link
+                      href={`https://dev.to/${profileData!.devId}`}
+                      target='_blank'
+                    >
+                      Dev.to
+                    </Link>
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant='body1'>
+                    <Link
+                      href={`https://github.com/${profileData!.githubId}`}
+                      target='_blank'
+                    >
+                      Github
+                    </Link>
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Card>
             <Box>
               <TabContext value={tab}>
-                <Box>
-                  <TabList onChange={handleTab}>
+                <Box display='flex' justifyContent='center' mt={10}>
+                  <TabList onChange={handleTab} centered>
                     <Tab label='Posts' value='1' />
                     <Tab label='Dev.to BLogs' value='2' />
                     <Tab label='Followers' value='3' />
@@ -119,8 +160,16 @@ const Profile = (): React.ReactElement => {
                     }
                   />
                 </TabPanel>
-                <TabPanel value='3'>{<Followers />}</TabPanel>
-                <TabPanel value='4'>{<Following />}</TabPanel>
+                <TabPanel value='3'>
+                  <Box display='flex' justifyContent='center'>
+                    <Followers />
+                  </Box>
+                </TabPanel>
+                <TabPanel value='4'>
+                  <Box display='flex' justifyContent='center'>
+                    <Following />
+                  </Box>
+                </TabPanel>
               </TabContext>
             </Box>
           </>

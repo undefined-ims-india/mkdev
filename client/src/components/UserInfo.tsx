@@ -52,6 +52,17 @@ const UserInfo = ({
           value={userInfo!.linkedinId || ''}
           onChange={handleChange}
         />
+        <Box>
+          <TextField
+            name='aboutMe'
+            label='About Me'
+            value={userInfo!.aboutMe || ''}
+            multiline
+            size='medium'
+            rows={5}
+            onChange={handleChange}
+          />
+        </Box>
         <Button type='submit'>Update</Button>
       </Box>
     </Box>
