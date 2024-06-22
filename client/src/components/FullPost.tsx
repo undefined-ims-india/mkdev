@@ -57,7 +57,7 @@ const FullPost = ():React.ReactElement => {
           <MarkDown text={content!.body} />
         </Box>
         <Box>
-          <RepoDisplay content={content!.repo} />
+          {content!.repo ? <RepoDisplay content={content!.repo}/> : <></>}
         </Box>
       </>
     )
