@@ -16,19 +16,19 @@ const Login = (): ReactElement => {
     >
       <Box alignContent={'center'}>
         <Typography
-          variant='h4'
+          variant='h1'
           align='center'
           gutterBottom
-          sx={{ fontFamily: 'fangsong' }}
+          sx={{ fontFamily: 'fangsong', fontSize: '3rem' }}
         >
           Welcome to
         </Typography>
 
         <Typography
-          variant='h2'
+          variant='h1'
           align='center'
           gutterBottom
-          sx={{ fontFamily: 'fangsong' }}
+          sx={{ fontFamily: 'fangsong', fontSize: '3rem' }}
         >
           MKDEV
         </Typography>
