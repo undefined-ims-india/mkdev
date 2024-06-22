@@ -62,6 +62,7 @@ const FullPost = ():React.ReactElement => {
                   label={tag.name}
                   variant="outlined"
                   size="small"
+                  key={tag.name + content!.id}
                 />
               ))
               :

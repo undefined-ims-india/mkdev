@@ -49,6 +49,7 @@ const Post = ({content} : {content: PostWithRelations}): ReactElement => {
               label={tag.name}
               variant="outlined"
               size="small"
+              key={tag.name + content.id}
             />
           ))
           :
