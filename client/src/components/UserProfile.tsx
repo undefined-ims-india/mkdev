@@ -35,9 +35,9 @@ const Profile = (): React.ReactElement => {
   const [tab, setTab] = useState('1');
 
   useEffect(() => {
-    axios
-      .get(`/api/users/${id}/profile`)
-      .then(({ data }): void => setProfileData(data));
+    axios.get(`/api/users/${id}/profile`).then(({ data }): void => {
+      setProfileData(data);
+    });
   }, [profileDataREF]);
 
   const handleEdit = () => setEdit(true);
@@ -45,7 +45,9 @@ const Profile = (): React.ReactElement => {
   const UpdateUserInfo = (userInfo: UserProfile) => {
     axios
       .patch(`/api/users/${userInfo.id}`, userInfo)
-      .then(({ data }): void => setUserInfo(data))
+      .then(({ data }): void => {
+        setUserInfo(data);
+      })
       .catch((error) => console.error('Error updating user info:', error));
     setEdit(false);
     setProfileData(userInfo);
@@ -70,10 +72,9 @@ const Profile = (): React.ReactElement => {
           <>
             <Typography
               gutterBottom
-              variant='h5'
-              component='h4'
+              variant='h1'
               textAlign='center'
-              fontFamily={'fangsong'}
+              sx={{ fontFamily: 'fangsong', fontSize: '3rem' }}
             >
               {profileData!.username}
             </Typography>
@@ -140,7 +141,7 @@ const Profile = (): React.ReactElement => {
                 <Box display='flex' justifyContent='center' mt={10}>
                   <TabList onChange={handleTab} centered>
                     <Tab label='Posts' value='1' />
-                    <Tab label='Dev.to BLogs' value='2' />
+                    <Tab label='Dev.to Blogs' value='2' />
                     <Tab label='Followers' value='3' />
                     <Tab label='Following' value='4' />
                   </TabList>
