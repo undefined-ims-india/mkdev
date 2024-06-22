@@ -1,8 +1,13 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import SurveyTag from './SurveyTag';
-import { redirect, useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Container, Grid, Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 interface TagsResponse {
 	id: number;
