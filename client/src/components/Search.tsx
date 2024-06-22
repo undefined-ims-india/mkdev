@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
@@ -13,19 +13,6 @@ import { styled } from '@mui/system';
 
 const tagTypes = ['user', 'post', 'all'];
 
-const tags = [
-    { id: 1, name: 'Javascript', tag: 'post' },
-    { id: 2, name: 'Typescript', tag: 'post' },
-    { id: 3, name: 'Ruby', tag: 'post' },
-    { id: 4, name: 'Fullstack', tag: 'user' },
-    { id: 5, name: 'Backend', tag: 'user' },
-    { id: 6, name: 'Web Dev', tag: 'user' },
-    { id: 7, name: 'Game Dev', tag: 'user' },
-    { id: 8, name: 'Go', tag: 'post' },
-    { id: 9, name: 'Rust', tag: 'post' },
-    { id: 10, name: 'HTML', tag: 'post' },
-];
-
 const Form = styled('form')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -36,7 +23,7 @@ const SelectContainer = styled(FormControl)(({ theme }) => ({
     minWidth: 120,
 }));
 
-const AutocompleteContainer = styled(Autocomplete)(({ theme }) => ({
+const AutocompleteContainer = styled('div')(({ theme }) => ({
     width: '100%',
 }));
 
@@ -44,18 +31,35 @@ const SearchButton = styled(Button)(({ theme }) => ({
     alignSelf: 'flex-start',
 }));
 
-const SelectedCategories = styled('div')(({ theme }) => ({
-    marginTop: theme.spacing(2),
-}));
-
 const CustomChip = styled(Chip)(({ theme }) => ({
     margin: theme.spacing(0.5),
 }));
 
+interface Tag {
+    id: number;
+    name: string;
+    tag: string;
+}
+
 export default function SearchComponent(): ReactElement {
-    const [selectedTags, setSelectedTags] = useState<
-        { id: number; name: string; tag: string }[]
-    >([]);
+    const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
+    const tagsRef = useRef(tags);
+
+    const getAllTags = () => {
+        axios.get('/api/tags')
+            .then(({ data }) => {
+                console.log(data);
+                setTags(data);
+            })
+            .catch((error) => {
+                console.error('Error fetching tags:', error);
+            });
+    };
+
+    useEffect(() => {
+        getAllTags();
+    }, []); // Corrected the dependency array
 
     const [tagType, setTagType] = useState<string>('all');
 
@@ -75,8 +79,8 @@ export default function SearchComponent(): ReactElement {
     };
 
     const changeSelectedEvent = (
-        event: React.ChangeEvent<{}>,
-        newValue: { id: number; name: string; tag: string }[]
+        event: React.SyntheticEvent,
+        newValue: Tag[]
     ) => {
         setSelectedTags(newValue);
     };
@@ -102,30 +106,32 @@ export default function SearchComponent(): ReactElement {
                     ))}
                 </Select>
             </SelectContainer>
-            <AutocompleteContainer
-                multiple
-                options={tags}
-                getOptionLabel={(option) => option.name}
-                value={selectedTags}
-                onChange={changeSelectedEvent}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        variant='outlined'
-                        label='Select Categories'
-                        placeholder='Add Categories'
-                    />
-                )}
-                renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
-                        <CustomChip
+            <AutocompleteContainer>
+                <Autocomplete
+                    multiple
+                    options={tags}
+                    getOptionLabel={(option: Tag) => option.name}
+                    value={selectedTags}
+                    onChange={changeSelectedEvent}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
                             variant='outlined'
-                            label={option.name}
-                            {...getTagProps({ index })}
+                            label='Select Categories'
+                            placeholder='Add Categories'
                         />
-                    ))
-                }
-            />
+                    )}
+                    renderTags={(value: Tag[], getTagProps) =>
+                        value.map((option: Tag, index: number) => (
+                            <CustomChip
+                                variant='outlined'
+                                label={option.name}
+                                {...getTagProps({ index })}
+                            />
+                        ))
+                    }
+                />
+            </AutocompleteContainer>
             <SearchButton
                 variant='contained'
                 color='primary'
