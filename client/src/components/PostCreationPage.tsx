@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import MarkDown from './MarkDown';
@@ -27,6 +27,15 @@ const PostCreationPage = (): ReactElement => {
   const [cantSubmit, setCantSubmit]: [boolean, Function] = useState(false);
   const [repo, setRepo]: [{link: string, files: { path: string; contents: string }[]},Function] = useState({link:'', files:[]});
   const [currentTab, setCurrentTab] = useState('0');
+  const [allPostTags, setAllPostTags] = useState([]);
+  const allPostTagsREF = useRef(allPostTags);
+
+  useEffect(() => {
+    axios.get('/api/tags/all/post')
+      .then(({data}) => {
+        setAllPostTags(data);
+      })
+  }, [allPostTagsREF])
 
   const handleTabChange = (e: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
