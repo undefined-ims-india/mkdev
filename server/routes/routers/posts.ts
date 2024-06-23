@@ -75,7 +75,7 @@ posts.get('/:id', async(req: RequestWithUser, res: any) => {
         liked: { select: { id: true }}
       }
     });
-    post.likedByUser = post.liked.slice().map(like => like.id).includes(req.user.id);
+    if (req.user) { post.likedByUser = post.liked.slice().map(like => like.id).includes(req.user.id); }
     res.send(post)
   }
   catch (err) {

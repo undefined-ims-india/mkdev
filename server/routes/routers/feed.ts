@@ -14,6 +14,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
           include: {
             author: true,
             tags: true,
+            liked: {select: {id:true}}
           },
           orderBy: [
             {
@@ -43,6 +44,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
             include: {
               author: true,
               tags: true,
+              liked: {select: {id:true}}
             },
             orderBy: [
               {
@@ -67,6 +69,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
             include: {
               author: true,
               tags: true,
+              liked: {select: {id:true}}
             },
             orderBy: [
               {
@@ -76,6 +79,9 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
           }
         )
       }
+      allPosts.map(post => (
+        {...post, likedByUser: post.liked.slice().map(like => like.id).includes(req.user.id)}
+      ))
     }
     res.send(allPosts);
   }
