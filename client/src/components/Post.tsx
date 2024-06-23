@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import Chip from '@mui/material/Chip'
 
 const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
@@ -48,11 +49,26 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         </Box>
       </Box>
       <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
-      <Typography variant="body2" sx={{marginBottom: 2}}>
-        <Link to={`/post/${content.id}`}>
-          {'See More -->'}
-        </Link>
-      </Typography>
+        {
+          content.tags.length ?
+          content.tags.map((tag) => (
+            <Chip
+              label={tag.name}
+              variant="outlined"
+              size="small"
+              key={tag.name + content.id}
+            />
+          ))
+          :
+          <></>
+        }
+      </Box>
+      <Box sx={{display:"flex", flexDirection:'row', margin: 1, alignItems: 'center', justifyContent: 'end', width: '100%'}}>
+          <Typography variant="body2">
+            <Link to={`/post/${content.id}`}>
+              {'See More -->'}
+            </Link>
+          </Typography>
       </Box>
     </Card>
   );

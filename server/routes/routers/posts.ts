@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { PostWithRelations, RequestWithUser } from '../../../types';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient,Tags } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
 // to remove the maintenance warning in the console...
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
@@ -10,7 +10,8 @@ const prisma = new PrismaClient();
 // add a post to logged in user
 posts.post('/', async (req: any, res: any) => {
   //image in files & title and body in body
-  const { title, body } = req.body;
+  const { title, body, tags } = req.body;
+  const tagArr = tags.length ? JSON.parse(tags).map((tag:Tags) => ({id: tag.id})) : [];
   const repoObj: {
     link: string;
     files: { path: string; contents: string }[];
@@ -25,6 +26,7 @@ posts.post('/', async (req: any, res: any) => {
           body,
           s3_Etag: s3Obj.ETag,
           author: { connect: { id: req.user.id } },
+          tags: { connect: tagArr }
         },
       });
     } else {
@@ -33,6 +35,7 @@ posts.post('/', async (req: any, res: any) => {
           title,
           body,
           author: { connect: { id: req.user.id } },
+          tags: { connect: tagArr }
         },
       });
     }
