@@ -5,7 +5,9 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { Conversations } from '@prisma/client';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev:4000', {
+  withCredentials: true,
+});
 
 interface PropsType {
   con: Conversations;
