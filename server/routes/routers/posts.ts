@@ -56,24 +56,6 @@ posts.post('/', async (req: any, res: any) => {
   }
 });
 
-// get all users posts
-posts.get('/', (req: any, res: any) => {
-  // console.log(req.user);
-
-  prisma.post
-    .findMany({ where: { userId: req.user.id } })
-    .then((posts: {}[]) => {
-      res.send(posts);
-    })
-    .catch((err: { name: string }) => {
-      console.error(err);
-      res.sendStatus(500);
-    })
-    .finally(async () => {
-      await prisma.$disconnect();
-    });
-});
-
 // get certain post
 posts.get('/:id', (req: any, res: any) => {
   const { id }: { id: string } = req.params;
