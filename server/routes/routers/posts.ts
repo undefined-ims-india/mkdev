@@ -58,15 +58,17 @@ posts.post('/', async (req: any, res: any) => {
 
 //like post
 posts.patch('/:id/like', async(req: RequestWithUser, res: any) => {
+  console.log('like', req.params.id)
   try {
-    prisma.post.update({
+    await prisma.post.update({
       where: {id: +req.params.id},
       data: {
         liked: {
-          connect: {id: req.user.id}
+          connect: {id: +req.user.id}
         }
       }
     })
+    res.sendStatus(200)
   }
   catch(err) {
     console.error(err);
@@ -79,15 +81,17 @@ posts.patch('/:id/like', async(req: RequestWithUser, res: any) => {
 
 //dislike post
 posts.patch('/:id/dislike', async(req: RequestWithUser, res: any) => {
+  console.log('dislike', req.params.id)
   try {
-    prisma.post.update({
+    await prisma.post.update({
       where: {id: +req.params.id},
       data: {
         liked: {
-          disconnect: {id: req.user.id}
+          disconnect: [{id: +req.user.id}]
         }
       }
     })
+    res.sendStatus(200)
   }
   catch(err) {
     console.error(err);
