@@ -12,6 +12,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
 
 const socket = io('http://localhost:4000');
 
@@ -144,34 +147,46 @@ const Messages = (): ReactElement => {
 
   return (
     <>
-      <Typography variant="h2">
-        Direct Messages
-      </Typography>
+      <Grid container>
+        <Grid item>
+          <Typography variant="h1">
+            Direct Messages
+          </Typography>
+        </Grid>
+      </Grid>
       { loginError ? (
         <>
-          <Typography variant="h3">
-            You must be logged in to view conversations
-          </Typography>
+          <Grid container>
+            <Grid item>
+              <Typography variant="h1">
+                You must be logged in to view conversations
+              </Typography>
+            </Grid>
+          </Grid>
         </>
       ) : (
         <>
-          <Button onClick={ beginConversation }>➕ Start Conversation</Button>
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Box
-              sx={{
-                border: 1,
-                display: 'grid',
-                columnGap: 3,
-                gridTemplateColumns: 'repeat(3, 1fr)',
-              }}
+          <Button
+            sx={{ marginBottom: 4 }}
+            variant='contained'
+            onClick={ beginConversation }
+          >
+            ➕ Start Conversation
+          </Button>
+            <Grid container
+              component={Paper}
+              spacing={{ md: 1.5, lg: 3}}
             >
-              <Box
-                sx={{
-                  border: 2,
-                  padding: 2,
-                  gridColumn: 'span 1',
-                  display: 'flex'
+              <Grid item
+                md={4}
+                xs={12}
+                sx={{ border: 1,
+                  paddingLeft: 4
                 }}
+                // direction="column"
+                // justifyContent="flex-start"
+                // alignItems="flex-start"
+                // spacing={3}
               >
                 <ConversationList
                   allCons={ allConversations }
@@ -179,13 +194,11 @@ const Messages = (): ReactElement => {
                   select={ selectConversation }
                   deleteCon={ deleteConversation }
                 />
-              </Box>
-              <Box
-                sx={{
-                  border: 2,
-                  padding: 10,
-                  gridColumn: 'span 2'
-                }}
+              </Grid>
+              <Grid item
+                md={8}
+                xs={12}
+                sx={{ border: 1 }}
               >
                 { addingConversation ? (
                     <form>
@@ -224,9 +237,8 @@ const Messages = (): ReactElement => {
                     label={ participantsLabel }
                   /> : ''
                 }
-              </Box>
-            </Box>
-          </Box>
+              </Grid>
+            </Grid>
         </>
       )
       }

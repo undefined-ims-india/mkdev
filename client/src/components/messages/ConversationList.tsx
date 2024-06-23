@@ -3,7 +3,9 @@ import Conversation from './Conversation';
 
 import { Conversations } from '@prisma/client';
 
-import Stack from '@mui/material/Stack';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Grid from '@mui/material/Grid';
 
 interface PropTypes {
   allCons: Conversations[],
@@ -16,23 +18,29 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
   const { allCons, select, setCons, deleteCon } = props;
 
   return (
-    <div>
-      <Stack>
+    <Grid container
+    sx={{ border: 1,
+      paddingLeft: 4
+    }}
+    >
+      <List>
       {
         allCons.map((con, i) => {
           return (
-            <Conversation
-              con={ con }
-              key={ `${con.id}-${i}` }
-              setCons={ setCons }
-              select={ select }
-              deleteCon={ deleteCon }
-            />
+            <ListItem dense={true}>
+              <Conversation
+                con={ con }
+                key={ `${con.id}-${i}` }
+                setCons={ setCons }
+                select={ select }
+                deleteCon={ deleteCon }
+              />
+            </ListItem>
           )
         })
       }
-      </Stack>
-    </div>
+      </List>
+    </Grid>
   );
 }
 

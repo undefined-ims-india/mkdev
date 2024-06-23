@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
 import { Conversations } from '@prisma/client';
+import { Typography } from '@mui/material';
 
 interface PropsType {
     con: Conversations;
@@ -57,7 +58,19 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
   return (
     <>
       <ButtonGroup>
-        <Button onClick={ (e)=> {selectConversation(e, con)} }>{ con.label }</Button>
+        <Button
+          sx={{
+            width: 300
+          }}
+          onClick={ (e)=> {selectConversation(e, con)} }
+        >
+          <Typography
+            noWrap
+            align='left'
+          >
+            { con.label }
+          </Typography>
+        </Button>
         <Button onClick={ handleMenu }>
           <MoreVertIcon />
         </Button>
