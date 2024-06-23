@@ -60,7 +60,7 @@ posts.post('/', async (req: any, res: any) => {
 posts.get('/:id', async(req: RequestWithUser, res: any) => {
   try {
     const { id } = req.params;
-    const post = await prisma.post.findFirstOrThrow({
+    const post : PostWithRelations = await prisma.post.findFirstOrThrow({
       where: {
         id: +id,
       },
@@ -71,9 +71,11 @@ posts.get('/:id', async(req: RequestWithUser, res: any) => {
           include: {
             files: true
           }
-        }
+        },
+        liked: { select: { id: true }}
       }
     });
+    post.likedByUser = post.liked.slice().map(like => like.id).includes(req.user.id);
     res.send(post)
   }
   catch (err) {
