@@ -56,6 +56,27 @@ posts.post('/', async (req: any, res: any) => {
   }
 });
 
+//like post
+posts.patch('/:id/like', async(req: RequestWithUser, res: any) => {
+  try {
+    prisma.post.update({
+      where: {id: +req.params.id},
+      data: {
+        liked: {
+          connect: {id: req.user.id}
+        }
+      }
+    })
+  }
+  catch(err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect()
+  }
+})
+
 // get certain post
 posts.get('/:id', async(req: RequestWithUser, res: any) => {
   try {
