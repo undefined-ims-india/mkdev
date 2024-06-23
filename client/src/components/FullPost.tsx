@@ -29,13 +29,14 @@ const FullPost = ():React.ReactElement => {
     setLike(!like);
   }
 
-
-  useEffect(() => {
+  const getPost = () => {
     axios.get(`/api/posts/${id}`)
       .then(({data}) => {
         setContent(data);
       })
-  }, [contentREF])
+  }
+
+  useEffect(getPost, [])
 
   try {
     return (
