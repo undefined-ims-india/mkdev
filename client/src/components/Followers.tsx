@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../types';
-import { User } from '@prisma/client';
 import axios from 'axios';
 
 import List from '@mui/material/List';
@@ -12,7 +11,6 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
 const Followers = (): ReactElement => {
-  const [user, setUser] = useState<User | null>(null);
   const { id } = useParams();
   const [followerData, setFollowerData] = useState<UserProfile[] | null>(null);
 
