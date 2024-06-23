@@ -12,12 +12,15 @@ const Dashboard = (): ReactElement => {
   const [feed, setFeed]:[PostWithRelations[], Function] = useState([]);
   const feedRef = useRef(feed)
 
-  useEffect(() => {
+  const getFeed = () => {
     axios.get('/api/feed')
       .then(({data}) => {
         setFeed(data);
-      })
-  }, [feedRef])
+        console.log(data);
+    });
+  };
+
+  useEffect(getFeed, [feedRef])
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -26,7 +29,7 @@ const Dashboard = (): ReactElement => {
         <Nav />
         <SearchComponent />
         {feed.map((post) => (
-          <Post key={post.id + post.title} content={post} />
+          <Post key={post.id + post.title} content={post} refreshParent={getFeed} />
         ))}
       </Box>
     </Box>

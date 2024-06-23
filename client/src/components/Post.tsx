@@ -1,9 +1,11 @@
-import React, {ReactElement, useState} from "react";
+import React, {ReactElement, useContext} from "react";
+import { UserContext } from './UserContext';
 import { PostWithRelations } from "../../../types";
 import { Link } from "react-router-dom";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
+import axios from 'axios';
 
 import MarkDown from "./MarkDown";
 
@@ -14,15 +16,15 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import CommentIcon from '@mui/icons-material/Comment';
 
-const Post = ({content} : {content: PostWithRelations}): ReactElement => {
+const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
-  const [like, setLike] = useState(false);
+  const userId = useContext(UserContext);
 
   const handleLike = () => {
-    setLike(!like);
-  }
+    axios.patch(`/api/posts/${content!.id}/${content!.likedByUser ? 'dislike' : 'like'}`)
+      .then(() => {refreshParent()})
+  };
 
   return (
     <Card sx={{marginBottom: 5}}>
@@ -42,9 +44,9 @@ const Post = ({content} : {content: PostWithRelations}): ReactElement => {
         </Box>
       </Box>
       <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
-      <IconButton aria-label='Like' onClick={handleLike}>
-        {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-      </IconButton>
+      <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
+            {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
       <Typography variant="body2">
         <Link to={`/post/${content.id}`}>
           {'See More -->'}
