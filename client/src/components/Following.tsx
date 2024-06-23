@@ -16,9 +16,12 @@ const Following = (): React.ReactElement => {
     useState<UserProfile[] | null>(null);
 
   useEffect(() => {
-    axios.get(`/api/follows/following/${id}`).then(({ data }) => {
-      setFollowingData(data);
-    });
+    axios
+      .get(`/api/follows/following/${id}`)
+      .then(({ data }) => {
+        setFollowingData(data);
+      })
+      .catch((err) => console.error(err));
   }, [id]);
 
   return (
