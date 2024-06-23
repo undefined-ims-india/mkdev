@@ -17,21 +17,26 @@ search.get(
     if (!Object.values(TagType).includes(tagType)) {
       return res.status(400).send('Invalid tag type');
     }
-
+    // Find posts where tag === tag and 
     try {
       const searchResults = await prisma.tags.findMany({
         where: {
-          tagType: TagType[tagType],
-          name: { in: splitTags},
+          tagType: TagType["Post"],
+          name: { in: [ "Typescript"]},
         },
         include: {
-          posts: true,
+          posts: {
+            include: {
+              author: true,
+              tags: true
+            }
+          },
           user: true,
           // posts: tagType === "Post" ? true : false,
           // user: tagType === "User" ? true : false,
         },
       });
-
+      console.log(searchResults)
       res.status(200).json(searchResults);
     } catch (error) {
       console.error(error);
