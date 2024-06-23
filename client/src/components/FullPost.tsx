@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from 'axios';
+import {UserContext} from './UserContext'
 import { useParams, Link } from 'react-router-dom';
 import { PostWithRelations } from "../../../types";
 import dayjs from 'dayjs';
@@ -23,10 +24,11 @@ const FullPost = ():React.ReactElement => {
   const { id } = useParams();
   const [content, setContent]: [PostWithRelations | null, Function] = useState(null);
   const contentREF = useRef(content);
-  const [like, setLike] = useState(false);
+  const userId = useContext(UserContext);
 
   const handleLike = () => {
-    setLike(!like);
+    axios.patch(`/api/posts/${content!.id}/${content!.likedByUser ? 'dislike' : 'like'}`)
+      .then(() => {getPost()})
   }
 
   const getPost = () => {
@@ -36,7 +38,7 @@ const FullPost = ():React.ReactElement => {
       })
   }
 
-  useEffect(getPost, [])
+  useEffect(getPost, [contentREF])
 
   try {
     return (
@@ -49,8 +51,8 @@ const FullPost = ():React.ReactElement => {
           </Link>
           <Typography variant="h1" sx={{fontSize: 20, marginLeft: 2, marginRight: 2}}>{content!.author.username || content!.author.name}</Typography>
           <Typography variant="body2" sx={{color: 'lightgrey'}}>{dayjs(content!.createdAt).fromNow()}</Typography>
-          <IconButton aria-label='Like' onClick={handleLike}>
-            {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
+            {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
         </Box>
         <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
