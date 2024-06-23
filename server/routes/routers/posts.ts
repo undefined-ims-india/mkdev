@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PostWithRelations } from '../../../types';
+import { PostWithRelations, RequestWithUser } from '../../../types';
 import { PrismaClient } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
 // to remove the maintenance warning in the console...
@@ -57,26 +57,33 @@ posts.post('/', async (req: any, res: any) => {
 });
 
 // get certain post
-posts.get('/:id', (req: any, res: any) => {
-  const { id }: { id: string } = req.params;
-  prisma.post
-    .findFirstOrThrow({ where: { id: +id }, include: {author: true, tags: true, repo: {include: {files: true}}} })
-    .then((value: PostWithRelations) => {
-      res.send(value);
-    })
-    .catch((err: { name: string }) => {
-      console.error(err);
-      if (err.name === 'NotFoundError') {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(500);
+posts.get('/:id', async(req: RequestWithUser, res: any) => {
+  try {
+    const { id } = req.params;
+    const post = await prisma.post.findFirstOrThrow({
+      where: {
+        id: +id,
+      },
+      include: {
+        author: true,
+        tags: true,
+        repo: {
+          include: {
+            files: true
+          }
+        }
       }
-    })
-    .finally(async () => {
-      await prisma.$disconnect();
     });
-});
-
+    res.send(post)
+  }
+  catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+})
 
 // update post
 posts.patch('/:id', (req: any, res: any) => {
