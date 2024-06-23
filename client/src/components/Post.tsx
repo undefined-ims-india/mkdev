@@ -36,6 +36,10 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         </Link>
         <Typography variant="h1" sx={{fontSize: 20, marginLeft: 2, marginRight: 2}}>{content.author.username || content.author.name}</Typography>
         <Typography variant="body2" sx={{color: 'lightgrey'}}>{dayjs(content.createdAt).fromNow()}</Typography>
+        <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
+          {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        </IconButton>
+        <Typography variant="body1">{content!.liked.length}</Typography>
       </Box>
       <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
         <MarkDown text={content.title} />
@@ -44,10 +48,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         </Box>
       </Box>
       <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
-      <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
-            {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-          </IconButton>
-      <Typography variant="body2">
+      <Typography variant="body2" sx={{marginBottom: 2}}>
         <Link to={`/post/${content.id}`}>
           {'See More -->'}
         </Link>

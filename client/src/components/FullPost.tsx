@@ -54,6 +54,7 @@ const FullPost = ():React.ReactElement => {
           <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
             {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
+          <Typography variant="body1">{content!.liked.length}</Typography>
         </Box>
         <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
           <MarkDown text={content!.title} />
