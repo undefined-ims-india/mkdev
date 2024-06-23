@@ -35,14 +35,6 @@ const Following = (): React.ReactElement => {
         </Typography>
       ) : (
         <>
-          <Typography
-            variant='h1'
-            align='center'
-            gutterBottom
-            sx={{ fontFamily: 'fangsong', fontSize: '1rem' }}
-          >
-            Following {followingData?.length}
-          </Typography>
           <List>
             {followingData &&
               followingData.map((following) => (
