@@ -13,6 +13,7 @@ import Messages from './messages/Messages';
 import Profile from './UserProfile';
 import FullPost from './FullPost';
 import SearchResults from './SearchResults';
+import Signup from './Survey';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -57,6 +58,8 @@ const routes = [
   {
     path: '/searchresults/:tagType/:tags',
     element: <SearchResults />
+    path: '/survey',
+    element: <Signup />
   }
 ]
 
@@ -99,4 +102,3 @@ const App = (): ReactElement => {
   );
 };
 
-export default App;
