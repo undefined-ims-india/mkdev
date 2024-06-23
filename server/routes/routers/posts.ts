@@ -75,7 +75,28 @@ posts.patch('/:id/like', async(req: RequestWithUser, res: any) => {
   finally {
     await prisma.$disconnect()
   }
-})
+});
+
+//dislike post
+posts.patch('/:id/dislike', async(req: RequestWithUser, res: any) => {
+  try {
+    prisma.post.update({
+      where: {id: +req.params.id},
+      data: {
+        liked: {
+          disconnect: {id: req.user.id}
+        }
+      }
+    })
+  }
+  catch(err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect()
+  }
+});
 
 // get certain post
 posts.get('/:id', async(req: RequestWithUser, res: any) => {
