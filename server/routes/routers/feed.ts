@@ -82,7 +82,6 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
       allPosts = allPosts.map(post => (
         {...post, likedByUser: post.liked.slice().map(like => like.id).includes(req.user.id)}
       ))
-      allPosts.forEach(post => {console.log(post.id, post.likedByUser)})
     }
     res.send(allPosts);
   }

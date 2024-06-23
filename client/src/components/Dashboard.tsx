@@ -16,7 +16,6 @@ const Dashboard = (): ReactElement => {
     axios.get('/api/feed')
       .then(({data}) => {
         setFeed(data);
-        console.log(data);
     });
   };
 

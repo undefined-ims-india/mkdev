@@ -58,7 +58,6 @@ posts.post('/', async (req: any, res: any) => {
 
 //like post
 posts.patch('/:id/like', async(req: RequestWithUser, res: any) => {
-  console.log('like', req.params.id)
   try {
     await prisma.post.update({
       where: {id: +req.params.id},
@@ -81,7 +80,6 @@ posts.patch('/:id/like', async(req: RequestWithUser, res: any) => {
 
 //dislike post
 posts.patch('/:id/dislike', async(req: RequestWithUser, res: any) => {
-  console.log('dislike', req.params.id)
   try {
     await prisma.post.update({
       where: {id: +req.params.id},
