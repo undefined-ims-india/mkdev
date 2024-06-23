@@ -17,6 +17,8 @@ export interface PostWithRelations extends Post {
   author: User;
   tags: Tags[];
   repo?: RepoWithFiles | null;
+  liked: {id: number}[];
+  likedByUser?: boolean;
 }
 
 export interface RepoWithFiles extends Repo {
