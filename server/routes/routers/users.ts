@@ -11,7 +11,6 @@ users.get('/loggedIn', (req: any, res: any) => {
     res.send({id: user.id});
   } else {
     res.send({id: 0})
-    console.error('Please Log in');
   }
 });
 

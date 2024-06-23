@@ -39,7 +39,7 @@ export default function SearchComponent(): ReactElement {
         const names = selectedTags.map(tag => tag.name).join('-');
         axios.get(`/api/search/${tagType}/${names}`)
             .then(({ data }) => {
-                console.log(data);
+                // console.log(data);
             })
             .catch((error) => {
                 console.error('Error during search:', error);
