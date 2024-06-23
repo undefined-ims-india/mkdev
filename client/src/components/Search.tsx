@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import axios from 'axios';
 
-const tagTypes = ['user', 'post', 'all'];
+const tagTypes = ['User', 'Post', ];
 
 const tags = [
     { id: 1, name: 'Javascript', tag: 'post' },
@@ -37,7 +37,8 @@ export default function SearchComponent(): ReactElement {
 
     const handleSearch = () => {
         const names = selectedTags.map(tag => tag.name).join('-');
-        axios.get(`/api/search/${tagType}/${names}`)
+        console.log(names);
+        axios.get(`/api/search/filter/${tagType}/${names}`)
             .then(({ data }) => {
                 console.log(data);
             })
