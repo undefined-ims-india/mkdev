@@ -22,6 +22,10 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import ArticleIcon from '@mui/icons-material/Article';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 const Profile = (): React.ReactElement => {
   const userId = useContext(UserContext);
@@ -30,6 +34,8 @@ const Profile = (): React.ReactElement => {
     useState(null);
   const [userInfo, setUserInfo]: [UserProfile | null, Function] =
     useState(null);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
   const [edit, setEdit] = useState(false);
   const profileDataREF = useRef(profileData);
   const [tab, setTab] = useState('1');
@@ -39,6 +45,13 @@ const Profile = (): React.ReactElement => {
       setProfileData(data);
     });
   }, [profileDataREF]);
+
+  useEffect(() => {
+    axios.get(`/api/follows/counts/${id}`).then(({ data }): void => {
+      setFollowerCount(data.followersCount);
+      setFollowingCount(data.followingCount);
+    });
+  }, [id]);
 
   const handleEdit = () => setEdit(true);
 
@@ -78,7 +91,7 @@ const Profile = (): React.ReactElement => {
             >
               {profileData!.username}
             </Typography>
-            <Card sx={{ maxWidth: 300, margin: 'auto', mt: 3 }}>
+            <Card sx={{ maxWidth: 300, margin: 'auto', mt: 2 }}>
               <Box display='flex' justifyContent='center' mb={2}>
                 <Grid
                   container
@@ -87,42 +100,12 @@ const Profile = (): React.ReactElement => {
                   justifyContent='center'
                   spacing={3}
                 >
-                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <Grid item xs={12} sm={6} md={8} lg={9}>
                     <Box
                       display='flex'
                       flexDirection='column'
-                      alignItems='flex-start'
+                      alignItems='center'
                     >
-                      <Typography variant='body1'>
-                        <Link
-                          href={`https://www.linkedin.com/in/${
-                            profileData!.linkedinId
-                          }`}
-                          target='_blank'
-                        >
-                          LinkedIn
-                        </Link>
-                      </Typography>
-                      <Typography variant='body1'>
-                        <Link
-                          href={`https://dev.to/${profileData!.devId}`}
-                          target='_blank'
-                        >
-                          Dev.to
-                        </Link>
-                      </Typography>
-                      <Typography variant='body1'>
-                        <Link
-                          href={`https://github.com/${profileData!.githubId}`}
-                          target='_blank'
-                        >
-                          Github
-                        </Link>
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item>
-                    <Box>
                       <Avatar
                         sx={{ width: 100, height: 100, mt: 2 }}
                         src={
@@ -132,17 +115,55 @@ const Profile = (): React.ReactElement => {
                         }
                         alt={profileData!.username || profileData!.name || ''}
                       />
+                      <Box display='flex' justifyContent='center' mt={2} mb={2}>
+                        {userId === profileData!.id ? (
+                          <Button onClick={handleEdit}>Edit</Button>
+                        ) : (
+                          <Follow />
+                        )}
+                      </Box>
                     </Box>
                   </Grid>
                 </Grid>
               </Box>
-              <Box display='flex' justifyContent='center' mt={2} mb={2}>
-                {userId === profileData!.id ? (
-                  <Button onClick={handleEdit}>Edit</Button>
-                ) : (
-                  <Follow />
-                )}
-              </Box>
+              <Grid item xs={12} sm={6} md={4} lg={3}>
+                <Box
+                  display='flex'
+                  flexDirection='row'
+                  alignItems='center'
+                  justifyContent={'space-evenly'}
+                >
+                  <Typography variant='body1'>
+                    <Link
+                      href={`https://www.linkedin.com/in/${
+                        profileData!.linkedinId
+                      }`}
+                      target='_blank'
+                      title='LinkedIn Profile'
+                    >
+                      <LinkedInIcon fontSize='large' />
+                    </Link>
+                  </Typography>
+                  <Typography variant='body1'>
+                    <Link
+                      href={`https://github.com/${profileData!.githubId}`}
+                      target='_blank'
+                      title='GitHub Profile'
+                    >
+                      <GitHubIcon fontSize='large' />
+                    </Link>
+                  </Typography>
+                  <Typography variant='body1'>
+                    <Link
+                      href={`https://dev.to/${profileData!.devId}`}
+                      target='_blank'
+                      title='Dev.to Profile'
+                    >
+                      <ArticleIcon fontSize='large' />
+                    </Link>
+                  </Typography>
+                </Box>
+              </Grid>
             </Card>
             <Box>
               <TabContext value={tab}>
@@ -150,8 +171,8 @@ const Profile = (): React.ReactElement => {
                   <TabList onChange={handleTab} centered>
                     <Tab label='Posts' value='1' />
                     <Tab label='Dev.to Blogs' value='2' />
-                    <Tab label='Followers' value='3' />
-                    <Tab label='Following' value='4' />
+                    <Tab label={`Followers (${followerCount})`} value='3' />
+                    <Tab label={`Following (${followingCount})`} value='4' />
                   </TabList>
                 </Box>
                 <TabPanel value='1'>
