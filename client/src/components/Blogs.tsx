@@ -1,6 +1,5 @@
 import React, { useState, ReactElement, useEffect } from 'react';
 import axios from 'axios';
-import { User } from '@prisma/client';
 
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
