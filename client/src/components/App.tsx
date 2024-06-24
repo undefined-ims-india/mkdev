@@ -26,6 +26,10 @@ const routes = [
     element: <Dashboard />,
   },
   {
+    path: '/',
+    element: <Welcome />,
+  },
+  {
     path: '/create-post',
     element: <PostCreationPage />,
   },
@@ -83,7 +87,6 @@ const App = (): ReactElement => {
           <UserProvider>
             {location.pathname === '/dashboard' ? <></> : <Nav />}
             <Routes>
-              <Route path='/' element={<Welcome />} />
               {routes.map(({ path, element }, index) => (
                 <Route key={path + index} path={path} element={element} />
               ))}
