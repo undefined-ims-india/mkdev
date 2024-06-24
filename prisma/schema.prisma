@@ -55,6 +55,7 @@ model User {
   devId          String?         @unique
   mediumId       String?         @unique
   githubId       String?         @unique
+  aboutMe        String?
   picture        String?
   firstName      String
   lastName       String?

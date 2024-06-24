@@ -30,22 +30,24 @@ const Followers = (): ReactElement => {
           No Followers
         </Typography>
       ) : (
-        <List>
-          {followerData &&
-            followerData.map((follower) => (
-              <ListItem key={follower.id}>
-                <ListItemAvatar>
-                  <a href={`/user/${follower.id}/profile`}>
-                    <Avatar
-                      alt={follower.username || ''}
-                      src={follower.picture || ''}
-                    />
-                  </a>
-                </ListItemAvatar>
-                <ListItemText primary={follower.username} />
-              </ListItem>
-            ))}
-        </List>
+        <>
+          <List>
+            {followerData &&
+              followerData.map((follower) => (
+                <ListItem key={follower.id}>
+                  <ListItemAvatar>
+                    <a href={`/user/${follower.id}/profile`}>
+                      <Avatar
+                        alt={follower.username || ''}
+                        src={follower.picture || ''}
+                      />
+                    </a>
+                  </ListItemAvatar>
+                  <ListItemText primary={follower.username} />
+                </ListItem>
+              ))}
+          </List>
+        </>
       )}
     </div>
   );

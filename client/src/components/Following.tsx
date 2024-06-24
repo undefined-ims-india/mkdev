@@ -16,9 +16,12 @@ const Following = (): React.ReactElement => {
     useState<UserProfile[] | null>(null);
 
   useEffect(() => {
-    axios.get(`/api/follows/following/${id}`).then(({ data }) => {
-      setFollowingData(data);
-    });
+    axios
+      .get(`/api/follows/following/${id}`)
+      .then(({ data }) => {
+        setFollowingData(data);
+      })
+      .catch((err) => console.error(err));
   }, [id]);
 
   return (
@@ -28,22 +31,24 @@ const Following = (): React.ReactElement => {
           Not Following Any Developers
         </Typography>
       ) : (
-        <List>
-          {followingData &&
-            followingData.map((following) => (
-              <ListItem key={following.id}>
-                <ListItemAvatar>
-                  <a href={`/user/${following.id}/profile`}>
-                    <Avatar
-                      alt={following.username || ''}
-                      src={following.picture || '?'}
-                    />
-                  </a>
-                </ListItemAvatar>
-                <ListItemText primary={following.username} />
-              </ListItem>
-            ))}
-        </List>
+        <>
+          <List>
+            {followingData &&
+              followingData.map((following) => (
+                <ListItem key={following.id}>
+                  <ListItemAvatar>
+                    <a href={`/user/${following.id}/profile`}>
+                      <Avatar
+                        alt={following.username || ''}
+                        src={following.picture || '?'}
+                      />
+                    </a>
+                  </ListItemAvatar>
+                  <ListItemText primary={following.username} />
+                </ListItem>
+              ))}
+          </List>
+        </>
       )}
     </div>
   );
