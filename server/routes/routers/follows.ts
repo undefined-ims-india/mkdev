@@ -23,7 +23,7 @@ follow.post('/follow/:followingId', async (req: any, res: any) => {
 
     res.sendStatus(201);
   } catch (err) {
-    console.log('Failed to follow user:', err);
+    console.error('Failed to follow user:', err);
     res.sendStatus(500);
   } finally {
     await prisma.$disconnect();
