@@ -10,7 +10,7 @@ search.get(
     res: Response
   ) => {
     const { tagType, tags } = req.params;
-    const splitTags = tags.toLowerCase().split('-');
+    const splitTags = tags.split('-');
     // console.log(splitTags, tagType, tags);
 
     // Validate and cast tagTypeParam to tagType enum
@@ -19,16 +19,18 @@ search.get(
     }
     // Find posts where tag === tag and 
     try {
+      console.log(tagType, splitTags);
       const searchResults = await prisma.tags.findMany({
         where: {
-          tagType: TagType["Post"],
-          name: { in: [ "Typescript"]},
+          tagType: TagType[tagType],
+          name: { in: splitTags},
         },
         include: {
           posts: {
             include: {
               author: true,
-              tags: true
+              tags: true,
+              liked: { select: {id: true}}
             }
           },
           user: true,
@@ -36,7 +38,6 @@ search.get(
           // user: tagType === "User" ? true : false,
         },
       });
-      console.log(searchResults)
       res.status(200).json(searchResults);
     } catch (error) {
       console.error(error);
