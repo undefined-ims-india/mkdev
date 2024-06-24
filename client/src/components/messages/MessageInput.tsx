@@ -8,6 +8,7 @@ import { Conversations } from '@prisma/client';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
 
 const socket = io('http://localhost:4000');
 
@@ -49,30 +50,59 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
         .catch((err) => {
           console.error('Failed to post message to db', err.cause);
         });
-
     }
+  }
 
+  const handleEnter = (e: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+
+    // only send message if there is text in input field
+    if (text) {
+      // broadcast the message to all the clients
+      socket.emit('message', {
+        body: text,
+        // TODO: senderId -> how to include here?
+        conversationId: con.id
+      });
+      setText('');
+
+      // send message to database with current conversation
+      axios
+        .post(`/api/messages/${con.id}`, {
+          message: {
+            body: text,
+            sender
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to post message to db', err.cause);
+        });
+    }
+    }
   }
 
   return (
-    <Box
-      sx={{
-        position: 'absolute',
-        bottom: 0,
-      }}
-    >
-      <form>
+      <Box
+        component='form'
+        autoComplete='off'
+        sx={{
+          width: .6,
+          position: 'absolute',
+          bottom: 12,
+        }}
+      >
         <TextField
           fullWidth
           placeholder='message
           'value={ text }
           onChange={ handleText }
+          onKeyDown={ handleEnter }
         />
-        <button onClick={ sendMessage } >
-          Send
-        </button>
-      </form>
-    </Box>
+          <Button onClick={ sendMessage } >
+            Send
+          </Button>
+        </Box>
   );
 }
 
