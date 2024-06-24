@@ -50,7 +50,6 @@ export default function SearchComponent(): ReactElement {
 		axios
 			.get('/api/tags')
 			.then(({ data }) => {
-				console.log(data);
 				setTags(data);
 			})
 			.catch((error) => {
@@ -73,7 +72,7 @@ export default function SearchComponent(): ReactElement {
 		axios
 			.get(`/api/search/${tagType}/${names}`)
 			.then(({ data }) => {
-				console.log(data);
+				
 			})
 			.catch((error) => {
 				console.error('Error during search:', error);
