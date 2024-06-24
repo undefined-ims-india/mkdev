@@ -10,8 +10,8 @@ import { Divider } from '@mui/material';
 const Welcome = () => {
   // should be the local strategy instead
   const login = () => {
-    axios.get('/auth/google').then(({ data }) => {
-      console.log(data);
+    axios.get('/auth/google').catch((err) => {
+      console.log(err);
     });
   };
   return (
