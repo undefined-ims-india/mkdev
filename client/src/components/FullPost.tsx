@@ -16,6 +16,8 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Chip from '@mui/material/Chip'
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 
 const FullPost = ():React.ReactElement => {
@@ -39,42 +41,48 @@ const FullPost = ():React.ReactElement => {
 
   try {
     return (
-      <>
-        <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
-          <Link to={`/user/${content!.author.id}/profile`}>
-            <Avatar alt={content!.author.username!} src={content!.author.picture!}>
-              {'?'}
-            </Avatar>
-          </Link>
-          <Typography variant="h1" sx={{fontSize: 20, marginLeft: 2, marginRight: 2}}>{content!.author.username || content!.author.name}</Typography>
-          <Typography variant="body2" sx={{color: 'lightgrey'}}>{dayjs(content!.createdAt).fromNow()}</Typography>
-          <IconButton aria-label='Like' onClick={handleLike}>
-            {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-          </IconButton>
-        </Box>
-          <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
-          <MarkDown text={content!.title} />
-          <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: -1, alignItems: 'center'}}>
-            {
-              content!.tags.length ?
-              content!.tags.map((tag) => (
-                <Chip
-                  label={tag.name}
-                  variant="outlined"
-                  size="small"
-                  key={tag.name + content!.id}
-                />
-              ))
-              :
-              <></>
-            }
-          </Box>
-          <MarkDown text={content!.body} />
-        </Box>
-        <Box>
-          {content!.repo ? <RepoDisplay content={content!.repo}/> : <></>}
-        </Box>
-      </>
+      <Grid container spacing={0}>
+        <Grid item xs />
+        <Grid item xs={10}>
+          <Paper>
+            <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center', paddingY: 2}}>
+              <Link to={`/user/${content!.author.id}/profile`}>
+                <Avatar alt={content!.author.username!} src={content!.author.picture!}>
+                  {'?'}
+                </Avatar>
+              </Link>
+              <Typography variant="h1" sx={{fontSize: 20, marginLeft: 2, marginRight: 2}}>{content!.author.username || content!.author.name}</Typography>
+              <Typography variant="body2" sx={{color: 'lightgrey'}}>{dayjs(content!.createdAt).fromNow()}</Typography>
+              <IconButton aria-label='Like' onClick={handleLike}>
+                {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              </IconButton>
+            </Box>
+            <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
+              <MarkDown text={content!.title} />
+              <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: -1, alignItems: 'center'}}>
+                {
+                  content!.tags.length ?
+                  content!.tags.map((tag) => (
+                    <Chip
+                      label={tag.name}
+                      variant="outlined"
+                      size="small"
+                      key={tag.name + content!.id}
+                    />
+                  ))
+                  :
+                  <></>
+                }
+              </Box>
+              <MarkDown text={content!.body} />
+            </Box>
+            <Box sx={{padding: 1}}>
+              {content!.repo ? <RepoDisplay content={content!.repo}/> : <></>}
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid item xs />
+      </Grid>
     )
   }
   catch (err) {
