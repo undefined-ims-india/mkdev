@@ -39,18 +39,13 @@ const Profile = (): React.ReactElement => {
   const profileDataREF = useRef(profileData);
   const [tab, setTab] = useState('1');
 
-  useEffect(() => {
-    axios.get(`/api/users/${id}/profile`).then(({ data }): void => {
-      setProfileData(data);
-    });
-  }, [profileDataREF]);
+  const getProfile = () => {
+    axios
+      .get(`/api/users/${id}/profile`)
+      .then(({ data }): void => setProfileData(data));
+  };
 
-  useEffect(() => {
-    axios.get(`/api/follows/counts/${id}`).then(({ data }): void => {
-      setFollowerCount(data.followersCount);
-      setFollowingCount(data.followingCount);
-    });
-  }, [id]);
+  useEffect(getProfile, [profileDataREF]);
 
   const handleEdit = () => setEdit(true);
 
@@ -179,6 +174,7 @@ const Profile = (): React.ReactElement => {
                     <Post
                       key={post.title + crypto.randomUUID()}
                       content={post}
+                      refreshParent={getProfile}
                     />
                   ))}
                 </TabPanel>
