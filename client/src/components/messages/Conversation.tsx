@@ -9,8 +9,10 @@ import Paper from '@mui/material/Paper';
 import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import Grid from '@mui/material/Grid';
 
 import { Conversations } from '@prisma/client';
+import { Typography } from '@mui/material';
 
 interface PropsType {
     con: Conversations;
@@ -55,9 +57,24 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
   const open = Boolean(anchorEl);
 
   return (
-    <>
-      <ButtonGroup>
-        <Button onClick={ (e)=> {selectConversation(e, con)} }>{ con.label }</Button>
+    <Grid item>
+      <ButtonGroup
+        sx={{
+          width: '200px'
+        }}
+        variant='contained'
+      >
+        <Button
+          fullWidth
+          onClick={ (e)=> {selectConversation(e, con)} }
+        >
+          <Typography
+            noWrap
+            align='left'
+          >
+            { con.label }
+          </Typography>
+        </Button>
         <Button onClick={ handleMenu }>
           <MoreVertIcon />
         </Button>
@@ -87,8 +104,7 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
           </ClickAwayListener>
         </Paper>
       </Popover>
-
-    </>
+    </Grid>
   );
 }
 
