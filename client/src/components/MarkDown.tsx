@@ -7,7 +7,7 @@ import Box  from "@mui/material/Box";
 
 const MarkDown = ({text}:{text: string}) :ReactElement => {
   return (
-    <Box sx={{marginBottom: -2, marginTop: -2}}>
+    <Box sx={{marginBottom: -2, marginTop: -2}} className="markdown-container">
       {parse(md.render(text))}
     </Box>
   )
