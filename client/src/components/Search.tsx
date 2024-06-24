@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
@@ -11,8 +11,9 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import styled from '@mui/system/styled';
+import { useNavigate } from 'react-router-dom';
 
-const tagTypes = ['user', 'post', 'all'];
+const tagTypes = ['User', 'Post'];
 
 const Form = styled('form')(({ theme }) => ({
 	display: 'flex',
@@ -39,44 +40,40 @@ const CustomChip = styled(Chip)(({ theme }) => ({
 interface Tag {
 	id: number;
 	name: string;
-	tag: string;
+	tagType: string;
 }
 
 export default function SearchComponent(): ReactElement {
 	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 	const [tags, setTags] = useState<Tag[]>([]);
+	const [tagType, setTagType] = useState<string>('Post');
+    const navigate  = useNavigate();
 
-	const getAllTags = () => {
-		axios
-			.get('/api/tags')
-			.then(({ data }) => {
-				setTags(data);
-			})
-			.catch((error) => {
-				console.error('Error fetching tags:', error);
-			});
+	const getAllTags = async () => {
+		try {
+			const { data } = await axios.get('/api/tags/all/post');
+			setTags(data);
+		} catch (error) {
+			console.error('Error fetching tags:', error);
+		}
 	};
 
 	useEffect(() => {
 		getAllTags();
 	}, []);
 
-	const [tagType, setTagType] = useState<string>('all');
-
 	const handleChangeTagType = (event: SelectChangeEvent<string>) => {
 		setTagType(event.target.value);
 	};
 
-	const handleSearch = () => {
+	const handleSearch = async () => {
 		const names = selectedTags.map((tag) => tag.name).join('-');
-		axios
-			.get(`/api/search/${tagType}/${names}`)
-			.then(({ data }) => {
-				
-			})
-			.catch((error) => {
-				console.error('Error during search:', error);
-			});
+		try {
+            navigate(`/searchresults/${tagType}/${names}`)
+			// const { data } = await axios.get(`/api/search/${tagType}/${names}`);
+		} catch (error) {
+			console.error('Error during search:', error);
+		}
 	};
 
 	const changeSelectedEvent = (
@@ -89,15 +86,13 @@ export default function SearchComponent(): ReactElement {
 	return (
 		<Form>
 			<SelectContainer variant='outlined' fullWidth>
-				<InputLabel id='tagType-label'>Search By a Tag</InputLabel>
+				<InputLabel id='tagType-label'>Search By Tag Type</InputLabel>
 				<Select
 					value={tagType}
 					onChange={handleChangeTagType}
-					input={<OutlinedInput label='Search By a Tag' />}
+					input={<OutlinedInput label='Search By Tag Type' />}
 					renderValue={(selected) => (
-						<div>
-							<CustomChip key={selected} label={selected} />
-						</div>
+						<CustomChip key={selected} label={selected} />
 					)}
 				>
 					{tagTypes.map((type) => (
@@ -118,8 +113,8 @@ export default function SearchComponent(): ReactElement {
 						<TextField
 							{...params}
 							variant='outlined'
-							label='Select Categories'
-							placeholder='Add Categories'
+							label='Select Tags'
+							placeholder='Add Tags'
 						/>
 					)}
 					renderTags={(value: Tag[], getTagProps) =>

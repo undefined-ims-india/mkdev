@@ -32,24 +32,35 @@ const UserInfo = ({
           name='username'
           label='Username'
           value={userInfo!.username || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
         <TextField
           name='githubId'
           label='Github Username'
           value={userInfo!.githubId || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
         <TextField
           name='devId'
           label='Dev.to Username'
           value={userInfo!.devId || ''}
+          sx={{ my: 2, mx: 1 }}
+          onChange={handleChange}
+        />
+        <TextField
+          name='mediumId'
+          label='Medium.dev Username'
+          value={userInfo!.mediumId || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
         <TextField
           name='linkedinId'
           label='LinkedIn Username'
           value={userInfo!.linkedinId || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
         <Button type='submit'>Update</Button>

@@ -23,7 +23,7 @@ follow.post('/follow/:followingId', async (req: any, res: any) => {
 
     res.sendStatus(201);
   } catch (err) {
-    console.log('Failed to follow user:', err);
+    console.error('Failed to follow user:', err);
     res.sendStatus(500);
   } finally {
     await prisma.$disconnect();
@@ -130,4 +130,34 @@ follow.get('/isFollowing/:followingId', async (req: any, res: any) => {
     await prisma.$disconnect();
   }
 });
+
+follow.get('/counts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const userData = await prisma.user.findUnique({
+      where: { id: +id },
+      include: {
+        followedBy: {
+          select: { id: true },
+        },
+        following: {
+          select: { id: true },
+        },
+      },
+    });
+
+    if (userData) {
+      const followersCount = userData.followedBy.length;
+      const followingCount = userData.following.length;
+      res.status(200).send({ followersCount, followingCount });
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    console.error('Failed to get user counts:', err);
+    res.sendStatus(500);
+  }
+});
+
 export default follow;
