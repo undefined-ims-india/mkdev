@@ -21,79 +21,80 @@ import { ColorModeContext } from './ThemeToggle';
 import { lightTheme, darkTheme } from '../styling/themes';
 import Box from '@mui/material/Box';
 
-
 const routes = [
   {
-      path: '/dashboard',
-      element: <Dashboard />,
+    path: '/dashboard',
+    element: <Dashboard />,
   },
   {
-      path: '/create-post',
-      element: <PostCreationPage />,
+    path: '/create-post',
+    element: <PostCreationPage />,
   },
   {
-      path: '/login',
-      element: <Login />,
+    path: '/login',
+    element: <Login />,
   },
   {
-      path: '/logout',
-      element: <Logout />,
+    path: '/logout',
+    element: <Logout />,
   },
   {
-      path: '/search',
-      element: <Search />,
+    path: '/search',
+    element: <Search />,
   },
   {
-      path: '/messages',
-      element: <Messages />,
+    path: '/messages',
+    element: <Messages />,
   },
   {
     path: '/user/:id/profile',
-    element: <Profile />
+    element: <Profile />,
   },
   {
     path: 'post/:id',
-    element: <FullPost />
+    element: <FullPost />,
   },
   {
     path: '/searchresults/:tagType/:tags',
-    element: <SearchResults />
+    element: <SearchResults />,
+  },
+  {
     path: '/survey',
-    element: <Signup />
-  }
-]
+    element: <Signup />,
+  },
+];
 
 const App = (): ReactElement => {
-
   const location = useLocation();
 
-
-  const [mode, setMode] = React.useState<typeof lightTheme | typeof darkTheme>(lightTheme);
+  const [mode, setMode] = React.useState<typeof lightTheme | typeof darkTheme>(
+    lightTheme,
+  );
   const colorMode = React.useMemo(
     // calculates value: returns an object, assigned to colorMode
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === lightTheme ? darkTheme : lightTheme));
+        setMode((prevMode) =>
+          prevMode === lightTheme ? darkTheme : lightTheme,
+        );
       },
     }),
     [],
   );
 
-  const theme = React.useMemo(
-    () =>
-      (mode),
-    [mode]
-  );
+  const theme = React.useMemo(() => mode, [mode]);
 
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box sx={{fontFamily: 'Roboto'}}>
+        <Box sx={{ fontFamily: 'Roboto' }}>
           <UserProvider>
-            {location.pathname === '/dashboard'? <></> : <Nav />}
+            {location.pathname === '/dashboard' ? <></> : <Nav />}
             <Routes>
-              {routes.map(({path, element}, index) => <Route key={path + index} path={path} element={element} />)}
+              {routes.map(({ path, element }, index) => (
+                <Route key={path + index} path={path} element={element} />
+              ))}
             </Routes>
           </UserProvider>
         </Box>
@@ -102,3 +103,4 @@ const App = (): ReactElement => {
   );
 };
 
+export default App;
