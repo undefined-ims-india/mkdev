@@ -11,6 +11,7 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import styled from '@mui/system/styled';
+import { useNavigate } from 'react-router-dom';
 
 const tagTypes = ['User', 'Post'];
 
@@ -45,11 +46,12 @@ interface Tag {
 export default function SearchComponent(): ReactElement {
 	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 	const [tags, setTags] = useState<Tag[]>([]);
-	const [tagType, setTagType] = useState<string>('User');
+	const [tagType, setTagType] = useState<string>('Post');
+    const navigate  = useNavigate();
 
 	const getAllTags = async () => {
 		try {
-			const { data } = await axios.get('/api/tags');
+			const { data } = await axios.get('/api/tags/all/post');
 			setTags(data);
 		} catch (error) {
 			console.error('Error fetching tags:', error);
@@ -67,8 +69,8 @@ export default function SearchComponent(): ReactElement {
 	const handleSearch = async () => {
 		const names = selectedTags.map((tag) => tag.name).join('-');
 		try {
-			const { data } = await axios.get(`/api/search/${tagType}/${names}`);
-			// Handle search results here
+            navigate(`/searchresults/${tagType}/${names}`)
+			// const { data } = await axios.get(`/api/search/${tagType}/${names}`);
 		} catch (error) {
 			console.error('Error during search:', error);
 		}
