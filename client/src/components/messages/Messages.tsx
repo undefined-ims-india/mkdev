@@ -173,72 +173,81 @@ const Messages = (): ReactElement => {
           >
             ➕ Start Conversation
           </Button>
-            <Grid container
-              component={Paper}
-              spacing={{ md: 1.5, lg: 3}}
+          <Grid container                                     // top most container for ConversationList and ConversationView
+            component={Paper}
+            spacing={{ md: 1.5, lg: 3}}
+            sx={{
+              width: '100%',
+              height: '80vh',
+              bgColor: '#AAAAAA'
+            }}
+          >
+            <Grid container item                              // ConversationList container
+              md={4}
+              xs={12}
+              sx={{
+                border: 1,
+                paddingLeft: 4,
+              }}
+              // direction="column"
+              // justifyContent="flex-start"
+              // alignItems="flex-start"
+              // spacing={3}
             >
-              <Grid item
-                md={4}
-                xs={12}
-                sx={{ border: 1,
-                  paddingLeft: 4
-                }}
-                // direction="column"
-                // justifyContent="flex-start"
-                // alignItems="flex-start"
-                // spacing={3}
-              >
-                <ConversationList
-                  allCons={ allConversations }
-                  setCons={ getAllConversations }
-                  select={ selectConversation }
-                  deleteCon={ deleteConversation }
-                />
-              </Grid>
-              <Grid item
-                md={8}
-                xs={12}
-                sx={{ border: 1 }}
-              >
-                { addingConversation ? (
-                    <form>
-                      <Autocomplete
-                        multiple
-                        id="tags-filled"
-                        options={allUsers.map((option) => option.username)}
-                        value={ participantsEntry }
-                        onChange={ changeParticipants }
-                        freeSolo
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index: number) => {
-                            const { key, ...tagProps } = getTagProps({ index });
-                            return (
-                              <Chip variant="outlined" label={option} key={key} {...tagProps} />
-                            );
-                          })
-                        }
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            variant="filled"
-                            label="To:"
-                            placeholder="usernames"
-                          />
-                        )}
-                      />
-                      <button onClick={ addConversation }>Add Conversation</button>
-                    </form>
-                  ) : ('')
-                }
-                { con ?
-                  <ConversationView
-                    addingConversation={ addingConversation }
-                    con={ con }
-                    label={ participantsLabel }
-                  /> : ''
-                }
-              </Grid>
+              <ConversationList
+                allCons={ allConversations }
+                setCons={ getAllConversations }
+                select={ selectConversation }
+                deleteCon={ deleteConversation }
+              />
             </Grid>
+            <Grid container item                                // ConversationView container
+              md={8}
+              xs={12}
+              sx={{
+                border: 1,
+              }}
+            >
+              { addingConversation ? (
+                  <form>
+                    <Autocomplete
+                      multiple
+                      id="tags-filled"
+                      options={allUsers.map((option) => option.username)}
+                      value={ participantsEntry }
+                      onChange={ changeParticipants }
+                      freeSolo
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index: number) => {
+                          const { key, ...tagProps } = getTagProps({ index });
+                          return (
+                            <Chip variant="outlined" label={option} key={key} {...tagProps} />
+                          );
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="filled"
+                          label="To:"
+                          placeholder="usernames"
+                        />
+                      )}
+                    />
+                    <Button onClick={ addConversation }>Add Conversation</Button>
+                  </form>
+                ) : ('')
+              }
+              { con ? (
+                <ConversationView
+                  addingConversation={ addingConversation }
+                  con={ con }
+                  label={ participantsLabel }
+                />
+                ) : ('')
+              }
+            </Grid>
+          </Grid>
         </>
       )
       }

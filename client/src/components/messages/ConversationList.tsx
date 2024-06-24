@@ -19,7 +19,8 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
 
   return (
     <Grid container
-    sx={{ border: 1,
+    sx={{
+      // border: 1,
       paddingLeft: 4
     }}
     >
@@ -27,7 +28,7 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
       {
         allCons.map((con, i) => {
           return (
-            <ListItem dense={true}>
+            <ListItem dense={true} key={`${i}`}>
               <Conversation
                 con={ con }
                 key={ `${con.id}-${i}` }
