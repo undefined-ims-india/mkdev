@@ -14,6 +14,7 @@ tags.get('/', async (req: any, res: Response) => {
         tags: true,
       },
     });
+    
     res.status(201).send(tagResponse);
   } catch {
     res.status(500).send('User Not Found');
@@ -45,6 +46,7 @@ tags.get('/all/post', async (req: Request, res: Response) => {
 tags.get('/all', async (req: Request, res: Response) => {
   try {
     const tags = await prisma.tags.findMany();
+
     const groupedTags = tags.reduce((groups: any, tag: any) => {
       const groupKey = tag.tagType; // Grouping by tagType
       if (!groups[groupKey]) {
@@ -53,7 +55,7 @@ tags.get('/all', async (req: Request, res: Response) => {
       groups[groupKey].push(tag);
       return groups;
     }, {});
-    // console.log(groupedTags);
+
     res.status(200).send(groupedTags);
   } catch (error) {
     res.status(500).send('Error getting all tags from user');
@@ -97,7 +99,7 @@ tags.post('/:tagId', async (req: any, res: Response) => {
       },
       select: { tags: true },
     });
-    // console.log('tag post', updatedUser);
+
     res.status(200).send(updatedUser);
   } catch (error) {
     res.status(500).send('Error adding tag to user');
@@ -120,6 +122,7 @@ tags.patch('/:tagId', async (req: any, res: Response) => {
     });
     res.status(200).send(updatedUser);
   } catch (error) {
+    console.error(error);
     res.status(500).send(error);
   }
 });

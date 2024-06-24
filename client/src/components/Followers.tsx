@@ -8,6 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
 
 const Followers = (): ReactElement => {
   const { id } = useParams();
@@ -25,24 +26,34 @@ const Followers = (): ReactElement => {
   return (
     <div>
       {followerData && followerData.length === 0 ? (
-        `No Followers`
+        <Typography
+          variant='h1'
+          align='center'
+          gutterBottom
+          sx={{ fontFamily: 'fangsong', fontSize: '2rem' }}
+        >
+          {' '}
+          No Followers
+        </Typography>
       ) : (
-        <List>
-          {followerData &&
-            followerData.map((follower) => (
-              <ListItem key={follower.id}>
-                <ListItemAvatar>
-                  <a href={`/user/${follower.id}/profile`}>
-                    <Avatar
-                      alt={follower.username || ''}
-                      src={follower.picture || ''}
-                    />
-                  </a>
-                </ListItemAvatar>
-                <ListItemText primary={follower.username} />
-              </ListItem>
-            ))}
-        </List>
+        <>
+          <List>
+            {followerData &&
+              followerData.map((follower) => (
+                <ListItem key={follower.id}>
+                  <ListItemAvatar>
+                    <a href={`/user/${follower.id}/profile`}>
+                      <Avatar
+                        alt={follower.username || ''}
+                        src={follower.picture || ''}
+                      />
+                    </a>
+                  </ListItemAvatar>
+                  <ListItemText primary={follower.username} />
+                </ListItem>
+              ))}
+          </List>
+        </>
       )}
     </div>
   );

@@ -54,6 +54,7 @@ model User {
   linkedinId     String?         @unique
   devId          String?         @unique
   githubId       String?         @unique
+  aboutMe        String?
   picture        String?
   firstName      String
   lastName       String?

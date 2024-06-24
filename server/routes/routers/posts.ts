@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PostWithRelations } from '../../../types';
+import { PostWithRelations, RequestWithUser } from '../../../types';
 import { PrismaClient,Tags } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
 // to remove the maintenance warning in the console...
@@ -59,43 +59,80 @@ posts.post('/', async (req: any, res: any) => {
   }
 });
 
-// get all users posts
-posts.get('/', (req: any, res: any) => {
-  prisma.post
-    .findMany({ where: { userId: req.user.id } })
-    .then((posts: {}[]) => {
-      res.send(posts);
+//like post
+posts.patch('/:id/like', async(req: RequestWithUser, res: any) => {
+  try {
+    await prisma.post.update({
+      where: {id: +req.params.id},
+      data: {
+        liked: {
+          connect: {id: +req.user.id}
+        }
+      }
     })
-    .catch((err: { name: string }) => {
-      console.error(err);
-      res.sendStatus(500);
+    res.sendStatus(200)
+  }
+  catch(err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect()
+  }
+});
+
+//dislike post
+posts.patch('/:id/dislike', async(req: RequestWithUser, res: any) => {
+  try {
+    await prisma.post.update({
+      where: {id: +req.params.id},
+      data: {
+        liked: {
+          disconnect: [{id: +req.user.id}]
+        }
+      }
     })
-    .finally(async () => {
-      await prisma.$disconnect();
-    });
+    res.sendStatus(200)
+  }
+  catch(err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect()
+  }
 });
 
 // get certain post
-posts.get('/:id', (req: any, res: any) => {
-  const { id }: { id: string } = req.params;
-  prisma.post
-    .findFirstOrThrow({ where: { id: +id }, include: {author: true, tags: true, repo: {include: {files: true}}} })
-    .then((value: PostWithRelations) => {
-      res.send(value);
-    })
-    .catch((err: { name: string }) => {
-      console.error(err);
-      if (err.name === 'NotFoundError') {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(500);
+posts.get('/:id', async(req: RequestWithUser, res: any) => {
+  try {
+    const { id } = req.params;
+    const post : PostWithRelations = await prisma.post.findFirstOrThrow({
+      where: {
+        id: +id,
+      },
+      include: {
+        author: true,
+        tags: true,
+        repo: {
+          include: {
+            files: true
+          }
+        },
+        liked: { select: { id: true }}
       }
-    })
-    .finally(async () => {
-      await prisma.$disconnect();
     });
-});
-
+    if (req.user) { post.likedByUser = post.liked.slice().map(like => like.id).includes(req.user.id); }
+    res.send(post)
+  }
+  catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+})
 
 // update post
 posts.patch('/:id', (req: any, res: any) => {
