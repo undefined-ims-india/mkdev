@@ -17,6 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Chip from '@mui/material/Chip'
+import Button from '@mui/material/Button'
 
 const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
@@ -28,47 +29,50 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
   };
 
   return (
-    <Card sx={{marginBottom: 5}}>
-      <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
-        <Link to={`/user/${content.author.id}/profile`}>
-          <Avatar alt={content.author.username!} src={content.author.picture!}>
-            {'?'}
-            </Avatar>
-        </Link>
-        <Typography variant="h1" sx={{fontSize: 20, marginLeft: 2, marginRight: 2}}>{content.author.username || content.author.name}</Typography>
-        <Typography variant="body2" sx={{color: 'lightgrey'}}>{dayjs(content.createdAt).fromNow()}</Typography>
-        <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
-          {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-        </IconButton>
-        <Typography variant="body1">{content!.liked.length}</Typography>
-      </Box>
-      <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
-        <MarkDown text={content.title} />
-        <Box sx={{maxHeight: 200, overflow: 'hidden'}}>
-          <MarkDown text={content.body} />
+    <Card sx={{marginBottom: 3, maxWidth: 3/4, borderRadius: 2}}>
+      <Box sx={{display:"flex", flexDirection:'row', marginLeft: 2, marginTop: 2, alignItems: 'center'}}>
+          <Link to={`/user/${content.author.id}/profile`}>
+            <Avatar alt={content.author.username!} src={content.author.picture!}>
+              {'?'}
+              </Avatar>
+          </Link>
+        <Box sx={{display:"flex", flexDirection:'column',  marginLeft: 2, marginRight: 2}}>
+          <Typography variant="h1" sx={{fontSize: 23}}>{content.author.username || content.author.name}</Typography>
+          <Typography variant="body2" sx={{color: 'silver'}}>{dayjs(content.createdAt).fromNow()}</Typography>
         </Box>
       </Box>
-      <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
-        {
-          content.tags.length ?
-          content.tags.map((tag) => (
-            <Chip
-              label={tag.name}
-              variant="outlined"
-              size="small"
-              key={tag.name + content.id}
-            />
-          ))
-          :
-          <></>
-        }
+      <Box sx={{display:"flex", flexDirection:'column', marginLeft: 9}}>
+        <MarkDown text={content.title} />
+        <Box sx={{display:"flex", flexDirection:'row', alignItems: 'center'}}>
+          {
+            content.tags.length ?
+            content.tags.map((tag) => (
+              <Chip
+                label={tag.name}
+                variant="outlined"
+                size="medium"
+                key={tag.name + content.id}
+              />
+            ))
+            :
+            <></>
+          }
+        </Box>
       </Box>
-      <Box sx={{display:"flex", flexDirection:'row', margin: 1, alignItems: 'center', justifyContent: 'end', width: '100%'}}>
-          <Typography variant="body2">
-            <Link to={`/post/${content.id}`}>
-              {'See More -->'}
-            </Link>
-          </Typography>
+      <Box sx={{display: "flex", flexDirection: "row", alignItems: 'center', marginLeft: 9, marginBottom: 2, justifyContent: 'space-between'}}>
+        <Box sx={{display: "flex", flexDirection: "row", alignItems: 'center'}}>
+          <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
+            {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
+          <Typography variant="body1">{content!.liked.length} Likes</Typography>
+        </Box>
+        <Box sx={{marginRight: 1}}>
+          <Link to={`/post/${content.id}`} style={{justifySelf:'end'}}>
+            <Button>
+              {'See Full Post'}
+            </Button>
+          </Link>
+        </Box>
       </Box>
     </Card>
   );

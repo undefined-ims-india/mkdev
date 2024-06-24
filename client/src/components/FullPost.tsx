@@ -49,15 +49,17 @@ const FullPost = ():React.ReactElement => {
               {'?'}
             </Avatar>
           </Link>
-          <Typography variant="h1" sx={{fontSize: 20, marginLeft: 2, marginRight: 2}}>{content!.author.username || content!.author.name}</Typography>
-          <Typography variant="body2" sx={{color: 'lightgrey'}}>{dayjs(content!.createdAt).fromNow()}</Typography>
+          <Typography variant="h1" sx={{fontSize: 23, marginLeft: 2, marginRight: 2}}>{content!.author.username || content!.author.name}</Typography>
+          <Typography variant="body2" sx={{color: 'silver'}}>{dayjs(content!.createdAt).fromNow()}</Typography>
           <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
             {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
           <Typography variant="body1">{content!.liked.length}</Typography>
         </Box>
           <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
-          <MarkDown text={content!.title} />
+          <Box sx={{marginTop: 2}}>
+            <MarkDown text={content!.title} />
+          </Box>
           <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: -1, alignItems: 'center'}}>
             {
               content!.tags.length ?
@@ -73,7 +75,9 @@ const FullPost = ():React.ReactElement => {
               <></>
             }
           </Box>
-          <MarkDown text={content!.body} />
+          <Box sx={{marginTop: 3}}>
+            <MarkDown text={content!.body} />
+          </Box>
         </Box>
         <Box>
           {content!.repo ? <RepoDisplay content={content!.repo}/> : <></>}
