@@ -5,6 +5,10 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { Conversations } from '@prisma/client';
 
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
 const socket = io('http://localhost:4000');
 
 interface PropsType {
@@ -51,14 +55,24 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
   }
 
   return (
-    <div>
+    <Box
+      sx={{
+        position: 'absolute',
+        bottom: 0,
+      }}
+    >
       <form>
-        <input value={ text } onChange={ handleText } />
+        <TextField
+          fullWidth
+          placeholder='message
+          'value={ text }
+          onChange={ handleText }
+        />
         <button onClick={ sendMessage } >
           Send
         </button>
       </form>
-    </div>
+    </Box>
   );
 }
 
