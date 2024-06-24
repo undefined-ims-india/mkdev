@@ -7,8 +7,9 @@ import { Conversations } from '@prisma/client';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
+import SendIcon from '@mui/icons-material/Send';
 
 const socket = io('http://localhost:4000');
 
@@ -57,28 +58,28 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
     if (e.key === 'Enter') {
       e.preventDefault();
 
-    // only send message if there is text in input field
-    if (text) {
-      // broadcast the message to all the clients
-      socket.emit('message', {
-        body: text,
-        // TODO: senderId -> how to include here?
-        conversationId: con.id
-      });
-      setText('');
-
-      // send message to database with current conversation
-      axios
-        .post(`/api/messages/${con.id}`, {
-          message: {
-            body: text,
-            sender
-          }
-        })
-        .catch((err) => {
-          console.error('Failed to post message to db', err.cause);
+      // only send message if there is text in input field
+      if (text) {
+        // broadcast the message to all the clients
+        socket.emit('message', {
+          body: text,
+          // TODO: senderId -> how to include here?
+          conversationId: con.id
         });
-    }
+        setText('');
+
+        // send message to database with current conversation
+        axios
+          .post(`/api/messages/${con.id}`, {
+            message: {
+              body: text,
+              sender
+            }
+          })
+          .catch((err) => {
+            console.error('Failed to post message to db', err.cause);
+          });
+      }
     }
   }
 
@@ -99,9 +100,9 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
           onChange={ handleText }
           onKeyDown={ handleEnter }
         />
-          <Button onClick={ sendMessage } >
-            Send
-          </Button>
+          <IconButton onClick={ sendMessage } >
+            <SendIcon />
+          </IconButton>
         </Box>
   );
 }
