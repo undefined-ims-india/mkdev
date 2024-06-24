@@ -10,26 +10,32 @@ search.get(
     res: Response
   ) => {
     const { tagType, tags } = req.params;
-    const splitTags = tags.toLowerCase().split('-');
-    // console.log(splitTags, tagType, tags);
+    const splitTags = tags.split('-');
 
     // Validate and cast tagTypeParam to tagType enum
     if (!Object.values(TagType).includes(tagType)) {
       return res.status(400).send('Invalid tag type');
     }
-
+    // Find posts where tag === tag and 
     try {
       const searchResults = await prisma.tags.findMany({
         where: {
           tagType: TagType[tagType],
-          name: { in: splitTags },
+          name: { in: splitTags},
         },
         include: {
-          posts: true,
+          posts: {
+            include: {
+              author: true,
+              tags: true,
+              liked: { select: {id: true}}
+            }
+          },
           user: true,
+          // posts: tagType === "Post" ? true : false,
+          // user: tagType === "User" ? true : false,
         },
       });
-
       res.status(200).json(searchResults);
     } catch (error) {
       console.error(error);

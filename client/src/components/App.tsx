@@ -12,6 +12,7 @@ import Search from './Search';
 import Messages from './messages/Messages';
 import Profile from './UserProfile';
 import FullPost from './FullPost';
+import SearchResults from './SearchResults';
 import Welcome from './Welcome';
 import Signup from './Survey';
 
@@ -57,6 +58,14 @@ const routes = [
   {
     path: 'post/:id',
     element: <FullPost />,
+  },
+  {
+    path: '/searchresults/:tagType/:tags',
+    element: <SearchResults />,
+  },
+  {
+    path: '/survey',
+    element: <Signup />,
   },
 ];
 
