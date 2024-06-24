@@ -40,7 +40,7 @@ export default function SearchComponent(): ReactElement {
         console.log(names);
         axios.get(`/api/search/filter/${tagType}/${names}`)
             .then(({ data }) => {
-                console.log(data);
+                // console.log(data);
             })
             .catch((error) => {
                 console.error('Error during search:', error);
