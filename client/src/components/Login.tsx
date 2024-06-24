@@ -19,15 +19,6 @@ const Login = (): ReactElement => {
           variant='h1'
           align='center'
           gutterBottom
-          sx={{ fontFamily: 'fangsong', fontSize: '3rem' }}
-        >
-          Welcome to
-        </Typography>
-
-        <Typography
-          variant='h1'
-          align='center'
-          gutterBottom
           sx={{ fontFamily: 'fangsong', fontSize: '6rem', fontWeight: 'bold' }}
         >
           MKDEV

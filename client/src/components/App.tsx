@@ -13,6 +13,7 @@ import Messages from './messages/Messages';
 import Profile from './UserProfile';
 import FullPost from './FullPost';
 import SearchResults from './SearchResults';
+import Welcome from './Welcome';
 import Signup from './Survey';
 
 import { CssBaseline } from '@mui/material';
@@ -25,6 +26,10 @@ const routes = [
   {
     path: '/dashboard',
     element: <Dashboard />,
+  },
+  {
+    path: '/',
+    element: <Welcome />,
   },
   {
     path: '/create-post',
@@ -68,18 +73,18 @@ const App = (): ReactElement => {
   const location = useLocation();
 
   const [mode, setMode] = React.useState<typeof lightTheme | typeof darkTheme>(
-    lightTheme,
+    lightTheme
   );
   const colorMode = React.useMemo(
     // calculates value: returns an object, assigned to colorMode
     () => ({
       toggleColorMode: () => {
         setMode((prevMode) =>
-          prevMode === lightTheme ? darkTheme : lightTheme,
+          prevMode === lightTheme ? darkTheme : lightTheme
         );
       },
     }),
-    [],
+    []
   );
 
   const theme = React.useMemo(() => mode, [mode]);

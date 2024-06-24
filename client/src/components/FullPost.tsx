@@ -17,6 +17,8 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Chip from '@mui/material/Chip'
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 
 const FullPost = ():React.ReactElement => {
@@ -42,8 +44,11 @@ const FullPost = ():React.ReactElement => {
 
   try {
     return (
-      <>
-        <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
+      <Grid container spacing={0}>
+        <Grid item xs />
+        <Grid item xs={10}>
+          <Paper>
+          <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: 1, alignItems: 'center'}}>
           <Link to={`/user/${content!.author.id}/profile`}>
             <Avatar alt={content!.author.username!} src={content!.author.picture!}>
               {'?'}
@@ -82,7 +87,10 @@ const FullPost = ():React.ReactElement => {
         <Box>
           {content!.repo ? <RepoDisplay content={content!.repo}/> : <></>}
         </Box>
-      </>
+          </Paper>
+        </Grid>
+        <Grid item xs />
+      </Grid>
     )
   }
   catch (err) {
