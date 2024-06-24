@@ -45,6 +45,7 @@ interface Tag {
 export default function SearchComponent(): ReactElement {
 	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 	const [tags, setTags] = useState<Tag[]>([]);
+    const [tagType, setTagType] = useState<string>('all');
 
 	const getAllTags = () => {
 		axios
@@ -61,18 +62,6 @@ export default function SearchComponent(): ReactElement {
 		getAllTags();
 	}, []);
 
-    const handleSearch = () => {
-        const names = selectedTags.map(tag => tag.name).join('-');
-        console.log(names);
-        axios.get(`/api/search/filter/${tagType}/${names}`)
-            .then(({ data }) => {
-                // console.log(data);
-            })
-            .catch((error) => {
-                console.error('Error during search:', error);
-            });
-    };
-	const [tagType, setTagType] = useState<string>('all');
 
 	const handleChangeTagType = (event: SelectChangeEvent<string>) => {
 		setTagType(event.target.value);
