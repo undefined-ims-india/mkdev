@@ -47,6 +47,13 @@ const Profile = (): React.ReactElement => {
 
   useEffect(getProfile, [profileDataREF]);
 
+  useEffect(() => {
+    axios.get(`/api/follows/counts/${id}`).then(({ data }): void => {
+      setFollowerCount(data.followersCount);
+      setFollowingCount(data.followingCount);
+    });
+  }, [id]);
+
   const handleEdit = () => setEdit(true);
 
   const UpdateUserInfo = (userInfo: UserProfile) => {
