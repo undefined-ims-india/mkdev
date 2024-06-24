@@ -13,8 +13,6 @@ export const UserProvider = ({children}: {children: ReactNode}):ReactElement => 
       })
   });
 
-  // console.log(userId)
-
   return (
     <UserContext.Provider value={userId}>
       {children}
