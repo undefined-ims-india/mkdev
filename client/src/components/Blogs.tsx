@@ -24,53 +24,76 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
 
   useEffect(() => {
     // Dev.to Blogs
-    axios
-      .get(`https://dev.to/api/articles?username=${devId}&per_page=6`)
-      .then(({ data }) => {
-        setBlogs(data);
-      })
-      .catch((err) => console.error(err));
-
+    const getDev = () => {
+      axios
+        .get(`https://dev.to/api/articles?username=${devId}&per_page=6`)
+        .then(({ data }) => {
+          setBlogs(data);
+        })
+        .catch((err) => console.error(err));
+    };
     // Medium Blogs
-    axios
-      .get(
-        `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumId}`
-      )
-      .then(({ data }) => {
-        setBlogs((prevBlogs) =>
-          prevBlogs.concat(
-            data.items.map((blog: any) => ({
-              id: blog.guid,
-              title: blog.title,
-              url: blog.link,
-              cover_image: blog.thumbnail,
-            }))
-          )
-        );
-      })
-      .catch((err) => console.error(err));
+    const getMedium = () => {
+      axios
+        .get(
+          `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumId}`
+        )
+        .then(({ data }) => {
+          setBlogs((prevBlogs) =>
+            prevBlogs.concat(
+              data.items.map((blog: any) => ({
+                id: blog.guid,
+                title: blog.title,
+                url: blog.link,
+                cover_image: blog.thumbnail,
+              }))
+            )
+          );
+        })
+        .catch((err) => console.error(err));
+    };
+    if (mediumId) {
+      getMedium();
+    } else if (devId) {
+      getDev();
+    } else {
+      setBlogs([]);
+    }
   }, [devId, mediumId]);
 
   return (
     <div>
       <Grid container spacing={4}>
-        {blogs.map((blog, idx) => (
-          <Grid item key={idx} xs={12} sm={6} md={4}>
-            <Card>
-              <CardMedia
-                component='img'
-                height='140'
-                image={blog.cover_image}
-                alt={blog.title}
-              />
-              <CardContent>
-                <Typography variant='h1' component='h2' fontSize={'2rem'}>
-                  <Link href={blog.url}>{blog.title}</Link>
-                </Typography>
-              </CardContent>
-            </Card>
+        {blogs.length === 0 ? (
+          <Grid item xs={12}>
+            <Typography variant='h1' component='h2' fontSize={'1rem'}>
+              No Blogs Found
+            </Typography>
           </Grid>
-        ))}
+        ) : (
+          blogs.map((blog, idx) => (
+            <Grid item key={idx} xs={12} sm={6} md={4}>
+              <Card>
+                <CardMedia
+                  component='img'
+                  height='140'
+                  image={blog.cover_image}
+                  alt={blog.title}
+                />
+                <CardContent>
+                  <Typography
+                    variant='h1'
+                    component='h2'
+                    fontSize={'2rem'}
+                    align='center'
+                  >
+                    <Link href={blog.url}>{blog.title}</Link>
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        )}
       </Grid>
     </div>
   );
