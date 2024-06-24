@@ -27,13 +27,7 @@ const Following = (): React.ReactElement => {
   return (
     <div>
       {followingData && followingData.length === 0 ? (
-        <Typography
-          variant='h1'
-          align='center'
-          gutterBottom
-          sx={{ fontFamily: 'fangsong', fontSize: '2rem' }}
-        >
-          {' '}
+        <Typography variant='h1' component='h2' fontSize={'1rem'}>
           Not Following Any Developers
         </Typography>
       ) : (
