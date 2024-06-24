@@ -9,11 +9,46 @@ async function main() {
   await prisma.tags.deleteMany().then(() => console.log('Deleted all tags'));
 
   const tagJavaScript = await prisma.tags.create({
-    data: { name: 'javascript', tagType: 'Post' },
+    data: { name: 'Javascript', tagType: 'Post' },
   });
   const tagTypescript = await prisma.tags.create({
-    data: { name: 'typescript', tagType: 'Post' },
+    data: { name: 'Typescript', tagType: 'Post' },
   });
+
+  const postTags = await prisma.tags.createMany({ data: [
+    { tagType: 'Post', name: 'FullStack' },
+    { tagType: 'Post', name: 'Backend' },
+    { tagType: 'Post', name: 'Frontend' },
+    { tagType: 'Post', name: 'Ui' },
+    { tagType: 'Post', name: 'DevOps' },
+    { tagType: 'Post', name: 'Beginner' },
+    { tagType: 'Post', name: 'Senior' },
+    { tagType: 'Post', name: 'Junior' },
+    { tagType: 'Post', name: 'Cloud' },
+    { tagType: 'Post', name: 'Ai' },
+    { tagType: 'Post', name: 'Mobile' },
+    { tagType: 'Post', name: 'Games' },
+    { tagType: 'Post', name: 'ios' },
+]});
+
+const userTags = await prisma.tags.createMany({ 
+  data: [
+    { tagType: 'User', name: 'Typescript' },
+    { tagType: 'User', name: 'Javascript' },
+    { tagType: 'User', name: 'Fullstack' },
+    { tagType: 'User', name: 'Backend' },
+    { tagType: 'User', name: 'Frontend' },
+    { tagType: 'User', name: 'Ui' },
+    { tagType: 'User', name: 'DevOps' },
+    { tagType: 'User', name: 'Beginner' },
+    { tagType: 'User', name: 'Senior' },
+    { tagType: 'User', name: 'Junior' },
+    { tagType: 'User', name: 'Cloud' },
+    { tagType: 'User', name: 'Ai' },
+    { tagType: 'User', name: 'Mobile' },
+    { tagType: 'User', name: 'Games' },
+    { tagType: 'User', name: 'ios' },
+]})
 
   const user1 = await prisma.user.create({
     data: {
