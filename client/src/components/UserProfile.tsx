@@ -117,6 +117,11 @@ const Profile = (): React.ReactElement => {
                     devId={
                       profileData!.devId !== null ? profileData!.devId : ''
                     }
+                    mediumId={
+                      profileData!.mediumId !== null
+                        ? profileData!.mediumId
+                        : ''
+                    }
                   />
                 </TabPanel>
                 <TabPanel value='3'>{<Followers />}</TabPanel>
