@@ -8,6 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
 
 const Followers = (): ReactElement => {
   const { id } = useParams();
@@ -25,7 +26,9 @@ const Followers = (): ReactElement => {
   return (
     <div>
       {followerData && followerData.length === 0 ? (
-        `No Followers`
+        <Typography variant='h1' component='h2' fontSize={'1rem'}>
+          No Followers
+        </Typography>
       ) : (
         <List>
           {followerData &&

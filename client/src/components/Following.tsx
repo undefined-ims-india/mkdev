@@ -8,6 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
 
 const Following = (): React.ReactElement => {
   const { id } = useParams();
@@ -23,7 +24,9 @@ const Following = (): React.ReactElement => {
   return (
     <div>
       {followingData && followingData.length === 0 ? (
-        `Not following any Developers`
+        <Typography variant='h1' component='h2' fontSize={'1rem'}>
+          Not Following Any Developers
+        </Typography>
       ) : (
         <List>
           {followingData &&
