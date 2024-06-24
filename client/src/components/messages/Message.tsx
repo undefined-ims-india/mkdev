@@ -4,9 +4,6 @@ import { Messages } from '@prisma/client';
 import axios from 'axios';
 
 import DeleteIcon from '@mui/icons-material/Delete';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
 import IconButton from '@mui/material/IconButton';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';

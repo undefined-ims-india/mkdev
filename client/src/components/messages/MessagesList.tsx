@@ -4,7 +4,6 @@ import Message from './Message';
 import { Messages, Conversations } from '@prisma/client';
 
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
