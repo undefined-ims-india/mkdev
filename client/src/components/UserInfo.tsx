@@ -50,6 +50,12 @@ const UserInfo = ({
           onChange={handleChange}
         />
         <TextField
+          name='mediumId'
+          label='Medium.dev Username'
+          value={userInfo!.mediumId || ''}
+          onChange={handleChange}
+        />
+        <TextField
           name='linkedinId'
           label='LinkedIn Username'
           value={userInfo!.linkedinId || ''}

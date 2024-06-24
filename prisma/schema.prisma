@@ -53,6 +53,7 @@ model User {
   googleId       String?         @unique
   linkedinId     String?         @unique
   devId          String?         @unique
+  mediumId       String?         @unique
   githubId       String?         @unique
   aboutMe        String?
   picture        String?
