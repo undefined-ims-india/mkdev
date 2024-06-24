@@ -53,6 +53,7 @@ const UserInfo = ({
           name='mediumId'
           label='Medium.dev Username'
           value={userInfo!.mediumId || ''}
+          sx={{ my: 2, mx: 1 }}
           onChange={handleChange}
         />
         <TextField
