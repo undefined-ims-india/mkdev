@@ -14,8 +14,7 @@ export default function SearchResults() {
 	const [userFeed, setUserFeed] = useState([]);
 	const feedRef = useRef(postFeed);
 
-	useEffect(() => {
-		console.log('params', tagType, tags);
+	const getSearch = () => {
 		axios.get(`/api/search/filter/${tagType}/${tags}`).then(({ data }) => {
 			if (tagType === 'User') {
 				let users = data.reduce((acc: any, curr: any) => {
@@ -32,6 +31,10 @@ export default function SearchResults() {
 			}, []);
 			return setPostFeed(data[0].posts);
 		});
+	}
+
+	useEffect(() => {
+		getSearch();
 	}, [feedRef]);
 
 	try {
@@ -41,7 +44,7 @@ export default function SearchResults() {
 					<SearchComponent />
 					{postFeed.map((post) => {
 						return (
-							<Post key={post.id + post.title} content={post} />
+							<Post key={post.id + post.title} content={post} refreshParent={getSearch}/>
 						);
 					})}
 				</Box>
