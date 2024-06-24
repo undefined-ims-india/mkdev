@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from 'axios';
+import {UserContext} from './UserContext'
 import { useParams, Link } from 'react-router-dom';
 import { PostWithRelations } from "../../../types";
 import dayjs from 'dayjs';
@@ -23,19 +24,21 @@ const FullPost = ():React.ReactElement => {
   const { id } = useParams();
   const [content, setContent]: [PostWithRelations | null, Function] = useState(null);
   const contentREF = useRef(content);
-  const [like, setLike] = useState(false);
+  const userId = useContext(UserContext);
 
   const handleLike = () => {
-    setLike(!like);
+    axios.patch(`/api/posts/${content!.id}/${content!.likedByUser ? 'dislike' : 'like'}`)
+      .then(() => {getPost()})
   }
 
-
-  useEffect(() => {
+  const getPost = () => {
     axios.get(`/api/posts/${id}`)
       .then(({data}) => {
         setContent(data);
       })
-  }, [contentREF])
+  }
+
+  useEffect(getPost, [contentREF])
 
   try {
     return (
@@ -46,14 +49,17 @@ const FullPost = ():React.ReactElement => {
               {'?'}
             </Avatar>
           </Link>
-          <Typography variant="h1" sx={{fontSize: 20, marginLeft: 2, marginRight: 2}}>{content!.author.username || content!.author.name}</Typography>
-          <Typography variant="body2" sx={{color: 'lightgrey'}}>{dayjs(content!.createdAt).fromNow()}</Typography>
-          <IconButton aria-label='Like' onClick={handleLike}>
-            {like ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          <Typography variant="h1" sx={{fontSize: 23, marginLeft: 2, marginRight: 2}}>{content!.author.username || content!.author.name}</Typography>
+          <Typography variant="body2" sx={{color: 'silver'}}>{dayjs(content!.createdAt).fromNow()}</Typography>
+          <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
+            {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
+          <Typography variant="body1">{content!.liked.length}</Typography>
         </Box>
           <Box sx={{display:"flex", flexDirection:'column', marginLeft: 2}}>
-          <MarkDown text={content!.title} />
+          <Box sx={{marginTop: 2}}>
+            <MarkDown text={content!.title} />
+          </Box>
           <Box sx={{display:"flex", flexDirection:'row', marginLeft: 1, marginTop: -1, alignItems: 'center'}}>
             {
               content!.tags.length ?
@@ -69,7 +75,9 @@ const FullPost = ():React.ReactElement => {
               <></>
             }
           </Box>
-          <MarkDown text={content!.body} />
+          <Box sx={{marginTop: 3}}>
+            <MarkDown text={content!.body} />
+          </Box>
         </Box>
         <Box>
           {content!.repo ? <RepoDisplay content={content!.repo}/> : <></>}
