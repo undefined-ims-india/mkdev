@@ -8,6 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
 
 const Following = (): React.ReactElement => {
   const { id } = useParams();
@@ -15,32 +16,45 @@ const Following = (): React.ReactElement => {
     useState<UserProfile[] | null>(null);
 
   useEffect(() => {
-    axios.get(`/api/follows/following/${id}`).then(({ data }) => {
-      setFollowingData(data);
-    });
+    axios
+      .get(`/api/follows/following/${id}`)
+      .then(({ data }) => {
+        setFollowingData(data);
+      })
+      .catch((err) => console.error(err));
   }, [id]);
 
   return (
     <div>
       {followingData && followingData.length === 0 ? (
-        `Not following any Developers`
+        <Typography
+          variant='h1'
+          align='center'
+          gutterBottom
+          sx={{ fontFamily: 'fangsong', fontSize: '2rem' }}
+        >
+          {' '}
+          Not Following Any Developers
+        </Typography>
       ) : (
-        <List>
-          {followingData &&
-            followingData.map((following) => (
-              <ListItem key={following.id}>
-                <ListItemAvatar>
-                  <a href={`/user/${following.id}/profile`}>
-                    <Avatar
-                      alt={following.username || ''}
-                      src={following.picture || '?'}
-                    />
-                  </a>
-                </ListItemAvatar>
-                <ListItemText primary={following.username} />
-              </ListItem>
-            ))}
-        </List>
+        <>
+          <List>
+            {followingData &&
+              followingData.map((following) => (
+                <ListItem key={following.id}>
+                  <ListItemAvatar>
+                    <a href={`/user/${following.id}/profile`}>
+                      <Avatar
+                        alt={following.username || ''}
+                        src={following.picture || '?'}
+                      />
+                    </a>
+                  </ListItemAvatar>
+                  <ListItemText primary={following.username} />
+                </ListItem>
+              ))}
+          </List>
+        </>
       )}
     </div>
   );

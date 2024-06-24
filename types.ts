@@ -22,5 +22,5 @@ export interface PostWithRelations extends Post {
 }
 
 export interface RepoWithFiles extends Repo {
-  files: File[]
+  files: File[];
 }
