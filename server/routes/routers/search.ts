@@ -19,7 +19,6 @@ search.get(
     }
     // Find posts where tag === tag and 
     try {
-      console.log(tagType, splitTags);
       const searchResults = await prisma.tags.findMany({
         where: {
           tagType: TagType[tagType],
