@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import SendIcon from '@mui/icons-material/Send';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev:4000');
 
 interface PropsType {
   con: Conversations;

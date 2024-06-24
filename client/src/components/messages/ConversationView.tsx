@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev:4000');
 
 interface PropsType {
   con: Conversations;

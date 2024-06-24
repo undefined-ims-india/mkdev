@@ -3,7 +3,7 @@ import dotEnv from 'dotenv';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import session from 'express-session';
-import { createServer } from 'node:http';
+import { createServer } from 'node:https';
 import { Server } from 'socket.io';
 import routes from './routes';
 import fileUpload from 'express-fileupload';
@@ -16,7 +16,7 @@ const GoogleStrategy = Strategy;
 const prisma = new PrismaClient();
 
 const PORT = process.env.PORT || 3000;
-const WS_PORT = process.env.WS_PORT || 4000;
+// const WS_PORT = process.env.WS_PORT || 4000;
 const CLIENT = path.resolve(__dirname, '..', '..');
 
 dotEnv.config();
@@ -29,7 +29,11 @@ const SESSION_SECRET: string = process.env.SESSION_SECRET || '';
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: [
+      `http://localhost:${PORT}`,
+      `http://127.0.0.1:${PORT}`,
+      `https://mkdev.dev`,
+    ],
     methods: 'GET, POST, PUT, DELETE',
     credentials: true,
   })
@@ -59,7 +63,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: '/auth/google/callback',
+      callbackURL: 'https://mkdev.dev/auth/google/callback',
     },
     (accessToken: string, refreshToken: string, profile: any, done: any) => {
       const { name, given_name, family_name, sub, picture } = profile._json;
@@ -148,17 +152,18 @@ app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
 });
 
-const socket = express();
-const server = createServer(socket);
+// const socket = express();
+const server = createServer(app);
 const io = new Server(server, {
   connectionStateRecovery: {},
   cors: {
     origin: [
       `http://localhost:${PORT}`,
       `http://127.0.0.1:${PORT}`,
-      `http://ec2-3-19-237-1.us-east-2.compute.amazonaws.com:${PORT}/`,
+      `https://mkdev.dev`,
     ],
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 
@@ -178,7 +183,7 @@ io.on('connection', (socket) => {
 });
 // socket handling ----------------------------------------- //
 // websocket server
-io.listen(+WS_PORT);
+io.listen(4000);
 
 app.listen(PORT, () => {
   console.info(`\nhttp://localhost:${PORT}\nhttp://127.0.0.1:${PORT}`);

@@ -14,7 +14,9 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev:4000', {
+  withCredentials: true,
+});
 
 const Messages = (): ReactElement => {
 
