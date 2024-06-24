@@ -11,7 +11,6 @@ search.get(
   ) => {
     const { tagType, tags } = req.params;
     const splitTags = tags.split('-');
-    // console.log(splitTags, tagType, tags);
 
     // Validate and cast tagTypeParam to tagType enum
     if (!Object.values(TagType).includes(tagType)) {
