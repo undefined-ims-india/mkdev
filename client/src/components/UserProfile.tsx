@@ -30,11 +30,13 @@ const Profile = (): React.ReactElement => {
   const profileDataREF = useRef(profileData);
   const [tab, setTab] = useState('1');
 
-  useEffect(() => {
+  const getProfile = () => {
     axios
-      .get(`/api/users/${id}/profile`)
-      .then(({ data }): void => setProfileData(data));
-  }, [profileDataREF]);
+    .get(`/api/users/${id}/profile`)
+    .then(({ data }): void => setProfileData(data));
+  };
+
+  useEffect(getProfile, [profileDataREF]);
 
   const handleEdit = () => setEdit(true);
 
@@ -109,6 +111,7 @@ const Profile = (): React.ReactElement => {
                     <Post
                       key={post.title + crypto.randomUUID()}
                       content={post}
+                      refreshParent={getProfile}
                     />
                   ))}
                 </TabPanel>
