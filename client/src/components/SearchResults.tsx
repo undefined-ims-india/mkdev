@@ -35,7 +35,7 @@ export default function SearchResults() {
 
 	useEffect(() => {
 		getSearch();
-	}, [feedRef]);
+	}, []);
 
 	try {
 		return (
