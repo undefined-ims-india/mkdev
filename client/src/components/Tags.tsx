@@ -25,10 +25,9 @@ const Tags = () => {
 	}, []);
 
 	const handleClick = async (id: number) => {
-		// console.log(id, 'YOU CLICKED!!');
 		try {
 			await axios.patch(`/api/tags/${id}`);
-			getUserTags();
+			await getUserTags();
 		} catch (error) {
 			console.error('Error deleting tag:', error);
 		}
