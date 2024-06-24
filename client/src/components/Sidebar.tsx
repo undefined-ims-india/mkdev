@@ -1,6 +1,9 @@
 import * as React from 'react';
-import { Chip } from '@mui/material';
+import { IconButton, AppBar, Toolbar, Typography, Box } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import Drawers from './Drawers';
+
+const drawerWidth = 240; 
 
 export default function Sidebar() {
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -21,14 +24,20 @@ export default function Sidebar() {
         }
     };
 
-
     return (
-        <Drawers mobileOpen={mobileOpen}
-            onTransitionEnd={handleDrawerTransitionEnd}
-            handleDrawerClose={handleDrawerClose}
-            handleDrawerTransitionEnd={handleDrawerTransitionEnd}
-            handleDrawerToggle={handleDrawerToggle}
-        />
+        <Box sx={{ display: 'flex' }}>
+            <Drawers
+                mobileOpen={mobileOpen}
+                onTransitionEnd={handleDrawerTransitionEnd}
+                handleDrawerClose={handleDrawerClose}
+                handleDrawerTransitionEnd={handleDrawerTransitionEnd}
+                handleDrawerToggle={handleDrawerToggle}
+            />
+            <Box
+                component="main"
+                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+            >
+            </Box>
+        </Box>
     );
 }
-

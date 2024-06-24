@@ -6,9 +6,11 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import { Messages, Conversations } from '@prisma/client';
 
-const socket = io('https://mkdev.dev:4000', {
-  withCredentials: true,
-});
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+
+const socket = io('https://mkdev.dev:4000');
 
 interface PropsType {
   con: Conversations;
@@ -43,16 +45,34 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
   })
 
   return (
-    <div>
+    <Grid container
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="flex-start"
+    >
       { !addingConversation ? (
-          <>
-            <h3>{ label }</h3>
-            <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
-            <MessageInput con={ con }/>
-          </>
+        <>
+          <Box
+            sx={{
+              top: 0
+            }}
+          >
+            <Typography variant='h4'>
+              { label }
+            </Typography>
+          </Box>
+          <Box>
+            <Grid item>
+              <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
+            </Grid>
+            <Grid item>
+              <MessageInput con={ con }/>
+            </Grid>
+          </Box>
+        </>
         ) : ('')
       }
-    </div>
+    </Grid>
   );
 }
 

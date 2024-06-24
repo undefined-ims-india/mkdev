@@ -6,53 +6,94 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
+import Link from '@mui/material/Link';
 
 interface Blog {
   id: number;
   title: string;
-  description: string;
   url: string;
   cover_image: string;
 }
 interface UserProps {
   devId: string;
+  mediumId: string;
 }
 
-const Blogs = ({ devId }: UserProps): ReactElement => {
+const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {
-    axios
-      .get(`https://dev.to/api/articles?username=${devId}&per_page=6`)
-      .then(({ data }) => {
-        setBlogs(data);
-      })
-      .catch((err) => console.error('Failed to get blogs:', err));
-  }, [devId]);
+    // Dev.to Blogs
+    const getDev = () => {
+      axios
+        .get(`https://dev.to/api/articles?username=${devId}&per_page=6`)
+        .then(({ data }) => {
+          setBlogs(data);
+        })
+        .catch((err) => console.error(err));
+    };
+    // Medium Blogs
+    const getMedium = () => {
+      axios
+        .get(
+          `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumId}`
+        )
+        .then(({ data }) => {
+          setBlogs((prevBlogs) =>
+            prevBlogs.concat(
+              data.items.map((blog: any) => ({
+                id: blog.guid,
+                title: blog.title,
+                url: blog.link,
+                cover_image: blog.thumbnail,
+              }))
+            )
+          );
+        })
+        .catch((err) => console.error(err));
+    };
+    if (mediumId) {
+      getMedium();
+    } else if (devId) {
+      getDev();
+    } else {
+      setBlogs([]);
+    }
+  }, [devId, mediumId]);
 
   return (
     <div>
       <Grid container spacing={4}>
-        {blogs.map((blog) => (
-          <Grid item key={blog.id} xs={12} sm={6} md={4}>
-            <Card>
-              <CardMedia
-                component='img'
-                height='140'
-                image={blog.cover_image}
-                alt={blog.title}
-              />
-              <CardContent>
-                <Typography variant='h5' component='h2'>
-                  <a href={blog.url}>{blog.title}</a>
-                </Typography>
-                <Typography variant='body2' color='textSecondary' component='p'>
-                  {blog.description}
-                </Typography>
-              </CardContent>
-            </Card>
+        {blogs.length === 0 ? (
+          <Grid item xs={12}>
+            <Typography variant='h1' component='h2' fontSize={'1rem'}>
+              No Blogs Found
+            </Typography>
           </Grid>
-        ))}
+        ) : (
+          blogs.map((blog, idx) => (
+            <Grid item key={idx} xs={12} sm={6} md={4}>
+              <Card>
+                <CardMedia
+                  component='img'
+                  height='140'
+                  image={blog.cover_image}
+                  alt={blog.title}
+                />
+                <CardContent>
+                  <Typography
+                    variant='h1'
+                    component='h2'
+                    fontSize={'2rem'}
+                    align='center'
+                  >
+                    <Link href={blog.url}>{blog.title}</Link>
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        )}
       </Grid>
     </div>
   );

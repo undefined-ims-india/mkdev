@@ -10,6 +10,9 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 const socket = io('https://mkdev.dev:4000', {
   withCredentials: true,
@@ -143,62 +146,109 @@ const Messages = (): ReactElement => {
   })
 
   return (
-    <div>
-      <h1>Direct Messages</h1>
+    <>
+      <Grid container>
+        <Grid item>
+          <Typography variant="h3">
+            Direct Messages
+          </Typography>
+        </Grid>
+      </Grid>
       { loginError ? (
         <>
-          <h3> You must be logged in to view conversations</h3>
+          <Grid container>
+            <Grid item>
+              <Typography variant="h1">
+                You must be logged in to view conversations
+              </Typography>
+            </Grid>
+          </Grid>
         </>
       ) : (
         <>
-          <Button onClick={ beginConversation }>➕ Start Conversation</Button>
-          <ConversationList 
-            allCons={ allConversations } 
-            setCons={ getAllConversations } 
-            select={ selectConversation }
-            deleteCon={ deleteConversation }
-          />
-          { addingConversation ? (
-              <form>
-                <Autocomplete
-                  multiple
-                  id="tags-filled"
-                  options={allUsers.map((option) => option.username)}
-                  value={ participantsEntry }
-                  onChange={ changeParticipants }
-                  freeSolo
-                  renderTags={(value, getTagProps) =>
-                    value.map((option, index: number) => {
-                      const { key, ...tagProps } = getTagProps({ index });
-                      return (
-                        <Chip variant="outlined" label={option} key={key} {...tagProps} />
-                      );
-                    })
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="filled"
-                      label="To:"
-                      placeholder="usernames"
+          <Button
+            sx={{ marginBottom: 4 }}
+            variant='contained'
+            onClick={ beginConversation }
+          >
+            ➕ Start Conversation
+          </Button>
+          <Grid container                                     // top most container for ConversationList and ConversationView
+            component={Paper}
+            spacing={{ md: 1.5, lg: 3}}
+            sx={{
+              width: '100%',
+              height: '80vh',
+            }}
+          >
+            <Grid container item                              // ConversationList container
+              md={4}
+              xs={12}
+              sx={{
+                border: 1,
+                borderColor: '#8c959f',
+                paddingLeft: 4,
+              }}
+            >
+              <ConversationList
+                allCons={ allConversations }
+                setCons={ getAllConversations }
+                select={ selectConversation }
+                deleteCon={ deleteConversation }
+              />
+            </Grid>
+            <Grid container item                                // ConversationView container
+              md={8}
+              xs={12}
+              sx={{
+                border: 1,
+                borderColor: '#8c959f'
+              }}
+            >
+              { addingConversation ? (
+                  <form>
+                    <Autocomplete
+                      multiple
+                      id="tags-filled"
+                      options={allUsers.map((option) => option.username)}
+                      value={ participantsEntry }
+                      onChange={ changeParticipants }
+                      freeSolo
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index: number) => {
+                          const { key, ...tagProps } = getTagProps({ index });
+                          return (
+                            <Chip variant="outlined" label={option} key={key} {...tagProps} />
+                          );
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="filled"
+                          label="To:"
+                          placeholder="usernames"
+                        />
+                      )}
                     />
-                  )}
+                    <Button onClick={ addConversation }>Add Conversation</Button>
+                  </form>
+                ) : ('')
+              }
+              { con ? (
+                <ConversationView
+                  addingConversation={ addingConversation }
+                  con={ con }
+                  label={ participantsLabel }
                 />
-                <button onClick={ addConversation }>Add Conversation</button>
-              </form>
-            ) : ('')
-          }
-          { con ?
-            <ConversationView
-              addingConversation={ addingConversation }
-              con={ con }
-              label={ participantsLabel }
-            /> : ''
-          }
+                ) : ('')
+              }
+            </Grid>
+          </Grid>
         </>
       )
       }
-    </div>
+    </>
   );
 }
 

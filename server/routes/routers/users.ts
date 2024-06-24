@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { RequestWithUser } from '../../../types';
 
 const users = Router();
 const prisma = new PrismaClient();
@@ -11,12 +12,11 @@ users.get('/loggedIn', (req: any, res: any) => {
     res.send({id: user.id});
   } else {
     res.send({id: 0})
-    console.error('Please Log in');
   }
 });
 
 //Get user profile
-users.get('/:id/profile', async ( req: express.Request<{ id: string }>, res: express.Response): Promise<void> => {
+users.get('/:id/profile', async ( req: RequestWithUser, res: any): Promise<void> => {
     try {
       const userProfile = await prisma.user.findUniqueOrThrow({
         where: { id: +req.params.id },
@@ -29,10 +29,20 @@ users.get('/:id/profile', async ( req: express.Request<{ id: string }>, res: exp
               repo: true,
               liked: { select: { id: true } },
             },
+            orderBy: [
+              {
+                createdAt: 'desc'
+              }
+            ]
           },
           blogs: true,
         },
       });
+      if (req.user){
+        userProfile.posts = userProfile.posts.map(post => (
+          {...post, likedByUser: post.liked.slice().map(like => like.id).includes(req.user!.id)}
+        ))
+      }
       res.send(userProfile);
     } catch (err) {
       console.error(err);
