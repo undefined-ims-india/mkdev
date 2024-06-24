@@ -29,6 +29,11 @@ users.get('/:id/profile', async ( req: RequestWithUser, res: any): Promise<void>
               repo: true,
               liked: { select: { id: true } },
             },
+            orderBy: [
+              {
+                createdAt: 'desc'
+              }
+            ]
           },
           blogs: true,
         },
