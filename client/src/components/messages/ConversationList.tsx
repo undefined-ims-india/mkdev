@@ -21,8 +21,12 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
     <Grid container
     sx={{
       // border: 1,
-      paddingLeft: 4
+      paddingTop: 4
     }}
+    direction="column"
+    justifyContent="flex-start"
+    alignItems="center"
+    spacing={3}
     >
       <List>
       {

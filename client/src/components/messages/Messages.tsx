@@ -149,7 +149,7 @@ const Messages = (): ReactElement => {
     <>
       <Grid container>
         <Grid item>
-          <Typography variant="h1">
+          <Typography variant="h3">
             Direct Messages
           </Typography>
         </Grid>
@@ -179,7 +179,6 @@ const Messages = (): ReactElement => {
             sx={{
               width: '100%',
               height: '80vh',
-              bgColor: '#AAAAAA'
             }}
           >
             <Grid container item                              // ConversationList container
@@ -187,12 +186,9 @@ const Messages = (): ReactElement => {
               xs={12}
               sx={{
                 border: 1,
+                borderColor: '#8c959f',
                 paddingLeft: 4,
               }}
-              // direction="column"
-              // justifyContent="flex-start"
-              // alignItems="flex-start"
-              // spacing={3}
             >
               <ConversationList
                 allCons={ allConversations }
@@ -206,6 +202,7 @@ const Messages = (): ReactElement => {
               xs={12}
               sx={{
                 border: 1,
+                borderColor: '#8c959f'
               }}
             >
               { addingConversation ? (

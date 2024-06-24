@@ -62,6 +62,7 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
         sx={{
           width: '200px'
         }}
+        variant='contained'
       >
         <Button
           fullWidth
