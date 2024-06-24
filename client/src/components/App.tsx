@@ -13,6 +13,7 @@ import Messages from './messages/Messages';
 import Profile from './UserProfile';
 import FullPost from './FullPost';
 import Welcome from './Welcome';
+import Signup from './Survey';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
