@@ -27,7 +27,7 @@ const Welcome = () => {
           variant='h1'
           align='center'
           gutterBottom
-          sx={{ fontFamily: 'fangsong', fontSize: '3rem' }}
+          sx={{ fontFamily: 'sans-serif', fontSize: '3rem' }}
         >
           Welcome to
         </Typography>
@@ -36,7 +36,7 @@ const Welcome = () => {
           variant='h1'
           align='center'
           sx={{
-            fontFamily: 'fangsong',
+            fontFamily: 'sans-serif',
             fontSize: '6rem',
             fontWeight: 'bold',
           }}
@@ -48,7 +48,7 @@ const Welcome = () => {
           align='center'
           gutterBottom
           sx={{
-            fontFamily: 'fangsong',
+            fontFamily: 'sans-serif',
             fontSize: '1rem',
             fontWeight: 'bold',
             mb: 3,
