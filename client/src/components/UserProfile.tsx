@@ -24,7 +24,6 @@ import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import ArticleIcon from '@mui/icons-material/Article';
 
 const Profile = (): React.ReactElement => {
   const userId = useContext(UserContext);
@@ -88,7 +87,7 @@ const Profile = (): React.ReactElement => {
               gutterBottom
               variant='h1'
               textAlign='center'
-              sx={{ fontFamily: 'fangsong', fontSize: '3rem' }}
+              sx={{ fontFamily: 'sans-serif', fontSize: '3rem' }}
             >
               {profileData!.username}
             </Typography>
@@ -160,7 +159,16 @@ const Profile = (): React.ReactElement => {
                       target='_blank'
                       title='Dev.to Profile'
                     >
-                      <ArticleIcon fontSize='large' />
+                      Dev.to
+                    </Link>
+                  </Typography>
+                  <Typography variant='body1'>
+                    <Link
+                      href={`https://medium.com/@${profileData!.mediumId}`}
+                      target='_blank'
+                      title='Medium.dev Profile'
+                    >
+                      Medium.dev
                     </Link>
                   </Typography>
                 </Box>
