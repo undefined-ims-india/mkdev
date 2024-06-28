@@ -135,7 +135,7 @@ app.get('/login', (req: Request, res: Response) => {
   res.render('login');
 });
 
-app.post('/logout', function (req: Request, res: Response, next) {
+app.post('/logout', (req: Request, res: Response, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
