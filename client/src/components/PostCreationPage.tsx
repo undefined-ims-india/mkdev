@@ -1,8 +1,10 @@
 import React, { ReactElement, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import MarkDown from './MarkDown';
 import Repo from './post creation/Repo';
+import PostTagsChips from './PostTagsChips';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -100,7 +102,7 @@ const PostCreationPage = (): ReactElement => {
           <Divider orientation='horizontal' variant='middle'/>
           <TabContext value={currentTab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleTabChange} sx={{background: 'rgb(255, 255, 255, .25)', borderRadius: 7}}>
+              <TabList onChange={handleTabChange} sx={{background: 'rgb(255, 255, 255, .25)', borderRadius: 2}}>
                 <Tab label="Edit" value="0" sx={{color: 'aliceblue'}}/>
                 <Tab label="Preview" value="1" sx={{color: 'aliceblue'}}/>
                 <Tab label="Repo" value="2" sx={{color: 'aliceblue'}}/>
@@ -157,9 +159,10 @@ const PostCreationPage = (): ReactElement => {
               </Paper>
             </TabPanel>
             <TabPanel value="1">
-              <Paper sx={{background: 'aliceblue', paddingX: 2}}>
+              <Paper sx={{background: 'aliceblue', paddingX: 2, minHeight: '6rem'}}>
                 <Stack>
                   <MarkDown text={title} />
+                  <PostTagsChips tags={selectedTags} />
                   <Divider orientation='horizontal' variant='middle' />
                   <MarkDown text={body} />
                 </Stack>
