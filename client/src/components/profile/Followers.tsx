@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserProfile } from '../../../types';
+import { UserProfile } from '../../../../types';
 import axios from 'axios';
 
 import List from '@mui/material/List';
