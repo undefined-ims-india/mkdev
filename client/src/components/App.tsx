@@ -15,7 +15,6 @@ import FullPost from './FullPost';
 import SearchResults from './SearchResults';
 import Welcome from './Welcome';
 import Signup from './Survey';
-import Test from './Test';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -68,10 +67,6 @@ const routes = [
     path: '/survey',
     element: <Signup />,
   },
-  {
-    path: '/test',
-    element: <Test />,
-  }
 ];
 
 const App = (): ReactElement => {
