@@ -8,6 +8,7 @@ dayjs.extend(relativeTime);
 import axios from 'axios';
 
 import MarkDown from "./MarkDown";
+import PostTagsChips from "./PostTagsChips";
 
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -47,21 +48,11 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
       </Box>
       <Box sx={{display:"flex", flexDirection:'column', marginLeft: 9}}>
         <MarkDown text={content.title} />
-        <Box sx={{display:"flex", flexDirection:'row', alignItems: 'center'}}>
-          {
-            content.tags.length ?
-            content.tags.map((tag) => (
-              <Chip
-                label={tag.name}
-                variant="outlined"
-                size="medium"
-                key={tag.name + content.id}
-              />
-            ))
-            :
-            <></>
-          }
-        </Box>
+        {
+          content.tags.length ?
+          <PostTagsChips tags={content.tags} /> :
+          <></>
+        }
       </Box>
       <Box sx={{display: "flex", flexDirection: "row", alignItems: 'center', marginLeft: 9, marginBottom: 2, justifyContent: 'space-between'}}>
         <Box sx={{display: "flex", flexDirection: "row", alignItems: 'center'}}>
