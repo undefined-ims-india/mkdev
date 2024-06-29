@@ -56,7 +56,7 @@ const routes = [
     element: <Profile />,
   },
   {
-    path: 'post/:id',
+    path: '/post/:id',
     element: <FullPost />,
   },
   {
