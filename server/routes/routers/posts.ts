@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { PostWithRelations, RequestWithUser } from '../../../types';
 import { PrismaClient,Tags } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
+import awsS3Fetch from '../../helpers/aws-s3-fetch';
 // to remove the maintenance warning in the console...
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const posts = Router();
@@ -24,7 +25,7 @@ posts.post('/', async (req: any, res: any) => {
         data: {
           title,
           body,
-          s3_Etag: s3Obj.ETag,
+          s3_key: s3Obj.Key,
           author: { connect: { id: req.user.id } },
           tags: { connect: tagArr }
         },
@@ -177,6 +178,28 @@ posts.delete('/:id', (req: any, res: any) => {
     .finally(async () => {
       await prisma.$disconnect();
     });
+
 });
+
+posts.get('/:id/image', async (req: any, res: any) => {
+  try {
+    const { id } = req.params;
+    const post = await prisma.post.findUniqueOrThrow({
+      where: { id: +id },
+      select: {
+        s3_key: true,
+      },
+    });
+    if ( !post.s3_key ) { throw {code: 'P2025'};}
+    res.send(await awsS3Fetch(post.s3_key));
+  }
+  catch (err: {code: string}) {
+    console.error('Error: GET /api/posts/:id/image: ', err);
+    res.sendStatus( err.code==='P2025' ? 404 : 500);
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+})
 
 export default posts;
