@@ -10,6 +10,7 @@ import axios from 'axios';
 import MarkDown from "./MarkDown";
 
 import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
@@ -30,6 +31,9 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
 
   return (
     <Card sx={{marginBottom: 3, maxWidth: 3/4, borderRadius: 2}}>
+      <div className="fill">
+        {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
+      </div>
       <Box sx={{display:"flex", flexDirection:'row', marginLeft: 2, marginTop: 2, alignItems: 'center'}}>
           <Link to={`/user/${content.author.id}/profile`}>
             <Avatar alt={content.author.username!} src={content.author.picture!}>

@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { PostWithRelations, RequestWithUser } from '../../../types';
 import { PrismaClient,Tags } from '@prisma/client';
 import awsS3Upload from '../../helpers/aws-s3-upload';
-import awsS3Fetch from '../../helpers/aws-s3-fetch';
 // to remove the maintenance warning in the console...
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 const posts = Router();

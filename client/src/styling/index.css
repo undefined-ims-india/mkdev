@@ -14,3 +14,17 @@
   color: aliceblue;
   padding: 2rem;
 }
+
+.fill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  max-height: 250px;
+  border-radius: 3px;
+}
+.fill img {
+  flex-shrink: 0;
+  min-width: 100%;
+  
+}
