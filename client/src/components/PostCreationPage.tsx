@@ -26,7 +26,7 @@ const PostCreationPage = (): ReactElement => {
   const [body, setBody]: [string, Function] = useState('');
   const [titleFieldTooltip, setTitleFieldTooltip] = useState(false);
   const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
-  // const [img, setImg]: [any, Function] = useState();
+  const [img, setImg]: [any, Function] = useState();
   const [cantSubmit, setCantSubmit]: [boolean, Function] = useState(false);
   const [repo, setRepo]: [{link: string, files: { path: string; contents: string }[]},Function] = useState({link:'', files:[]});
   const [currentTab, setCurrentTab] = useState('0');
@@ -56,14 +56,14 @@ const PostCreationPage = (): ReactElement => {
     }
   };
 
-  // const handleFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
-  //   setImg(e.target.files![0]);
-  // };
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setImg(e.target.files![0]);
+  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setCantSubmit(true);
-    axios.postForm('/api/posts', { title, body, /*img,*/ tags: JSON.stringify(selectedTags), repo: btoa(JSON.stringify(repo)) })
+    axios.postForm('/api/posts', { title, body, img, tags: JSON.stringify(selectedTags), repo: btoa(JSON.stringify(repo)) })
       .then(({ data }) => {
         navigate('/dashboard');
     })
@@ -88,48 +88,27 @@ const PostCreationPage = (): ReactElement => {
   return (
     <Grid container spacing={0}>
       <Grid item xs />
-      <Grid item xs={10}>
-        <Paper elevation={3}>
+      <Grid item md={8} xs={12}>
+        <div className='glass-card'>
           <Grid container>
             <Grid item xs sx={{marginTop: 5, marginBottom: 5}}/>
-            <Grid item xs={6} sx={{display: 'flex', justifyContent:'center', alignItems:'center'}}>
-              <Typography variant='h1' sx={{fontSize:40}}>Create Post</Typography>
-            </Grid>
-            <Grid item xs={2} sx={{display: 'flex', justifyContent:'center', alignItems:'center'}}>
-                <Button onClick={handleSubmit} disabled={cantSubmit} >Submit</Button>
+            <Grid item xs={6} md={12} sx={{display: 'flex', justifyContent:'center', alignItems:'center'}}>
+              <Typography variant='h1' sx={{fontSize:50, fontWeight: 4}}>Create Post</Typography>
             </Grid>
             <Grid item xs/>
           </Grid>
           <Divider orientation='horizontal' variant='middle'/>
           <TabContext value={currentTab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <TabList onChange={handleTabChange}>
-                <Tab label="Edit" value="0"/>
-                <Tab label="Preview" value="1"/>
-                <Tab label="Repo" value="2"/>
+              <TabList onChange={handleTabChange} sx={{background: 'rgb(255, 255, 255, .25)', borderRadius: 7}}>
+                <Tab label="Edit" value="0" sx={{color: 'aliceblue'}}/>
+                <Tab label="Preview" value="1" sx={{color: 'aliceblue'}}/>
+                <Tab label="Repo" value="2" sx={{color: 'aliceblue'}}/>
               </TabList>
             </Box>
             <TabPanel value="0">
-              <Paper>
-                <Stack sx={{marginRight: 2, marginLeft: 2}}>
-                  {allPostTags ?
-                    <Autocomplete
-                      multiple
-                      options={allPostTags}
-                      value={selectedTags}
-                      onChange={handleTagSelect}
-                      getOptionLabel={(tag: Tags) => tag.name}
-                      renderInput={(params) => (
-                        <TextField
-                        {...params}
-                        label="Tags"
-                        placeholder={ selectedTags.length ? 'Choose more tags' : 'Choose tags to categorize your post'}
-                        />
-                      )}
-                    />
-                  :
-                    <></>
-                  }
+              <Paper sx={{background: 'aliceblue', paddingX: 2}}>
+                <Stack>
                   <Input
                     id="post-title"
                     type="text"
@@ -137,6 +116,7 @@ const PostCreationPage = (): ReactElement => {
                     onChange={handleTextInput}
                     name="title"
                     placeholder="Title"
+                    sx={{marginY: 2}}
                     />
                   <Input
                     id="post-body"
@@ -148,11 +128,36 @@ const PostCreationPage = (): ReactElement => {
                     placeholder="Body Text"
                     rows={30}
                   />
+                  <Box sx={{marginY: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
+                    {allPostTags ?
+                      <Box sx={{flexGrow: 1}}>
+                        <Autocomplete
+                        multiple
+                        options={allPostTags}
+                        value={selectedTags}
+                        onChange={handleTagSelect}
+                        getOptionLabel={(tag: Tags) => tag.name}
+                        renderInput={(params) => (
+                          <TextField
+                          {...params}
+                          label="Tags"
+                          placeholder={ selectedTags.length ? 'Choose more tags' : 'Choose tags to categorize your post'}
+                          />
+                        )}
+                        />
+                      </Box>
+                      :
+                      <></>
+                    }
+                    <Box sx={{margin: 2}}>
+                      <Button variant="contained" onClick={handleSubmit} disabled={cantSubmit} >Submit</Button>
+                    </Box>
+                  </Box>
                 </Stack>
               </Paper>
             </TabPanel>
             <TabPanel value="1">
-              <Paper>
+              <Paper sx={{background: 'aliceblue', paddingX: 2}}>
                 <Stack>
                   <MarkDown text={title} />
                   <Divider orientation='horizontal' variant='middle' />
@@ -161,14 +166,15 @@ const PostCreationPage = (): ReactElement => {
               </Paper>
             </TabPanel>
             <TabPanel value="2">
-              <Paper>
+              <Paper sx={{background: 'aliceblue', padding: 2}}>
                 <Repo saveFile={saveFile} saveRepo={saveRepo}/>
               </Paper>
             </TabPanel>
           </TabContext>
-        </Paper>
+        </div>
       </Grid>
       <Grid item xs />
+      
     </Grid>
   );
 };
