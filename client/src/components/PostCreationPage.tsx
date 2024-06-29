@@ -1,6 +1,8 @@
 import React, { ReactElement, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Tags } from '@prisma/client';
+
 
 import MarkDown from './MarkDown';
 import Repo from './post creation/Repo';
@@ -20,7 +22,8 @@ import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Tags } from '@prisma/client';
+import InputLabel from '@mui/material/InputLabel';
+import CheckIcon from '@mui/icons-material/Check';
 
 const PostCreationPage = (): ReactElement => {
   const navigate = useNavigate();
@@ -109,8 +112,20 @@ const PostCreationPage = (): ReactElement => {
               </TabList>
             </Box>
             <TabPanel value="0">
-              <Paper sx={{background: 'aliceblue', paddingX: 2}}>
+              <Paper sx={{background: 'aliceblue', padding: 2}}>
                 <Stack>
+                  <Box sx={{display: 'flex', flexDirection:'row', alignItems: 'center'}}>
+                    <InputLabel htmlFor='img-upload'>
+                      <Button variant='contained' component="span">Add Cover Image</Button>
+                    </InputLabel>
+                    <TextField
+                      type='file'
+                      sx={{display: 'none'}}
+                      id='img-upload'
+                      onChange={handleFile}
+                    />
+                    <CheckIcon fontSize='large' sx={{color: img ? 'green' : 'silver'}} />
+                  </Box>
                   <Input
                     id="post-title"
                     type="text"
@@ -161,6 +176,9 @@ const PostCreationPage = (): ReactElement => {
             <TabPanel value="1">
               <Paper sx={{background: 'aliceblue', paddingX: 2, minHeight: '6rem'}}>
                 <Stack>
+                  <div className="fill">
+                    {img ? <img src={URL.createObjectURL(img)} /> : <></>}
+                  </div>
                   <MarkDown text={title} />
                   <PostTagsChips tags={selectedTags} />
                   <Divider orientation='horizontal' variant='middle' />
