@@ -26,6 +26,7 @@ const app = express();
 const GOOGLE_CLIENT_ID: string = process.env.GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET: string = process.env.GOOGLE_CLIENT_SECRET || '';
 const SESSION_SECRET: string = process.env.SESSION_SECRET || '';
+const CALLBACK_URL: string = process.env.CALLBACK_URL || '';
 
 app.use(
   cors({
@@ -63,7 +64,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: 'https://mkdev.dev/auth/google/callback',
+      callbackURL: CALLBACK_URL,
     },
     (accessToken: string, refreshToken: string, profile: any, done: any) => {
       const { name, given_name, family_name, sub, picture } = profile._json;
