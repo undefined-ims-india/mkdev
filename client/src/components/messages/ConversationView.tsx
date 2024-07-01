@@ -40,7 +40,7 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
 
   // add any received message from websocket
   socket.on('message', (msg: Messages): void => {
-    // add emitted messages to allMsgs
+    // add emitted message to allMsgs
     setAllMsgs([...allMsgs, msg]);
   })
 
