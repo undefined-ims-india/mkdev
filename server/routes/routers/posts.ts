@@ -24,7 +24,7 @@ posts.post('/', async (req: any, res: any) => {
         data: {
           title,
           body,
-          s3_Etag: s3Obj.ETag,
+          s3_key: s3Obj.Key,
           author: { connect: { id: req.user.id } },
           tags: { connect: tagArr }
         },
@@ -177,6 +177,7 @@ posts.delete('/:id', (req: any, res: any) => {
     .finally(async () => {
       await prisma.$disconnect();
     });
+
 });
 
 export default posts;
