@@ -10,6 +10,14 @@ messages.get('/:conversationId', async (req, res) => {
   const allMessages = await prisma.messages.findMany({
     where: {
       conversationId: +conversationId,
+    },
+    include: {
+      sender: {
+        select: {
+          username: true,
+          picture: true,
+        }
+      }
     }
   });
   res.status(200).send(allMessages);
