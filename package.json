@@ -8,6 +8,7 @@
     "dev:start": "nodemon dist/server/server/index.js",
     "dev:frontend": "npx webpack --watch",
     "dev:server": "tsc --watch",
+    "dev:copy": "cp ./server/public -r ./dist/server/server/public",
     "dev": "concurrently npm:dev:* -c ##31E981,#55C3FF,#FFCA28",
     "build:types": "tsc ",
     "build:webpack": "npx webpack",
