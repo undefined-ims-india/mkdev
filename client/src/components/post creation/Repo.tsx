@@ -52,7 +52,7 @@ const Repo = ({ saveFile, saveRepo }: {saveFile: Function, saveRepo: Function}):
         <Button disabled={!tree.length || !displayFile.length} onClick={() => {saveFile(displayFilePath, displayFile)}}>Save file to post</Button>
       </Box>
     </Box>
-    <Box sx={{display: 'flex', flexDirection: 'row'}}>
+    <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
         <List sx={{height: 600, overflow: 'scroll'}}>
           {tree.map((file, index) => (
             <ListItem key={index}>
@@ -63,7 +63,7 @@ const Repo = ({ saveFile, saveRepo }: {saveFile: Function, saveRepo: Function}):
           ))}
         </List>
       <Divider orientation='vertical' />
-      <Paper sx={{height:600,overflow: 'scroll'}}>
+      <Paper sx={{height:600,overflow: 'scroll', background: '#0d1117'}}>
         <MarkDown text={displayFile} />
       </Paper>
     </Box>
