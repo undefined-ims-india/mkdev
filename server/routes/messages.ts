@@ -31,7 +31,23 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
       }
     }
   })
-  .then(() => { res.sendStatus(201) })
+  .then((message) => {
+    // query for username and avatar
+    prisma.user.findUnique({
+      where: { id: message.senderId }
+    })
+    .then((user) => {
+      res.status(201).send({
+        ...message,
+        username: user!.username,
+        picture: user!.picture
+      })
+    })
+    .catch((err) => {
+      console.error('Failed to find user associated with that id:\n', err);
+      res.sendStatus(404);
+    })
+  })
   .catch((err: Error) => {
     console.error('Failed to create new message:\n', err);
     res.sendStatus(500);
@@ -54,7 +70,7 @@ messages.patch('/:id', (req: Request, res: Response) => {
     res.sendStatus(201);
   })
   .catch((err) => {
-    console.error('Failed to update like field', err);
+    console.error('Failed to update like field:\n', err);
   })
 })
 
@@ -69,7 +85,7 @@ messages.delete('/:id', (req: Request, res: Response) => {
     res.sendStatus(200);
   })
   .catch((err) => {
-    console.error('Failed to delete message', err)
+    console.error('Failed to delete message:\n', err)
   });
 })
 
