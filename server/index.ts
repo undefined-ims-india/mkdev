@@ -133,7 +133,7 @@ app.get(
 );
 
 app.get('/login', (req: Request, res: Response) => {
-  res.render('login');
+  res.redirect('/login');
 });
 
 app.post('/logout', function (req: Request, res: Response, next) {
