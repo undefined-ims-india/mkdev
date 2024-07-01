@@ -26,6 +26,5 @@ export interface RepoWithFiles extends Repo {
 }
 
 export interface MessageWithMetadata extends Messages {
-  username: string | null;
-  picture: string | null;
+  sender: User;
 }
