@@ -97,7 +97,6 @@ const Profile = (): React.ReactElement => {
                             <EditIcon />
                           </IconButton>
                         ) : (
-                          // <Button onClick={handleEdit}>Edit</Button>
                           <Follow />
                         )}
                       </Box>
