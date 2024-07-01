@@ -7,11 +7,11 @@ const prisma = new PrismaClient();
 
 // Authenticated route to verify a user is logged in
 users.get('/loggedIn', (req: any, res: any) => {
-  const user = req.user;
   if (req.isAuthenticated()) {
-    res.send({ id: user.id });
+    const user = req.user;
+    res.json({ isLoggedIn: true, id: user.id });
   } else {
-    res.send({ id: 0 });
+    res.json({ isLoggedIn: false, id: 0 });
   }
 });
 
