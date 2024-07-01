@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { UserProfile } from '../../../../types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Input from '@mui/material/Input';
+import Stack from '@mui/material/Stack';
 
 interface UserInfoProps {
   profileData: UserProfile;
@@ -27,44 +30,54 @@ const UserInfo = ({
 
   return (
     <Box component='form' sx={{ m: 1, width: '16' }} onSubmit={handleUpdate}>
-      <Box>
-        <TextField
-          name='username'
-          label='Username'
-          value={userInfo!.username || ''}
-          sx={{ my: 2, mx: 1 }}
-          onChange={handleChange}
-        />
-        <TextField
-          name='githubId'
-          label='Github Username'
-          value={userInfo!.githubId || ''}
-          sx={{ my: 2, mx: 1 }}
-          onChange={handleChange}
-        />
-        <TextField
-          name='devId'
-          label='Dev.to Username'
-          value={userInfo!.devId || ''}
-          sx={{ my: 2, mx: 1 }}
-          onChange={handleChange}
-        />
-        <TextField
-          name='mediumId'
-          label='Medium.dev Username'
-          value={userInfo!.mediumId || ''}
-          sx={{ my: 2, mx: 1 }}
-          onChange={handleChange}
-        />
-        <TextField
-          name='linkedinId'
-          label='LinkedIn Username'
-          value={userInfo!.linkedinId || ''}
-          sx={{ my: 2, mx: 1 }}
-          onChange={handleChange}
-        />
+      <Stack>
+        <FormControl sx={{ my: 2, mx: 1, width: '10%' }}>
+          <InputLabel htmlFor='username'>Username</InputLabel>
+          <Input
+            id='username'
+            name='username'
+            value={userInfo!.username || ''}
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl sx={{ my: 2, mx: 1, width: '10%' }}>
+          <InputLabel htmlFor='githubId'>Github Username</InputLabel>
+          <Input
+            id='githubId'
+            name='githubId'
+            value={userInfo!.githubId || ''}
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl sx={{ my: 2, mx: 1, width: '10%' }}>
+          <InputLabel htmlFor='devId'>Dev.to Username</InputLabel>
+          <Input
+            id='devId'
+            name='devId'
+            value={userInfo!.devId || ''}
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl sx={{ my: 2, mx: 1, width: '10%' }}>
+          <InputLabel htmlFor='mediumId'>Medium Username</InputLabel>
+          <Input
+            id='mediumId'
+            name='mediumId'
+            value={userInfo!.mediumId || ''}
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl sx={{ my: 2, mx: 1, width: '10%' }}>
+          <InputLabel htmlFor='linkedinId'>LinkedIn Username</InputLabel>
+          <Input
+            id='linkedinId'
+            name='linkedinId'
+            value={userInfo!.linkedinId || ''}
+            onChange={handleChange}
+          />
+        </FormControl>
         <Button type='submit'>Update</Button>
-      </Box>
+      </Stack>
     </Box>
   );
 };
