@@ -8,8 +8,10 @@ dayjs.extend(relativeTime);
 import axios from 'axios';
 
 import MarkDown from "./MarkDown";
+import PostTagsChips from "./PostTagsChips";
 
 import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
@@ -30,6 +32,9 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
 
   return (
     <Card sx={{marginBottom: 3, maxWidth: 3/4, borderRadius: 2}}>
+      <div className="fill">
+        {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
+      </div>
       <Box sx={{display:"flex", flexDirection:'row', marginLeft: 2, marginTop: 2, alignItems: 'center'}}>
           <Link to={`/user/${content.author.id}/profile`}>
             <Avatar alt={content.author.username!} src={content.author.picture!}>
@@ -43,21 +48,11 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
       </Box>
       <Box sx={{display:"flex", flexDirection:'column', marginLeft: 9}}>
         <MarkDown text={content.title} />
-        <Box sx={{display:"flex", flexDirection:'row', alignItems: 'center'}}>
-          {
-            content.tags.length ?
-            content.tags.map((tag) => (
-              <Chip
-                label={tag.name}
-                variant="outlined"
-                size="medium"
-                key={tag.name + content.id}
-              />
-            ))
-            :
-            <></>
-          }
-        </Box>
+        {
+          content.tags.length ?
+          <PostTagsChips tags={content.tags} /> :
+          <></>
+        }
       </Box>
       <Box sx={{display: "flex", flexDirection: "row", alignItems: 'center', marginLeft: 9, marginBottom: 2, justifyContent: 'space-between'}}>
         <Box sx={{display: "flex", flexDirection: "row", alignItems: 'center'}}>
