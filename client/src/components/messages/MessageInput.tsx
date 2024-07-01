@@ -43,12 +43,7 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
         .then(({ data }) => {
           // broadcast the message to all the clients
           socket.emit('message', {
-            body: data.body,
-            senderId: data.senderId,
-            username: data.username,
-            picture: data.picture,
-            conversationId: data.conversationId,
-            createdAt: data.createdAt,
+            ...data
           })
         })
         .catch((err) => {
@@ -65,13 +60,6 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
 
       // only send message if there is text in input field
       if (text) {
-        // broadcast the message to all the clients
-        socket.emit('message', {
-          body: text,
-          // TODO: senderId -> how to include here?
-          conversationId: con.id
-        });
-        setText('');
 
         // send message to database with current conversation
         axios
@@ -81,9 +69,17 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
               sender
             }
           })
+          .then(({ data }) => {
+            // broadcast the message to all the clients
+            socket.emit('message', {
+              ...data
+            })
+          })
           .catch((err) => {
             console.error('Failed to post message to db', err.cause);
           });
+
+        setText('');
       }
     }
   }
