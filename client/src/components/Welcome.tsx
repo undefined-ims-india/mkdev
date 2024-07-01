@@ -34,43 +34,41 @@ const Welcome = () => {
       justifyContent='center'
       minHeight='100vh'
     >
-      <div className='glass-card'>
-        <Box alignContent={'center'}>
-          <Typography
-            variant='h1'
-            align='center'
-            gutterBottom
-            sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
-          >
-            Welcome to
-          </Typography>
+      <Box alignContent={'center'} className='glass-card'>
+        <Typography
+          variant='h1'
+          align='center'
+          gutterBottom
+          sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
+        >
+          Welcome to
+        </Typography>
 
-          <Typography
-            variant='h1'
-            align='center'
-            sx={{
-              fontFamily: 'Roboto',
-              fontSize: '6rem',
-              fontWeight: 'bold',
-            }}
-          >
-            MKDEV
-          </Typography>
-          <Typography
-            variant='h1'
-            align='center'
-            gutterBottom
-            sx={{
-              fontFamily: 'Roboto',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              mb: 3,
-            }}
-          >
-            A Platform For Developers To Connect And Share Their Work
-          </Typography>
-        </Box>
-      </div>
+        <Typography
+          variant='h1'
+          align='center'
+          sx={{
+            fontFamily: 'Roboto',
+            fontSize: '6rem',
+            fontWeight: 'bold',
+          }}
+        >
+          MKDEV
+        </Typography>
+        <Typography
+          variant='h1'
+          align='center'
+          gutterBottom
+          sx={{
+            fontFamily: 'Roboto',
+            fontSize: '1rem',
+            fontWeight: 'bold',
+            mb: 3,
+          }}
+        >
+          A Platform For Developers To Connect And Share Their Work
+        </Typography>
+      </Box>
     </Box>
   );
 };
