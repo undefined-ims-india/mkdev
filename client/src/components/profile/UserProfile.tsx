@@ -23,26 +23,17 @@ const Profile = (): React.ReactElement => {
     useState(null);
   const [userInfo, setUserInfo]: [UserProfile | null, Function] =
     useState(null);
-  const [followerCount, setFollowerCount] = useState(0);
-  const [followingCount, setFollowingCount] = useState(0);
   const [edit, setEdit] = useState(false);
   const profileDataREF = useRef(profileData);
-  const [tab, setTab] = useState('1');
 
   const getProfile = () => {
     axios
       .get(`/api/users/${id}/profile`)
-      .then(({ data }): void => setProfileData(data));
+      .then(({ data }): void => setProfileData(data))
+      .catch((err) => console.error('Failed to get user:', err));
   };
 
   useEffect(getProfile, [profileDataREF]);
-
-  useEffect(() => {
-    axios.get(`/api/follows/counts/${id}`).then(({ data }): void => {
-      setFollowerCount(data.followersCount);
-      setFollowingCount(data.followingCount);
-    });
-  }, [id]);
 
   const handleEdit = () => setEdit(true);
 
