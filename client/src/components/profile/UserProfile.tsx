@@ -2,23 +2,14 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../../types';
-import Follow from './Follow';
-import { UserContext } from '../UserContext';
 import ProfileTabs from './ProfileTabs';
-import Socials from './Socials';
+import ProfileInfo from './ProfileInfo';
 
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
 import Skeleton from '@mui/material/Skeleton';
 import UserInfo from './UserInfo';
 import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
 
 const Profile = (): React.ReactElement => {
-  const userId = useContext(UserContext);
   const { id } = useParams();
   const [profileData, setProfileData]: [UserProfile | null, Function] =
     useState(null);
@@ -67,47 +58,7 @@ const Profile = (): React.ReactElement => {
             >
               {profileData!.username}
             </Typography>
-            <Card sx={{ maxWidth: 300, margin: 'auto', mt: 2 }}>
-              <Box display='flex' justifyContent='center' mb={2}>
-                <Grid
-                  container
-                  direction='row'
-                  alignItems='center'
-                  justifyContent='center'
-                  spacing={3}
-                >
-                  <Grid item xs={12} sm={6} md={8} lg={9}>
-                    <Box
-                      display='flex'
-                      flexDirection='column'
-                      alignItems='center'
-                    >
-                      <Avatar
-                        sx={{ width: 100, height: 100, mt: 2 }}
-                        src={
-                          profileData!.picture !== null
-                            ? profileData!.picture
-                            : ''
-                        }
-                        alt={profileData!.username || profileData!.name || ''}
-                      />
-                      <Box display='flex' justifyContent='center' mt={2} mb={2}>
-                        {userId === profileData!.id ? (
-                          <IconButton aria-label='edit' onClick={handleEdit}>
-                            <EditIcon />
-                          </IconButton>
-                        ) : (
-                          <Follow />
-                        )}
-                      </Box>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Box>
-              <Box>
-                <Socials profileData={profileData!} />
-              </Box>
-            </Card>
+            <ProfileInfo profileData={profileData!} handleEdit={handleEdit} />
             <ProfileTabs profileData={profileData!} getProfile={getProfile} />
           </>
         )}
