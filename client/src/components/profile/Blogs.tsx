@@ -68,7 +68,12 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
       <Grid container spacing={4}>
         {blogs.length === 0 ? (
           <Grid item xs={12}>
-            <Typography variant='h1' component='h2' fontSize={'1rem'}>
+            <Typography
+              variant='h1'
+              component='h2'
+              fontSize={'1rem'}
+              align='center'
+            >
               No Blogs Found
             </Typography>
           </Grid>
@@ -76,14 +81,13 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
           blogs.map((blog, idx) => (
             <Grid item key={idx} xs={12} sm={6} md={4}>
               <Card>
-                <Link href={blog.url}>
-                  <CardMedia
-                    component='img'
-                    height='140'
-                    image={blog.cover_image}
-                    alt={blog.title}
-                  />
-                </Link>
+                {/* <AspectRatio> */}
+                {/* <Link href={blog.url}>{`${blog.cover_image}`}</Link> */}
+                <CardMedia
+                  component='img'
+                  image={blog.cover_image}
+                  alt={blog.title}
+                />
                 <CardContent>
                   <Typography
                     variant='h1'
@@ -91,7 +95,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     fontSize={'2rem'}
                     align='center'
                   >
-                    {`${blog.title}`}
+                    {blog.title}
                   </Typography>
                 </CardContent>
               </Card>
