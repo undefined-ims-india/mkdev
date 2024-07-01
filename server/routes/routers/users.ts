@@ -9,14 +9,16 @@ const prisma = new PrismaClient();
 users.get('/loggedIn', (req: any, res: any) => {
   const user = req.user;
   if (req.isAuthenticated()) {
-    res.send({id: user.id});
+    res.send({ id: user.id });
   } else {
-    res.send({id: 0})
+    res.send({ id: 0 });
   }
 });
 
 //Get user profile
-users.get('/:id/profile', async ( req: RequestWithUser, res: any): Promise<void> => {
+users.get(
+  '/:id/profile',
+  async (req: RequestWithUser, res: any): Promise<void> => {
     try {
       const userProfile = await prisma.user.findUniqueOrThrow({
         where: { id: +req.params.id },
@@ -31,17 +33,21 @@ users.get('/:id/profile', async ( req: RequestWithUser, res: any): Promise<void>
             },
             orderBy: [
               {
-                createdAt: 'desc'
-              }
-            ]
+                createdAt: 'desc',
+              },
+            ],
           },
           blogs: true,
         },
       });
-      if (req.user){
-        userProfile.posts = userProfile.posts.map(post => (
-          {...post, likedByUser: post.liked.slice().map(like => like.id).includes(req.user!.id)}
-        ))
+      if (req.user) {
+        userProfile.posts = userProfile.posts.map((post) => ({
+          ...post,
+          likedByUser: post.liked
+            .slice()
+            .map((like) => like.id)
+            .includes(req.user!.id),
+        }));
       }
       res.send(userProfile);
     } catch (err) {
@@ -54,21 +60,27 @@ users.get('/:id/profile', async ( req: RequestWithUser, res: any): Promise<void>
 );
 
 //Get user image
-users.get('/:id/image', async (req: express.Request<{ id: string }>, res: express.Response) => {
-  try {
-    const { id } = req.params;
-    if (id === '0'){ return }
-    const userImg = await prisma.user.findUniqueOrThrow({where: {id: +id}, select: {picture: true}})
-    res.send(userImg);
+users.get(
+  '/:id/image',
+  async (req: express.Request<{ id: string }>, res: express.Response) => {
+    try {
+      const { id } = req.params;
+      if (id === '0') {
+        return;
+      }
+      const userImg = await prisma.user.findUniqueOrThrow({
+        where: { id: +id },
+        select: { picture: true },
+      });
+      res.send(userImg);
+    } catch (err) {
+      console.error('GET /api/users/:id/image', err);
+      res.sendStatus(500);
+    } finally {
+      await prisma.$disconnect();
+    }
   }
-  catch (err) {
-    console.error('GET /api/users/:id/image', err);
-    res.sendStatus(500);
-  }
-  finally {
-    await prisma.$disconnect();
-  }
-})
+);
 
 // Get user by id
 users.get('/:id', async (req: any, res: any) => {
