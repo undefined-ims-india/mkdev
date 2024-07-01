@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, ReactElement } from 'react';
 import { Messages } from '@prisma/client';
 
 import axios from 'axios';
@@ -9,6 +9,8 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
 
 
 interface PropsType {
@@ -18,7 +20,7 @@ interface PropsType {
 
 const Message: React.FC<PropsType> = (props): ReactElement => {
   const { getAllMsgs } = props;
-  const { id, body, liked, senderId } = props.msg; // TODO: senderId will be used for styling and/or including picture
+  const { id, body, liked, senderId } = props.msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
 
@@ -43,6 +45,10 @@ const Message: React.FC<PropsType> = (props): ReactElement => {
   }
 
   return (
+    <Box>
+      <Avatar /* TODO: going to need the picture passed down */>
+
+      </Avatar>
       <Paper
         elevation={2}
         sx={{
@@ -52,13 +58,14 @@ const Message: React.FC<PropsType> = (props): ReactElement => {
         }}
       >
         <Typography>
-          { body }
+          { senderId + body /* TODO: add timestamp somewhere in this box */}
         </Typography>
         <IconButton onClick={ handleDelete }><DeleteIcon fontSize='small'/></IconButton>
         <IconButton onClick={ handleLike }>
           { isLiked ? <ThumbUpAltIcon fontSize='small'/> : <ThumbUpOffAltIcon fontSize='small'/> }
         </IconButton>
       </Paper>
+    </Box>
   );
 }
 
