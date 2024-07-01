@@ -99,7 +99,7 @@ const App = (): ReactElement => {
           minHeight: window.screen.height,
         }}>
           <UserProvider>
-            {location.pathname === '/dashboard' ? <></> : <Nav />}
+            {['/dashboard', '/', '/survey'].includes(location.pathname) ? <></> : <Nav />}\
             <Routes>
               {routes.map(({ path, element }, index) => (
                 <Route key={path + index} path={path} element={element} />
