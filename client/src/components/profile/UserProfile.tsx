@@ -11,10 +11,11 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Skeleton from '@mui/material/Skeleton';
 import UserInfo from './UserInfo';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Profile = (): React.ReactElement => {
   const userId = useContext(UserContext);
@@ -92,8 +93,11 @@ const Profile = (): React.ReactElement => {
                       />
                       <Box display='flex' justifyContent='center' mt={2} mb={2}>
                         {userId === profileData!.id ? (
-                          <Button onClick={handleEdit}>Edit</Button>
+                          <IconButton aria-label='edit' onClick={handleEdit}>
+                            <EditIcon />
+                          </IconButton>
                         ) : (
+                          // <Button onClick={handleEdit}>Edit</Button>
                           <Follow />
                         )}
                       </Box>
@@ -101,10 +105,10 @@ const Profile = (): React.ReactElement => {
                   </Grid>
                 </Grid>
               </Box>
+              <Box>
+                <Socials profileData={profileData!} />
+              </Box>
             </Card>
-            <Box>
-              <Socials profileData={profileData!} />
-            </Box>
             <ProfileTabs profileData={profileData!} getProfile={getProfile} />
           </>
         )}
