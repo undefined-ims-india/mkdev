@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { UserProfile } from '../../../types';
+import { UserProfile } from '../../../../types';
+import Link from '@mui/material/Link';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -25,7 +26,7 @@ const Following = (): React.ReactElement => {
   }, [id]);
 
   return (
-    <div>
+    <>
       {followingData && followingData.length === 0 ? (
         <Typography variant='h1' component='h2' fontSize={'1rem'}>
           Not Following Any Developers
@@ -37,12 +38,12 @@ const Following = (): React.ReactElement => {
               followingData.map((following) => (
                 <ListItem key={following.id}>
                   <ListItemAvatar>
-                    <a href={`/user/${following.id}/profile`}>
+                    <Link href={`/user/${following.id}/profile`}>
                       <Avatar
                         alt={following.username || ''}
                         src={following.picture || '?'}
                       />
-                    </a>
+                    </Link>
                   </ListItemAvatar>
                   <ListItemText primary={following.username} />
                 </ListItem>
@@ -50,7 +51,7 @@ const Following = (): React.ReactElement => {
           </List>
         </>
       )}
-    </div>
+    </>
   );
 };
 
