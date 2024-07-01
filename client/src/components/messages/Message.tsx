@@ -1,5 +1,8 @@
 import React, { useState, ReactElement } from 'react';
-import { Messages } from '@prisma/client';
+import { MessageWithMetadata } from '../../../../types';
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+dayjs.extend(calendar);
 
 import axios from 'axios';
 
@@ -14,13 +17,13 @@ import Avatar from '@mui/material/Avatar';
 
 
 interface PropsType {
-  msg: Messages;
+  msg: MessageWithMetadata;
   getAllMsgs: () => void;
 }
 
 const Message: React.FC<PropsType> = (props): ReactElement => {
   const { getAllMsgs } = props;
-  const { id, body, liked, senderId } = props.msg;
+  const { id, body, liked, createdAt, sender } = props.msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
 
@@ -46,9 +49,15 @@ const Message: React.FC<PropsType> = (props): ReactElement => {
 
   return (
     <Box>
-      <Avatar /* TODO: going to need the picture passed down */>
-
-      </Avatar>
+      <Box>
+        <Avatar src={ sender.picture! }></Avatar>
+        <Typography>
+          { sender.username }
+        </Typography>
+        <Typography>
+          { dayjs(createdAt).calendar() }
+        </Typography>
+      </Box>
       <Paper
         elevation={2}
         sx={{
@@ -58,7 +67,7 @@ const Message: React.FC<PropsType> = (props): ReactElement => {
         }}
       >
         <Typography>
-          { senderId + body /* TODO: add timestamp somewhere in this box */}
+          { body }
         </Typography>
         <IconButton onClick={ handleDelete }><DeleteIcon fontSize='small'/></IconButton>
         <IconButton onClick={ handleLike }>
