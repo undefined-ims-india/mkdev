@@ -30,7 +30,7 @@ const Login = (): ReactElement => {
             variant='h1'
             align='center'
             gutterBottom
-            sx={{ fontFamily: 'fangsong', fontSize: '3rem' }}
+            sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
           >
             Welcome to
           </Typography>
@@ -39,7 +39,7 @@ const Login = (): ReactElement => {
             variant='h1'
             align='center'
             sx={{
-              fontFamily: 'fangsong',
+              fontFamily: 'Roboto',
               fontSize: '6rem',
               fontWeight: 'bold',
             }}
@@ -51,7 +51,7 @@ const Login = (): ReactElement => {
             align='center'
             gutterBottom
             sx={{
-              fontFamily: 'fangsong',
+              fontFamily: 'Roboto',
               fontSize: '1rem',
               fontWeight: 'bold',
               mb: 3,
