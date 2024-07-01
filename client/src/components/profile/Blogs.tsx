@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
 
 interface Blog {
   id: number;
@@ -79,13 +79,13 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
           blogs.map((blog, idx) => (
             <Grid item key={idx} xs={12} sm={6} md={4}>
               <Card>
-                {/* <AspectRatio> */}
-                {/* <Link href={blog.url}>{`${blog.cover_image}`}</Link> */}
-                <CardMedia
-                  component='img'
-                  image={blog.cover_image}
-                  alt={blog.title}
-                />
+                <Link to={blog.url} style={{ textDecoration: 'none' }}>
+                  <CardMedia
+                    component='img'
+                    image={blog.cover_image}
+                    alt={blog.title}
+                  />
+                </Link>
                 <CardContent>
                   <Typography
                     variant='h1'
