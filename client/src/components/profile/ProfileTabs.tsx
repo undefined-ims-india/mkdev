@@ -64,12 +64,14 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
           </Box>
         </TabPanel>
         <TabPanel value='2'>
-          <Blogs
-            devId={profileData!.devId !== null ? profileData!.devId : ''}
-            mediumId={
-              profileData!.mediumId !== null ? profileData!.mediumId : ''
-            }
-          />
+          <Box sx={{ p: 3, flexGrow: 1, overflow: 'wrap' }}>
+            <Blogs
+              devId={profileData!.devId !== null ? profileData!.devId : ''}
+              mediumId={
+                profileData!.mediumId !== null ? profileData!.mediumId : ''
+              }
+            />
+          </Box>
         </TabPanel>
         <TabPanel value='3'>
           <Box display='flex' justifyContent='center'>
