@@ -10,7 +10,7 @@ import Login from './Login';
 import Logout from './Logout';
 import Search from './Search';
 import Messages from './messages/Messages';
-import UserProfile from './profile/UserProfile';
+import Profile from './profile/UserProfile';
 import FullPost from './FullPost';
 import SearchResults from './SearchResults';
 import Welcome from './Welcome';
@@ -53,7 +53,7 @@ const routes = [
   },
   {
     path: '/user/:id/profile',
-    element: <UserProfile />,
+    element: <Profile />,
   },
   {
     path: '/post/:id',
