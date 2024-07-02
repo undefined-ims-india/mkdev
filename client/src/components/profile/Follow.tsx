@@ -10,9 +10,12 @@ const Follow = (): ReactElement => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
-    axios.get(`/api/follows/isFollowing/${id}`).then(({ data }) => {
-      setIsFollowing(data.isFollowing);
-    });
+    axios
+      .get(`/api/follows/isFollowing/${id}`)
+      .then(({ data }) => {
+        setIsFollowing(data.isFollowing);
+      })
+      .catch((err) => console.error(err));
   }, []);
 
   const follow = () => {
