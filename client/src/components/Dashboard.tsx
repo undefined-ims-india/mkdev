@@ -24,12 +24,15 @@ const Dashboard = (): ReactElement => {
   return (
     <Box sx={{ display: 'flex' }}>
       <Sidebar />
-      <Box component='main' sx={{ flexGrow: 1, p: 3}}>
-        <Nav />
+      <Box component='main' sx={{ flexGrow: 1, p: 3, overflow: 'wrap'}}>
         <SearchComponent />
-        {feed.map((post) => (
-          <Post key={post.id + post.title} content={post} refreshParent={getFeed} />
-        ))}
+        <Box sx={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+          {feed.map((post) => (
+            <Box  key={post.id + post.title} sx={{width: '50vw', minWidth: 300, marginY:2 }}>
+              <Post content={post} refreshParent={getFeed} />
+            </Box>
+          ))}
+        </Box>
       </Box>
     </Box>
   );
