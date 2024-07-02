@@ -18,6 +18,8 @@ const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
 const WS_PORT = process.env.WS_PORT || 4000;
 const CLIENT = path.resolve(__dirname, '..', '..');
+const PUBLIC = path.resolve(__dirname, '.', 'public');
+console.log(PUBLIC)
 
 dotEnv.config();
 
@@ -52,6 +54,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/img', express.static(PUBLIC))
 app.use('/api', routes);
 
 // Google Strategy
