@@ -7,12 +7,15 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import Link from '@mui/material/Link';
+import { User } from '@prisma/client';
+import Box from '@mui/material/Box';
 
 interface Blog {
   id: number;
   title: string;
   url: string;
   cover_image: string;
+  description: string;
 }
 interface UserProps {
   devId: string;
@@ -23,12 +26,13 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {
+    setBlogs([]);
     // Dev.to Blogs
     const getDev = () => {
       axios
         .get(`https://dev.to/api/articles?username=${devId}&per_page=6`)
         .then(({ data }) => {
-          setBlogs(data);
+          setBlogs((prevBlogs) => [...prevBlogs, ...data]);
         })
         .catch((err) => console.error(err));
     };
@@ -36,37 +40,40 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
     const getMedium = () => {
       axios
         .get(
-          `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumId}`
+          `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumId}&per_page=6`
         )
         .then(({ data }) => {
-          setBlogs((prevBlogs) =>
-            prevBlogs.concat(
-              data.items.map((blog: any) => ({
-                id: blog.guid,
-                title: blog.title,
-                url: blog.link,
-                cover_image: blog.thumbnail,
-              }))
-            )
-          );
+          const medBlogs = data.items.map((blog: any) => ({
+            id: blog.guid,
+            title: blog.title,
+            description: blog.description,
+            url: blog.link,
+            cover_image: blog.thumbnail,
+          }));
+          setBlogs((prevBlogs) => [...prevBlogs, ...medBlogs]);
         })
         .catch((err) => console.error(err));
     };
+
+    if (devId) {
+      getDev();
+    }
     if (mediumId) {
       getMedium();
-    } else if (devId) {
-      getDev();
-    } else {
-      setBlogs([]);
     }
   }, [devId, mediumId]);
 
   return (
-    <div>
+    <Box>
       <Grid container spacing={4}>
         {blogs.length === 0 ? (
           <Grid item xs={12}>
-            <Typography variant='h1' component='h2' fontSize={'1rem'}>
+            <Typography
+              variant='h1'
+              component='h2'
+              fontSize={'1rem'}
+              align='center'
+            >
               No Blogs Found
             </Typography>
           </Grid>
@@ -74,9 +81,10 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
           blogs.map((blog, idx) => (
             <Grid item key={idx} xs={12} sm={6} md={4}>
               <Card>
+                {/* <AspectRatio> */}
+                {/* <Link href={blog.url}>{`${blog.cover_image}`}</Link> */}
                 <CardMedia
                   component='img'
-                  height='140'
                   image={blog.cover_image}
                   alt={blog.title}
                 />
@@ -87,7 +95,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     fontSize={'2rem'}
                     align='center'
                   >
-                    <Link href={blog.url}>{blog.title}</Link>
+                    {blog.title}
                   </Typography>
                 </CardContent>
               </Card>
@@ -95,7 +103,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
           ))
         )}
       </Grid>
-    </div>
+    </Box>
   );
 };
 

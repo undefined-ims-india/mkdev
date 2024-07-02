@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { UserProfile } from '../../../types';
+import { UserProfile } from '../../../../types';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';

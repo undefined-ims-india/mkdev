@@ -1,6 +1,6 @@
 import React, { ReactElement, useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserContext } from './UserContext';
+import { UserContext } from '../UserContext';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 
