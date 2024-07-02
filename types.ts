@@ -17,7 +17,7 @@ export interface PostWithRelations extends Post {
   author: User;
   tags: Tags[];
   repo?: RepoWithFiles | null;
-  liked: {id: number}[];
+  liked: { id: number }[];
   likedByUser?: boolean;
 }
 
@@ -27,4 +27,14 @@ export interface RepoWithFiles extends Repo {
 
 export interface MessageWithMetadata extends Messages {
   sender: User;
+}
+
+export interface BlogPosts {
+  devId: User[];
+  mediumId: User[];
+  id: number;
+  title: string;
+  url: string;
+  cover_image: string;
+  description: string;
 }
