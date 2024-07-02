@@ -6,6 +6,7 @@ import axios from 'axios';
 import Sidebar from './Sidebar';
 import { PostWithRelations } from '../../../types';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 const Dashboard = (): ReactElement => {
 
@@ -27,9 +28,17 @@ const Dashboard = (): ReactElement => {
       <Box component='main' sx={{ flexGrow: 1, p: 3}}>
         <Nav />
         <SearchComponent />
-        {feed.map((post) => (
-          <Post key={post.id + post.title} content={post} refreshParent={getFeed} />
-        ))}
+        <Grid container>
+          {feed.map((post) => (
+            <>
+              <Grid item xs={0} lg={2} />
+              <Grid item xs={12} lg={8}>
+                <Post key={post.id + post.title} content={post} refreshParent={getFeed} />
+              </Grid>
+              <Grid item xs={0} lg={2} />
+            </>
+          ))}
+        </Grid>
       </Box>
     </Box>
   );
