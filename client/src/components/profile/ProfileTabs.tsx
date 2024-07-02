@@ -29,7 +29,7 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
         setFollowerCount(data.followersCount);
         setFollowingCount(data.followingCount);
       });
-  }, [profileData.id]);
+  }, [profileData]);
 
   const handleTab = (
     e: React.SyntheticEvent<Element, Event>,
@@ -51,16 +51,17 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
         </Box>
         <TabPanel value='1'>
           <Box display='flex' flexDirection='column' alignItems='center'>
-            {profileData!.posts.map((post) => (
-              <Box
-                key={post.title + crypto.randomUUID()}
-                my={1}
-                width='50%'
-                justifyContent={'center'}
-              >
-                <Post content={post} refreshParent={getProfile} />
-              </Box>
-            ))}
+            {profileData &&
+              profileData!.posts.map((post) => (
+                <Box
+                  key={post.title + crypto.randomUUID()}
+                  my={1}
+                  width='50%'
+                  justifyContent={'center'}
+                >
+                  <Post content={post} refreshParent={getProfile} />
+                </Box>
+              ))}
           </Box>
         </TabPanel>
         <TabPanel value='2'>

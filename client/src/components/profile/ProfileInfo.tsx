@@ -44,6 +44,7 @@ const ProfileInfo = ({
             mt: 2,
             fontWeight: 'bold',
             fontSize: '1.25rem',
+            color: 'text.primary',
           }}
         >
           {profileData!.name}

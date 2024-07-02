@@ -50,14 +50,6 @@ const Profile = (): React.ReactElement => {
           />
         ) : (
           <>
-            <Typography
-              gutterBottom
-              variant='h1'
-              textAlign='center'
-              sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
-            >
-              {profileData!.username}
-            </Typography>
             <ProfileInfo profileData={profileData!} handleEdit={handleEdit} />
             <ProfileTabs profileData={profileData!} getProfile={getProfile} />
           </>
