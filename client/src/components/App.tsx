@@ -15,6 +15,7 @@ import FullPost from './FullPost';
 import SearchResults from './SearchResults';
 import Welcome from './Welcome';
 import Signup from './Survey';
+import Register from './Register';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -67,6 +68,10 @@ const routes = [
     path: '/survey',
     element: <Signup />,
   },
+  {
+    path: '/register',
+    element: <Register />,
+  },
 ];
 
 const App = (): ReactElement => {
@@ -102,8 +107,12 @@ const App = (): ReactElement => {
           }}
         >
           <UserProvider>
-            {['/dashboard', '/', '/survey'].includes(location.pathname) ? <></> : <Nav />}\
-            <Box sx={{marginBottom: '70px'}}></Box>
+            {['/dashboard', '/', '/survey'].includes(location.pathname) ? (
+              <></>
+            ) : (
+              <Nav />
+            )}
+            \<Box sx={{ marginBottom: '70px' }}></Box>
             <Routes>
               {routes.map(({ path, element }, index) => (
                 <Route key={path + index} path={path} element={element} />
