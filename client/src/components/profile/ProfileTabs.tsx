@@ -50,13 +50,18 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
           </TabList>
         </Box>
         <TabPanel value='1'>
-          {profileData!.posts.map((post) => (
-            <Post
-              key={post.title + crypto.randomUUID()}
-              content={post}
-              refreshParent={getProfile}
-            />
-          ))}
+          <Box display='flex' flexDirection='column' alignItems='center'>
+            {profileData!.posts.map((post) => (
+              <Box
+                key={post.title + crypto.randomUUID()}
+                my={2}
+                width='100%'
+                maxWidth={800}
+              >
+                <Post content={post} refreshParent={getProfile} />
+              </Box>
+            ))}
+          </Box>
         </TabPanel>
         <TabPanel value='2'>
           <Blogs
