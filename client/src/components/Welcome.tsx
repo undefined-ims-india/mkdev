@@ -36,7 +36,7 @@ const Welcome = () => {
       alignItems='center'
       justifyContent='center'
     >
-      <Box alignContent={'center'} sx={{color: 'aliceblue'}}>
+      <Box alignContent={'center'} sx={{color: 'aliceblue', maxWidth: 90/100}}>
         <Box sx={{marginBottom: 6}}>
           <Typography
             variant='h1'
@@ -73,14 +73,18 @@ const Welcome = () => {
           </Typography>
         </Box>
       </Box>
-      <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems:'center', marginY: 3, minHeight: '25vh' }} className="glass-card">
+      <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems:'center', marginY: 3, minHeight: '35vh' }} className="glass-card">
         <Typography variant='h1' sx={{fontSize: 20}}>Join the Community</Typography>
         <form action='/auth/google' method='GET'>
           <Button type='submit'>
             <GoogleButton />
           </Button>
         </form>
-        <Divider sx={{borderColor: 'aliceblue'}}>OR</Divider>
+        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', alignItems:'center'}}>
+          <Divider sx={{borderColor: 'aliceblue', width: '9vw'}}></Divider>
+          <Typography variant="h2" sx={{fontSize: 18, marginX: 1}}>OR</Typography>
+          <Divider sx={{borderColor: 'aliceblue', width: '9vw'}}></Divider>
+        </Box>
         <Typography variant='h1' sx={{fontSize: 20}}>Just Browse</Typography>
         <Button onClick={() => {navigate('/dashboard')}} variant="contained" size='large'>
           Continue Without Logging In
