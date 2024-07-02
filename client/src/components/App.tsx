@@ -103,7 +103,7 @@ const App = (): ReactElement => {
           }}
         >
           <UserProvider>
-            {['/', '/survey'].includes(location.pathname) ? <></> : <Nav />}\
+            {['/', '/survey'].includes(location.pathname) ? <></> : <Nav />}
             <Box sx={{marginBottom: '70px'}}></Box>
             <Routes>
               {routes.map(({ path, element }, index) => (
