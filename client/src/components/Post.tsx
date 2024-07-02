@@ -30,14 +30,21 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
   };
 
   return (
-    <Card sx={{borderRadius: 2, padding: '1vh'}}>
+    <Card sx={{borderRadius: 2, padding: '1vh', maxWidth: '55vw'}}>
       <div className="fill">
         {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
       </div>
       <Grid container>
-        <Grid item xs={2}>
+        <Grid item xs={1}>
           <Link to={`/user/${content.author.id}/profile`} style={{textDecoration: 'none'}}>
-            <Avatar alt={content.author.username! || content.author.name} src={content.author.picture!} sx={{width: '3vw', height: '3vw'}} >
+            <Avatar
+              alt={content.author.username! || content.author.name}
+              src={content.author.picture!}
+              sx={{
+                width: '2.5vw', height: '2.5vw',
+                minWidth: 40, minHeight: 40
+              }}
+            >
               {content.author.username![0] || content.author.firstName[0] || '?'}
             </Avatar>
           </Link>
