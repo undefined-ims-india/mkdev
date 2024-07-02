@@ -10,7 +10,12 @@ import Link from '@mui/material/Link';
 import { BlogPosts } from '../../../../types';
 import Box from '@mui/material/Box';
 
-const Blogs = ({ devId, mediumId }): ReactElement => {
+interface UserProps {
+  devId: string;
+  mediumId: string;
+}
+
+const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
   const [blogs, setBlogs] = useState<BlogPosts[]>([]);
   const [loading, setLoading] = useState(false);
 
