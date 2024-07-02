@@ -54,9 +54,9 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
             {profileData!.posts.map((post) => (
               <Box
                 key={post.title + crypto.randomUUID()}
-                my={2}
-                width='100%'
-                maxWidth={800}
+                my={1}
+                width='50%'
+                justifyContent={'center'}
               >
                 <Post content={post} refreshParent={getProfile} />
               </Box>
