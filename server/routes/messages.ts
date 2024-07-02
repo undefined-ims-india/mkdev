@@ -10,6 +10,14 @@ messages.get('/:conversationId', async (req, res) => {
   const allMessages = await prisma.messages.findMany({
     where: {
       conversationId: +conversationId,
+    },
+    include: {
+      sender: {
+        select: {
+          username: true,
+          picture: true,
+        }
+      }
     }
   });
   res.status(200).send(allMessages);
@@ -29,9 +37,19 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
       conversation: {
         connect: { id: conversationId }
       }
+    },
+    include: {
+      sender: {
+        select: {
+          username: true,
+          picture: true,
+        }
+      }
     }
   })
-  .then(() => { res.sendStatus(201) })
+  .then((data) => {
+    res.status(201).send(data);
+  })
   .catch((err: Error) => {
     console.error('Failed to create new message:\n', err);
     res.sendStatus(500);
@@ -54,7 +72,7 @@ messages.patch('/:id', (req: Request, res: Response) => {
     res.sendStatus(201);
   })
   .catch((err) => {
-    console.error('Failed to update like field', err);
+    console.error('Failed to update like field:\n', err);
   })
 })
 
@@ -69,7 +87,7 @@ messages.delete('/:id', (req: Request, res: Response) => {
     res.sendStatus(200);
   })
   .catch((err) => {
-    console.error('Failed to delete message', err)
+    console.error('Failed to delete message:\n', err)
   });
 })
 

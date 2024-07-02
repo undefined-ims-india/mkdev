@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserProfile } from '../../../types';
+import { UserProfile } from '../../../../types';
 import axios from 'axios';
 
 import List from '@mui/material/List';
@@ -9,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 
 const Followers = (): ReactElement => {
   const { id } = useParams();
@@ -36,12 +37,12 @@ const Followers = (): ReactElement => {
               followerData.map((follower) => (
                 <ListItem key={follower.id}>
                   <ListItemAvatar>
-                    <a href={`/user/${follower.id}/profile`}>
+                    <Link href={`/user/${follower.id}/profile`}>
                       <Avatar
                         alt={follower.username || ''}
                         src={follower.picture || ''}
                       />
-                    </a>
+                    </Link>
                   </ListItemAvatar>
                   <ListItemText primary={follower.username} />
                 </ListItem>
