@@ -1,14 +1,15 @@
 import React, { ReactElement } from 'react';
 import Message from './Message';
 
-import { Messages, Conversations } from '@prisma/client';
+import { Conversations } from '@prisma/client';
+import { MessageWithMetadata } from '../../../../types';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 
 interface PropsType {
-  allMsgs: Messages[],
+  allMsgs: MessageWithMetadata[],
   con: Conversations;
   getAllMsgs: () => void;
 }
