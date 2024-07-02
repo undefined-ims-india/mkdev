@@ -19,12 +19,12 @@ posts.post('/', async (req: any, res: any) => {
   try {
     let post;
     if (req.files && req.files.img) {
-      const s3Obj = await awsS3Upload(req.files.img);
+      const key = await awsS3Upload(req.files.img);
       post = await prisma.post.create({
         data: {
           title,
           body,
-          s3_key: s3Obj.Key,
+          s3_key: key,
           author: { connect: { id: req.user.id } },
           tags: { connect: tagArr }
         },
