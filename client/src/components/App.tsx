@@ -99,10 +99,11 @@ const App = (): ReactElement => {
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             minHeight: (window.screen.height * .889),
+            width: window.screen.width
           }}
         >
           <UserProvider>
-            {['/dashboard', '/', '/survey'].includes(location.pathname) ? <></> : <Nav />}\
+            {['/', '/survey'].includes(location.pathname) ? <></> : <Nav />}\
             <Box sx={{marginBottom: '70px'}}></Box>
             <Routes>
               {routes.map(({ path, element }, index) => (
