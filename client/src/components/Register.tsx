@@ -1,5 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import Container from '@mui/material/Container';
 import Input from '@mui/material/Input';
@@ -8,6 +9,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const Register = (): ReactElement => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState<string>('');
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
@@ -38,7 +40,13 @@ const Register = (): ReactElement => {
         autoComplete='off'
         sx={{ '& .MuiInput-root': { margin: 4 } }}
       >
-        <Typography variant='h4' component='h1' gutterBottom align='center'>
+        <Typography
+          variant='h4'
+          component='h1'
+          gutterBottom
+          align='center'
+          sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
+        >
           Sign Up
         </Typography>
         <Input
@@ -73,9 +81,7 @@ const Register = (): ReactElement => {
         />
         <Box>
           <Box display='flex' justifyContent='space-between'>
-            <Button onClick={() => (window.location.href = '/login')}>
-              Cancel
-            </Button>
+            <Button onClick={() => navigate('/login')}>Cancel</Button>
             <Button type='submit'>Register</Button>
           </Box>
         </Box>
