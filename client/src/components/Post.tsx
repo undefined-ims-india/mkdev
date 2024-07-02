@@ -30,15 +30,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
   };
 
   return (
-    <Card className="glass-card" sx={{
-      borderRadius: 2,
-      maxWidth: '55vw',
-      backgroundColor: 'rgba(27, 45, 50, 0.47)',
-      backdropFilter: 'blur(14px) saturate(180%)',
-      border: '1px solid rgba(255, 255, 255, 0.125)',
-      boxShadow: '0 1px 12px rgba(0, 0, 0, 0.25)',
-      padding: '10px'
-    }} >
+    <>
       <Box className="fill top-curve" sx={{maxHeight: "250px"}}>
         {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
       </Box>
@@ -65,14 +57,20 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         <Grid item xs={12} sx={{overflow: 'wrap'}}>
           <MarkDown text={content.title} />
         </Grid>
-        <Grid item xs={8} sx={{display: "flex", alignContent: 'center'}}>
+        <Grid item xs={12} sx={{display: "flex", alignContent: 'center'}}>
           {
           content.tags.length ?
           <PostTagsChips tags={content.tags} /> :
           <></>
           }
         </Grid>
-        <Grid item lg={2} xs={0}/>
+        <Grid item lg={2} xs={4} sx={{display: "flex", flexDirection: "row", alignItems: 'center'}}>
+          <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
+            {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+          </IconButton>
+          <Typography variant="body1">{content!.liked.length} Likes</Typography>
+        </Grid>
+        <Grid item lg={8} xs={4}/>
         <Grid item lg={2} xs={4} sx={{display: 'flex', justifyContent: 'right'}}>
           <Link to={`/post/${content.id}`}>
             <Button>
@@ -81,7 +79,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
           </Link>
         </Grid>
       </Grid>
-    </Card>
+    </>
   );
 };
 

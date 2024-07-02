@@ -28,7 +28,7 @@ const Dashboard = (): ReactElement => {
         <SearchComponent />
         <Box sx={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
           {feed.map((post) => (
-            <Box  key={post.id + post.title} sx={{width: '50vw', minWidth: 300, marginY:1 }}>
+            <Box  key={post.id + post.title} sx={{width: '50vw', minWidth: 300, marginY:2 }}>
               <Post content={post} refreshParent={getFeed} />
             </Box>
           ))}
