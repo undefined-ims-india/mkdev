@@ -11,15 +11,14 @@ import MarkDown from "./MarkDown";
 import PostTagsChips from "./PostTagsChips";
 
 import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Chip from '@mui/material/Chip'
 import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid'
 
 const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
@@ -31,11 +30,56 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
   };
 
   return (
-    <Card sx={{marginBottom: 3, maxWidth: 3/4, borderRadius: 2}}>
+    <Card sx={{borderRadius: 2, padding: '1vh'}}>
       <div className="fill">
         {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
       </div>
-      <Box sx={{display:"flex", flexDirection:'row', marginLeft: 2, marginTop: 2, alignItems: 'center'}}>
+      <Grid container>
+        <Grid item xs={2}>
+          <Link to={`/user/${content.author.id}/profile`} style={{textDecoration: 'none'}}>
+            <Avatar alt={content.author.username! || content.author.name} src={content.author.picture!} sx={{width: '3vw', height: '3vw'}} >
+              {content.author.username![0] || content.author.firstName[0] || '?'}
+            </Avatar>
+          </Link>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+};
+
+export default Post;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+<Box sx={{display:"flex", flexDirection:'row', marginLeft: 2, marginTop: 2, alignItems: 'center'}}>
           <Link to={`/user/${content.author.id}/profile`}>
             <Avatar alt={content.author.username!} src={content.author.picture!}>
               {'?'}
@@ -69,8 +113,4 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
           </Link>
         </Box>
       </Box>
-    </Card>
-  );
-};
-
-export default Post;
+    */
