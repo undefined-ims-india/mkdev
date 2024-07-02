@@ -1,4 +1,5 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, useContext, ReactElement } from 'react';
+import { UserContext } from '../UserContext';
 import { MessageWithMetadata } from '../../../../types';
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
@@ -23,9 +24,10 @@ interface PropsType {
 
 const Message: React.FC<PropsType> = (props): ReactElement => {
   const { getAllMsgs } = props;
-  const { id, body, liked, createdAt, sender } = props.msg;
+  const { id, body, liked, createdAt, senderId, sender } = props.msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
+  const loggedInUser = useContext(UserContext);
 
   const handleLike = () => {
     axios
@@ -69,7 +71,12 @@ const Message: React.FC<PropsType> = (props): ReactElement => {
         <Typography>
           { body }
         </Typography>
-        <IconButton onClick={ handleDelete }><DeleteIcon fontSize='small'/></IconButton>
+        { loggedInUser === senderId ? (
+            <IconButton onClick={ handleDelete }>
+              <DeleteIcon fontSize='small'/>
+            </IconButton>
+          ) : (<></>)
+        }
         <IconButton onClick={ handleLike }>
           { isLiked ? <ThumbUpAltIcon fontSize='small'/> : <ThumbUpOffAltIcon fontSize='small'/> }
         </IconButton>
