@@ -1,5 +1,9 @@
-import React, { useState, useEffect, ReactElement } from 'react';
-import { Messages } from '@prisma/client';
+import React, { useState, useContext, ReactElement } from 'react';
+import { UserContext } from '../UserContext';
+import { MessageWithMetadata } from '../../../../types';
+import dayjs from "dayjs";
+import calendar from "dayjs/plugin/calendar";
+dayjs.extend(calendar);
 
 import axios from 'axios';
 
@@ -9,18 +13,21 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
 
 
 interface PropsType {
-  msg: Messages;
+  msg: MessageWithMetadata;
   getAllMsgs: () => void;
 }
 
 const Message: React.FC<PropsType> = (props): ReactElement => {
   const { getAllMsgs } = props;
-  const { id, body, liked, senderId } = props.msg; // TODO: senderId will be used for styling and/or including picture
+  const { id, body, liked, createdAt, senderId, sender } = props.msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
+  const loggedInUser = useContext(UserContext);
 
   const handleLike = () => {
     axios
@@ -43,6 +50,16 @@ const Message: React.FC<PropsType> = (props): ReactElement => {
   }
 
   return (
+    <Box>
+      <Box>
+        <Avatar src={ sender.picture! }></Avatar>
+        <Typography>
+          { sender.username }
+        </Typography>
+        <Typography>
+          { dayjs(createdAt).calendar() }
+        </Typography>
+      </Box>
       <Paper
         elevation={2}
         sx={{
@@ -54,11 +71,17 @@ const Message: React.FC<PropsType> = (props): ReactElement => {
         <Typography>
           { body }
         </Typography>
-        <IconButton onClick={ handleDelete }><DeleteIcon fontSize='small'/></IconButton>
+        { loggedInUser === senderId ? (
+            <IconButton onClick={ handleDelete }>
+              <DeleteIcon fontSize='small'/>
+            </IconButton>
+          ) : (<></>)
+        }
         <IconButton onClick={ handleLike }>
           { isLiked ? <ThumbUpAltIcon fontSize='small'/> : <ThumbUpOffAltIcon fontSize='small'/> }
         </IconButton>
       </Paper>
+    </Box>
   );
 }
 
