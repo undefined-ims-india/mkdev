@@ -32,7 +32,6 @@ const Welcome = () => {
       flexDirection='column'
       alignItems='center'
       justifyContent='center'
-      minHeight='100vh'
     >
       <Box alignContent={'center'} className='glass-card'>
         <Typography
