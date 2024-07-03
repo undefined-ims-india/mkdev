@@ -8,6 +8,8 @@ import ProfileInfo from './ProfileInfo';
 import Skeleton from '@mui/material/Skeleton';
 import UserInfo from './UserInfo';
 import Typography from '@mui/material/Typography';
+import AboutMe from './AboutMe';
+import Box from '@mui/material/Box';
 
 const Profile = (): React.ReactElement => {
   const { id } = useParams();
@@ -50,8 +52,32 @@ const Profile = (): React.ReactElement => {
           />
         ) : (
           <>
-            <ProfileInfo profileData={profileData!} handleEdit={handleEdit} />
-            <ProfileTabs profileData={profileData!} getProfile={getProfile} />
+            <Typography
+              gutterBottom
+              variant='h1'
+              textAlign='center'
+              sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
+            >
+              {profileData!.username}
+            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+              <Box sx={{ flex: 1 }}>
+                <ProfileInfo
+                  profileData={profileData!}
+                  handleEdit={handleEdit}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <AboutMe
+                  profileData={profileData!}
+                  getProfile={getProfile}
+                  UpdateUserInfo={UpdateUserInfo}
+                />
+              </Box>
+            </Box>
+            <Box>
+              <ProfileTabs profileData={profileData!} getProfile={getProfile} />
+            </Box>
           </>
         )}
       </>
