@@ -23,9 +23,25 @@ messages.get('/:conversationId', async (req, res) => {
   res.status(200).send(allMessages);
 });
 
-messages.post('/:conversationId', (req: Request, res: Response) => {
+messages.post('/:conversationId', async (req: Request, res: Response) => {
   const { body, sender } = req.body.message;
   const conversationId: number = +req.params.conversationId;
+
+  // find participants and store recipients in variable
+  const participants = await prisma.conversations.findFirst({
+    where: {
+      id: conversationId,
+    },
+    select: {
+      participants: {
+        select: {
+          id: true
+        }
+      }
+    }
+  })
+  const recipients = participants?.participants.filter(user => user.id !== sender);
+  console.log('recipients when message sent', recipients);
 
   // create message with data from request body and params
   prisma.messages.create({
@@ -36,6 +52,9 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
       },
       conversation: {
         connect: { id: conversationId }
+      },
+      unreadBy: {
+        connect: recipients
       }
     },
     include: {
@@ -44,7 +63,8 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
           username: true,
           picture: true,
         }
-      }
+      },
+      unreadBy: true
     }
   })
   .then((data) => {
