@@ -3,6 +3,7 @@ import { UserContext } from './UserContext';
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import axios from 'axios';
+import { useTheme } from '@mui/material';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -23,6 +24,7 @@ const Nav = (): ReactElement => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = !!anchorEl;
   const navigate = useNavigate();
+  const theme = useTheme().palette.mode;
 
   useEffect(() => {
     axios
@@ -45,7 +47,7 @@ const Nav = (): ReactElement => {
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar enableColorOnDark sx={{
-          backgroundColor: 'rgba(200, 150, 200, 0.30)',
+          backgroundColor: theme === 'light' ? 'rgba(90, 217, 219, .3)' : 'rgba(51, 34, 77, .6)',
           backdropFilter: 'blur(14px) saturate(180%)',
           zIndex: '10',
           height: '70px'
@@ -65,11 +67,11 @@ const Nav = (): ReactElement => {
                 {!!id ?
                   (
                     <>
-                      <IconButton onClick={() => {navigate('/create-post')}} sx={{color: 'aliceblue'}}>
+                      <IconButton onClick={() => {navigate('/create-post')}}>
                         <AddBoxIcon fontSize="medium" />
                         <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
                       </IconButton>
-                      <IconButton onClick={() => {navigate('/messages')}} sx={{color: 'aliceblue'}}>
+                      <IconButton onClick={() => {navigate('/messages')}}>
                         <InboxIcon fontSize="medium" />
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
                       </IconButton>
@@ -96,7 +98,7 @@ const Nav = (): ReactElement => {
                 :
                   (
                     <>
-                      <Button onClick={() => {navigate('/login')}} sx={{color:'aliceblue'}} size='large'>Login</Button>
+                      <Button onClick={() => {navigate('/login')}} size='large'>Login</Button>
                       <ThemeToggle />
                     </>
                   )
