@@ -10,6 +10,7 @@ import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Grid from '@mui/material/Grid';
+import Badge from '@mui/material/Badge';
 
 import { Conversations } from '@prisma/client';
 import { Typography } from '@mui/material';
@@ -58,27 +59,29 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
 
   return (
     <Grid item>
-      <ButtonGroup
-        sx={{
-          width: '200px'
-        }}
-        variant='contained'
-      >
-        <Button
-          fullWidth
-          onClick={ (e)=> {selectConversation(e, con)} }
+      <Badge badgeContent={true} /* TODO: change true to a variable */ color="warning">
+        <ButtonGroup
+          sx={{
+            width: '200px'
+          }}
+          variant='contained'
         >
-          <Typography
-            noWrap
-            align='left'
+          <Button
+            fullWidth
+            onClick={ (e)=> {selectConversation(e, con)} }
           >
-            { con.label }
-          </Typography>
-        </Button>
-        <Button onClick={ handleMenu }>
-          <MoreVertIcon />
-        </Button>
-      </ButtonGroup>
+            <Typography
+              noWrap
+              align='left'
+            >
+              { con.label }
+            </Typography>
+          </Button>
+          <Button onClick={ handleMenu }>
+            <MoreVertIcon />
+          </Button>
+        </ButtonGroup>
+      </Badge>
       <Popover
         open={open}
         anchorEl={ anchorEl }

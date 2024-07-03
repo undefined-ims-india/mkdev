@@ -15,7 +15,8 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid';
+import Badge from '@mui/material/Badge';
 
 const Nav = (): ReactElement => {
   const id = useContext(UserContext);
@@ -70,7 +71,9 @@ const Nav = (): ReactElement => {
                         <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
                       </IconButton>
                       <IconButton onClick={() => {navigate('/messages')}} sx={{color: 'aliceblue'}}>
-                        <InboxIcon fontSize="medium" />
+                        <Badge badgeContent={true} /* TODO: change true to a variable */ color="warning">
+                          <InboxIcon fontSize="medium" />
+                        </Badge>
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
                       </IconButton>
                       <Button onClick={handleOpen} sx={{ padding: 0, border: 'none', background: 'none' }}>
