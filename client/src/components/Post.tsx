@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 import axios from 'axios';
+import { useTheme } from "@mui/material";
 
 import MarkDown from "./MarkDown";
 import PostTagsChips from "./PostTagsChips";
@@ -23,6 +24,7 @@ import Grid from '@mui/material/Grid'
 const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
   const userId = useContext(UserContext);
+  const theme = useTheme().palette.mode;
 
   const handleLike = () => {
     axios.patch(`/api/posts/${content!.id}/${content!.likedByUser ? 'dislike' : 'like'}`)
@@ -34,7 +36,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
       <Box className="fill top-curve" sx={{maxHeight: "250px"}}>
         {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
       </Box>
-      <Grid container spacing={0} sx={{background:'aliceblue', padding: '1vh',}} className={content.s3_key ? "bottom-curve" : "rounded"}>
+      <Grid container spacing={0} sx={{background: theme === 'light' ? 'white' : '#171717', padding: '1vh',}} className={content.s3_key ? "bottom-curve" : "rounded"}>
         <Grid item lg={3} xs={12} sx={{display: "flex", flexDirection: "row", overflow: 'wrap', justifyContent: "start", alignItems: 'center'}}>
           <Link to={`/user/${content.author.id}/profile`} style={{textDecoration: 'none'}}>
             <Avatar
