@@ -20,17 +20,9 @@ const UserInfo = ({
   const [userInfo, setUserInfo]: [UserProfile | null, Function] =
     useState(profileData);
 
-  useEffect(() => {
-    const userAboutMe = localStorage.getItem('aboutMe');
-    if (userAboutMe) {
-      setUserInfo({ ...userInfo, aboutMe: userAboutMe });
-    }
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
-    name === 'aboutMe' ? localStorage.setItem('aboutMe', value) : null;
   };
 
   const handleUpdate = (e: React.FormEvent): void => {
@@ -91,22 +83,6 @@ const UserInfo = ({
             onChange={handleChange}
           />
         </FormControl>
-        <Box>
-          <FormControl sx={{ p: 2, my: 1, mx: 1, width: '50%' }}>
-            <InputLabel htmlFor='aboutMe'>About Me</InputLabel>
-            <Input
-              sx={{ variant: 'contained', backgroundColor: 'white' }}
-              id='aboutMe'
-              name='aboutMe'
-              multiline
-              minRows={5}
-              placeholder='Tell everyone about yourself!'
-              style={{ width: '100%' }}
-              value={userInfo!.aboutMe || ''}
-              onChange={handleChange}
-            />
-          </FormControl>
-        </Box>
         <Button type='submit'>Update</Button>
       </Stack>
     </Box>
