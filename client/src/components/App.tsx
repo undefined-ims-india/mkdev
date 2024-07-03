@@ -72,16 +72,23 @@ const routes = [
 const App = (): ReactElement => {
   const location = useLocation();
 
+  if (!window.localStorage.getItem('theme')) { window.localStorage.setItem('theme', 'light') }
+
   const [mode, setMode] = React.useState<typeof lightTheme | typeof darkTheme>(
-    lightTheme
+    window.localStorage.getItem('theme') === 'light' ? lightTheme : darkTheme
   );
   const colorMode = React.useMemo(
     // calculates value: returns an object, assigned to colorMode
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) =>
-          prevMode === lightTheme ? darkTheme : lightTheme
-        );
+        if (window.localStorage.getItem('theme') === 'light') {
+          setMode(darkTheme);
+          window.localStorage.setItem('theme', 'dark')
+        }
+        else if (window.localStorage.getItem('theme') === 'dark') {
+          setMode(lightTheme);
+          window.localStorage.setItem('theme', 'light')
+        }
       },
     }),
     []
