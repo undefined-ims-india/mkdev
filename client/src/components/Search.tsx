@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import styled from '@mui/system/styled';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 const tagTypes = ['User', 'Post'];
 
@@ -153,7 +154,7 @@ export default function SearchComponent(): ReactElement {
             color='primary'
             onClick={handleSearch}
           >
-            Search
+							<ManageSearchIcon fontSize='large' />
           </SearchButton>
         </AutocompleteContainer>
       </Form>
