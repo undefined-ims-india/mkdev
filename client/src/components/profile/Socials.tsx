@@ -20,7 +20,8 @@ const Socials = ({ profileData }: UserProps): ReactElement => {
           display='flex'
           flexDirection='row'
           alignItems='center'
-          justifyContent={'space-evenly'}
+          justifyContent={'space-between'}
+          gap='20px'
         >
           <Typography variant='body1' component='div'>
             {profileData!.linkedinId ? (
