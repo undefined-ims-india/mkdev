@@ -9,6 +9,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Link from '@mui/material/Link';
 import { BlogPosts } from '../../../../types';
 import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface UserProps {
   devId: string;
@@ -67,6 +68,16 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
         {loading ? (
           <Grid item xs={12}>
             <Typography align='center'>Loading...</Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100px',
+              }}
+            >
+              <LinearProgress sx={{ width: '50%', height: '10px' }} />
+            </Box>
           </Grid>
         ) : blogs.length ? (
           blogs.map((blog, idx) => (
@@ -85,8 +96,17 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h2'
                     fontSize={'2rem'}
                     align='center'
+                    gutterBottom
                   >
                     {blog.title}
+                  </Typography>
+                  <Typography
+                    variant='h1'
+                    component='h3'
+                    fontSize={'1rem'}
+                    align='center'
+                  >
+                    {blog.description}
                   </Typography>
                 </CardContent>
               </Card>
