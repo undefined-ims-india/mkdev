@@ -47,7 +47,7 @@ const Nav = (): ReactElement => {
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar enableColorOnDark sx={{
-          backgroundColor: theme === 'light' ? 'rgb(40, 40, 40, .30)' : 'rgb(230, 230, 230, 0.30)',
+          backgroundColor: theme === 'light' ? 'rgba(90, 217, 219, .3)' : 'rgb(230, 230, 230, 0.30)',
           backdropFilter: 'blur(14px) saturate(180%)',
           zIndex: '10',
           height: '70px'
