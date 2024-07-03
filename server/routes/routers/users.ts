@@ -117,12 +117,21 @@ users.get('/', (req: any, res: any) => {
 // Update user by id
 users.patch('/:id', async (req: any, res: any) => {
   const { id } = req.params;
-  const { devId, username, githubId, linkedinId } = req.body;
+  const { devId, username, githubId, linkedinId, mediumId, picture, aboutMe } =
+    req.body;
 
   try {
     const user = await prisma.user.update({
       where: { id: +id },
-      data: { devId, username, githubId, linkedinId },
+      data: {
+        devId,
+        username,
+        githubId,
+        linkedinId,
+        mediumId,
+        picture,
+        aboutMe,
+      },
     });
     res.status(200).send(user);
   } catch (err) {
