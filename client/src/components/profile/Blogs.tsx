@@ -28,6 +28,9 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
         const { data } = await axios.get(
           `https://dev.to/api/articles?username=${devId}&per_page=6`
         );
+        if (data.length) {
+          return;
+        }
         setBlogs((prevBlogs) => [...prevBlogs, ...data]);
       } catch (error) {
         console.error(error);
@@ -39,6 +42,9 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
         const { data } = await axios.get(
           `https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@${mediumId}&per_page=6`
         );
+        if (data.items && data.items.length) {
+          return;
+        }
         const medBlogs = data.items.map((blog: any) => ({
           id: blog.guid,
           title: blog.title,
@@ -64,7 +70,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
           <Grid item xs={12}>
             <Typography align='center'>Loading...</Typography>
           </Grid>
-        ) : blogs.length ? (
+        ) : blogs.length > 0 ? (
           blogs.map((blog, idx) => (
             <Grid item key={idx} xs={12} sm={6} md={4}>
               <Card>
