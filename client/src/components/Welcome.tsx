@@ -35,8 +35,9 @@ const Welcome = () => {
       flexDirection='column'
       alignItems='center'
       justifyContent='center'
+      sx={{height: '100vh', width: '100vw'}}
     >
-      <Box alignContent={'center'} sx={{color: 'aliceblue', maxWidth: 90/100}}>
+      <Box alignContent={'center'} sx={{maxWidth: 90/100}}>
         <Box sx={{marginBottom: 6}}>
           <Typography
             variant='h1'
