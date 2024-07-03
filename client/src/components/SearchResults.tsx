@@ -21,7 +21,6 @@ export default function SearchResults() {
           acc.push(curr.user);
           return acc;
         }, []);
-        console.log(users.flat());
         return setUserFeed(users.flat());
       }
       // else if tagType is equal to posts
