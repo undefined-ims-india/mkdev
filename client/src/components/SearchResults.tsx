@@ -39,7 +39,7 @@ export default function SearchResults() {
 
   try {
     return (
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
         <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
           <SearchComponent />
           {postFeed &&
