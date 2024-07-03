@@ -22,50 +22,52 @@ const ProfileInfo = ({
 }: ProfileProps): ReactElement => {
   const userId = useContext(UserContext);
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        margin: 'auto',
-        mt: 2,
-        padding: '20px',
-        borderRadius: '10px',
-      }}
-    >
-      <Box display='flex' flexDirection='column' alignItems='center' mb={2}>
-        <Avatar
-          sx={{ width: 120, height: 120, mt: 2 }}
-          src={profileData!.picture !== null ? profileData!.picture : ''}
-          alt={profileData!.username || profileData!.name || ''}
-        />
-        <Typography
-          variant='h6'
-          component='h2'
-          sx={{
-            mt: 2,
-            fontWeight: 'bold',
-            fontSize: '1.25rem',
-            color: 'text.primary',
-          }}
-        >
-          {profileData!.name}
-        </Typography>
-        <Typography variant='body1' color='textSecondary' sx={{ mt: 1 }}>
-          {profileData!.aboutMe}
-        </Typography>
-        <Box display='flex' justifyContent='center' mt={2}>
-          {userId === profileData!.id ? (
-            <IconButton aria-label='edit' onClick={handleEdit} sx={{ mt: 2 }}>
-              <EditIcon />
-            </IconButton>
-          ) : (
-            <Follow />
-          )}
+    <>
+      <Card
+        sx={{
+          maxWidth: 290,
+          margin: 'auto',
+          mt: 2,
+          padding: '20px',
+          borderRadius: '10px',
+        }}
+      >
+        <Box display='flex' flexDirection='column' alignItems='center' mb={2}>
+          <Avatar
+            sx={{ width: 120, height: 120, mt: 2 }}
+            src={profileData!.picture !== null ? profileData!.picture : ''}
+            alt={profileData!.username || profileData!.name || ''}
+          />
+          <Typography
+            variant='h6'
+            component='h2'
+            sx={{
+              mt: 2,
+              fontWeight: 'bold',
+              fontSize: '1.25rem',
+              color: 'text.primary',
+            }}
+          >
+            {profileData!.name}
+          </Typography>
+          <Typography variant='body1' color='textSecondary' sx={{ mt: 1 }}>
+            {profileData!.aboutMe}
+          </Typography>
+          <Box display='flex' justifyContent='center' mt={2}>
+            {userId === profileData!.id ? (
+              <IconButton aria-label='edit' onClick={handleEdit} sx={{ mt: 2 }}>
+                <EditIcon />
+              </IconButton>
+            ) : (
+              <Follow />
+            )}
+          </Box>
         </Box>
-      </Box>
-      <Box mt={2}>
-        <Socials profileData={profileData!} />
-      </Box>
-    </Card>
+        <Box mt={2}>
+          <Socials profileData={profileData!} />
+        </Box>
+      </Card>
+    </>
   );
 };
 
