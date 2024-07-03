@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import SearchComponent from './Search';
 import Post from './Post';
-import { PostWithRelations } from '../../../types';
+import { PostWithRelations, UserProfile } from '../../../types';
 import ProfileInfo from './profile/ProfileInfo';
 import Grid from '@mui/material/Grid';
 
@@ -19,7 +19,6 @@ export default function SearchResults() {
       if (tagType === 'User') {
         let users = data.reduce((acc: any, curr: any) => {
           acc.push(curr.user);
-          console.log(acc);
           return acc;
         }, []);
         console.log(users.flat());
@@ -55,11 +54,13 @@ export default function SearchResults() {
             })}
           {userFeed && (
             <Grid container spacing={2}>
-              {userFeed.map((user) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={user.id}>
-                  <ProfileInfo profileData={user} handleEdit={() => {}} />
-                </Grid>
-              ))}
+              {userFeed.map((user: UserProfile) => {
+                return (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={`${user.name + user.id}`}>
+                    <ProfileInfo profileData={user} handleEdit={() => {}} />
+                  </Grid>
+                );
+              })}
             </Grid>
           )}
           {/* {userFeed && userFeed.map((user) => {
