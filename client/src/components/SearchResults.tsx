@@ -63,12 +63,6 @@ export default function SearchResults() {
               })}
             </Grid>
           )}
-          {/* {userFeed && userFeed.map((user) => {
-						console.log(user, 'This is user');
-						return (
-							<ProfileInfo profileData={user} handleEdit={() => {}}/>
-						);
-					})} */}
         </Box>
       </Box>
     );
