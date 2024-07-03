@@ -11,6 +11,7 @@ export interface UserProfile extends User {
   blogs: Blog[];
   followedBy: User[];
   following: User[];
+  aboutMe: string;
 }
 
 export interface PostWithRelations extends Post {
