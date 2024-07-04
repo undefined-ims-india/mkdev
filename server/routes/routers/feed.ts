@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { PostWithRelations } from '../../../types';
+import { postWithRelationsSelector } from '../../helpers/post-selectors';
 
 const feed = Router();
 const prisma = new PrismaClient();
@@ -16,27 +17,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
               title: ""
             }
           },
-          include: {
-            author: { select :{
-              id: true,
-              username: true,
-              name: true,
-              picture: true
-            }},
-            tags: true,
-            liked: {select: {id:true}},
-            comments: { select: {
-              id: true,
-              body: true,
-              createdAt: true,
-              author: { select :{
-                id: true,
-                username: true,
-                name: true,
-                picture: true
-              }}
-          }},
-          },
+          include: postWithRelationsSelector,
           orderBy: [
             {
               createdAt: 'desc'
@@ -67,27 +48,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
                 title: ""
               }
             },
-            include: {
-              author: { select :{
-                id: true,
-                username: true,
-                name: true,
-                picture: true
-              }},
-              tags: true,
-              liked: {select: {id:true}},
-              comments: { select: {
-                id: true,
-                body: true,
-                createdAt: true,
-                author: { select :{
-                  id: true,
-                  username: true,
-                  name: true,
-                  picture: true
-                }}
-            }},
-            },
+            include: postWithRelationsSelector,
             orderBy: [
               {
                 createdAt: 'desc'
@@ -111,27 +72,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
                 title: ""
               }
             },
-            include: {
-              author: { select :{
-                id: true,
-                username: true,
-                name: true,
-                picture: true
-              }},
-              tags: true,
-              liked: {select: {id:true}},
-              comments: { select: {
-                id: true,
-                body: true,
-                createdAt: true,
-                author: { select :{
-                  id: true,
-                  username: true,
-                  name: true,
-                  picture: true
-                }}
-            }},
-            },
+            include: postWithRelationsSelector,
             orderBy: [
               {
                 createdAt: 'desc'

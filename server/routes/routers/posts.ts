@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PostWithRelations, RequestWithUser } from '../../../types';
 import { PrismaClient,Tags } from '@prisma/client';
+import { postWithRelationsSelector } from '../../helpers/post-selectors';
 import awsS3Upload from '../../helpers/aws-s3-upload';
 // to remove the maintenance warning in the console...
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
@@ -111,32 +112,7 @@ posts.get('/:id', async(req: RequestWithUser, res: any) => {
       where: {
         id: +id,
       },
-      include: {
-        author: { select :{
-          id: true,
-          username: true,
-          name: true,
-          picture: true
-        }},
-        tags: true,
-        repo: {
-          include: {
-            files: true
-          }
-        },
-        liked: { select: { id: true }},
-        comments: { select: {
-          id: true,
-          body: true,
-          author: { select :{
-            id: true,
-            username: true,
-            name: true,
-            picture: true
-          }},
-          createdAt: true,
-        }}
-      }
+      include: postWithRelationsSelector
     });
     if (req.user) { post.likedByUser = post.liked.slice().map(like => like.id).includes(req.user.id); }
     res.send(post)
