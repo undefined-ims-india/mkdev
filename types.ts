@@ -17,7 +17,7 @@ export interface SimpleUser {
   id: number;
   name: string;
   username: string;
-  picture: string;
+  picture: string | null;
 }
 
 export interface Comment {
