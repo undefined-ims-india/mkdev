@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material";
 import MarkDown from "../MarkDown";
 import PostTagsChips from "../PostTagsChips";
 import PostUserInfo from "./PostUserInfo";
+import PostComments from "./PostComments";
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box'
@@ -23,7 +24,7 @@ import Grid from '@mui/material/Grid'
 
 const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
-  const userId = useContext(UserContext);
+  const userId = useContext(UserContext).userId;
   const theme = useTheme().palette.mode;
 
   const handleLike = () => {
@@ -36,7 +37,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
       <Box className="fill top-curve" sx={{maxHeight: "250px"}}>
         {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
       </Box>
-      <Grid container spacing={0} sx={{background: theme === 'light' ? 'white' : '#171717', padding: '1vh',}} className={content.s3_key ? "bottom-curve" : "rounded"}>
+      <Grid container spacing={0} sx={{background: theme === 'light' ? 'white' : '#171717', padding: '1vh',}} className={content.s3_key ? "" : "top-curve"}>
         <Grid item lg={3} xs={12} >
           <PostUserInfo content={content}/>
         </Grid>
@@ -66,6 +67,14 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
           </Link>
         </Grid>
       </Grid>
+      {
+        content.comments?
+        <Box>
+        <PostComments comments={content.comments} />
+      </Box>
+      :
+      <></>
+      }
     </>
   );
 };

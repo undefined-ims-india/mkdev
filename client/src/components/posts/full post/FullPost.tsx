@@ -25,7 +25,7 @@ const FullPost = (): React.ReactElement => {
   const [content, setContent]: [PostWithRelations | null, Function] =
     useState(null);
   const contentREF = useRef(content);
-  const userId = useContext(UserContext);
+  const userId = useContext(UserContext).userId;
 
   const handleLike = () => {
     axios
