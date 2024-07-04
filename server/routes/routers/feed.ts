@@ -26,15 +26,16 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
             tags: true,
             liked: {select: {id:true}},
             comments: { select: {
+              id: true,
+              body: true,
+              createdAt: true,
+              author: { select :{
                 id: true,
-                body: true,
-                author: { select :{
-                  id: true,
-                  username: true,
-                  name: true,
-                  picture: true
-                }}
-            }},
+                username: true,
+                name: true,
+                picture: true
+              }}
+          }},
           },
           orderBy: [
             {
@@ -78,6 +79,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
               comments: { select: {
                 id: true,
                 body: true,
+                createdAt: true,
                 author: { select :{
                   id: true,
                   username: true,
@@ -121,6 +123,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
               comments: { select: {
                 id: true,
                 body: true,
+                createdAt: true,
                 author: { select :{
                   id: true,
                   username: true,
