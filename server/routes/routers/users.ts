@@ -133,4 +133,25 @@ users.patch('/:id', async (req: any, res: any) => {
   }
 });
 
+// Get unread message count by user id
+users.get('/unread/:id', (req: any, res: any) => {
+  const { id } = req.params;
+
+  prisma.user.findFirst({
+    where: {
+      id: +id
+    },
+    select: {
+      _count: {
+        select: {
+          unreadMessages: true
+        }
+      }
+    }
+  })
+  .then((unreadCount) => {
+    res.status(200).send(JSON.stringify(unreadCount?._count.unreadMessages));
+  })
+})
+
 export default users;
