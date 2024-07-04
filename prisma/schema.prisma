@@ -19,13 +19,16 @@ model Post {
   title     String   @db.VarChar(255)
   body      String
   userId    Int
-  s3_key   String?
+  s3_key    String?
   repo      Repo?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation("UserPosts", fields: [userId], references: [id])
   liked     User[]   @relation("LikedPosts")
   tags      Tags[]   @relation("PostToTags")
+  postId    Int?
+  comments  Post[]   @relation("PostComments")
+  commentOn Post?    @relation("PostComments", fields: [postId], references: [id])
 }
 
 model Repo {
