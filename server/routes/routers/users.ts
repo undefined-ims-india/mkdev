@@ -114,25 +114,6 @@ users.get('/', (req: any, res: any) => {
     });
 });
 
-// Update user by id
-users.patch('/:id', async (req: any, res: any) => {
-  const { id } = req.params;
-  const { devId, username, githubId, linkedinId } = req.body;
-
-  try {
-    const user = await prisma.user.update({
-      where: { id: +id },
-      data: { devId, username, githubId, linkedinId },
-    });
-    res.status(200).send(user);
-  } catch (err) {
-    console.error('Failed to update user:', err);
-    res.sendStatus(500);
-  } finally {
-    await prisma.$disconnect();
-  }
-});
-
 // Get unread message count by user id
 users.get('/unread/:id', (req: any, res: any) => {
   const { id } = req.params;
@@ -153,5 +134,24 @@ users.get('/unread/:id', (req: any, res: any) => {
     res.status(200).send(JSON.stringify(unreadCount?._count.unreadMessages));
   })
 })
+
+// Update user by id
+users.patch('/:id', async (req: any, res: any) => {
+  const { id } = req.params;
+  const { devId, username, githubId, linkedinId } = req.body;
+
+  try {
+    const user = await prisma.user.update({
+      where: { id: +id },
+      data: { devId, username, githubId, linkedinId },
+    });
+    res.status(200).send(user);
+  } catch (err) {
+    console.error('Failed to update user:', err);
+    res.sendStatus(500);
+  } finally {
+    await prisma.$disconnect();
+  }
+});
 
 export default users;
