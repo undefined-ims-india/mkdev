@@ -112,14 +112,30 @@ posts.get('/:id', async(req: RequestWithUser, res: any) => {
         id: +id,
       },
       include: {
-        author: true,
+        author: { select :{
+          id: true,
+          username: true,
+          name: true,
+          picture: true
+        }},
         tags: true,
         repo: {
           include: {
             files: true
           }
         },
-        liked: { select: { id: true }}
+        liked: { select: { id: true }},
+        comments: { select: {
+          id: true,
+          body: true,
+          author: { select :{
+            id: true,
+            username: true,
+            name: true,
+            picture: true
+          }},
+          createdAt: true,
+        }}
       }
     });
     if (req.user) { post.likedByUser = post.liked.slice().map(like => like.id).includes(req.user.id); }
@@ -177,7 +193,29 @@ posts.delete('/:id', (req: any, res: any) => {
     .finally(async () => {
       await prisma.$disconnect();
     });
-
 });
+
+posts.put('/:id/comment', async (req: RequestWithUser, res: any) => {
+  try {
+    console.log('put comment')
+    const { body } = req.body;
+    await prisma.post.create({
+      data: {
+        body,
+        author: { connect: { id: req.user.id }},
+        commentOn: { connect: { id: +req.params.id }}
+      }
+    })
+    res.sendStatus(200);
+  }
+  catch (err) {
+    console.error('Error: /api/posts/:id/comment: ' + err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect();
+    console.log('done')
+  }
+})
 
 export default posts;
