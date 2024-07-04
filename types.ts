@@ -12,6 +12,7 @@ export interface UserProfile extends User {
   followedBy: User[];
   following: User[];
   aboutMe: string;
+  bio: string;
 }
 
 export interface PostWithRelations extends Post {
