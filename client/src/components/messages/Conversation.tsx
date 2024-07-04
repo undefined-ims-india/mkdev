@@ -1,4 +1,5 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState, useEffect, useContext, ReactElement } from 'react';
+import { UserContext } from '../UserContext';
 import axios from 'axios';
 
 import Button from '@mui/material/Button';
@@ -25,8 +26,24 @@ interface PropsType {
 const Conversation: React.FC<PropsType> = (props): ReactElement => {
   const { con, select, setCons, deleteCon } = props;
 
-  // const [open, setOpen] = useState<boolean>(false);
+  const userId = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const open = Boolean(anchorEl); // for delete option TODO: change to delete button
+  const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
+  const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
+
+  // get number of unread messages in conversation
+  useEffect(() => {
+    axios
+      .get(`/api/messages/unread/${con.id}/${userId}`)
+      .then(({ data }): void => {
+        console.log('data from conv unreadmsgs req', data)
+        if (data > 0) {
+          setIsHidden(false);
+        }
+        setUnreadMsgs(data);
+      })
+  }, [unreadMsgs, userId])
 
   // pass selected conversation id to Messages component to change conId state
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
@@ -55,11 +72,9 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
     setAnchorEl(null);
   }
 
-  const open = Boolean(anchorEl);
-
   return (
     <Grid item>
-      <Badge badgeContent={true} /* TODO: change true to a variable */ color="warning">
+      <Badge badgeContent={unreadMsgs} color="warning">
         <ButtonGroup
           sx={{
             width: '200px'
