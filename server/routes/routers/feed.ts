@@ -17,7 +17,12 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
             }
           },
           include: {
-            author: true,
+            author: { select :{
+              id: true,
+              username: true,
+              name: true,
+              picture: true
+            }},
             tags: true,
             liked: {select: {id:true}}
           },
@@ -52,7 +57,12 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
               }
             },
             include: {
-              author: true,
+              author: { select :{
+                id: true,
+                username: true,
+                name: true,
+                picture: true
+              }},
               tags: true,
               liked: {select: {id:true}}
             },
@@ -80,7 +90,12 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
               }
             },
             include: {
-              author: true,
+              author: { select :{
+                id: true,
+                username: true,
+                name: true,
+                picture: true
+              }},
               tags: true,
               liked: {select: {id:true}}
             },
