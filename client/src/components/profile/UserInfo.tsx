@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { UserProfile } from '../../../../types';
 
 import Box from '@mui/material/Box';
@@ -7,6 +7,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import Stack from '@mui/material/Stack';
+import { Card, CardContent } from '@mui/material';
 
 interface UserInfoProps {
   profileData: UserProfile;
@@ -83,6 +84,23 @@ const UserInfo = ({
             onChange={handleChange}
           />
         </FormControl>
+        <Card sx={{ maxWidth: 600, m: 2 }}>
+          <CardContent>
+            <FormControl sx={{ p: 2, my: 1, mx: 1, width: '100%' }}>
+              <InputLabel htmlFor='aboutMe'>About Me</InputLabel>
+              <Input
+                id='bio'
+                name='bio'
+                multiline
+                minRows={5}
+                placeholder='Tell everyone about yourself!'
+                value={userInfo.bio || ''}
+                onChange={handleChange}
+                fullWidth
+              />
+            </FormControl>
+          </CardContent>
+        </Card>
         <Button type='submit'>Update</Button>
       </Stack>
     </Box>
