@@ -24,7 +24,17 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
               picture: true
             }},
             tags: true,
-            liked: {select: {id:true}}
+            liked: {select: {id:true}},
+            comments: { select: {
+                id: true,
+                body: true,
+                author: { select :{
+                  id: true,
+                  username: true,
+                  name: true,
+                  picture: true
+                }}
+            }},
           },
           orderBy: [
             {
@@ -64,7 +74,17 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
                 picture: true
               }},
               tags: true,
-              liked: {select: {id:true}}
+              liked: {select: {id:true}},
+              comments: { select: {
+                id: true,
+                body: true,
+                author: { select :{
+                  id: true,
+                  username: true,
+                  name: true,
+                  picture: true
+                }}
+            }},
             },
             orderBy: [
               {
@@ -97,7 +117,17 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
                 picture: true
               }},
               tags: true,
-              liked: {select: {id:true}}
+              liked: {select: {id:true}},
+              comments: { select: {
+                id: true,
+                body: true,
+                author: { select :{
+                  id: true,
+                  username: true,
+                  name: true,
+                  picture: true
+                }}
+            }},
             },
             orderBy: [
               {
