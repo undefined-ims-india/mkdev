@@ -22,6 +22,8 @@ const Nav = (): ReactElement => {
   const id = useContext(UserContext);
   const [profileImage, setProfileImage]: [string, Function] = useState('');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
+  const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
   const open = !!anchorEl;
   const navigate = useNavigate();
 
@@ -35,6 +37,17 @@ const Nav = (): ReactElement => {
         console.error(err);
       });
   }, [profileImage, id]);
+
+  useEffect(() => {
+    axios
+      .get(`/api/users/unread/${id}`)
+      .then(({ data }): void => {
+        if (data > 0) {
+          setIsHidden(false);
+        }
+        setUnreadMsgs(data);
+      })
+  }, [unreadMsgs, id])
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(e.currentTarget);
@@ -71,7 +84,7 @@ const Nav = (): ReactElement => {
                         <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
                       </IconButton>
                       <IconButton onClick={() => {navigate('/messages')}} sx={{color: 'aliceblue'}}>
-                        <Badge badgeContent={true} /* TODO: change true to a variable */ color="warning">
+                        <Badge badgeContent={unreadMsgs} invisible={isHidden} color="warning">
                           <InboxIcon fontSize="medium" />
                         </Badge>
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
