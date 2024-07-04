@@ -19,7 +19,7 @@ model Post {
   title     String   @db.VarChar(255)
   body      String
   userId    Int
-  s3_key   String?
+  s3_key    String?
   repo      Repo?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,6 +56,7 @@ model User {
   mediumId       String?         @unique
   githubId       String?         @unique
   aboutMe        String?
+  bio            String?
   picture        String?
   firstName      String
   lastName       String?
