@@ -4,25 +4,7 @@ import { PrismaClient } from '@prisma/client';
 const messages = Router();
 const prisma = new PrismaClient();
 
-messages.get('/:conversationId', async (req, res) => {
-  const { conversationId } = req.params;
-
-  const allMessages = await prisma.messages.findMany({
-    where: {
-      conversationId: +conversationId,
-    },
-    include: {
-      sender: {
-        select: {
-          username: true,
-          picture: true,
-        }
-      }
-    }
-  });
-  res.status(200).send(allMessages);
-});
-
+// create a message
 messages.post('/:conversationId', async (req: Request, res: Response) => {
   const { body, sender } = req.body.message;
   const conversationId: number = +req.params.conversationId;
@@ -74,6 +56,50 @@ messages.post('/:conversationId', async (req: Request, res: Response) => {
     res.sendStatus(500);
   });
 
+})
+
+// get all messages in a conversation
+messages.get('/:conversationId', async (req, res) => {
+  const { conversationId } = req.params;
+
+  const allMessages = await prisma.messages.findMany({
+    where: {
+      conversationId: +conversationId,
+    },
+    include: {
+      sender: {
+        select: {
+          username: true,
+          picture: true,
+        }
+      }
+    }
+  });
+  res.status(200).send(allMessages);
+});
+
+// get all unread messages in a conversation, per logged in user
+messages.get('/unread/:conversationId/:userId', async(req, res) => {
+  const { conversationId, userId } = req.params;
+
+  const unreadMessages = await prisma.messages.findMany({
+    where: {
+      conversationId: +conversationId,
+    },
+    select: {
+      unreadBy: {
+        where: {
+          id: +userId
+        }
+      }
+    }
+  })
+
+  const totalUnreadMessages = unreadMessages.filter((obj) => {
+    return obj.unreadBy.length > 0;
+  }).length
+
+  res.status(200).send(JSON.stringify(totalUnreadMessages));
 })
 
 // update liked status on specific message
