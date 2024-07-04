@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../../UserContext";
 import { useParams, Link } from "react-router-dom";
-import { PostWithRelations } from "../../../types";
+import { PostWithRelations } from "../../../../../types";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-import MarkDown from "./MarkDown";
+import MarkDown from "../MarkDown";
 import RepoDisplay from "./RepoDisplay";
 
 import Avatar from "@mui/material/Avatar";

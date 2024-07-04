@@ -1,6 +1,6 @@
 import React, {ReactElement, useContext} from "react";
-import { UserContext } from './UserContext';
-import { PostWithRelations } from "../../../types";
+import { UserContext } from '../../UserContext';
+import { PostWithRelations } from "../../../../../types";
 import { Link } from "react-router-dom";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -8,8 +8,8 @@ dayjs.extend(relativeTime);
 import axios from 'axios';
 import { useTheme } from "@mui/material";
 
-import MarkDown from "./MarkDown";
-import PostTagsChips from "./PostTagsChips";
+import MarkDown from "../MarkDown";
+import PostTagsChips from "../PostTagsChips";
 
 import Card from '@mui/material/Card';
 import Avatar from '@mui/material/Avatar';
