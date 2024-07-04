@@ -41,7 +41,6 @@ messages.post('/:conversationId', async (req: Request, res: Response) => {
     }
   })
   const recipients = participants?.participants.filter(user => user.id !== sender);
-  console.log('recipients when message sent', recipients);
 
   // create message with data from request body and params
   prisma.messages.create({
