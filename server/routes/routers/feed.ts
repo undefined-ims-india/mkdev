@@ -11,6 +11,11 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
     if (!req.user) {
       allPosts = await prisma.post.findMany(
         {
+          where: {
+            NOT: {
+              title: ""
+            }
+          },
           include: {
             author: true,
             tags: true,
@@ -41,6 +46,11 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
       if(feedFilter.users.length <= 1 && feedFilter.tags.length === 0 ) {
         allPosts = await prisma.post.findMany(
           {
+            where: {
+              NOT: {
+                title: ""
+              }
+            },
             include: {
               author: true,
               tags: true,
@@ -64,7 +74,10 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
                     id: { in: feedFilter.users }
                   }
                 }
-              ]
+              ],
+              NOT: {
+                title: ""
+              }
             },
             include: {
               author: true,
