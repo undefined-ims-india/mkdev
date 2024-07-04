@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import Nav from './Nav';
 import SearchComponent from './Search';
-import Post from './Post';
+import Post from './posts/post card/Post';
 import axios from 'axios';
 import Sidebar from './Sidebar';
 import { PostWithRelations } from '../../../types';

@@ -10,6 +10,7 @@ import { useTheme } from "@mui/material";
 
 import MarkDown from "../MarkDown";
 import PostTagsChips from "../PostTagsChips";
+import PostUserInfo from "./PostUserInfo";
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box'
@@ -36,23 +37,8 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
       </Box>
       <Grid container spacing={0} sx={{background: theme === 'light' ? 'white' : '#171717', padding: '1vh',}} className={content.s3_key ? "bottom-curve" : "rounded"}>
-        <Grid item lg={3} xs={12} sx={{display: "flex", flexDirection: "row", overflow: 'wrap', justifyContent: "start", alignItems: 'center'}}>
-          <Link to={`/user/${content.author.id}/profile`} style={{textDecoration: 'none'}}>
-            <Avatar
-              alt={content.author.username! || content.author.name}
-              src={content.author.picture!}
-              sx={{
-                width: '2.5vw', height: '2.5vw',
-                minWidth: 40, minHeight: 40
-              }}
-            >
-              {content.author.username![0] || content.author.name[0] || '?'}
-            </Avatar>
-          </Link>
-          <Box sx={{display:"flex", flexDirection:'column',  marginLeft: 2, marginRight: 2, flexGrow: 1}}>
-            <Typography variant="h1" sx={{fontSize: 23}}>{content.author.username || content.author.name}</Typography>
-            <Typography variant="body2" sx={{color: 'silver'}}>{dayjs(content.createdAt).fromNow()}</Typography>
-          </Box>
+        <Grid item lg={3} xs={12} >
+          <PostUserInfo content={content}/>
         </Grid>
         <Grid item lg={9} xs={0}/>
         <Grid item xs={12} sx={{overflow: 'wrap'}}>
