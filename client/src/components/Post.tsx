@@ -47,7 +47,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
                 minWidth: 40, minHeight: 40
               }}
             >
-              {content.author.username![0] || content.author.firstName[0] || '?'}
+              {content.author.username![0] || content.author.name[0] || '?'}
             </Avatar>
           </Link>
           <Box sx={{display:"flex", flexDirection:'column',  marginLeft: 2, marginRight: 2, flexGrow: 1}}>
