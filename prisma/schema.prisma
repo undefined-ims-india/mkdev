@@ -59,7 +59,7 @@ model User {
   mediumId       String?         @unique
   githubId       String?         @unique
   aboutMe        String?
-  picture        String?
+  picture        String          @default("")
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
