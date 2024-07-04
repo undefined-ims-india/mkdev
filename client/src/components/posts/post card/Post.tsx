@@ -11,7 +11,6 @@ import { useTheme } from "@mui/material";
 import MarkDown from "../MarkDown";
 import PostTagsChips from "../PostTagsChips";
 
-import Card from '@mui/material/Card';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
