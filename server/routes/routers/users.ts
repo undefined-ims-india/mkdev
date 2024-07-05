@@ -154,4 +154,46 @@ users.patch('/:id', async (req: any, res: any) => {
   }
 });
 
+// Update unread messages for single user
+users.patch('/read/:id/:conversationId', async (req, res) => {
+  const { id, conversationId } = req.params;
+
+  // find messages that are unread by user
+  const readMsgs = await prisma.messages.findMany({
+    where: {
+      AND: [
+        {
+          conversationId: +conversationId
+        },
+        {
+          unreadBy: {
+            some: {
+              id: {
+                equals: +id
+              }
+            }
+          }
+        }
+      ]
+    },
+    select: {
+      id: true
+    }
+  })
+
+  // disconnect readMsgs from user's unreadMessages
+  await prisma.user.update({
+    where: {
+      id: +id
+    },
+    data: {
+      unreadMessages: {
+        disconnect: readMsgs
+      }
+    }
+  })
+
+  res.sendStatus(202);
+})
+
 export default users;
