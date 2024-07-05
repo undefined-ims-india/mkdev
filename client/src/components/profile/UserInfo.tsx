@@ -7,7 +7,8 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import Stack from '@mui/material/Stack';
-import { Card, CardContent } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 interface UserInfoProps {
   profileData: UserProfile;
@@ -84,17 +85,34 @@ const UserInfo = ({
             onChange={handleChange}
           />
         </FormControl>
-        <Card sx={{ maxWidth: 600, m: 2 }}>
+        <Card sx={{ maxWidth: 300, m: 2 }}>
           <CardContent>
             <FormControl sx={{ p: 2, my: 1, mx: 1, width: '100%' }}>
-              <InputLabel htmlFor='aboutMe'>About Me</InputLabel>
+              <InputLabel htmlFor='bio'>Bio</InputLabel>
               <Input
                 id='bio'
                 name='bio'
                 multiline
                 minRows={5}
-                placeholder='Tell everyone about yourself!'
-                value={userInfo.bio || ''}
+                placeholder='This is the bio section!'
+                value={userInfo!.bio || ''}
+                onChange={handleChange}
+                fullWidth
+              />
+            </FormControl>
+          </CardContent>
+        </Card>
+        <Card sx={{ maxWidth: 600, m: 2 }}>
+          <CardContent>
+            <FormControl sx={{ p: 2, my: 1, mx: 1, width: '100%' }}>
+              <InputLabel htmlFor='aboutMe'>About Me</InputLabel>
+              <Input
+                id='aboutMe'
+                name='aboutMe'
+                multiline
+                minRows={5}
+                placeholder='This is the about me'
+                value={userInfo!.aboutMe || ''}
                 onChange={handleChange}
                 fullWidth
               />
