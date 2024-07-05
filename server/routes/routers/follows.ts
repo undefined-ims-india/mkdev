@@ -107,7 +107,6 @@ follow.get('/isFollowing/:followingId', async (req: any, res: any) => {
   const { followingId } = req.params;
 
   if (!req.user) {
-    console.log('User not logged in');
     return res.sendStatus(401);
   }
 
