@@ -59,6 +59,10 @@ const Nav = (): ReactElement => {
     setUnreadMsgs(0);
   })
 
+  socket.on('message', (message) => {
+    setUnreadMsgs(message.newMessage);
+  })
+
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(e.currentTarget);
   };
