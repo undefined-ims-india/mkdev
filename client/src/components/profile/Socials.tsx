@@ -63,7 +63,7 @@ const Socials = ({ profileData }: UserProps): ReactElement => {
                 <DevIcon />
               </Link>
             ) : (
-              <DevIconDisabled />
+              <DevIconDisabled color='disabled' />
             )}
           </Typography>
           <Typography variant='body1' component='div'>
@@ -76,7 +76,7 @@ const Socials = ({ profileData }: UserProps): ReactElement => {
                 <MediumIcon />
               </Link>
             ) : (
-              <MediumIconDisabled />
+              <MediumIconDisabled color='disabled' />
             )}
           </Typography>
         </Box>
