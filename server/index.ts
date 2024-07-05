@@ -176,6 +176,11 @@ io.on('connection', (socket) => {
   socket.on('add-conversation', () => {
     io.emit('add-conversation');
   });
+
+  socket.on('read-message', () => {
+    io.emit('read-message');
+  })
+
   // on disconnection
   socket.on('disconnect', () => {});
 });
