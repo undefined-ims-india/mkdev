@@ -13,7 +13,7 @@ import PostTagsChips from "../PostTagsChips";
 import PostUserInfo from "./PostUserInfo";
 import PostComments from "./PostComments";
 
-import Avatar from '@mui/material/Avatar';
+import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -52,14 +52,18 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
           <></>
           }
         </Grid>
-        <Grid item lg={2} xs={4} sx={{display: "flex", flexDirection: "row", alignItems: 'center'}}>
+        <Grid item lg={2} xs={3} sx={{display: "flex", flexDirection: "row", alignItems: 'center'}}>
           <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
             {content!.likedByUser ? <FavoriteIcon /> : <FavoriteBorderIcon />}
           </IconButton>
-          <Typography variant="body1">{content!.liked.length} Likes</Typography>
+          <Typography variant="body1">{content!.liked.length}</Typography>
         </Grid>
-        <Grid item lg={8} xs={4}/>
-        <Grid item lg={2} xs={4} sx={{display: 'flex', justifyContent: 'right'}}>
+        <Grid item lg={2} xs={3} sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+          <ChatBubbleOutlineOutlinedIcon sx={{color: 'silver', marginRight: 1}} />
+          <Typography variant="body1">{content!.comments!.length}</Typography>
+        </Grid>
+        <Grid item lg={6} xs={0}/>
+        <Grid item lg={2} xs={6} sx={{display: 'flex', justifyContent: 'right'}}>
           <Link to={`/post/${content.id}`}>
             <Button>
               {'See Full Post'}
