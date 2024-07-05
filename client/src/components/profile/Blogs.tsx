@@ -49,7 +49,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
         const medBlogs = data.items.map((blog: any) => ({
           id: blog.guid,
           title: blog.title,
-          description: blog.description,
+          description: data.feed.description,
           url: blog.link,
           cover_image: blog.thumbnail,
         }));
@@ -67,7 +67,6 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
       <Grid container spacing={4}>
         {loading ? (
           <Grid item xs={12}>
-            <Typography align='center'>Loading...</Typography>
             <Box
               sx={{
                 display: 'flex',
@@ -96,7 +95,6 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h2'
                     fontSize={'2rem'}
                     align='center'
-                    gutterBottom
                   >
                     {blog.title}
                   </Typography>
