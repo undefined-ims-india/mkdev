@@ -39,7 +39,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
       </Box>
       <Grid container spacing={0} sx={{background: theme === 'light' ? 'white' : '#171717', padding: '1vh',}} className={content.s3_key ? "" : "top-curve"}>
         <Grid item lg={3} xs={12} >
-          <PostUserInfo content={content}/>
+          <PostUserInfo createdAt={content.createdAt} author={content.author}/>
         </Grid>
         <Grid item lg={9} xs={0}/>
         <Grid item xs={12} sx={{overflow: 'wrap'}}>

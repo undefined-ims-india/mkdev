@@ -2,6 +2,7 @@ import React, {useState, useContext} from 'react';
 import { Comment } from '../../../../../types';
 import axios from 'axios';
 import { UserContext } from '../../UserContext';
+import CommentCard from './CommentCard';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -64,6 +65,14 @@ export default ({comments}:{comments: Comment[]}) => {
           </Grid>
         </Card>
       </Grid>
+        {
+          comments.length ?
+          <Grid item xs={12}>
+            {comments.map((comment, index) => (<CommentCard comment={comment} key={comment.body.slice(20) + index}/> ))}
+          </Grid>
+          :
+          <></>
+        }
     </Grid>
   )
 }
