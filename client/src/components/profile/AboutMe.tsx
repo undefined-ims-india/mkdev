@@ -4,6 +4,9 @@ import { UserProfile } from '../../../../types';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface UserInfoProps {
   profileData: UserProfile;
@@ -12,14 +15,16 @@ interface UserInfoProps {
 }
 
 const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
-  const [userInfo, setUserInfo]: [UserProfile | null, Function] =
-    useState(profileData);
-
-  useEffect(() => {
-    if (profileData.aboutMe) {
-      setUserInfo({ ...userInfo, aboutMe: profileData.aboutMe });
-    }
-  }, []);
+  if (!profileData) {
+    return (
+      <Grid item xs={12}>
+        <Typography align='center'>Loading...</Typography>
+        <Box className='load-box'>
+          <LinearProgress className='loading-bar' />
+        </Box>
+      </Grid>
+    );
+  }
 
   return (
     <Card sx={{ maxWidth: 600, m: 2 }}>
