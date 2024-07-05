@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import axios from 'axios';
 import { useTheme } from '@mui/material';
+import io from 'socket.io-client';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -18,6 +19,8 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Grid from '@mui/material/Grid';
 import Badge from '@mui/material/Badge';
+
+const socket = io('http://localhost:4000');
 
 const Nav = (): ReactElement => {
   const id = useContext(UserContext);
@@ -40,6 +43,7 @@ const Nav = (): ReactElement => {
       });
   }, [profileImage, id]);
 
+  // count total unread messages for logged in user
   useEffect(() => {
     axios
       .get(`/api/users/unread/${id}`)
@@ -50,6 +54,10 @@ const Nav = (): ReactElement => {
         setUnreadMsgs(data);
       })
   }, [unreadMsgs, id])
+
+  socket.on('read-message', () => {
+    setUnreadMsgs(0);
+  })
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(e.currentTarget);
