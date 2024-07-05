@@ -43,7 +43,8 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
         .then(({ data }) => {
           // broadcast the message to all the clients
           socket.emit('message', {
-            ...data
+            ...data,
+            newMessage: 1
           })
         })
         .catch((err) => {
