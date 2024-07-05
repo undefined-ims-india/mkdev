@@ -11,6 +11,9 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface UserProps {
   profileData: UserProfile;
@@ -23,12 +26,14 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
   const [tab, setTab] = useState('1');
 
   useEffect(() => {
-    axios
-      .get(`/api/follows/counts/${profileData.id}`)
-      .then(({ data }): void => {
-        setFollowerCount(data.followersCount);
-        setFollowingCount(data.followingCount);
-      });
+    if (profileData && profileData.id) {
+      axios
+        .get(`/api/follows/counts/${profileData!.id}`)
+        .then(({ data }): void => {
+          setFollowerCount(data.followersCount);
+          setFollowingCount(data.followingCount);
+        });
+    }
   }, [profileData]);
 
   const handleTab = (
@@ -37,6 +42,17 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
   ) => {
     setTab(value);
   };
+
+  if (!profileData) {
+    return (
+      <Grid item xs={12}>
+        <Typography align='center'>Loading...</Typography>
+        <Box className='load-box'>
+          <LinearProgress className='loading-bar' />
+        </Box>
+      </Grid>
+    );
+  }
 
   return (
     <Box>
