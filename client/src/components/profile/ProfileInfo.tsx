@@ -39,7 +39,7 @@ const ProfileInfo = ({
     <>
       <Card
         sx={{
-          maxWidth: 400,
+          maxWidth: 250,
           margin: 'auto',
           mt: 2,
           padding: '20px',
@@ -64,7 +64,22 @@ const ProfileInfo = ({
           >
             {profileData!.name}
           </Typography>
-          <Typography variant='body1' color='textSecondary' sx={{ mt: 1 }}>
+          <Typography
+            variant='h6'
+            component='h2'
+            sx={{
+              fontWeight: 'bold',
+              fontSize: '.95rem',
+              color: 'text.primary',
+            }}
+          >
+            {profileData!.username ? `@${profileData!.username}` : ''}
+          </Typography>
+          <Typography
+            variant='body1'
+            color='textSecondary'
+            sx={{ mt: 1, p: 1 }}
+          >
             {profileData!.bio}
           </Typography>
           <Box display='flex' justifyContent='center' mt={2}>

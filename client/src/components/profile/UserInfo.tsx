@@ -7,8 +7,8 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
 import Stack from '@mui/material/Stack';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 interface UserInfoProps {
   profileData: UserProfile;
@@ -33,7 +33,11 @@ const UserInfo = ({
   };
 
   return (
-    <Box component='form' sx={{ m: 1, width: '16' }} onSubmit={handleUpdate}>
+    <Box
+      component='form'
+      sx={{ p: 1, m: 1, width: '16' }}
+      onSubmit={handleUpdate}
+    >
       <Stack spacing={2}>
         <FormControl sx={{ p: 2, my: 1, mx: 1, width: '10%' }}>
           <InputLabel htmlFor='username'>Username</InputLabel>
@@ -85,40 +89,40 @@ const UserInfo = ({
             onChange={handleChange}
           />
         </FormControl>
-        <Card sx={{ maxWidth: 300, m: 2 }}>
-          <CardContent>
-            <FormControl sx={{ p: 2, my: 1, mx: 1, width: '100%' }}>
-              <InputLabel htmlFor='bio'>Bio</InputLabel>
-              <Input
-                id='bio'
-                name='bio'
-                multiline
-                minRows={5}
-                placeholder='This is the bio section!'
-                value={userInfo!.bio || ''}
-                onChange={handleChange}
-                fullWidth
-              />
-            </FormControl>
-          </CardContent>
-        </Card>
-        <Card sx={{ maxWidth: 600, m: 2 }}>
-          <CardContent>
-            <FormControl sx={{ p: 2, my: 1, mx: 1, width: '100%' }}>
-              <InputLabel htmlFor='aboutMe'>About Me</InputLabel>
-              <Input
-                id='aboutMe'
-                name='aboutMe'
-                multiline
-                minRows={5}
-                placeholder='This is the about me'
-                value={userInfo!.aboutMe || ''}
-                onChange={handleChange}
-                fullWidth
-              />
-            </FormControl>
-          </CardContent>
-        </Card>
+        <Paper elevation={3} sx={{ p: 2, m: 2, maxWidth: 600 }}>
+          <Typography variant='h6' sx={{ mb: 2 }}>
+            Bio
+          </Typography>
+          <FormControl sx={{ width: '100%' }}>
+            <Input
+              id='bio'
+              name='bio'
+              multiline
+              minRows={5}
+              placeholder='This is the about me'
+              value={userInfo!.bio || ''}
+              onChange={handleChange}
+              fullWidth
+            />
+          </FormControl>
+        </Paper>
+        <Paper elevation={3} sx={{ p: 2, m: 2, maxWidth: 600 }}>
+          <Typography variant='h6' sx={{ mb: 2 }}>
+            About Me
+          </Typography>
+          <FormControl sx={{ width: '100%' }}>
+            <Input
+              id='aboutMe'
+              name='aboutMe'
+              multiline
+              minRows={5}
+              placeholder='This is the about me'
+              value={userInfo!.aboutMe || ''}
+              onChange={handleChange}
+              fullWidth
+            />
+          </FormControl>
+        </Paper>
         <Button type='submit'>Update</Button>
       </Stack>
     </Box>
