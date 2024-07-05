@@ -58,9 +58,23 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
     <Box>
       <TabContext value={tab}>
         <Box display='flex' justifyContent='center' mt={10}>
-          <TabList onChange={handleTab} centered>
+          <TabList
+            onChange={handleTab}
+            centered
+            variant='fullWidth'
+            sx={{
+              '& .MuiTab-root': {
+                fontSize: { xs: '0.7rem', sm: '0.75rem', md: '1rem' },
+                padding: { xs: '3px 6px', sm: '6px 12px' },
+                minWidth: { xs: 50, sm: 70 },
+              },
+              '& .MuiTabs-flexContainer': {
+                gap: '4px',
+              },
+            }}
+          >
             <Tab label='Posts' value='1' />
-            <Tab label='Dev.to Blogs' value='2' />
+            <Tab label='Blogs' value='2' />
             <Tab label={`Followers (${followerCount})`} value='3' />
             <Tab label={`Following (${followingCount})`} value='4' />
           </TabList>
@@ -73,7 +87,10 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
                   key={post.title + crypto.randomUUID()}
                   my={1}
                   width='50%'
-                  justifyContent={'center'}
+                  sx={{
+                    width: { xs: '90%', sm: '70%', md: '50%' },
+                    justifyContent: 'center',
+                  }}
                 >
                   <Post content={post} refreshParent={getProfile} />
                 </Box>
