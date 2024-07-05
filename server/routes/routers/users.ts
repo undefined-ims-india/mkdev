@@ -158,7 +158,7 @@ users.patch('/:id', async (req: any, res: any) => {
 users.patch('/read/:id/:conversationId', async (req, res) => {
   const { id, conversationId } = req.params;
 
-  // find messages that are unread by user
+  // find messages that are unread by user in specific conversation
   const readMsgs = await prisma.messages.findMany({
     where: {
       AND: [
@@ -181,7 +181,7 @@ users.patch('/read/:id/:conversationId', async (req, res) => {
     }
   })
 
-  // disconnect readMsgs from user's unreadMessages
+  // disconnect newly read messages from user's unreadMessages
   await prisma.user.update({
     where: {
       id: +id
