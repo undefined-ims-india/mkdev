@@ -46,7 +46,6 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
   if (!profileData) {
     return (
       <Grid item xs={12}>
-        <Typography align='center'>Loading...</Typography>
         <Box className='load-box'>
           <LinearProgress className='loading-bar' />
         </Box>
@@ -64,7 +63,7 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
             variant='fullWidth'
             sx={{
               '& .MuiTab-root': {
-                fontSize: { xs: '0.7rem', sm: '0.75rem', md: '1rem' },
+                fontSize: { xs: '0.7rem', sm: '0.75rem', md: '.9rem' },
                 padding: { xs: '3px 6px', sm: '6px 12px' },
                 minWidth: { xs: 50, sm: 70 },
               },
