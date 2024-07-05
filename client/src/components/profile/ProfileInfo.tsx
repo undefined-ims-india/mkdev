@@ -10,9 +10,11 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import LinearProgress from '@mui/material/LinearProgress';
+import Grid from '@mui/material/Grid';
 
 interface ProfileProps {
-  profileData: UserProfile;
+  profileData: UserProfile | null;
   handleEdit: () => void;
 }
 
@@ -21,11 +23,23 @@ const ProfileInfo = ({
   handleEdit,
 }: ProfileProps): ReactElement => {
   const userId = useContext(UserContext);
+
+  if (!profileData) {
+    return (
+      <Grid item xs={12}>
+        <Typography align='center'>Loading...</Typography>
+        <Box className='load-box'>
+          <LinearProgress className='loading-bar' />
+        </Box>
+      </Grid>
+    );
+  }
+
   return (
     <>
       <Card
         sx={{
-          maxWidth: 290,
+          maxWidth: 400,
           margin: 'auto',
           mt: 2,
           padding: '20px',
@@ -51,7 +65,7 @@ const ProfileInfo = ({
             {profileData!.name}
           </Typography>
           <Typography variant='body1' color='textSecondary' sx={{ mt: 1 }}>
-            {profileData!.aboutMe}
+            {profileData!.bio}
           </Typography>
           <Box display='flex' justifyContent='center' mt={2}>
             {userId === profileData!.id ? (
