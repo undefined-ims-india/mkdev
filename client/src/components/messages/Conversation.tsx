@@ -30,7 +30,7 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl); // for delete option TODO: change to delete button
   const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
-  const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
+  // const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
 
   // get number of unread messages in conversation
   useEffect(() => {
@@ -38,9 +38,9 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
       .get(`/api/messages/unread/${con.id}/${userId}`)
       .then(({ data }): void => {
         console.log('data from conv unreadmsgs req', data)
-        if (data > 0) {
-          setIsHidden(false);
-        }
+        // if (data > 0) {
+        //   setIsHidden(false);
+        // }
         setUnreadMsgs(data);
       })
   }, [unreadMsgs, userId])
@@ -48,6 +48,13 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
   // pass selected conversation id to Messages component to change conId state
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
     select(e, newCon);
+    // disconnect newly read msgs from user
+    axios
+      .patch(`/api/users/read/${userId}/${con.id}`)
+      .then(() => { setUnreadMsgs(0) })
+      .catch((err) => {
+        console.error('Failed to mark messages read:\n', err);
+      })
   }
 
   const deleteConversation = () => {
