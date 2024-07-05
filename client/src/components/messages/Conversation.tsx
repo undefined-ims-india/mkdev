@@ -43,6 +43,10 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
       })
   }, [unreadMsgs, userId])
 
+  socket.on('message', (message) => {
+    setUnreadMsgs(message.newMessage);
+  })
+
   // pass selected conversation id to Messages component to change conId state
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
     select(e, newCon);
