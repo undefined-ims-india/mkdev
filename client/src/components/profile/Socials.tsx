@@ -1,5 +1,7 @@
 import React, { ReactElement } from 'react';
 import { UserProfile } from '../../../../types';
+import MediumIcon from './icons/MediumIcon';
+import DevIcon from './icons/DevIcon';
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -56,12 +58,10 @@ const Socials = ({ profileData }: UserProps): ReactElement => {
                 target='_blank'
                 title='Dev.to Profile'
               >
-                Dev.to
+                <DevIcon />
               </Link>
             ) : (
-              <Typography color='disabled' component='span'>
-                Dev.to
-              </Typography>
+              <DevIcon color='disabled' />
             )}
           </Typography>
           <Typography variant='body1' component='div'>
@@ -71,12 +71,10 @@ const Socials = ({ profileData }: UserProps): ReactElement => {
                 target='_blank'
                 title='Medium.dev Profile'
               >
-                Medium
+                <MediumIcon />
               </Link>
             ) : (
-              <Typography color='disabled' component='span'>
-                Medium
-              </Typography>
+              <MediumIcon color='disabled' />
             )}
           </Typography>
         </Box>
