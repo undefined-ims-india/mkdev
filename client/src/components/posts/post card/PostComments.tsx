@@ -68,7 +68,7 @@ export default ({comments}:{comments: Comment[]}) => {
         {
           comments.length ?
           <Grid item xs={12}>
-            {comments.map((comment, index) => (<CommentCard comment={comment} key={comment.body.slice(20) + index}/> ))}
+            {comments.slice(2).map((comment, index) => (<CommentCard comment={comment} key={comment.body.slice(20) + index}/> ))}
           </Grid>
           :
           <></>
