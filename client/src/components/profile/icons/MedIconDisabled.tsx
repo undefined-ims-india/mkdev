@@ -7,7 +7,7 @@ const MediumIconDisabled = (props: React.SVGProps<SVGSVGElement>) => (
     y='0px'
     width='50'
     height='50'
-    viewBox='0,0,300,150'
+    viewBox='0 0 300 250'
   >
     <g
       fill-opacity='0.52157'
