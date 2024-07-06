@@ -8,7 +8,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-export default ({postID, liked, numLikes, refreshParent} : {postID: number, liked?: boolean, numLikes: number, refreshParent : Function}) => {
+export default ({postID, liked, numLikes, refreshParent} : {postID: number, liked: boolean | undefined, numLikes: number, refreshParent : Function}) => {
 
   const { userId } = useContext(UserContext);
 
