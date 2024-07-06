@@ -32,7 +32,7 @@ export default ({comment, refreshParent} : {comment: Comment, refreshParent: Fun
             </Grid>
             <Grid item xs={11}/>
             <Grid item xs={1}>
-              <LikeButton postID={comment.id} liked={false} numLikes={0} refreshParent={refreshParent}/>
+              <LikeButton postID={comment.id} liked={comment.likedByUser} numLikes={comment.liked.length} refreshParent={refreshParent}/>
             </Grid>
           </Grid>
         </Card>

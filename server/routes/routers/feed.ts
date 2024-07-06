@@ -7,6 +7,7 @@ const feed = Router();
 const prisma = new PrismaClient();
 
 feed.get('/', async (req: any, res: any):Promise<void> => {
+  console.time('fetching feed');
   try{
     let allPosts : PostWithRelations[];
     if (!req.user) {
@@ -82,9 +83,17 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
         )
       }
       allPosts = allPosts.map(post => (
-        {...post, likedByUser: post.liked.slice().map(like => like.id).includes(req.user.id)}
-      ))
+        {
+          ...post,
+          likedByUser: post.liked.slice().map(like => like.id).includes(req.user.id),
+          comments: post.comments?.map((comment) => ({
+            ...comment,
+            likedByUser: comment.liked.slice().map((like) => like.id).includes(req.user.id)}
+          ))
+        }
+      ));
     }
+    console.timeEnd('fetching feed')
     res.send(allPosts);
   }
   catch (err) {
