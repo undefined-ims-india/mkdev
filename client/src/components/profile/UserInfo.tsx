@@ -46,7 +46,15 @@ const UserInfo = ({
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <Stack spacing={1}>
-              <FormControl sx={{ p: 2, my: 1, mx: 1, width: '50%' }}>
+              <FormControl
+                sx={{
+                  p: 2,
+                  my: 1,
+                  mx: 1,
+                  width: '50%',
+                  fontFamily: 'Sometype',
+                }}
+              >
                 <InputLabel htmlFor='username'>Username</InputLabel>
                 <Input
                   sx={{ variant: 'contained', backgroundColor: 'white' }}
@@ -56,7 +64,15 @@ const UserInfo = ({
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl sx={{ p: 2, my: 1, mx: 1, width: '50%' }}>
+              <FormControl
+                sx={{
+                  p: 2,
+                  my: 1,
+                  mx: 1,
+                  width: '50%',
+                  fontFamily: 'Sometype',
+                }}
+              >
                 <InputLabel htmlFor='githubId'>Github Username</InputLabel>
                 <Input
                   sx={{ variant: 'contained', backgroundColor: 'white' }}
@@ -66,7 +82,15 @@ const UserInfo = ({
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl sx={{ p: 2, my: 1, mx: 1, width: '50%' }}>
+              <FormControl
+                sx={{
+                  p: 2,
+                  my: 1,
+                  mx: 1,
+                  width: '50%',
+                  fontFamily: 'Sometype',
+                }}
+              >
                 <InputLabel htmlFor='devId'>Dev.to Username</InputLabel>
                 <Input
                   sx={{ variant: 'contained', backgroundColor: 'white' }}
@@ -76,7 +100,15 @@ const UserInfo = ({
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl sx={{ p: 2, my: 1, mx: 1, width: '50%' }}>
+              <FormControl
+                sx={{
+                  p: 2,
+                  my: 1,
+                  mx: 1,
+                  width: '50%',
+                  fontFamily: 'Sometype',
+                }}
+              >
                 <InputLabel htmlFor='mediumId'>Medium Username</InputLabel>
                 <Input
                   sx={{ variant: 'contained', backgroundColor: 'white' }}
@@ -86,7 +118,15 @@ const UserInfo = ({
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl sx={{ p: 2, my: 1, mx: 1, width: '50%' }}>
+              <FormControl
+                sx={{
+                  p: 2,
+                  my: 1,
+                  mx: 1,
+                  width: '50%',
+                  fontFamily: 'Sometype',
+                }}
+              >
                 <InputLabel htmlFor='linkedinId'>LinkedIn Username</InputLabel>
                 <Input
                   sx={{ variant: 'contained', backgroundColor: 'white' }}
@@ -107,11 +147,16 @@ const UserInfo = ({
             </Stack>
           </Grid>
           <Grid item xs={6}>
+            {/* Bio */}
             <Paper elevation={3} sx={{ p: 2, m: 2, maxWidth: 600 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
+              <Typography
+                variant='h1'
+                fontSize={'1.5rem'}
+                sx={{ mb: 2, fontFamily: 'Sometype' }}
+              >
                 Bio
               </Typography>
-              <FormControl sx={{ width: '100%' }}>
+              <FormControl sx={{ width: '100%', fontFamily: 'Sometype' }}>
                 <Input
                   id='bio'
                   name='bio'
@@ -124,11 +169,16 @@ const UserInfo = ({
                 />
               </FormControl>
             </Paper>
+            {/* About Me */}
             <Paper elevation={3} sx={{ p: 2, m: 2, maxWidth: 600 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
+              <Typography
+                variant='h1'
+                fontSize={'1.5rem'}
+                sx={{ mb: 2, fontFamily: 'Sometype' }}
+              >
                 About Me
               </Typography>
-              <FormControl sx={{ width: '100%' }}>
+              <FormControl sx={{ width: '100%', fontFamily: 'Sometype' }}>
                 <Input
                   id='aboutMe'
                   name='aboutMe'
