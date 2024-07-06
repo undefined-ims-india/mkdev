@@ -31,7 +31,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
         elevation={3}
         sx={{ width: 400, height: 200, m: 2, p: 2, overflow: 'hidden' }}
       >
-        {profileData.aboutMe.length > 0 ? (
+        {profileData!.aboutMe ? (
           <Typography
             variant='body1'
             paragraph
@@ -42,7 +42,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
               whiteSpace: 'nowrap',
             }}
           >
-            {profileData.aboutMe}
+            {profileData!.aboutMe}
           </Typography>
         ) : (
           <Typography
@@ -55,7 +55,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
               whiteSpace: 'nowrap',
             }}
           >
-            'Nothing, yet...'
+            Nothing, yet...
           </Typography>
         )}
       </Paper>
@@ -74,8 +74,8 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
             overflow: 'hidden',
           }}
         >
-          {profileData.tags && profileData.tags.length > 0 ? (
-            profileData.tags.map((tag, index) => (
+          {profileData!.tags && profileData!.tags.length > 0 ? (
+            profileData!.tags.map((tag, index) => (
               <Chip
                 key={index}
                 component='div'
