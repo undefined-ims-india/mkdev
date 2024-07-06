@@ -71,7 +71,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
             display: 'flex',
             flexWrap: 'wrap',
             gap: 0.5,
-            overflow: 'hidden', // Apply overflow hidden to the container of the tags
+            overflow: 'hidden',
           }}
         >
           {profileData.tags && profileData.tags.length > 0 ? (
