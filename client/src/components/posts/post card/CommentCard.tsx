@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography'
 
 export default ({comment, refreshParent} : {comment: Comment, refreshParent: Function}) => {
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{marginY: 2}}>
       <Grid item xs={1} sx={{display: 'flex', justifyContent: 'end'}}>
         <AvatarLink user={comment.author} />
       </Grid>

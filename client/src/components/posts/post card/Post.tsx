@@ -74,7 +74,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
       {
         content.comments?
         <Box>
-        <PostComments comments={content.comments} refreshParent={refreshParent} />
+        <PostComments comments={content.comments} refreshParent={refreshParent} postID={content.id} />
       </Box>
       :
       <></>

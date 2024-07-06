@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 
-export default ({comments, refreshParent}:{comments: Comment[], refreshParent: Function}) => {
+export default ({comments, refreshParent, postID}:{comments: Comment[], refreshParent: Function, postID: number}) => {
 
   const {userId, userImage} = useContext(UserContext);
   const [body, setBody] = useState('');
@@ -24,56 +24,64 @@ export default ({comments, refreshParent}:{comments: Comment[], refreshParent: F
   }
 
   const postComment = () => {
-    axios.put('/api/posts/:id/comment', {body})
+    axios.put(`/api/posts/${postID}/comment`, {body})
+      .then(() => refreshParent())
   }
 
   return (
-    <Grid spacing={0} container className="glass-card bottom-curve" sx={{paddingY: '1vh', paddingX: "1vw"}}>
-      <Grid item xs={12} sx={{marginBottom: 2}}>
-        <Card sx={{display: 'flex', flexDirection: 'row', justifyContent:'center', alignItems: 'center', flexGrow: 1, paddingX: 2, paddingY: 1}}>
-          <Grid container spacing={1} >
-            <Grid item xs={1} sx={{display: 'flex', justifyContent:'center', alignItems: 'center'}}>
-              <Avatar
-              src={userImage}
-              sx={{
-                width: '2.3vw', height: '2.3vw',
-                minWidth: 30, minHeight: 30
-              }}
-              />
-            </Grid>
-            <Grid item xs={11} md={10} sx={{display: 'flex', justifyContent:'center', alignItems: 'center', paddingRight: '1vw'}}>
-              <TextField
-                onChange={handleInput}
-                name="commentBody"
-                value={body}
-                variant="outlined"
-                size="small"
-                label="Comment"
-                placeholder='Add A Comment'
-                fullWidth
-              />
-            </Grid>
-            <Grid item md={1} xs={12} sx={{display: 'flex', justifyContent:'end', alignItems: 'center'}}>
-              <Button
-                onClick={postComment}
-                variant="contained"
-                size="small"
-                >
-                <SendIcon />
-              </Button>
-            </Grid>
+    <Grid spacing={0} container className="glass-card bottom-curve">
+      {
+        userId ? (
+          <>
+          <Grid item xs={12} sx={{padding: 2}}>
+            <Card sx={{display: 'flex', flexDirection: 'row', justifyContent:'center', alignItems: 'center', flexGrow: 1, paddingX: 2, paddingY: 1}}>
+              <Grid container spacing={1} >
+                <Grid item xs={1} sx={{display: 'flex', justifyContent:'center', alignItems: 'center'}}>
+                  <Avatar
+                  src={userImage}
+                  sx={{
+                    width: '2.3vw', height: '2.3vw',
+                    minWidth: 30, minHeight: 30
+                  }}
+                  />
+                </Grid>
+                <Grid item xs={11} md={10} sx={{display: 'flex', justifyContent:'center', alignItems: 'center', paddingRight: '1vw'}}>
+                  <TextField
+                    onChange={handleInput}
+                    name="commentBody"
+                    value={body}
+                    variant="outlined"
+                    size="small"
+                    label="Comment"
+                    placeholder='Add A Comment'
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item md={1} xs={12} sx={{display: 'flex', justifyContent:'end', alignItems: 'center'}}>
+                  <Button
+                    onClick={postComment}
+                    variant="contained"
+                    size="small"
+                    >
+                    <SendIcon />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Card>
           </Grid>
-        </Card>
-        <Divider />
-      </Grid>
-        {
-          comments.length ?
-          <Grid item xs={12} sx={{marginY: 1}}>
-            {comments.slice(0, 2).map((comment, index) => (<CommentCard comment={comment} refreshParent={refreshParent} key={comment.body.slice(20) + index}/> ))}
-          </Grid>
-          :
-          <></>
-        }
+          <Divider variant='middle' sx={{flexGrow: 1}} />
+          </>
+        ) :
+        <></>
+      }
+      {
+        comments.length ?
+        <Grid item xs={12}>
+          {comments.slice(0, 2).map((comment, index) => (<CommentCard comment={comment} refreshParent={refreshParent} key={comment.body.slice(20) + index}/> ))}
+        </Grid>
+        :
+        <></>
+      }
     </Grid>
   )
 }
