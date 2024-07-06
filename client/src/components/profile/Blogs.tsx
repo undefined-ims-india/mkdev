@@ -35,6 +35,9 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
         const { data } = await axios.get(
           `https://dev.to/api/articles?username=${devId}&per_page=6`
         );
+        if (!devId) {
+          return;
+        }
         setBlogs((prevBlogs) => [...prevBlogs, ...data]);
       } catch (error) {
         console.error(error);
@@ -95,6 +98,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h2'
                     fontSize={'2rem'}
                     align='center'
+                    fontFamily={'Sometype'}
                   >
                     {blog.title}
                   </Typography>
@@ -103,6 +107,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h3'
                     fontSize={'1rem'}
                     align='center'
+                    fontFamily={'Sometype'}
                   >
                     {blog.description}
                   </Typography>
@@ -117,6 +122,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
               component='h2'
               fontSize={'1rem'}
               align='center'
+              fontFamily={'Sometype'}
             >
               No Blogs Found
             </Typography>
