@@ -9,6 +9,7 @@ import Skeleton from '@mui/material/Skeleton';
 import UserInfo from './UserInfo';
 import AboutMe from './AboutMe';
 import Box from '@mui/material/Box';
+import { Card, CardContent } from '@mui/material';
 
 const Profile = (): React.ReactElement => {
   const { id } = useParams();
@@ -54,41 +55,61 @@ const Profile = (): React.ReactElement => {
             <Box
               sx={{
                 display: 'flex',
-                alignItems: 'flex-start',
-                gap: 1,
                 justifyContent: 'center',
-                flexDirection: 'column',
+                alignItems: 'center',
+                height: '50vh',
+                width: '100%',
               }}
             >
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: { xs: 1, md: 2 },
-                  flexDirection: { xs: 'column', md: 'row' },
-                  justifyContent: 'center',
-                  width: '100%',
-                  maxWidth: '960px',
-                  mx: 'auto',
-                }}
-              >
-                <Box
-                  sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}
-                >
-                  <ProfileInfo
-                    profileData={profileData!}
-                    handleEdit={handleEdit}
-                  />
-                </Box>
-                <Box
-                  sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}
-                >
-                  <AboutMe
-                    profileData={profileData!}
-                    getProfile={getProfile}
-                    UpdateUserInfo={UpdateUserInfo}
-                  />
-                </Box>
-              </Box>
+              <Card sx={{ maxWidth: 960, width: '100%' }}>
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 1,
+                      justifyContent: 'center',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        gap: { xs: 1, md: 2 },
+                        flexDirection: { xs: 'column', md: 'row' },
+                        justifyContent: 'center',
+                        width: '100%',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          flex: 1,
+                          display: 'flex',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <ProfileInfo
+                          profileData={profileData!}
+                          handleEdit={handleEdit}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          flex: 1,
+                          display: 'flex',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <AboutMe
+                          profileData={profileData!}
+                          getProfile={getProfile}
+                          UpdateUserInfo={UpdateUserInfo}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
             </Box>
             <Box>
               <ProfileTabs profileData={profileData!} getProfile={getProfile} />
