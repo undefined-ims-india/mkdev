@@ -1,17 +1,17 @@
-import React, {useState} from "react";
-import axios from 'axios';
+import React from "react";
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 import { Comment } from "../../../../../types";
 import AvatarLink from './AvatarLink'
 import MarkDown from "../MarkDown";
+import LikeButton from './LikeButton'
 
 import Card from '@mui/material/Card';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography'
 
-export default ({comment} : {comment: Comment}) => {
+export default ({comment, refreshParent} : {comment: Comment, refreshParent: Function}) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={1} sx={{display: 'flex', justifyContent: 'end'}}>
@@ -29,6 +29,10 @@ export default ({comment} : {comment: Comment}) => {
             </Grid>
             <Grid item xs={12}>
               <MarkDown text={comment.body} />
+            </Grid>
+            <Grid item xs={11}/>
+            <Grid item xs={1}>
+              <LikeButton postID={comment.id} liked={false} numLikes={0} refreshParent={refreshParent}/>
             </Grid>
           </Grid>
         </Card>

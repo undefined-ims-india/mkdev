@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 
-export default ({comments}:{comments: Comment[]}) => {
+export default ({comments, refreshParent}:{comments: Comment[], refreshParent: Function}) => {
 
   const {userId, userImage} = useContext(UserContext);
   const [body, setBody] = useState('');
@@ -69,7 +69,7 @@ export default ({comments}:{comments: Comment[]}) => {
         {
           comments.length ?
           <Grid item xs={12} sx={{marginY: 1}}>
-            {comments.slice(0, 2).map((comment, index) => (<CommentCard comment={comment} key={comment.body.slice(20) + index}/> ))}
+            {comments.slice(0, 2).map((comment, index) => (<CommentCard comment={comment} refreshParent={refreshParent} key={comment.body.slice(20) + index}/> ))}
           </Grid>
           :
           <></>
