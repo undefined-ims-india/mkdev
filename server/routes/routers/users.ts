@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { RequestWithUser } from '../../../types';
+import { postWithRelationsSelector } from '../../helpers/post-selectors';
 
 const users = Router();
 const prisma = new PrismaClient();
@@ -25,12 +26,7 @@ users.get(
         include: {
           tags: true,
           posts: {
-            include: {
-              author: true,
-              tags: true,
-              repo: true,
-              liked: { select: { id: true } },
-            },
+            include: postWithRelationsSelector,
             orderBy: [
               {
                 createdAt: 'desc',
