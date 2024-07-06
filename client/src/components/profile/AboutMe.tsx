@@ -35,7 +35,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
           <Typography
             variant='body1'
             paragraph
-            fontFamily={'Sometype'}
+            fontFamily={'SomeType'}
             sx={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -48,7 +48,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
           <Typography
             variant='body1'
             paragraph
-            fontFamily={'Sometype'}
+            fontFamily={'SomeType'}
             sx={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -63,7 +63,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
         elevation={3}
         sx={{ width: 400, height: 200, m: 2, p: 2, overflow: 'hidden' }}
       >
-        <Typography variant='h6' fontFamily='Sometype' align='center'>
+        <Typography variant='h6' fontFamily='SomeType' align='center'>
           Interests
         </Typography>
         <Box
@@ -88,7 +88,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
               />
             ))
           ) : (
-            <Typography variant='body2' fontFamily={'Sometype'}>
+            <Typography variant='body2' fontFamily={'SomeType'}>
               No interests, yet...
             </Typography>
           )}
