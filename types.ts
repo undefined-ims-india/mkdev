@@ -25,6 +25,8 @@ export interface Comment {
   body: string,
   author: SimpleUser,
   createdAt: Date,
+  liked: {id: number}[],
+  likedByUser?: boolean,
 }
 
 export interface PostWithRelations extends Post {
