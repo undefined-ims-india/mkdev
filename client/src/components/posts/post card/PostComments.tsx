@@ -4,7 +4,7 @@ import axios from 'axios';
 import { UserContext } from '../../UserContext';
 import CommentCard from './CommentCard';
 
-import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import Avatar from '@mui/material/Avatar';
@@ -29,7 +29,7 @@ export default ({comments}:{comments: Comment[]}) => {
 
   return (
     <Grid spacing={0} container className="glass-card bottom-curve" sx={{paddingY: '1vh', paddingX: "1vw"}}>
-      <Grid item xs={12} >
+      <Grid item xs={12} sx={{marginBottom: 2}}>
         <Card sx={{display: 'flex', flexDirection: 'row', justifyContent:'center', alignItems: 'center', flexGrow: 1, paddingX: 2, paddingY: 1}}>
           <Grid container spacing={1} >
             <Grid item xs={1} sx={{display: 'flex', justifyContent:'center', alignItems: 'center'}}>
@@ -64,11 +64,12 @@ export default ({comments}:{comments: Comment[]}) => {
             </Grid>
           </Grid>
         </Card>
+        <Divider />
       </Grid>
         {
           comments.length ?
-          <Grid item xs={12}>
-            {comments.slice(2).map((comment, index) => (<CommentCard comment={comment} key={comment.body.slice(20) + index}/> ))}
+          <Grid item xs={12} sx={{marginY: 1}}>
+            {comments.slice(0, 2).map((comment, index) => (<CommentCard comment={comment} key={comment.body.slice(20) + index}/> ))}
           </Grid>
           :
           <></>
