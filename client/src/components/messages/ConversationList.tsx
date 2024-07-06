@@ -14,8 +14,12 @@ interface PropTypes {
   deleteCon: () => void;
 }
 
-const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
-  const { allCons, select, setCons, deleteCon } = props;
+const ConversationList: React.FC<PropTypes> =
+  ({
+    allCons,
+    select,
+    setCons,
+    deleteCon }): ReactElement => {
 
   return (
     <Grid container
