@@ -27,7 +27,6 @@ const ProfileInfo = ({
   if (!profileData) {
     return (
       <Grid item xs={12}>
-        <Typography align='center'>Loading...</Typography>
         <Box className='load-box'>
           <LinearProgress className='loading-bar' />
         </Box>
