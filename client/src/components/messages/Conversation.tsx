@@ -17,6 +17,7 @@ const socket = io('http://localhost:4000');
 
 interface PropsType {
   con: Conversations;
+  visibleCon: Conversations | null,
   select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null) => void;
   setCons: () => void;
   deleteCon: () => void;
@@ -25,17 +26,15 @@ interface PropsType {
 const Conversation: React.FC<PropsType> = (props): ReactElement => {
   const {
     con,
+    visibleCon,
     select,
     setCons,
     deleteCon } = props;
 
   const userId = useContext(UserContext);
   const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
-  const [isVisible, setIsVisible] = useState<boolean>(false); // conversation in view
-  const [isHidden, setIsHidden] = useState<boolean | undefined>(true) // badge in view
+  const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
-
-  console.log('isVisible, top of Convo component', isVisible, con.id);
 
   // get number of unread messages in conversation
   useEffect(() => {
@@ -46,15 +45,7 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
       })
   }, [unreadMsgs, userId])
 
-  socket.on('current-conversation', ({ conversation }) => {
-    console.log('recvs current-conversation event');
-    if (con.id === conversation) {
-      setIsVisible(true);
-    }
-  })
-
   socket.on('message', (message) => {
-    console.log('message event in conv component, isVisible:', isVisible);
 
     /**
      * message = {
@@ -67,27 +58,25 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
      *    conversation from socket is not visible AND conversation from socket does not match
      *    conversation id of this current conversation
      */
-    if (!isVisible && con.id !== message.conversation) {
-    // if (!isVisible) { // TODO: add conversation check here
-      console.log('gets here because isVisible is false:', isVisible)
 
-      // change variable for invisible prop on badge component
-      setIsHidden(false);
-      // add one to new unread message count
-      setUnreadMsgs(() => unreadMsgs + message.newMessage);
-
-      // was using this before plane edits
-      // setUnreadMsgs(message.newMessage);
+    console.log('message.conversationId', message.conversationId);
+    if (visibleCon !== null) {
+      console.log('visibleConversation', visibleCon.id);
+      if (visibleCon.id !== message.conversationId) {
+        setIsHidden(false);
+        setUnreadMsgs(() => unreadMsgs + message.newMessage);
+      } else if (visibleCon.id === con.id) {
+        setIsHidden(true);
+      }
     } else {
-      // badge should be invisible by default
-      setUnreadMsgs(0);
+      setIsHidden(false);
+      setUnreadMsgs(() => unreadMsgs + message.newMessage);
     }
   })
 
-  // pass selected conversation id to Messages component to change conId state
+  // pass selected conversation id to Messages component, set selected conversation as visible
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
     select(e, newCon);
-    setIsVisible(true);
 
     // disconnect newly read msgs from user
     axios
