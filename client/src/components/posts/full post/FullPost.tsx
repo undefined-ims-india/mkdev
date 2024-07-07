@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
-import { UserContext } from "../../UserContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { PostWithRelations } from "../../../../../types";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -10,33 +9,23 @@ dayjs.extend(relativeTime);
 import MarkDown from "../MarkDown";
 import RepoDisplay from "./RepoDisplay";
 import PostComments from '../post card/PostComments';
+import PostUserInfo from '../post card/PostUserInfo'
+import LikeButton from "../post card/LikeButton";
 
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import Backdrop from '@mui/material/Backdrop'
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
 
 const FullPost = (): React.ReactElement => {
   const { id } = useParams();
+  const [open, setOpen] = useState(false);
   const [content, setContent]: [PostWithRelations | null, Function] =
     useState(null);
   const contentREF = useRef(content);
-  const userId = useContext(UserContext).userId;
-
-  const handleLike = () => {
-    axios
-      .patch(
-        `/api/posts/${content!.id}/${content!.likedByUser ? "dislike" : "like"}`,
-      )
-      .then(() => {
-        getPost();
-      });
-  };
 
   const getPost = () => {
     axios.get(`/api/posts/${id}`).then(({ data }) => {
@@ -44,57 +33,54 @@ const FullPost = (): React.ReactElement => {
     });
   };
 
-  console.log(content)
-  
+  const openDrawer = () => {
+    setOpen(true);
+  }
+
+  const closeDrawer = () => {
+    setOpen(false);
+  }
+
   useEffect(getPost, [contentREF]);
 
   try {
     return (
-      <Grid container spacing={0}>
+      <>
+      {content!.s3_key ? (
+        <Backdrop open={open} onClick={closeDrawer} sx={{zIndex: 10000}}>
+          <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} />
+        </Backdrop>
+      ) :
+      <></>
+      }
+      <Grid container spacing={0} paddingTop={'5vh'}>
         <Grid item xs={1} />
         <Grid item xs={10}>
-          <Paper>
-            <div className="fill">
-              {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
-            </div>
+            {content!.s3_key ? (
+              <Grid container sx={{height: '30vh'}} className="glass-card top-curve">
+              <Grid item xs={1} md={2}/>
+              <Grid item xs={10} md={8} sx={{display: 'flex', justifyContent: 'center', height: '30vh'}}>
+                {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
+                <IconButton sx={{justifySelf: 'end', alignSelf: 'end'}} onClick={openDrawer}>
+                  <FullscreenIcon />
+                </IconButton>
+              </Grid>
+              <Grid item xs={1} md={2}/>
+            </Grid>
+            ):
+            <></>
+            }
+          <Paper sx={{paddingY: 2}}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "row",
                 marginLeft: 1,
-                marginTop: 1,
                 alignItems: "center",
               }}
             >
-              <Link to={`/user/${content!.author.id}/profile`}>
-                <Avatar
-                  alt={content!.author.username!}
-                  src={content!.author.picture!}
-                >
-                  {"?"}
-                </Avatar>
-              </Link>
-              <Typography
-                variant="h1"
-                sx={{ fontSize: 23, marginLeft: 2, marginRight: 2 }}
-              >
-                {content!.author.username || content!.author.name}
-              </Typography>
-              <Typography variant="body2" sx={{ color: "silver" }}>
-                {dayjs(content!.createdAt).fromNow()}
-              </Typography>
-              <IconButton
-                aria-label="Like"
-                onClick={handleLike}
-                disabled={!userId}
-              >
-                {content!.likedByUser ? (
-                  <FavoriteIcon />
-                ) : (
-                  <FavoriteBorderIcon />
-                )}
-              </IconButton>
-              <Typography variant="body1">{content!.liked.length}</Typography>
+              <PostUserInfo author={content!.author} createdAt={content!.createdAt} />
+              <LikeButton postID={content!.id} liked={content!.likedByUser} numLikes={content!.liked.length} refreshParent={getPost} />
             </Box>
             <Box
               sx={{ display: "flex", flexDirection: "column", marginLeft: 2 }}
@@ -124,7 +110,7 @@ const FullPost = (): React.ReactElement => {
                   <></>
                 )}
               </Box>
-              <Box sx={{ marginTop: 3 }}>
+              <Box>
                 <MarkDown text={content!.body} />
               </Box>
             </Box>
@@ -146,6 +132,7 @@ const FullPost = (): React.ReactElement => {
         <></>
       }
       </Grid>
+      </>
     );
   } catch (err) {
     console.error(err);
