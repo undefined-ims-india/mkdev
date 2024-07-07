@@ -9,6 +9,7 @@ dayjs.extend(relativeTime);
 
 import MarkDown from "../MarkDown";
 import RepoDisplay from "./RepoDisplay";
+import PostComments from '../post card/PostComments';
 
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
@@ -43,12 +44,14 @@ const FullPost = (): React.ReactElement => {
     });
   };
 
+  console.log(content)
+  
   useEffect(getPost, [contentREF]);
 
   try {
     return (
       <Grid container spacing={0}>
-        <Grid item xs />
+        <Grid item xs={1} />
         <Grid item xs={10}>
           <Paper>
             <div className="fill">
@@ -130,7 +133,18 @@ const FullPost = (): React.ReactElement => {
             </Box>
           </Paper>
         </Grid>
-        <Grid item xs />
+        <Grid item xs={1} />
+        {content!.comments ?(
+          <>
+        <Grid item xs={1} />
+          <Grid item xs={10}>
+            <PostComments refreshParent={getPost} postID={content!.id} comments={content!.comments} />
+          </Grid>
+          <Grid item xs={1} />
+        </>
+        ):
+        <></>
+      }
       </Grid>
     );
   } catch (err) {
