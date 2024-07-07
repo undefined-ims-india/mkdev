@@ -60,7 +60,7 @@ const Nav = (): ReactElement => {
   })
 
   socket.on('message', (message) => {
-    setUnreadMsgs(message.newMessage);
+    setUnreadMsgs(() => unreadMsgs + message.newMessage);
   })
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>): void => {

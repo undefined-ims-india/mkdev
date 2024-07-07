@@ -22,9 +22,14 @@ interface PropsType {
   getAllMsgs: () => void;
 }
 
-const Message: React.FC<PropsType> = (props): ReactElement => {
-  const { getAllMsgs } = props;
-  const { id, body, liked, createdAt, senderId, sender } = props.msg;
+const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
+  const {
+    id,
+    body,
+    liked,
+    createdAt,
+    senderId,
+    sender } = msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const loggedInUser = useContext(UserContext);
