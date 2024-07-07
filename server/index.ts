@@ -181,7 +181,7 @@ io.on('connection', (socket) => {
     io.emit('read-message');
   })
 
-  // on disconnection
+   // on disconnection
   socket.on('disconnect', () => {});
 });
 // socket handling ----------------------------------------- //
