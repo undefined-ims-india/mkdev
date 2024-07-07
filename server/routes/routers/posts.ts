@@ -173,7 +173,6 @@ posts.delete('/:id', (req: any, res: any) => {
 
 posts.put('/:id/comment', async (req: RequestWithUser, res: any) => {
   try {
-    console.log('put comment')
     const { body } = req.body;
     await prisma.post.create({
       data: {
@@ -190,7 +189,6 @@ posts.put('/:id/comment', async (req: RequestWithUser, res: any) => {
   }
   finally {
     await prisma.$disconnect();
-    console.log('done')
   }
 })
 
