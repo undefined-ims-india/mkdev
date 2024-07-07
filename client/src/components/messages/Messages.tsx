@@ -24,6 +24,7 @@ const Messages = (): ReactElement => {
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
   const [participantsEntry, setParticipantsEntry] = useState<(string | null)[]>([]);
   const [allConversations, setAllConversations] = useState<Conversations[]>([]);
+  const [visibleConversation, setVisibleConversation] = useState<Conversations | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
 
@@ -94,8 +95,8 @@ const Messages = (): ReactElement => {
     e.preventDefault();
 
     // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
-    // use mui textfield error
     if (!participants.length) {
+      // use mui textfield error -> update a state variable responsible for showing error
       return;
     }
 
@@ -130,6 +131,7 @@ const Messages = (): ReactElement => {
     if (newCon) {
       setParticipantsLabel(newCon!.label);
     }
+    setVisibleConversation(newCon);
   }
 
   const deleteConversation = () => {
@@ -169,7 +171,7 @@ const Messages = (): ReactElement => {
             variant='contained'
             onClick={ beginConversation }
           >
-            ➕ Start Conversation
+            ➕ New Conversation
           </Button>
           <Grid container                                     // top most container for ConversationList and ConversationView
             component={Paper}
@@ -190,6 +192,7 @@ const Messages = (): ReactElement => {
             >
               <ConversationList
                 allCons={ allConversations }
+                visibleCon={ visibleConversation }
                 setCons={ getAllConversations }
                 select={ selectConversation }
                 deleteCon={ deleteConversation }

@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 
 interface PropTypes {
   allCons: Conversations[],
+  visibleCon: Conversations | null,
   select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null) => void;
   setCons: () => void;
   deleteCon: () => void;
@@ -17,6 +18,7 @@ interface PropTypes {
 const ConversationList: React.FC<PropTypes> =
   ({
     allCons,
+    visibleCon,
     select,
     setCons,
     deleteCon }): ReactElement => {
@@ -40,6 +42,7 @@ const ConversationList: React.FC<PropTypes> =
               <Conversation
                 con={ con }
                 key={ `${con.id}-${i}` }
+                visibleCon={ visibleCon }
                 setCons={ setCons }
                 select={ select }
                 deleteCon={ deleteCon }
