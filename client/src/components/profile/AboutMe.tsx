@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
+import { Divider } from '@mui/material';
 
 interface UserInfoProps {
   profileData: UserProfile;
@@ -36,8 +37,10 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
           fontFamily='SomeType'
           align='center'
           fontSize={'1rem'}
+          fontWeight={'bold'}
         >
           About {profileData.firstName}
+          <Divider />
         </Typography>
         {profileData!.aboutMe ? (
           <Typography
@@ -45,24 +48,14 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
             paragraph
             fontFamily={'SomeType'}
             sx={{
-              overflow: 'hidden',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              whiteSpace: 'wrap',
             }}
           >
             {profileData!.aboutMe}
           </Typography>
         ) : (
-          <Typography
-            variant='body1'
-            paragraph
-            fontFamily={'SomeType'}
-            sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
+          <Typography variant='body1' paragraph fontFamily={'SomeType'}>
             Nothing, yet...
           </Typography>
         )}
@@ -76,9 +69,11 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
           fontFamily='SomeType'
           align='center'
           fontSize={'1rem'}
+          fontWeight={'bold'}
         >
           Interests
         </Typography>
+        <Divider />
         <Box
           sx={{
             display: 'flex',
