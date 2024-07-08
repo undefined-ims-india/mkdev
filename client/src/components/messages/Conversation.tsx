@@ -33,41 +33,23 @@ const Conversation: React.FC<PropsType> =
   }): ReactElement => {
 
   const { userId } = useContext(UserContext);
-  const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
+  const [unreadMsgsTotal, setUnreadMsgsTotal] = useState<React.ReactNode>(0);
   const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
 
-  // get number of unread messages in conversation
-  useEffect(() => {
+  const getUnreadMsgsTotal = (conversationId: number, userId: number) => {
     axios
-      .get(`/api/messages/unread/${con.id}/${userId}`)
+      .get(`/api/messages/unread/${conversationId}/${userId}`)
       .then(({ data }): void => {
-        setUnreadMsgs(data);
+        setUnreadMsgsTotal(data);
       })
-  }, [unreadMsgs])
-
-  socket.on('message', (message) => {
-
-    if (visibleCon !== null) {
-      if (visibleCon.id === con.id) {
-        setIsHidden(true);
-        if (visibleCon.id === message.conversationId) {
-          markAllMsgsRead(userId, con.id);
-        }
-      } else if (visibleCon.id !== message.conversationId) {
-        setIsHidden(false);
-        setUnreadMsgs(() => unreadMsgs + message.newMessage);
-      }
-    } else {
-      setUnreadMsgs(() => unreadMsgs + message.newMessage);
-    }
-  })
+  }
 
   const markAllMsgsRead = (userId: number, conId: number): void => {
     axios
-      .patch(`/api/users/read/${userId}/${con.id}`)
+      .patch(`/api/users/read/${userId}/${conId}`)
       .then(() => {
-        setUnreadMsgs(0)
+        setUnreadMsgsTotal(0)
         // send socket event to change inbox notification badge
         socket.emit('read-message', {})
       })
@@ -75,6 +57,35 @@ const Conversation: React.FC<PropsType> =
         console.error('Failed to mark messages read:\n', err);
       })
   }
+
+  socket.on('message', (message) => {
+    // if conversation is in view
+    if (visibleCon !== null) {
+      // and a message is received in that conversation
+      if (visibleCon.id === message.conversationId) {
+        // and the visibleCon id matches the conversation id
+        if (visibleCon.id === con.id) {
+          // don't show the badge
+          setIsHidden(true);
+          // and mark all messages as read
+          markAllMsgsRead(userId, con.id);
+        } else {
+          // make sure badge is showing
+          setIsHidden(false);
+          // get total number of unread messages in the conversation
+          getUnreadMsgsTotal(con.id, userId);
+        }
+        // else is message is received in another message
+      } else if (visibleCon.id !== message.conversationId) {
+        // make sure badge is showing
+        setIsHidden(false);
+        // get total number of unread messages in the conversation
+        getUnreadMsgsTotal(con.id, userId);
+      }
+    } else { // no conversation is is view
+      getUnreadMsgsTotal(con.id, userId);
+    }
+  })
 
   // pass selected conversation id to Messages component, set selected conversation as visible
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
@@ -94,7 +105,7 @@ const Conversation: React.FC<PropsType> =
 
   return (
     <Grid item>
-      <Badge badgeContent={ unreadMsgs } invisible={ isHidden }color="warning">
+      <Badge badgeContent={ unreadMsgsTotal } invisible={ isHidden }color="warning">
         <ButtonGroup
           sx={{
             width: '200px'
