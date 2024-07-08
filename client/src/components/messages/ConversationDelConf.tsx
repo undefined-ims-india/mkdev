@@ -49,7 +49,7 @@ const ConversationDelConf: React.FC<PropsType> =
       </DialogTitle>
       <DialogContent>
         <DialogContentText id='delete-confirmation-description'>
-          This will delete this conversation permanently and cannot be undone.
+          Deleting this conversation will be permanent and cannot be undone.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
