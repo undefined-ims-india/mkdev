@@ -20,7 +20,7 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
   const { con } = props;
 
   const [text, setText] = useState('');
-  const sender = useContext(UserContext);
+  const sender = useContext(UserContext).userId;
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);

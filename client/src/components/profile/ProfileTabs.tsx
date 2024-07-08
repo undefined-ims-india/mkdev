@@ -1,7 +1,7 @@
 import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import { UserProfile } from '../../../../types';
-import Post from '../Post';
+import Post from '../posts/post card/Post';
 import Blogs from './Blogs';
 import Followers from './Followers';
 import Following from './Following';

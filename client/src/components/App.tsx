@@ -5,13 +5,13 @@ import Nav from './Nav';
 import { UserProvider } from './UserContext';
 
 import Dashboard from './Dashboard';
-import PostCreationPage from './PostCreationPage';
+import PostCreationPage from './posts/post creation/PostCreationPage';
 import Login from './Login';
 import Logout from './Logout';
 import Search from './Search';
 import Messages from './messages/Messages';
 import Profile from './profile/UserProfile';
-import FullPost from './FullPost';
+import FullPost from './posts/full post/FullPost';
 import SearchResults from './SearchResults';
 import Welcome from './Welcome';
 import Signup from './Survey';

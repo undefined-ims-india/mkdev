@@ -15,12 +15,29 @@ export interface UserProfile extends User {
   bio: string;
 }
 
+export interface SimpleUser {
+  id: number;
+  name: string;
+  username: string;
+  picture: string | null;
+}
+
+export interface Comment {
+  id: number,
+  body: string,
+  author: SimpleUser,
+  createdAt: Date,
+  liked: {id: number}[],
+  likedByUser?: boolean,
+}
+
 export interface PostWithRelations extends Post {
-  author: User;
+  author: SimpleUser;
   tags: Tags[];
   repo?: RepoWithFiles | null;
   liked: { id: number }[];
   likedByUser?: boolean;
+  comments?: Comment[]
 }
 
 export interface RepoWithFiles extends Repo {
