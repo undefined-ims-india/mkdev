@@ -40,6 +40,7 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
         users: [...userWithFollowsAndTags!.following, {id: userWithFollowsAndTags!.id}].flatMap(entry => entry.id),
         tags: [...userWithFollowsAndTags!.tags].flatMap(entry => entry.id),
       }
+      console.log(feedFilter)
       if(feedFilter.users.length <= 1 && feedFilter.tags.length === 0 ) {
         allPosts = await prisma.post.findMany(
           {
@@ -65,6 +66,13 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
                 {
                   author: {
                     id: { in: feedFilter.users }
+                  }
+                },
+                {
+                  tags : {
+                    every : {
+                      id : { in: feedFilter.tags }
+                    },
                   }
                 }
               ],
