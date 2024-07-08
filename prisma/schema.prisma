@@ -67,8 +67,9 @@ model User {
   post_count     Int?            @default(0)
   blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
-  posts          Post[]          @relation("UserPosts")
+  unreadMessages Messages[]      @relation("UnreadMessages")
   conversations  Conversations[] @relation("ConversationsToUser")
+  posts          Post[]          @relation("UserPosts")
   likedPosts     Post[]          @relation("LikedPosts")
   tags           Tags[]          @relation("TagsToUser")
   followedBy     User[]          @relation("UserFollows")
@@ -99,11 +100,12 @@ model Messages {
   id             Int           @id @default(autoincrement())
   body           String
   liked          Boolean       @default(false)
+  unreadBy       User[]        @relation("UnreadMessages")
   createdAt      DateTime      @default(now())
   senderId       Int
   conversationId Int
   conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender         User          @relation(fields: [senderId], references: [id])
+  sender         User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
 
 model Conversations {
