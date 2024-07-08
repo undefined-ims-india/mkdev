@@ -4,9 +4,9 @@ import axios from 'axios';
 import { Tags } from '@prisma/client';
 
 
-import MarkDown from './MarkDown';
-import Repo from './post creation/Repo';
-import PostTagsChips from './PostTagsChips';
+import MarkDown from '../MarkDown';
+import Repo from './Repo';
+import PostTagsChips from '../PostTagsChips';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';

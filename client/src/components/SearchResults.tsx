@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import SearchComponent from './Search';
-import Post from './Post';
+import Post from './posts/post card/Post';
 import { PostWithRelations, UserProfile } from '../../../types';
 import ProfileInfo from './profile/ProfileInfo';
 import Grid from '@mui/material/Grid';

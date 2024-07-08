@@ -22,7 +22,7 @@ const Messages = (): ReactElement => {
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
-  const [participantsEntry, setParticipantsEntry] = useState<(string | null)[]>([]);
+  const [participantsEntry, setParticipantsEntry] = useState<(string)[]>([]);
   const [allConversations, setAllConversations] = useState<Conversations[]>([]);
   const [visibleConversation, setVisibleConversation] = useState<Conversations | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
@@ -69,7 +69,7 @@ const Messages = (): ReactElement => {
     setAddingConversation(true);
   }
 
-  const changeParticipants = (e: any, value: (string | null)[] ): void => {
+  const changeParticipants = (e: any, value: (string)[] ): void => {
     setParticipantsEntry(value);
     // iterate through participants entry and find user objects from all users
     const participantsArr: User[] = [];
@@ -212,7 +212,7 @@ const Messages = (): ReactElement => {
                       multiple
                       id="tags-filled"
                       options={allUsers.map((option) => option.username)}
-                      value={ participantsEntry }
+                      value={ participantsEntry! }
                       onChange={ changeParticipants }
                       freeSolo
                       renderTags={(value, getTagProps) =>

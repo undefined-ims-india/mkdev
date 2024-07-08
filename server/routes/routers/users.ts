@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { RequestWithUser } from '../../../types';
+import { postWithRelationsSelector } from '../../helpers/post-selectors';
 
 const users = Router();
 const prisma = new PrismaClient();
@@ -9,7 +10,7 @@ const prisma = new PrismaClient();
 users.get('/loggedIn', (req: any, res: any) => {
   if (req.isAuthenticated()) {
     const user = req.user;
-    res.json({ isLoggedIn: true, id: user.id });
+    res.json({ isLoggedIn: true, id: user.id, image: user.picture });
   } else {
     res.json({ isLoggedIn: false, id: 0 });
   }
@@ -25,12 +26,7 @@ users.get(
         include: {
           tags: true,
           posts: {
-            include: {
-              author: true,
-              tags: true,
-              repo: true,
-              liked: { select: { id: true } },
-            },
+            include: postWithRelationsSelector,
             orderBy: [
               {
                 createdAt: 'desc',
@@ -138,12 +134,30 @@ users.get('/unread/:id', (req: any, res: any) => {
 // Update user by id
 users.patch('/:id', async (req: any, res: any) => {
   const { id } = req.params;
-  const { devId, username, githubId, linkedinId } = req.body;
+  const {
+    devId,
+    username,
+    githubId,
+    linkedinId,
+    mediumId,
+    picture,
+    aboutMe,
+    bio,
+  } = req.body;
 
   try {
     const user = await prisma.user.update({
       where: { id: +id },
-      data: { devId, username, githubId, linkedinId },
+      data: {
+        devId,
+        username,
+        githubId,
+        linkedinId,
+        mediumId,
+        picture,
+        aboutMe,
+        bio,
+      },
     });
     res.status(200).send(user);
   } catch (err) {

@@ -19,7 +19,7 @@ interface PropsType {
 const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
 
   const [text, setText] = useState('');
-  const sender = useContext(UserContext);
+  const sender = useContext(UserContext).userId;
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
