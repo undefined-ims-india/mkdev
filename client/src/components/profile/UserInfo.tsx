@@ -52,7 +52,7 @@ const UserInfo = ({
                   my: 1,
                   mx: 1,
                   width: '50%',
-                  fontFamily: 'Sometype',
+                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel htmlFor='username'>Username</InputLabel>
@@ -70,7 +70,7 @@ const UserInfo = ({
                   my: 1,
                   mx: 1,
                   width: '50%',
-                  fontFamily: 'Sometype',
+                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel htmlFor='githubId'>Github Username</InputLabel>
@@ -88,7 +88,7 @@ const UserInfo = ({
                   my: 1,
                   mx: 1,
                   width: '50%',
-                  fontFamily: 'Sometype',
+                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel htmlFor='devId'>Dev.to Username</InputLabel>
@@ -106,7 +106,7 @@ const UserInfo = ({
                   my: 1,
                   mx: 1,
                   width: '50%',
-                  fontFamily: 'Sometype',
+                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel htmlFor='mediumId'>Medium Username</InputLabel>
@@ -124,7 +124,7 @@ const UserInfo = ({
                   my: 1,
                   mx: 1,
                   width: '50%',
-                  fontFamily: 'Sometype',
+                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel htmlFor='linkedinId'>LinkedIn Username</InputLabel>
@@ -152,11 +152,11 @@ const UserInfo = ({
               <Typography
                 variant='h1'
                 fontSize={'1.5rem'}
-                sx={{ mb: 2, fontFamily: 'Sometype' }}
+                sx={{ mb: 2, fontFamily: 'SomeType' }}
               >
                 Bio
               </Typography>
-              <FormControl sx={{ width: '100%', fontFamily: 'Sometype' }}>
+              <FormControl sx={{ width: '100%', fontFamily: 'SomeType' }}>
                 <Input
                   id='bio'
                   name='bio'
@@ -174,11 +174,11 @@ const UserInfo = ({
               <Typography
                 variant='h1'
                 fontSize={'1.5rem'}
-                sx={{ mb: 2, fontFamily: 'Sometype' }}
+                sx={{ mb: 2, fontFamily: 'SomeType' }}
               >
                 About Me
               </Typography>
-              <FormControl sx={{ width: '100%', fontFamily: 'Sometype' }}>
+              <FormControl sx={{ width: '100%', fontFamily: 'SomeType' }}>
                 <Input
                   id='aboutMe'
                   name='aboutMe'
