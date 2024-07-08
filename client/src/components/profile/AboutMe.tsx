@@ -31,6 +31,14 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
         elevation={3}
         sx={{ width: 400, height: 200, m: 2, p: 2, overflow: 'hidden' }}
       >
+        <Typography
+          variant='h1'
+          fontFamily='SomeType'
+          align='center'
+          fontSize={'1rem'}
+        >
+          About {profileData.firstName}
+        </Typography>
         {profileData!.aboutMe ? (
           <Typography
             variant='body1'
@@ -63,7 +71,12 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
         elevation={3}
         sx={{ width: 400, height: 200, m: 2, p: 2, overflow: 'hidden' }}
       >
-        <Typography variant='h6' fontFamily='SomeType' align='center'>
+        <Typography
+          variant='h1'
+          fontFamily='SomeType'
+          align='center'
+          fontSize={'1rem'}
+        >
           Interests
         </Typography>
         <Box
