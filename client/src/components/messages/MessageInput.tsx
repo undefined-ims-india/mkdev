@@ -16,8 +16,7 @@ interface PropsType {
   con: Conversations;
 }
 
-const MessageInput: React.FC<PropsType> = (props): ReactElement => {
-  const { con } = props;
+const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
 
   const [text, setText] = useState('');
   const sender = useContext(UserContext);
@@ -31,8 +30,6 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
 
     // only send message if there is text in input field
     if (text) {
-      // console.log('con.id before socket', con.id)
-
       // send message to database with current conversation
       axios
         .post(`/api/messages/${con.id}`, {
@@ -42,16 +39,10 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
           }
         })
         .then(({ data }) => {
-          /**
-           * data is of type Messages from db
-           * all of data is sent in the socket message object
-           * PLUS two other properties for new message badge functionality
-           */
           // broadcast the message to all the clients
           socket.emit('message', {
             ...data,
             newMessage: 1,
-            conversation: con.id
           })
         })
         .catch((err) => {
@@ -68,7 +59,6 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
 
       // only send message if there is text in input field
       if (text) {
-
         // send message to database with current conversation
         axios
           .post(`/api/messages/${con.id}`, {
@@ -82,7 +72,6 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
             socket.emit('message', {
               ...data,
               newMessage: 1,
-              conversation: con.id
             })
           })
           .catch((err) => {

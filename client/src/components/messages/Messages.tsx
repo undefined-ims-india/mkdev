@@ -238,8 +238,9 @@ const Messages = (): ReactElement => {
               }
               { con ? (
                 <ConversationView
-                  addingConversation={ addingConversation }
                   con={ con }
+                  visibleCon={ visibleConversation }
+                  addingConversation={ addingConversation }
                   label={ participantsLabel }
                 />
                 ) : ('')

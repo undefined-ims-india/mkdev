@@ -23,13 +23,14 @@ interface PropsType {
   deleteCon: () => void;
 }
 
-const Conversation: React.FC<PropsType> = (props): ReactElement => {
-  const {
+const Conversation: React.FC<PropsType> =
+  ({
     con,
     visibleCon,
     select,
     setCons,
-    deleteCon } = props;
+    deleteCon
+  }): ReactElement => {
 
   const userId = useContext(UserContext);
   const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
@@ -43,42 +44,26 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
       .then(({ data }): void => {
         setUnreadMsgs(data);
       })
-  }, [unreadMsgs, userId])
+  }, [unreadMsgs])
 
   socket.on('message', (message) => {
 
-    /**
-     * message = {
-     *  ...data, // from prisma db operation
-     * newMessage: 1,
-     *  conversation: con.id
-     * }
-     *
-     * when a new message event happens, a new message should be added ONLY if
-     *    conversation from socket is not visible AND conversation from socket does not match
-     *    conversation id of this current conversation
-     */
-
-    console.log('message.conversationId', message.conversationId);
     if (visibleCon !== null) {
-      console.log('visibleConversation', visibleCon.id);
-      if (visibleCon.id !== message.conversationId) {
+      if (visibleCon.id === con.id) {
+        setIsHidden(true);
+        if (visibleCon.id === message.conversationId) {
+          markAllMsgsRead(userId, con.id);
+        }
+      } else if (visibleCon.id !== message.conversationId) {
         setIsHidden(false);
         setUnreadMsgs(() => unreadMsgs + message.newMessage);
-      } else if (visibleCon.id === con.id) {
-        setIsHidden(true);
       }
     } else {
-      setIsHidden(false);
       setUnreadMsgs(() => unreadMsgs + message.newMessage);
     }
   })
 
-  // pass selected conversation id to Messages component, set selected conversation as visible
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
-    select(e, newCon);
-
-    // disconnect newly read msgs from user
+  const markAllMsgsRead = (userId: number, conId: number): void => {
     axios
       .patch(`/api/users/read/${userId}/${con.id}`)
       .then(() => {
@@ -89,7 +74,12 @@ const Conversation: React.FC<PropsType> = (props): ReactElement => {
       .catch((err) => {
         console.error('Failed to mark messages read:\n', err);
       })
+  }
 
+  // pass selected conversation id to Messages component, set selected conversation as visible
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
+    select(e, newCon);
+    markAllMsgsRead(userId, con.id);
   }
 
   // show delete conversation confirmation dialog

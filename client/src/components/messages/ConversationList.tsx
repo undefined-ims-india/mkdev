@@ -21,7 +21,8 @@ const ConversationList: React.FC<PropTypes> =
     visibleCon,
     select,
     setCons,
-    deleteCon }): ReactElement => {
+    deleteCon
+  }): ReactElement => {
 
   return (
     <Grid container

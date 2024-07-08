@@ -24,7 +24,8 @@ const ConversationDelConf: React.FC<PropsType> =
     hidden,
     setCons,
     deleteCon,
-    handleClose }): ReactElement => {
+    handleClose
+  }): ReactElement => {
 
   const deleteConversation = () => {
     axios

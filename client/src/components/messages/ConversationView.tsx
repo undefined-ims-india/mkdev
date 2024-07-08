@@ -15,12 +15,17 @@ const socket = io('http://localhost:4000');
 
 interface PropsType {
   con: Conversations;
+  visibleCon: Conversations | null;
   label: string;
   addingConversation: boolean;
 }
 
-const ConversationView: React.FC<PropsType> = (props): ReactElement => {
-  const { con, label, addingConversation } = props;
+const ConversationView: React.FC<PropsType> =
+  ({
+    con,
+    label,
+    addingConversation
+  }): ReactElement => {
 
   const [allMsgs, setAllMsgs] = useState<MessageWithMetadata[]>([]);
 
@@ -69,7 +74,7 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
               <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
             </Grid>
             <Grid item>
-              <MessageInput con={ con }/>
+              <MessageInput con={ con } />
             </Grid>
           </Box>
         </>
