@@ -32,7 +32,7 @@ const Conversation: React.FC<PropsType> =
     deleteCon
   }): ReactElement => {
 
-  const userId = useContext(UserContext);
+  const { userId } = useContext(UserContext);
   const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
   const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
