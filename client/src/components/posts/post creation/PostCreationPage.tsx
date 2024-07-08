@@ -52,14 +52,14 @@ const PostCreationPage = (): ReactElement => {
     setCurrentTab(newValue);
   }
 
-  const handleTextInput = (
+  const handleTextInput = async (
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
-  ): void => {
+  ): Promise<void> => {
     switch (e.target.name) {
-      case 'title': {setTitle(`# ${e.target.value}`); break;}
-      case 'body': {setBody(e.target.value); break;}
+      case 'title': {await setTitle(`# ${e.target.value}`); break;}
+      case 'body': {await setBody(e.target.value); break;}
     }
   };
 
@@ -88,8 +88,8 @@ const PostCreationPage = (): ReactElement => {
     setRepo({...repo, link})
   };
 
-  const handleTagSelect = (e: React.SyntheticEvent, newValue: Tags[]) => {
-    setSelectedTags(newValue);
+  const handleTagSelect = async (e: React.SyntheticEvent, newValue: Tags[]) => {
+    await setSelectedTags(newValue);
   }
 
   return (
@@ -169,7 +169,7 @@ const PostCreationPage = (): ReactElement => {
                       <></>
                     }
                     <Box sx={{margin: 2}}>
-                      <Button variant="contained" onClick={handleSubmit} disabled={cantSubmit} >Submit</Button>
+                      <Button variant="contained" onClick={handleSubmit} disabled={(cantSubmit || body.length <= 0 || title.length <= 2 || selectedTags.length <= 0)} >Submit</Button>
                     </Box>
                   </Box>
                 </Stack>
