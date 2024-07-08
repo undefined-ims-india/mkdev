@@ -15,7 +15,7 @@ const ProfileInfo = ({
   profileData,
   handleEdit,
 }: ProfileProps): ReactElement => {
-  const userId = useContext(UserContext);
+  const userId = useContext(UserContext).userId;
   return (
     <Card sx={{ maxWidth: 300, margin: 'auto', mt: 2 }}>
       <Box display='flex' justifyContent='center' mb={2}>

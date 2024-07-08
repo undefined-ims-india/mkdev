@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PostWithRelations, RequestWithUser } from '../../../types';
 import { PrismaClient,Tags } from '@prisma/client';
+import { postWithRelationsSelector } from '../../helpers/post-selectors';
 import awsS3Upload from '../../helpers/aws-s3-upload';
 // to remove the maintenance warning in the console...
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
@@ -111,16 +112,7 @@ posts.get('/:id', async(req: RequestWithUser, res: any) => {
       where: {
         id: +id,
       },
-      include: {
-        author: true,
-        tags: true,
-        repo: {
-          include: {
-            files: true
-          }
-        },
-        liked: { select: { id: true }}
-      }
+      include: postWithRelationsSelector
     });
     if (req.user) { post.likedByUser = post.liked.slice().map(like => like.id).includes(req.user.id); }
     res.send(post)
@@ -177,7 +169,27 @@ posts.delete('/:id', (req: any, res: any) => {
     .finally(async () => {
       await prisma.$disconnect();
     });
-
 });
+
+posts.put('/:id/comment', async (req: RequestWithUser, res: any) => {
+  try {
+    const { body } = req.body;
+    await prisma.post.create({
+      data: {
+        body,
+        author: { connect: { id: req.user.id }},
+        commentOn: { connect: { id: +req.params.id }}
+      }
+    })
+    res.sendStatus(200);
+  }
+  catch (err) {
+    console.error('Error: /api/posts/:id/comment: ' + err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+})
 
 export default posts;
