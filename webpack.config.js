@@ -38,7 +38,12 @@ module.exports = {
       },
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ template: './client/src/index.html' })],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './client/src/index.html',
+      favicon: './client/src/favicon.ico',
+    }),
+  ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
