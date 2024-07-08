@@ -98,7 +98,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h2'
                     fontSize={'2rem'}
                     align='center'
-                    fontFamily={'Sometype'}
+                    fontFamily={'SomeType'}
                   >
                     {blog.title}
                   </Typography>
@@ -107,7 +107,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h3'
                     fontSize={'1rem'}
                     align='center'
-                    fontFamily={'Sometype'}
+                    fontFamily={'SomeType'}
                   >
                     {blog.description}
                   </Typography>
@@ -122,7 +122,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
               component='h2'
               fontSize={'1rem'}
               align='center'
-              fontFamily={'Sometype'}
+              fontFamily={'SomeType'}
             >
               No Blogs Found
             </Typography>
