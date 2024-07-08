@@ -43,13 +43,12 @@ const Login = (): ReactElement => {
       justifyContent='center'
       minHeight='100vh'
     >
-      <Box alignContent={'center'} className='glass-card'>
+      <Box alignContent={'center'} className='glass-card' width={'30%'}>
         <Box alignContent={'center'} className='glass-card'>
           <Typography
             variant='h1'
             align='center'
-            gutterBottom
-            sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
+            sx={{ fontFamily: 'SomeType', fontSize: '2rem', my: 2 }}
           >
             Welcome to
           </Typography>
@@ -58,7 +57,7 @@ const Login = (): ReactElement => {
             variant='h1'
             align='center'
             sx={{
-              fontFamily: 'Roboto',
+              fontFamily: 'SomeType',
               fontSize: '6rem',
               fontWeight: 'bold',
             }}
@@ -70,16 +69,22 @@ const Login = (): ReactElement => {
             align='center'
             gutterBottom
             sx={{
-              fontFamily: 'Roboto',
+              fontFamily: 'SomeType',
               fontSize: '1rem',
               fontWeight: 'bold',
               mb: 3,
+              p: 2,
             }}
           >
             A Platform For Developers To Connect And Share Their Work
           </Typography>
         </Box>
-        <Box component='form' onSubmit={login} noValidate sx={{ mt: 1 }}>
+        <Box
+          component='form'
+          onSubmit={login}
+          noValidate
+          sx={{ mt: 1, p: 3, justifyContent: 'center' }}
+        >
           <FormControl fullWidth margin='normal' required>
             <InputLabel htmlFor='email'>User Email</InputLabel>
             <Input id='email' name='email' autoComplete='email' autoFocus />
@@ -97,12 +102,20 @@ const Login = (): ReactElement => {
             type='submit'
             fullWidth
             variant='contained'
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ my: 2, alignContent: 'center' }}
           >
             Sign In
           </Button>
+          <Button
+            onClick={handleSignUp}
+            variant='text'
+            fullWidth
+            sx={{ alignContent: 'center' }}
+          >
+            Don't have an account? Sign Up
+          </Button>
         </Box>
-        <Divider sx={{ my: 2, color: 'aliceblue' }}>OR</Divider>
+        <Divider sx={{ mb: 1, color: 'aliceblue' }}>OR</Divider>
         <Box
           sx={{
             my: 2,
@@ -116,9 +129,6 @@ const Login = (): ReactElement => {
               <GoogleButton />
             </Button>
           </form>
-          <Button onClick={handleSignUp} variant='text'>
-            Don't have an account? Sign Up
-          </Button>
         </Box>
       </Box>
     </Box>

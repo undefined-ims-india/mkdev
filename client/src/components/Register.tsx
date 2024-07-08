@@ -3,86 +3,134 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import Container from '@mui/material/Container';
-import Input from '@mui/material/Input';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { TextField } from '@mui/material';
 
 const Register = (): ReactElement => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const userInfo = { username, firstName, lastName, email, password };
-    axios
-      .post('/api/users/', userInfo)
-      .then(({ data }) => {
-        setUsername(username);
-        setFirstName(firstName);
-        setLastName(lastName);
-        setEmail(email);
-        setPassword(password);
-      })
-      .catch((err) => console.error(err));
+  const [userInfo, setUserInfo] = useState({
+    email: '',
+    password: '',
+    username: '',
+    name: '',
+    firstName: '',
+    lastName: '',
+  });
+
+  const handleChange = (e: any) => {
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      await axios.post('api/users', userInfo);
+      navigate('/login');
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <Container maxWidth='sm'>
       <Box
         className='glass-card'
-        component='form'
-        onSubmit={handleSubmit}
-        noValidate
-        autoComplete='off'
-        sx={{ '& .MuiInput-root': { margin: 4 } }}
+        sx={{
+          p: 3,
+          mt: 10,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
       >
         <Typography
-          variant='h4'
           component='h1'
-          gutterBottom
-          align='center'
-          sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
+          variant='h1'
+          className='glass-card'
+          sx={{
+            p: 1,
+            fontFamily: 'SomeType',
+            fontSize: {
+              xs: '1rem',
+              sm: '1.2rem',
+              md: '1.5rem',
+            },
+          }}
         >
-          Sign Up
+          Enter Your Information To Create An Account
         </Typography>
-        <Input
-          type='text'
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          placeholder='First Name'
-        />
-        <Input
-          type='text'
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          placeholder='Last Name'
-        />
-        <Input
-          type='text'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder='Username'
-        />
-        <Input
-          type='email'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder='Email'
-        />
-        <Input
-          type='password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder='Password'
-        />
-        <Box>
-          <Box display='flex' justifyContent='space-between'>
-            <Button onClick={() => navigate('/login')}>Cancel</Button>
-            <Button type='submit'>Register</Button>
+        <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            id='email'
+            label='Email Address'
+            autoComplete='email'
+            autoFocus
+            onChange={handleChange}
+          />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            label='Password'
+            type='password'
+            id='password'
+            autoComplete='current-password'
+            onChange={handleChange}
+          />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            label='Username'
+            id='username'
+            onChange={handleChange}
+          />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            fullWidth
+            label='Name'
+            id='name'
+            onChange={handleChange}
+          />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            fullWidth
+            label='First Name'
+            id='firstName'
+            onChange={handleChange}
+          />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            fullWidth
+            label='Last Name'
+            id='lastName'
+            onChange={handleChange}
+          />
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              mt: 3,
+              mb: 2,
+            }}
+          >
+            <Button variant='outlined' onClick={() => navigate(-1)}>
+              Cancel
+            </Button>
+            <Button type='submit' variant='contained'>
+              Register
+            </Button>
           </Box>
         </Box>
       </Box>
