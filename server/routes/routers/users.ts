@@ -211,27 +211,4 @@ users.patch('/read/:id/:conversationId', async (req, res) => {
   res.sendStatus(202);
 });
 
-// Create user for initial setup
-users.post('/', async (req: any, res: any) => {
-  const { email, password, firstName, lastName, username, name } = req.body;
-
-  try {
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        password,
-        name,
-        firstName,
-        lastName,
-        username,
-      },
-    });
-    res.status(201).json(newUser);
-  } catch (err) {
-    console.error('Failed to create new user:', err);
-  } finally {
-    await prisma.$disconnect();
-  }
-});
-
 export default users;
