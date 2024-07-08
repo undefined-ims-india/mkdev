@@ -110,6 +110,27 @@ users.get('/', (req: any, res: any) => {
     });
 });
 
+// Get unread message count by user id
+users.get('/unread/:id', (req: any, res: any) => {
+  const { id } = req.params;
+
+  prisma.user.findFirst({
+    where: {
+      id: +id
+    },
+    select: {
+      _count: {
+        select: {
+          unreadMessages: true
+        }
+      }
+    }
+  })
+  .then((unreadCount) => {
+    res.status(200).send(JSON.stringify(unreadCount?._count.unreadMessages));
+  })
+})
+
 // Update user by id
 users.patch('/:id', async (req: any, res: any) => {
   const { id } = req.params;
@@ -146,5 +167,47 @@ users.patch('/:id', async (req: any, res: any) => {
     await prisma.$disconnect();
   }
 });
+
+// Update unread messages for single user
+users.patch('/read/:id/:conversationId', async (req, res) => {
+  const { id, conversationId } = req.params;
+
+  // find messages that are unread by user in specific conversation
+  const readMsgs = await prisma.messages.findMany({
+    where: {
+      AND: [
+        {
+          conversationId: +conversationId
+        },
+        {
+          unreadBy: {
+            some: {
+              id: {
+                equals: +id
+              }
+            }
+          }
+        }
+      ]
+    },
+    select: {
+      id: true
+    }
+  })
+
+  // disconnect newly read messages from user's unreadMessages
+  await prisma.user.update({
+    where: {
+      id: +id
+    },
+    data: {
+      unreadMessages: {
+        disconnect: readMsgs
+      }
+    }
+  })
+
+  res.sendStatus(202);
+})
 
 export default users;
