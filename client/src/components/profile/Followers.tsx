@@ -10,6 +10,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import { Box } from '@mui/material';
 
 const Followers = (): ReactElement => {
   const { id } = useParams();
@@ -18,16 +19,19 @@ const Followers = (): ReactElement => {
   useEffect(() => {
     axios
       .get(`/api/follows/followers/${id}`)
-      .then(({ data }): void => {
-        setFollowerData(data);
-      })
+      .then(({ data }): void => setFollowerData(data))
       .catch((err) => console.error(err));
   }, [id]);
 
   return (
-    <div>
+    <Box>
       {followerData && followerData.length === 0 ? (
-        <Typography variant='h1' component='h2' fontSize={'1rem'}>
+        <Typography
+          variant='h1'
+          component='h2'
+          fontSize={'1rem'}
+          fontFamily={'SomeType'}
+        >
           No Followers
         </Typography>
       ) : (
@@ -50,7 +54,7 @@ const Followers = (): ReactElement => {
           </List>
         </>
       )}
-    </div>
+    </Box>
   );
 };
 

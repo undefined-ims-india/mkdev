@@ -14,8 +14,7 @@ interface PropsType {
   getAllMsgs: () => void;
 }
 
-const MessagesList: React.FC<PropsType> = (props): ReactElement => {
-  const { allMsgs, getAllMsgs, con } = props;
+const MessagesList: React.FC<PropsType> = ({ allMsgs, getAllMsgs, con }): ReactElement => {
 
   return (
     <Box

@@ -5,7 +5,7 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 
 const Follow = (): ReactElement => {
-  const userId = useContext(UserContext);
+  const userId = useContext(UserContext).userId;
   const { id } = useParams();
   const [isFollowing, setIsFollowing] = useState(false);
 
