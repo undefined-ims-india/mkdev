@@ -12,19 +12,24 @@ export const ColorModeContext = createContext({ toggleColorMode: () => {}});
 export const ThemeToggle = (): ReactElement => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+
+  const styling = {marginRight: 2, color: theme.palette.primary.main}
+
   return (
       <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+        <Box sx={{display: 'flex', flexDirection: 'row', ...styling}}>
         {theme.palette.mode === 'dark' ?
-          <Box sx={{display: 'flex', flexDirection: 'row'}}>
-            <Typography sx={{marginRight: 2}}>Light Mode</Typography>
+          <>
+            <Typography sx={styling}>Light Mode</Typography>
             <Brightness7Icon />
-          </Box>
+          </>
         :
-          <Box sx={{display: 'flex', flexDirection: 'row'}}>
-            <Typography sx={{marginRight: 2}}>Dark Mode</Typography>
+          <>
+            <Typography sx={styling}>Dark Mode</Typography>
             <Brightness4Icon />
-          </Box>
+          </>
         }
+          </Box>
       </IconButton>
   );
 }

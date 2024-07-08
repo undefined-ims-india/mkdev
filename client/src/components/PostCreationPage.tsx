@@ -39,6 +39,8 @@ const PostCreationPage = (): ReactElement => {
   const allPostTagsREF = useRef(allPostTags);
   const [selectedTags, setSelectedTags]: [Tags[], Function] = useState([]);
 
+  const paperStyling = { padding: 2, minHeight: '6rem'}
+
   useEffect(() => {
     axios.get('/api/tags/all/post')
       .then(({data}) => {
@@ -112,7 +114,7 @@ const PostCreationPage = (): ReactElement => {
               </TabList>
             </Box>
             <TabPanel value="0">
-              <Paper sx={{background: 'aliceblue', padding: 2}}>
+              <Paper sx={paperStyling}>
                 <Stack>
                   <Box sx={{display: 'flex', flexDirection:'row', alignItems: 'center'}}>
                     <InputLabel htmlFor='img-upload'>
@@ -174,7 +176,7 @@ const PostCreationPage = (): ReactElement => {
               </Paper>
             </TabPanel>
             <TabPanel value="1">
-              <Paper sx={{background: 'aliceblue', paddingX: 2, minHeight: '6rem'}}>
+              <Paper sx={paperStyling}>
                 <Stack>
                   <div className="fill">
                     {img ? <img src={URL.createObjectURL(img)} /> : <></>}
@@ -187,7 +189,7 @@ const PostCreationPage = (): ReactElement => {
               </Paper>
             </TabPanel>
             <TabPanel value="2">
-              <Paper sx={{background: 'aliceblue', padding: 2}}>
+              <Paper sx={paperStyling}>
                 <Repo saveFile={saveFile} saveRepo={saveRepo}/>
               </Paper>
             </TabPanel>
