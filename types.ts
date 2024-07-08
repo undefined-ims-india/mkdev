@@ -11,6 +11,8 @@ export interface UserProfile extends User {
   blogs: Blog[];
   followedBy: User[];
   following: User[];
+  aboutMe: string;
+  bio: string;
 }
 
 export interface SimpleUser {
@@ -33,7 +35,7 @@ export interface PostWithRelations extends Post {
   author: SimpleUser;
   tags: Tags[];
   repo?: RepoWithFiles | null;
-  liked: {id: number}[];
+  liked: { id: number }[];
   likedByUser?: boolean;
   comments?: Comment[]
 }
@@ -44,4 +46,14 @@ export interface RepoWithFiles extends Repo {
 
 export interface MessageWithMetadata extends Messages {
   sender: User;
+}
+
+export interface BlogPosts {
+  devId: User[];
+  mediumId: User[];
+  id: number;
+  title: string;
+  url: string;
+  cover_image: string;
+  description: string;
 }

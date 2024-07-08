@@ -35,3 +35,16 @@
 .rounded {
   border-radius: 8px;
 }
+
+.loading-bar {
+  width: 50%;
+  height: 10px;
+}
+
+.load-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+
+}

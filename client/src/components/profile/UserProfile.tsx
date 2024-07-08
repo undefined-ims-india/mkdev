@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../../types';
@@ -7,7 +7,9 @@ import ProfileInfo from './ProfileInfo';
 
 import Skeleton from '@mui/material/Skeleton';
 import UserInfo from './UserInfo';
-import Typography from '@mui/material/Typography';
+import AboutMe from './AboutMe';
+import Box from '@mui/material/Box';
+import { Card, CardContent } from '@mui/material';
 
 const Profile = (): React.ReactElement => {
   const { id } = useParams();
@@ -21,7 +23,7 @@ const Profile = (): React.ReactElement => {
   const getProfile = () => {
     axios
       .get(`/api/users/${id}/profile`)
-      .then(({ data }): void => setProfileData(data))
+      .then(({ data }) => setProfileData(data))
       .catch((err) => console.error('Failed to get user:', err));
   };
 
@@ -50,16 +52,68 @@ const Profile = (): React.ReactElement => {
           />
         ) : (
           <>
-            <Typography
-              gutterBottom
-              variant='h1'
-              textAlign='center'
-              sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '50vh',
+                width: '100%',
+              }}
             >
-              {profileData!.username}
-            </Typography>
-            <ProfileInfo profileData={profileData!} handleEdit={handleEdit} />
-            <ProfileTabs profileData={profileData!} getProfile={getProfile} />
+              <Card sx={{ maxWidth: 750, width: '100%' }}>
+                <CardContent>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 1,
+                      justifyContent: 'center',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        gap: { xs: 1, md: 2 },
+                        flexDirection: { xs: 'column', md: 'row' },
+                        justifyContent: 'center',
+                        width: '100%',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          flex: 1,
+                          display: 'flex',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <ProfileInfo
+                          profileData={profileData!}
+                          handleEdit={handleEdit}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          flex: 1,
+                          display: 'flex',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <AboutMe
+                          profileData={profileData!}
+                          getProfile={getProfile}
+                          UpdateUserInfo={UpdateUserInfo}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Box>
+            <Box>
+              <ProfileTabs profileData={profileData!} getProfile={getProfile} />
+            </Box>
           </>
         )}
       </>

@@ -11,6 +11,8 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
+import Grid from '@mui/material/Grid';
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface UserProps {
   profileData: UserProfile;
@@ -23,13 +25,15 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
   const [tab, setTab] = useState('1');
 
   useEffect(() => {
-    axios
-      .get(`/api/follows/counts/${profileData.id}`)
-      .then(({ data }): void => {
-        setFollowerCount(data.followersCount);
-        setFollowingCount(data.followingCount);
-      });
-  }, [profileData.id]);
+    if (profileData && profileData.id) {
+      axios
+        .get(`/api/follows/counts/${profileData!.id}`)
+        .then(({ data }): void => {
+          setFollowerCount(data.followersCount);
+          setFollowingCount(data.followingCount);
+        });
+    }
+  }, [profileData]);
 
   const handleTab = (
     e: React.SyntheticEvent<Element, Event>,
@@ -38,33 +42,68 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
     setTab(value);
   };
 
+  if (!profileData) {
+    return (
+      <Grid item xs={12}>
+        <Box className='load-box'>
+          <LinearProgress className='loading-bar' />
+        </Box>
+      </Grid>
+    );
+  }
+
   return (
     <Box>
       <TabContext value={tab}>
         <Box display='flex' justifyContent='center' mt={10}>
-          <TabList onChange={handleTab} centered>
+          <TabList
+            onChange={handleTab}
+            centered
+            variant='fullWidth'
+            sx={{
+              '& .MuiTab-root': {
+                fontSize: { xs: '0.7rem', sm: '0.75rem', md: '.9rem' },
+                padding: { xs: '3px 6px', sm: '6px 12px' },
+                minWidth: { xs: 50, sm: 70 },
+              },
+              '& .MuiTabs-flexContainer': {
+                gap: '4px',
+              },
+            }}
+          >
             <Tab label='Posts' value='1' />
-            <Tab label='Dev.to Blogs' value='2' />
+            <Tab label='Blogs' value='2' />
             <Tab label={`Followers (${followerCount})`} value='3' />
             <Tab label={`Following (${followingCount})`} value='4' />
           </TabList>
         </Box>
         <TabPanel value='1'>
-          {profileData!.posts.map((post) => (
-            <Post
-              key={post.title + crypto.randomUUID()}
-              content={post}
-              refreshParent={getProfile}
-            />
-          ))}
+          <Box display='flex' flexDirection='column' alignItems='center'>
+            {profileData &&
+              profileData!.posts.map((post) => (
+                <Box
+                  key={post.title + crypto.randomUUID()}
+                  my={1}
+                  width='50%'
+                  sx={{
+                    width: { xs: '90%', sm: '70%', md: '50%' },
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Post content={post} refreshParent={getProfile} />
+                </Box>
+              ))}
+          </Box>
         </TabPanel>
         <TabPanel value='2'>
-          <Blogs
-            devId={profileData!.devId !== null ? profileData!.devId : ''}
-            mediumId={
-              profileData!.mediumId !== null ? profileData!.mediumId : ''
-            }
-          />
+          <Box sx={{ p: 3, flexGrow: 1, overflow: 'wrap' }}>
+            <Blogs
+              devId={profileData!.devId !== null ? profileData!.devId : ''}
+              mediumId={
+                profileData!.mediumId !== null ? profileData!.mediumId : ''
+              }
+            />
+          </Box>
         </TabPanel>
         <TabPanel value='3'>
           <Box display='flex' justifyContent='center'>

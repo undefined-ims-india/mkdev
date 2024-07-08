@@ -106,6 +106,10 @@ follow.delete('/unfollow/:followingId', async (req: any, res: any) => {
 follow.get('/isFollowing/:followingId', async (req: any, res: any) => {
   const { followingId } = req.params;
 
+  if (!req.user) {
+    return res.sendStatus(401);
+  }
+
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },

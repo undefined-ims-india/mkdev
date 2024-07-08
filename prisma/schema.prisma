@@ -16,7 +16,7 @@ enum TagType {
 //Posts that will show up on feed based on the tags a user has saved
 model Post {
   id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255) @default("")
+  title     String   @default("") @db.VarChar(255)
   body      String
   userId    Int
   s3_key    String?
@@ -59,6 +59,7 @@ model User {
   mediumId       String?         @unique
   githubId       String?         @unique
   aboutMe        String?
+  bio            String?
   picture        String          @default("")
   firstName      String
   lastName       String?
