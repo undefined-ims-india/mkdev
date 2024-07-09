@@ -60,7 +60,8 @@ conversations.get('/', async (req: any, res: Response) => {
       include: {
         participants: {
           select: {
-            name: true,
+            id: true,
+            username: true,
           }
         }
       },
