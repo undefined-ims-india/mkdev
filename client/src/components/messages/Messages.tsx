@@ -14,19 +14,20 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import { ConversationWithParticipants } from '../../../../types';
 
 const socket = io('http://localhost:4000');
 
 const Messages = (): ReactElement => {
 
   const { userId } = useContext(UserContext);
-  const [con, setCon] = useState<Conversations | null>();
+  const [con, setCon] = useState<ConversationWithParticipants | null>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
   const [participantsEntry, setParticipantsEntry] = useState<(string)[]>([]);
-  const [allConversations, setAllConversations] = useState<Conversations[]>([]);
-  const [visibleConversation, setVisibleConversation] = useState<Conversations | null>(null);
+  const [allConversations, setAllConversations] = useState<ConversationWithParticipants[]>([]);
+  const [visibleConversation, setVisibleConversation] = useState<ConversationWithParticipants | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
 
@@ -89,7 +90,6 @@ const Messages = (): ReactElement => {
     axios
       .get(`/api/conversations/label/${con.id}`)
       .then(({ data }) => {
-        console.log('data from getConvLabel', data);
         let label = '';
         for (let i = 0; i < data.participants.length; i++) {
           if (data.participants[i].id !== userId) {
@@ -118,7 +118,6 @@ const Messages = (): ReactElement => {
         participants: participants, // users that sender enters
       })
       .then(({ data }) => {
-        console.log('conversation returned object', data);
         generateConversationLabel(data);
         return data;
       })
@@ -139,7 +138,7 @@ const Messages = (): ReactElement => {
       });
   }
 
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null): void => {
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null): void => {
     if (addingConversation) {
       setAddingConversation(false);
     }
@@ -157,7 +156,7 @@ const Messages = (): ReactElement => {
   }
 
   // add emitted conversation to allConversations
-  socket.on('add-conversation', (conversation: Conversations): void => {
+  socket.on('add-conversation', (conversation: ConversationWithParticipants): void => {
     setAllConversations([...allConversations, conversation]);
     getAllConversations();
   })
