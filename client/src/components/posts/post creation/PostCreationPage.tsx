@@ -4,9 +4,9 @@ import axios from 'axios';
 import { Tags } from '@prisma/client';
 
 
-import MarkDown from './MarkDown';
-import Repo from './post creation/Repo';
-import PostTagsChips from './PostTagsChips';
+import MarkDown from '../MarkDown';
+import Repo from './Repo';
+import PostTagsChips from '../PostTagsChips';
 
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -24,13 +24,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
 import CheckIcon from '@mui/icons-material/Check';
+import Tooltip from '@mui/material/Tooltip';
 
 const PostCreationPage = (): ReactElement => {
   const navigate = useNavigate();
   const [title, setTitle]: [string, Function] = useState('# ');
   const [body, setBody]: [string, Function] = useState('');
-  const [titleFieldTooltip, setTitleFieldTooltip] = useState(false);
-  const [bodyFieldTooltip, setBodyFieldTooltip] = useState(false);
   const [img, setImg]: [any, Function] = useState();
   const [cantSubmit, setCantSubmit]: [boolean, Function] = useState(false);
   const [repo, setRepo]: [{link: string, files: { path: string; contents: string }[]},Function] = useState({link:'', files:[]});
@@ -38,6 +37,8 @@ const PostCreationPage = (): ReactElement => {
   const [allPostTags, setAllPostTags]: [Tags[]|null, Function] = useState(null);
   const allPostTagsREF = useRef(allPostTags);
   const [selectedTags, setSelectedTags]: [Tags[], Function] = useState([]);
+
+  const paperStyling = { padding: 2, minHeight: '6rem'}
 
   useEffect(() => {
     axios.get('/api/tags/all/post')
@@ -50,14 +51,14 @@ const PostCreationPage = (): ReactElement => {
     setCurrentTab(newValue);
   }
 
-  const handleTextInput = (
+  const handleTextInput = async (
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
-  ): void => {
+  ): Promise<void> => {
     switch (e.target.name) {
-      case 'title': {setTitle(`# ${e.target.value}`); break;}
-      case 'body': {setBody(e.target.value); break;}
+      case 'title': {await setTitle(`# ${e.target.value}`); break;}
+      case 'body': {await setBody(e.target.value); break;}
     }
   };
 
@@ -86,8 +87,8 @@ const PostCreationPage = (): ReactElement => {
     setRepo({...repo, link})
   };
 
-  const handleTagSelect = (e: React.SyntheticEvent, newValue: Tags[]) => {
-    setSelectedTags(newValue);
+  const handleTagSelect = async (e: React.SyntheticEvent, newValue: Tags[]) => {
+    await setSelectedTags(newValue);
   }
 
   return (
@@ -112,7 +113,7 @@ const PostCreationPage = (): ReactElement => {
               </TabList>
             </Box>
             <TabPanel value="0">
-              <Paper sx={{background: 'aliceblue', padding: 2}}>
+              <Paper sx={paperStyling}>
                 <Stack>
                   <Box sx={{display: 'flex', flexDirection:'row', alignItems: 'center'}}>
                     <InputLabel htmlFor='img-upload'>
@@ -167,14 +168,26 @@ const PostCreationPage = (): ReactElement => {
                       <></>
                     }
                     <Box sx={{margin: 2}}>
-                      <Button variant="contained" onClick={handleSubmit} disabled={cantSubmit} >Submit</Button>
+                      <Tooltip disableFocusListener title={
+                        ((title.length > 2) ? (body.length) ? (selectedTags.length) ? '' : 'Please tag your post with relevant topics' : 'Please add body text' : 'Please add a title')
+                      }>
+                        <span>
+                          <Button
+                            variant="contained"
+                            onClick={handleSubmit}
+                            disabled={(cantSubmit || body.length <= 0 || title.length <= 2 || selectedTags.length <= 0)}
+                            >
+                            Submit
+                          </Button>
+                        </span>
+                      </Tooltip>
                     </Box>
                   </Box>
                 </Stack>
               </Paper>
             </TabPanel>
             <TabPanel value="1">
-              <Paper sx={{background: 'aliceblue', paddingX: 2, minHeight: '6rem'}}>
+              <Paper sx={paperStyling}>
                 <Stack>
                   <div className="fill">
                     {img ? <img src={URL.createObjectURL(img)} /> : <></>}
@@ -187,7 +200,7 @@ const PostCreationPage = (): ReactElement => {
               </Paper>
             </TabPanel>
             <TabPanel value="2">
-              <Paper sx={{background: 'aliceblue', padding: 2}}>
+              <Paper sx={paperStyling}>
                 <Repo saveFile={saveFile} saveRepo={saveRepo}/>
               </Paper>
             </TabPanel>

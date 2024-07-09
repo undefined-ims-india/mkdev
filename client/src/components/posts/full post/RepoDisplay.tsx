@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { RepoWithFiles } from "../../../types";
-import MarkDown from "./MarkDown";
+import { RepoWithFiles } from "../../../../../types";
+import MarkDown from "../MarkDown";
 
 import Box from '@mui/material/Box';
 import TabList from '@mui/lab/TabList';

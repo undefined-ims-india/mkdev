@@ -28,7 +28,12 @@ const Following = (): React.ReactElement => {
   return (
     <>
       {followingData && followingData.length === 0 ? (
-        <Typography variant='h1' component='h2' fontSize={'1rem'}>
+        <Typography
+          variant='h1'
+          component='h2'
+          fontSize={'1rem'}
+          fontFamily={'SomeType'}
+        >
           Not Following Any Developers
         </Typography>
       ) : (
@@ -41,7 +46,7 @@ const Following = (): React.ReactElement => {
                     <Link href={`/user/${following.id}/profile`}>
                       <Avatar
                         alt={following.username || ''}
-                        src={following.picture || '?'}
+                        src={following.picture || ''}
                       />
                     </Link>
                   </ListItemAvatar>

@@ -3,6 +3,8 @@ import { UserContext } from './UserContext';
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
 import axios from 'axios';
+import { useTheme } from '@mui/material';
+import io from 'socket.io-client';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -15,25 +17,39 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/Grid';
+import Badge from '@mui/material/Badge';
+
+const socket = io('http://localhost:4000');
 
 const Nav = (): ReactElement => {
-  const id = useContext(UserContext);
-  const [profileImage, setProfileImage]: [string, Function] = useState('');
+  const {userId, userImage} = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
+  const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
   const open = !!anchorEl;
   const navigate = useNavigate();
+  const theme = useTheme().palette.mode;
 
+  // count total unread messages for logged in user
   useEffect(() => {
     axios
-      .get(`/api/users/${id}/image`)
+      .get(`/api/users/unread/${userId}`)
       .then(({ data }): void => {
-        setProfileImage(data.picture);
+        if (data > 0) {
+          setIsHidden(false);
+        }
+        setUnreadMsgs(data);
       })
-      .catch((err: Error) => {
-        console.error(err);
-      });
-  }, [profileImage, id]);
+  }, [unreadMsgs])
+
+  socket.on('read-message', () => {
+    setUnreadMsgs(0);
+  })
+
+  socket.on('message', (message) => {
+    setUnreadMsgs(() => unreadMsgs + message.newMessage);
+  })
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(e.currentTarget);
@@ -45,7 +61,7 @@ const Nav = (): ReactElement => {
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar enableColorOnDark sx={{
-          backgroundColor: 'rgba(200, 150, 200, 0.30)',
+          backgroundColor: theme === 'light' ? 'rgba(90, 217, 219, .3)' : 'rgba(51, 34, 77, .6)',
           backdropFilter: 'blur(14px) saturate(180%)',
           zIndex: '10',
           height: '70px'
@@ -62,23 +78,25 @@ const Nav = (): ReactElement => {
             <Grid item lg={8} xs={4} />
             <Grid item lg={2} xs={6}>
               <Box sx={{display: 'flex', flexDirection:'row', justifyContent:'end', alignItems:'center', height: '100%'}}>
-                {!!id ?
+                {!!userId ?
                   (
                     <>
-                      <IconButton onClick={() => {navigate('/create-post')}} sx={{color: 'aliceblue'}}>
+                      <IconButton onClick={() => {navigate('/create-post')}}>
                         <AddBoxIcon fontSize="medium" />
                         <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
                       </IconButton>
                       <IconButton onClick={() => {navigate('/messages')}} sx={{color: 'aliceblue'}}>
-                        <InboxIcon fontSize="medium" />
+                        <Badge badgeContent={unreadMsgs} invisible={isHidden} color="warning">
+                          <InboxIcon fontSize="medium" />
+                        </Badge>
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
                       </IconButton>
                       <Button onClick={handleOpen} sx={{ padding: 0, border: 'none', background: 'none' }}>
-                        <Avatar src={profileImage}/>
+                        <Avatar src={userImage}/>
                       </Button>
                       <Menu open={open} anchorEl={anchorEl} onClose={handleClose} sx={{zIndex: 11}}>
                         <MenuItem>
-                          <Button onClick={() => { navigate(`/user/${id}/profile`)}}>Profile</Button>
+                          <Button onClick={() => { navigate(`/user/${userId}/profile`)}}>Profile</Button>
                         </MenuItem>
                         <MenuItem>
                           <Button onClick={() => { navigate(`/messages`)}}>Messages</Button>
@@ -96,7 +114,7 @@ const Nav = (): ReactElement => {
                 :
                   (
                     <>
-                      <Button onClick={() => {navigate('/login')}} sx={{color:'aliceblue'}} size='large'>Login</Button>
+                      <Button onClick={() => {navigate('/login')}} size='large'>Login</Button>
                       <ThemeToggle />
                     </>
                   )

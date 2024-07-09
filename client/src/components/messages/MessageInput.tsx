@@ -16,11 +16,10 @@ interface PropsType {
   con: Conversations;
 }
 
-const MessageInput: React.FC<PropsType> = (props): ReactElement => {
-  const { con } = props;
+const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
 
   const [text, setText] = useState('');
-  const sender = useContext(UserContext);
+  const sender = useContext(UserContext).userId;
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
@@ -31,7 +30,6 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
 
     // only send message if there is text in input field
     if (text) {
-
       // send message to database with current conversation
       axios
         .post(`/api/messages/${con.id}`, {
@@ -43,7 +41,8 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
         .then(({ data }) => {
           // broadcast the message to all the clients
           socket.emit('message', {
-            ...data
+            ...data,
+            newMessage: 1,
           })
         })
         .catch((err) => {
@@ -60,7 +59,6 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
 
       // only send message if there is text in input field
       if (text) {
-
         // send message to database with current conversation
         axios
           .post(`/api/messages/${con.id}`, {
@@ -72,7 +70,8 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
           .then(({ data }) => {
             // broadcast the message to all the clients
             socket.emit('message', {
-              ...data
+              ...data,
+              newMessage: 1,
             })
           })
           .catch((err) => {
