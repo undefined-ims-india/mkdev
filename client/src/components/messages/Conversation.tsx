@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, ReactElement } from 'react';
+import React, { useState, useContext, ReactElement } from 'react';
 import { UserContext } from '../UserContext';
 import axios from 'axios';
 import ConversationDelConf from './ConversationDelConf';
@@ -46,7 +46,6 @@ const Conversation: React.FC<PropsType> =
           label += `${con.participants[i].username}, `
         }
       }
-      // setLabel(label.slice(0, label.length - 2));
       return label.slice(0, label.length - 2)
     } else {
       return '';
@@ -137,7 +136,6 @@ const Conversation: React.FC<PropsType> =
               noWrap
               align='left'
             >
-              {/* { con.label } */}
               { label }
             </Typography>
           </Button>

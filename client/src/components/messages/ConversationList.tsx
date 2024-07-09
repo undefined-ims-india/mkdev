@@ -28,7 +28,6 @@ const ConversationList: React.FC<PropTypes> =
   return (
     <Grid container
     sx={{
-      // border: 1,
       paddingTop: 4
     }}
     direction="column"
