@@ -37,7 +37,7 @@ const UserInfo = ({
   };
 
   const handleCancel = () => {
-    navigate(-1);
+    navigate(0);
   };
 
   return (
