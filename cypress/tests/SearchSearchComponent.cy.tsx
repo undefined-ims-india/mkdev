@@ -8,10 +8,11 @@ describe('<SearchComponent />', () => {
     <Routes>
       cy.mount(
       <SearchComponent />
+
       );
     </Routes>;
   })
   it('Can search for a  result', () => {
-    
+
   });
 });
