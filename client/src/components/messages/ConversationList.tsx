@@ -6,11 +6,12 @@ import { Conversations } from '@prisma/client';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Grid from '@mui/material/Grid';
+import { ConversationWithParticipants } from '../../../../types';
 
 interface PropTypes {
-  allCons: Conversations[],
-  visibleCon: Conversations | null,
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null) => void;
+  allCons: ConversationWithParticipants[];
+  visibleCon: Conversations | null;
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
   setCons: () => void;
   deleteCon: () => void;
 }
@@ -27,7 +28,6 @@ const ConversationList: React.FC<PropTypes> =
   return (
     <Grid container
     sx={{
-      // border: 1,
       paddingTop: 4
     }}
     direction="column"
