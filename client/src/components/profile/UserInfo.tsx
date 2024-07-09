@@ -37,7 +37,7 @@ const UserInfo = ({
   };
 
   const handleCancel = () => {
-    navigate(-1);
+    navigate(0);
   };
 
   return (
@@ -57,7 +57,6 @@ const UserInfo = ({
               >
                 <InputLabel htmlFor='username'>Username</InputLabel>
                 <Input
-                  sx={{ variant: 'contained', backgroundColor: 'white' }}
                   id='username'
                   name='username'
                   value={userInfo!.username || ''}
@@ -75,7 +74,6 @@ const UserInfo = ({
               >
                 <InputLabel htmlFor='githubId'>Github Username</InputLabel>
                 <Input
-                  sx={{ variant: 'contained', backgroundColor: 'white' }}
                   id='githubId'
                   name='githubId'
                   value={userInfo!.githubId || ''}
@@ -93,7 +91,6 @@ const UserInfo = ({
               >
                 <InputLabel htmlFor='devId'>Dev.to Username</InputLabel>
                 <Input
-                  sx={{ variant: 'contained', backgroundColor: 'white' }}
                   id='devId'
                   name='devId'
                   value={userInfo!.devId || ''}
@@ -111,7 +108,6 @@ const UserInfo = ({
               >
                 <InputLabel htmlFor='mediumId'>Medium Username</InputLabel>
                 <Input
-                  sx={{ variant: 'contained', backgroundColor: 'white' }}
                   id='mediumId'
                   name='mediumId'
                   value={userInfo!.mediumId || ''}
@@ -129,7 +125,6 @@ const UserInfo = ({
               >
                 <InputLabel htmlFor='linkedinId'>LinkedIn Username</InputLabel>
                 <Input
-                  sx={{ variant: 'contained', backgroundColor: 'white' }}
                   id='linkedinId'
                   name='linkedinId'
                   value={userInfo!.linkedinId || ''}
@@ -137,11 +132,11 @@ const UserInfo = ({
                 />
               </FormControl>
               <Box display='flex' justifyContent='center' gap={2}>
-                <Button type='submit' color='primary'>
-                  Update
-                </Button>
                 <Button type='button' onClick={handleCancel} color='error'>
                   Cancel
+                </Button>
+                <Button type='submit' color='primary'>
+                  Update
                 </Button>
               </Box>
             </Stack>
@@ -161,8 +156,8 @@ const UserInfo = ({
                   id='bio'
                   name='bio'
                   multiline
-                  minRows={5}
-                  placeholder='This is the about me'
+                  minRows={2}
+                  placeholder='This is the Bio'
                   value={userInfo!.bio || ''}
                   onChange={handleChange}
                   fullWidth
