@@ -7,6 +7,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { User, Conversations } from '@prisma/client';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -161,8 +162,16 @@ const Messages = (): ReactElement => {
     getAllConversations();
   })
 
+  // disable horizontal and vertical scroll on body for this component
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+        document.body.style.overflow = "scroll"
+    };
+  }, []);
+
   return (
-    <>
+    <Box>
       <Grid container>
         <Grid item>
           <Typography variant="h3">
@@ -266,7 +275,7 @@ const Messages = (): ReactElement => {
         </>
       )
       }
-    </>
+    </Box>
   );
 }
 
