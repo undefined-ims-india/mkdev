@@ -229,14 +229,14 @@ users.post(
       const key = await awsS3Upload(req.file);
 
       const updateUser = await prisma.user.update({
-        where: { id: +req.params.userId },
+        where: { id: +req.user.id },
         data: { coverImage: key },
       });
 
-      res.status(201).json({ msg: 'Image uploaded successfully', updateUser });
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      res.status(500).send('Failed to upload image');
+      res.status(201).json(updateUser);
+    } catch (err) {
+      console.error('Error uploading image:', err);
+      res.sendStatus(500);
     } finally {
       await prisma.$disconnect();
     }
