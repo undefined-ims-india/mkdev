@@ -4,12 +4,14 @@ import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../../types';
 import ProfileTabs from './ProfileTabs';
 import ProfileInfo from './ProfileInfo';
+import AboutMe from './AboutMe';
+import UserInfo from './UserInfo';
 
 import Skeleton from '@mui/material/Skeleton';
-import UserInfo from './UserInfo';
-import AboutMe from './AboutMe';
 import Box from '@mui/material/Box';
-import { Card, CardContent } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Modal from '@mui/material/Modal';
 
 const Profile = (): React.ReactElement => {
   const { id } = useParams();
@@ -29,7 +31,9 @@ const Profile = (): React.ReactElement => {
 
   useEffect(getProfile, [profileDataREF]);
 
-  const handleEdit = () => setEdit(true);
+  const handleEdit = () => {
+    setEdit(true);
+  };
 
   const UpdateUserInfo = (userInfo: UserProfile) => {
     axios
@@ -45,77 +49,90 @@ const Profile = (): React.ReactElement => {
   try {
     return (
       <>
-        {edit ? (
-          <UserInfo
-            UpdateUserInfo={UpdateUserInfo}
-            profileData={profileData!}
-          />
-        ) : (
-          <>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '50vh',
-                width: '100%',
-              }}
-            >
-              <Card sx={{ maxWidth: 750, width: '100%' }}>
-                <CardContent>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '50vh',
+            width: '100%',
+            p: 3,
+          }}
+        >
+          <Card sx={{ maxWidth: 750, width: '100%' }}>
+            <CardContent>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: 1,
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: { xs: 1, md: 2 },
+                    flexDirection: { xs: 'column', md: 'row' },
+                    justifyContent: 'center',
+                    width: '100%',
+                  }}
+                >
                   <Box
                     sx={{
+                      flex: 1,
                       display: 'flex',
-                      alignItems: 'flex-start',
-                      gap: 1,
                       justifyContent: 'center',
-                      flexDirection: 'column',
                     }}
                   >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        gap: { xs: 1, md: 2 },
-                        flexDirection: { xs: 'column', md: 'row' },
-                        justifyContent: 'center',
-                        width: '100%',
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          flex: 1,
-                          display: 'flex',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <ProfileInfo
-                          profileData={profileData!}
-                          handleEdit={handleEdit}
-                        />
-                      </Box>
-                      <Box
-                        sx={{
-                          flex: 1,
-                          display: 'flex',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <AboutMe
-                          profileData={profileData!}
-                          getProfile={getProfile}
-                          UpdateUserInfo={UpdateUserInfo}
-                        />
-                      </Box>
-                    </Box>
+                    <ProfileInfo
+                      profileData={profileData!}
+                      handleEdit={handleEdit}
+                    />
                   </Box>
-                </CardContent>
-              </Card>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <AboutMe
+                      profileData={profileData!}
+                      getProfile={getProfile}
+                      UpdateUserInfo={UpdateUserInfo}
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            </CardContent>
+          </Card>
+
+          <Modal open={edit} onClose={handleEdit}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 900,
+                bgcolor: 'background.paper',
+                border: '2px solid',
+                boxShadow: 24,
+                p: 2,
+              }}
+            >
+              <UserInfo
+                UpdateUserInfo={UpdateUserInfo}
+                profileData={profileData!}
+              />
             </Box>
-            <Box>
-              <ProfileTabs profileData={profileData!} getProfile={getProfile} />
-            </Box>
-          </>
-        )}
+          </Modal>
+        </Box>
+        <Box>
+          <ProfileTabs profileData={profileData!} getProfile={getProfile} />
+        </Box>
       </>
     );
   } catch (err) {
