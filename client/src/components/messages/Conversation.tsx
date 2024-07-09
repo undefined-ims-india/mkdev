@@ -12,13 +12,14 @@ import Badge from '@mui/material/Badge';
 
 import { Conversations } from '@prisma/client';
 import { Typography } from '@mui/material';
+import { ConversationWithParticipants } from '../../../../types';
 
 const socket = io('http://localhost:4000');
 
 interface PropsType {
-  con: Conversations;
+  con: ConversationWithParticipants;
   visibleCon: Conversations | null,
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null) => void;
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
   setCons: () => void;
   deleteCon: () => void;
 }
@@ -36,6 +37,22 @@ const Conversation: React.FC<PropsType> =
   const [unreadMsgsTotal, setUnreadMsgsTotal] = useState<React.ReactNode>(0);
   const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
+
+  const generateConversationLabel = (con: ConversationWithParticipants): string => {
+    if (con.participants) {
+      let label = '';
+      for (let i = 0; i < con.participants.length; i++) {
+        if (con.participants[i].id !== userId) {
+          label += `${con.participants[i].username}, `
+        }
+      }
+      // setLabel(label.slice(0, label.length - 2));
+      return label.slice(0, label.length - 2)
+    } else {
+      return '';
+    }
+  }
+  const [label, setLabel] = useState(generateConversationLabel(con));
 
   const getUnreadMsgsTotal = (conversationId: number, userId: number) => {
     axios
@@ -88,7 +105,7 @@ const Conversation: React.FC<PropsType> =
   })
 
   // pass selected conversation id to Messages component, set selected conversation as visible
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants): void => {
     select(e, newCon);
     markAllMsgsRead(userId, con.id);
   }
@@ -120,7 +137,8 @@ const Conversation: React.FC<PropsType> =
               noWrap
               align='left'
             >
-              { con.label }
+              {/* { con.label } */}
+              { label }
             </Typography>
           </Button>
           <Button onClick={ handleDelete }>
