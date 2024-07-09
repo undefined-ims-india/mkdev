@@ -22,7 +22,7 @@ const ProfileInfo = ({
   profileData,
   handleEdit,
 }: ProfileProps): ReactElement => {
-  const userId = useContext(UserContext).userId;
+  const userId = useContext(UserContext).id;
 
   if (!profileData) {
     return (

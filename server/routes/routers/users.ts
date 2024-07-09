@@ -10,7 +10,13 @@ const prisma = new PrismaClient();
 users.get('/loggedIn', (req: any, res: any) => {
   if (req.isAuthenticated()) {
     const user = req.user;
-    res.json({ isLoggedIn: true, id: user.id, image: user.picture });
+    res.send({
+      isLoggedIn: true,
+      id: user.id,
+      image: user.picture,
+      name: user.name,
+      username: user.username
+    });
   } else {
     res.json({ isLoggedIn: false, id: 0 });
   }

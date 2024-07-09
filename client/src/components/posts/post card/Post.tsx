@@ -25,7 +25,7 @@ import Grid from '@mui/material/Grid'
 
 const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
-  const userId = useContext(UserContext).userId;
+  const userId = useContext(UserContext).id;
   const theme = useTheme().palette.mode;
 
   const handleLike = () => {

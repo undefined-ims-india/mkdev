@@ -32,7 +32,7 @@ const Conversation: React.FC<PropsType> =
     deleteCon
   }): ReactElement => {
 
-  const { userId } = useContext(UserContext);
+  const user = useContext(UserContext);
   const [unreadMsgsTotal, setUnreadMsgsTotal] = useState<React.ReactNode>(0);
   const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
@@ -68,29 +68,29 @@ const Conversation: React.FC<PropsType> =
           // don't show the badge
           setIsHidden(true);
           // and mark all messages as read
-          markAllMsgsRead(userId, con.id);
+          markAllMsgsRead(user.id, con.id);
         } else {
           // make sure badge is showing
           setIsHidden(false);
           // get total number of unread messages in the conversation
-          getUnreadMsgsTotal(con.id, userId);
+          getUnreadMsgsTotal(con.id, user.id);
         }
         // else is message is received in another message
       } else if (visibleCon.id !== message.conversationId) {
         // make sure badge is showing
         setIsHidden(false);
         // get total number of unread messages in the conversation
-        getUnreadMsgsTotal(con.id, userId);
+        getUnreadMsgsTotal(con.id, user.id);
       }
     } else { // no conversation is is view
-      getUnreadMsgsTotal(con.id, userId);
+      getUnreadMsgsTotal(con.id, user.id);
     }
   })
 
   // pass selected conversation id to Messages component, set selected conversation as visible
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
     select(e, newCon);
-    markAllMsgsRead(userId, con.id);
+    markAllMsgsRead(user.id, con.id);
   }
 
   // show delete conversation confirmation dialog
