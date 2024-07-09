@@ -19,8 +19,8 @@ const MessagesList: React.FC<PropsType> = ({ allMsgs, getAllMsgs, con }): ReactE
   return (
     <Box
       sx={{
-        maxHeight: '55vh',
-        width: '60vw',
+        flexGrow: 1,
+        maxHeight: '50vh',
         overflow: 'auto',
       }}
     >
