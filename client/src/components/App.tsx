@@ -11,7 +11,7 @@ import Logout from './Logout';
 import Search from './Search';
 import Messages from './messages/Messages';
 import Profile from './profile/UserProfile';
-import FullPost from './posts/full post/FullPost';
+import FullPostPage from './posts/full post/FullPostPage';
 import SearchResults from './SearchResults';
 import Welcome from './Welcome';
 import Signup from './Survey';
@@ -57,7 +57,7 @@ const routes = [
   },
   {
     path: '/post/:id',
-    element: <FullPost />,
+    element: <FullPostPage />,
   },
   {
     path: '/searchresults/:tagType/:tags',
