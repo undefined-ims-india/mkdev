@@ -90,7 +90,6 @@ const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          flexWrap: 'wrap',
         }}
       >
         <TextField
