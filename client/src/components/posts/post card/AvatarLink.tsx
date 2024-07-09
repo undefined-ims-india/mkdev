@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom'
 import { SimpleUser } from '../../../../../types'
 import Avatar from '@mui/material/Avatar';
 
-export default ({user}: {user : SimpleUser}) => (
-  <Link to={`/user/${user.id}/profile`} style={{textDecoration: 'none'}}>
+export default ({user}: {user : SimpleUser}) => {
+  if (!user.username) {user.username = ''}
+  if (!user.name) {user.name = ''}
+  return (
+    <Link to={`/user/${user.id}/profile`} style={{textDecoration: 'none'}}>
       <Avatar
         alt={user.username! || user.name}
         src={user.picture!}
@@ -16,4 +19,5 @@ export default ({user}: {user : SimpleUser}) => (
         {user.username![0] || user.name[0] || '?'}
       </Avatar>
     </Link>
-)
+  )
+  }

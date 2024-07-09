@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tags } from "@prisma/client";
 import { useLocation } from "react-router-dom";
-import { PostWithRelations, RepoWithFiles, SimpleUser } from "../../../../../types";
+import { PostWithRelations, RepoWithFiles, SimpleUser, Comment } from "../../../../../types";
 
 import MarkDown from "../MarkDown";
 import RepoDisplay from "./RepoDisplay";
@@ -20,19 +20,18 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 const FullPost = ({content, imageLink, getPost} :
   {
     content:
-      | PostWithRelations
-      | {
+    {
         createdAt: Date,
         title: string,
         body: string,
         tags: Tags[]
         repo: RepoWithFiles,
         author: SimpleUser,
-
-        id: undefined,
-        likedByUser: undefined,
-        liked: undefined,
-        comments: undefined
+        
+        id: undefined | number,
+        likedByUser: undefined | boolean,
+        liked: undefined | {id: number}[],
+        comments: undefined | Comment[]
       },
     imageLink: string,
     getPost?: Function
@@ -131,7 +130,7 @@ const FullPost = ({content, imageLink, getPost} :
           <>
         <Grid item xs={1} />
           <Grid item xs={10}>
-            <PostComments refreshParent={getPost!} postID={content!.id} comments={content!.comments} />
+            <PostComments refreshParent={getPost!} postID={content!.id!} comments={content!.comments} />
           </Grid>
           <Grid item xs={1} />
         </>

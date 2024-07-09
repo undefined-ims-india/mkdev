@@ -1,10 +1,12 @@
-import React, { ReactElement, useState, useCallback } from 'react';
+import React, { ReactElement, useState, useCallback, useContext } from 'react';
 import { Tags } from '@prisma/client';
 
 import MarkDown from '../MarkDown';
 import Repo from './Repo';
 import PostTagsChips from '../PostTagsChips';
 import InputTab from './InputTab';
+import FullPost from '../full post/FullPost';
+import { UserContext } from '../../UserContext';
 
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
@@ -19,6 +21,8 @@ import TabPanel from '@mui/lab/TabPanel';
 
 
 const PostCreationPage = (): ReactElement => {
+
+  const user = useContext(UserContext);
   const [title, setTitle]: [string, Function] = useState('# ');
   const [body, setBody]: [string, Function] = useState('');
   const [img, setImg]: [any, Function] = useState();
@@ -87,17 +91,17 @@ const PostCreationPage = (): ReactElement => {
             <InputTab content={content} handlers={handlers} paperStyling={paperStyling}/>
           </TabPanel>
           <TabPanel value="1">
-            <Paper sx={paperStyling}>
-              <Stack>
-                <div className="fill">
-                  {img ? <img src={URL.createObjectURL(img)} /> : <></>}
-                </div>
-                <MarkDown text={title} />
-                <PostTagsChips tags={selectedTags} />
-                <Divider orientation='horizontal' variant='middle' />
-                <MarkDown text={body} />
-              </Stack>
-            </Paper>
+            <FullPost
+              content={{
+                title,
+                body,
+                author: user,
+                repo: {...repo, id: 0, postId: 0, files: repo.files.map(file => ({...file, id: 0, repoId: 0, createdAt: new Date(Date.now()), star: false}))},
+                tags: selectedTags,
+                liked: undefined, likedByUser: undefined, comments: undefined, id: undefined, createdAt: new Date(Date.now())
+              }}
+              imageLink={img ? URL.createObjectURL(img) : ''}
+            />
           </TabPanel>
           <TabPanel value="2">
             <Paper sx={paperStyling}>
