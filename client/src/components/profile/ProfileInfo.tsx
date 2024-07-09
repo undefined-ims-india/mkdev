@@ -1,17 +1,15 @@
 import React, { ReactElement, useContext } from 'react';
-import Follow from './Follow';
 import { UserProfile } from '../../../../types';
-import { UserContext } from '../UserContext';
 import Socials from './Socials';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
 import LinearProgress from '@mui/material/LinearProgress';
 import Grid from '@mui/material/Grid';
+import EditOrFollow from './Edit';
+import Divider from '@mui/material/Divider';
 
 interface ProfileProps {
   profileData: UserProfile | null;
@@ -22,8 +20,6 @@ const ProfileInfo = ({
   profileData,
   handleEdit,
 }: ProfileProps): ReactElement => {
-  const userId = useContext(UserContext).userId;
-
   if (!profileData) {
     return (
       <Grid item xs={12}>
@@ -47,7 +43,7 @@ const ProfileInfo = ({
       >
         <Box display='flex' flexDirection='column' alignItems='center' mb={2}>
           <Avatar
-            sx={{ width: 120, height: 120, mt: 2 }}
+            sx={{ width: 120, height: 120, mt: 1 }}
             src={profileData!.picture !== null ? profileData!.picture : ''}
             alt={profileData!.username || profileData!.name || ''}
           />
@@ -59,6 +55,7 @@ const ProfileInfo = ({
               fontWeight: 'bold',
               fontSize: '1.25rem',
               color: 'text.primary',
+              fontFamily: 'SomeType',
             }}
           >
             {profileData!.name}
@@ -77,22 +74,17 @@ const ProfileInfo = ({
           <Typography
             variant='body1'
             color='textSecondary'
-            sx={{ mt: 1, p: 1 }}
+            sx={{ mt: 1, p: 1, fontFamily: 'SomeType' }}
           >
             {profileData!.bio}
           </Typography>
-          <Box display='flex' justifyContent='center' mt={2}>
-            {userId === profileData!.id ? (
-              <IconButton aria-label='edit' onClick={handleEdit} sx={{ mt: 2 }}>
-                <EditIcon />
-              </IconButton>
-            ) : (
-              <Follow />
-            )}
-          </Box>
         </Box>
         <Box mt={2}>
           <Socials profileData={profileData!} />
+        </Box>
+        <Divider />
+        <Box mt={2} display='flex' justifyContent='center'>
+          <EditOrFollow profileData={profileData!} handleEdit={handleEdit} />
         </Box>
       </Card>
     </>
