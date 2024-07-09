@@ -4,12 +4,14 @@ import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../../types';
 import ProfileTabs from './ProfileTabs';
 import ProfileInfo from './ProfileInfo';
+import CoverImage from './CoverImage';
 
 import Skeleton from '@mui/material/Skeleton';
 import UserInfo from './UserInfo';
 import AboutMe from './AboutMe';
 import Box from '@mui/material/Box';
-import { Card, CardContent } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 const Profile = (): React.ReactElement => {
   const { id } = useParams();
@@ -26,7 +28,6 @@ const Profile = (): React.ReactElement => {
       .then(({ data }) => setProfileData(data))
       .catch((err) => console.error('Failed to get user:', err));
   };
-
   useEffect(getProfile, [profileDataREF]);
 
   const handleEdit = () => setEdit(true);
@@ -46,12 +47,24 @@ const Profile = (): React.ReactElement => {
     return (
       <>
         {edit ? (
-          <UserInfo
-            UpdateUserInfo={UpdateUserInfo}
-            profileData={profileData!}
-          />
-        ) : (
           <>
+            <UserInfo
+              UpdateUserInfo={UpdateUserInfo}
+              profileData={profileData!}
+            />
+            {/* <CoverImage
+              UpdateUserInfo={UpdateUserInfo}
+              profileData={profileData!}
+            /> */}
+          </>
+        ) : (
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+            }}
+          >
+            <CoverImage profileData={profileData!} />
             <Box
               sx={{
                 display: 'flex',
@@ -68,8 +81,6 @@ const Profile = (): React.ReactElement => {
                       display: 'flex',
                       alignItems: 'flex-start',
                       gap: 1,
-                      justifyContent: 'center',
-                      flexDirection: 'column',
                     }}
                   >
                     <Box
@@ -114,7 +125,7 @@ const Profile = (): React.ReactElement => {
             <Box>
               <ProfileTabs profileData={profileData!} getProfile={getProfile} />
             </Box>
-          </>
+          </Box>
         )}
       </>
     );
