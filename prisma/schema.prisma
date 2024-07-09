@@ -60,6 +60,7 @@ model User {
   githubId       String?         @unique
   aboutMe        String?
   bio            String?
+  coverImage     String?         @default("")
   picture        String          @default("")
   firstName      String
   lastName       String?
