@@ -2,6 +2,8 @@ import express, { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { RequestWithUser } from '../../../types';
 import { postWithRelationsSelector } from '../../helpers/post-selectors';
+import awsS3Upload from '../../helpers/aws-s3-upload';
+import multer from 'multer';
 
 const users = Router();
 const prisma = new PrismaClient();
@@ -114,22 +116,23 @@ users.get('/', (req: any, res: any) => {
 users.get('/unread/:id', (req: any, res: any) => {
   const { id } = req.params;
 
-  prisma.user.findFirst({
-    where: {
-      id: +id
-    },
-    select: {
-      _count: {
-        select: {
-          unreadMessages: true
-        }
-      }
-    }
-  })
-  .then((unreadCount) => {
-    res.status(200).send(JSON.stringify(unreadCount?._count.unreadMessages));
-  })
-})
+  prisma.user
+    .findFirst({
+      where: {
+        id: +id,
+      },
+      select: {
+        _count: {
+          select: {
+            unreadMessages: true,
+          },
+        },
+      },
+    })
+    .then((unreadCount) => {
+      res.status(200).send(JSON.stringify(unreadCount?._count.unreadMessages));
+    });
+});
 
 // Update user by id
 users.patch('/:id', async (req: any, res: any) => {
@@ -143,6 +146,7 @@ users.patch('/:id', async (req: any, res: any) => {
     picture,
     aboutMe,
     bio,
+    coverImage,
   } = req.body;
 
   try {
@@ -157,6 +161,7 @@ users.patch('/:id', async (req: any, res: any) => {
         picture,
         aboutMe,
         bio,
+        coverImage,
       },
     });
     res.status(200).send(user);
@@ -177,37 +182,65 @@ users.patch('/read/:id/:conversationId', async (req, res) => {
     where: {
       AND: [
         {
-          conversationId: +conversationId
+          conversationId: +conversationId,
         },
         {
           unreadBy: {
             some: {
               id: {
-                equals: +id
-              }
-            }
-          }
-        }
-      ]
+                equals: +id,
+              },
+            },
+          },
+        },
+      ],
     },
     select: {
-      id: true
-    }
-  })
+      id: true,
+    },
+  });
 
   // disconnect newly read messages from user's unreadMessages
   await prisma.user.update({
     where: {
-      id: +id
+      id: +id,
     },
     data: {
       unreadMessages: {
-        disconnect: readMsgs
-      }
-    }
-  })
+        disconnect: readMsgs,
+      },
+    },
+  });
 
   res.sendStatus(202);
-})
+});
+
+// Middleware for uploading images within express / Node.js applications. Neat.
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
+
+// Upload User's Cover Image
+users.post(
+  '/coverImage/:userId',
+  upload.single('image'),
+  async (req: any, res: any) => {
+    try {
+      const key = await awsS3Upload(req.file);
+
+      const updateUser = await prisma.user.update({
+        where: { id: +req.params.userId },
+        data: { coverImage: key },
+      });
+
+      res.status(201).json({ msg: 'Image uploaded successfully', updateUser });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      res.status(500).send('Failed to upload image');
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+);
 
 export default users;
