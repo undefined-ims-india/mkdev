@@ -13,6 +13,7 @@ export interface UserProfile extends User {
   following: User[];
   aboutMe: string;
   bio: string;
+  coverImage: string;
 }
 
 export interface SimpleUser {
@@ -23,12 +24,12 @@ export interface SimpleUser {
 }
 
 export interface Comment {
-  id: number,
-  body: string,
-  author: SimpleUser,
-  createdAt: Date,
-  liked: {id: number}[],
-  likedByUser?: boolean,
+  id: number;
+  body: string;
+  author: SimpleUser;
+  createdAt: Date;
+  liked: { id: number }[];
+  likedByUser?: boolean;
 }
 
 export interface PostWithRelations extends Post {
@@ -37,7 +38,7 @@ export interface PostWithRelations extends Post {
   repo?: RepoWithFiles | null;
   liked: { id: number }[];
   likedByUser?: boolean;
-  comments?: Comment[]
+  comments?: Comment[];
 }
 
 export interface RepoWithFiles extends Repo {
