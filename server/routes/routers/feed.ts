@@ -66,6 +66,13 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
                   author: {
                     id: { in: feedFilter.users }
                   }
+                },
+                {
+                  tags : {
+                    every : {
+                      id : { in: feedFilter.tags }
+                    },
+                  }
                 }
               ],
               NOT: {
