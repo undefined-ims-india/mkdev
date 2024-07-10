@@ -14,10 +14,10 @@ const EditOrFollow = ({
   profileData,
   handleEdit,
 }: EditProps): React.ReactElement => {
-  const { userId } = useContext(UserContext);
+  const { id } = useContext(UserContext);
   return (
     <>
-      {userId === profileData!.id ? (
+      {id === profileData!.id ? (
         <IconButton aria-label='edit' onClick={handleEdit} sx={{ mt: -1 }}>
           <EditIcon />
         </IconButton>
