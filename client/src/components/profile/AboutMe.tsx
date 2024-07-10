@@ -11,7 +11,7 @@ import { Divider } from '@mui/material';
 
 interface UserInfoProps {
   profileData: UserProfile;
-  UpdateUserInfo: (userInfo: UserProfile) => void;
+  updateUserInfo: (userInfo: UserProfile) => void;
   getProfile: () => void;
 }
 
@@ -30,7 +30,13 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
     <Box>
       <Paper
         elevation={3}
-        sx={{ width: 400, height: 200, m: 2, p: 2, overflow: 'hidden' }}
+        sx={{
+          width: { xs: '90%', sm: 400 },
+          height: { xs: 'auto', sm: 200 },
+          m: 2,
+          p: 2,
+          overflow: 'hidden',
+        }}
       >
         <Typography
           variant='h1'
@@ -62,7 +68,13 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
       </Paper>
       <Paper
         elevation={3}
-        sx={{ width: 400, height: 200, m: 2, p: 2, overflow: 'hidden' }}
+        sx={{
+          width: { xs: '90%', sm: 400 },
+          height: { xs: 'auto', sm: 200 },
+          m: 2,
+          p: 2,
+          overflow: 'hidden',
+        }}
       >
         <Typography
           variant='h1'
@@ -73,7 +85,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
         >
           Interests
         </Typography>
-        <Divider />
+        <Divider sx={{ my: 1 }} />
         <Box
           sx={{
             display: 'flex',

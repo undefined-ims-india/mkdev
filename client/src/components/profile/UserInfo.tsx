@@ -15,12 +15,12 @@ import Container from '@mui/material/Container';
 
 interface UserInfoProps {
   profileData: UserProfile;
-  UpdateUserInfo: (userInfo: UserProfile) => void;
+  updateUserInfo: (userInfo: UserProfile) => void;
 }
 
 const UserInfo = ({
   profileData,
-  UpdateUserInfo,
+  updateUserInfo,
 }: UserInfoProps): React.ReactElement => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo]: [UserProfile | null, Function] =
@@ -33,7 +33,7 @@ const UserInfo = ({
 
   const handleUpdate = (e: React.FormEvent): void => {
     e.preventDefault();
-    UpdateUserInfo(userInfo!);
+    updateUserInfo(userInfo!);
   };
 
   const handleCancel = () => {
@@ -49,8 +49,8 @@ const UserInfo = ({
               <FormControl
                 sx={{
                   p: 2,
-                  my: 1,
-                  mx: 1,
+                  my: 0.5,
+                  mx: 0.5,
                   width: '50%',
                   fontFamily: 'SomeType',
                 }}
@@ -66,8 +66,8 @@ const UserInfo = ({
               <FormControl
                 sx={{
                   p: 2,
-                  my: 1,
-                  mx: 1,
+                  my: 0.5,
+                  mx: 0.5,
                   width: '50%',
                   fontFamily: 'SomeType',
                 }}
@@ -83,8 +83,8 @@ const UserInfo = ({
               <FormControl
                 sx={{
                   p: 2,
-                  my: 1,
-                  mx: 1,
+                  my: 0.5,
+                  mx: 0.5,
                   width: '50%',
                   fontFamily: 'SomeType',
                 }}
@@ -100,8 +100,8 @@ const UserInfo = ({
               <FormControl
                 sx={{
                   p: 2,
-                  my: 1,
-                  mx: 1,
+                  my: 0.5,
+                  mx: 0.5,
                   width: '50%',
                   fontFamily: 'SomeType',
                 }}
@@ -117,8 +117,8 @@ const UserInfo = ({
               <FormControl
                 sx={{
                   p: 2,
-                  my: 1,
-                  mx: 1,
+                  my: 0.5,
+                  mx: 0.5,
                   width: '50%',
                   fontFamily: 'SomeType',
                 }}
@@ -151,7 +151,9 @@ const UserInfo = ({
               >
                 Bio
               </Typography>
-              <FormControl sx={{ width: '100%', fontFamily: 'SomeType' }}>
+              <FormControl
+                sx={{ width: '100%', fontFamily: 'SomeType', fontSize: '1rem' }}
+              >
                 <Input
                   id='bio'
                   name='bio'
