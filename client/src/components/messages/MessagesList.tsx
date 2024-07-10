@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, ReactElement, useContext } from 'react';
 import { UserContext } from '../UserContext';
-import Message from './Message';
 import IncomingMessage from './IncomingMessage';
 import OutgoingMessage from './OutgoingMessage';
 
