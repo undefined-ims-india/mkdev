@@ -1,5 +1,8 @@
-import React, { useEffect, useRef, ReactElement } from 'react';
+import React, { useEffect, useRef, ReactElement, useContext } from 'react';
+import { UserContext } from '../UserContext';
 import Message from './Message';
+import IncomingMessage from './IncomingMessage';
+import OutgoingMessage from './OutgoingMessage';
 
 import { Conversations } from '@prisma/client';
 import { MessageWithMetadata } from '../../../../types';
@@ -16,6 +19,7 @@ interface PropsType {
 
 const MessagesList: React.FC<PropsType> = ({ allMsgs, getAllMsgs, con }): ReactElement => {
 
+  const { userId } = useContext(UserContext)
   const latestMsgRef = useRef<HTMLLIElement>(null);
 
   // scroll to most recent message automatically
@@ -30,22 +34,47 @@ const MessagesList: React.FC<PropsType> = ({ allMsgs, getAllMsgs, con }): ReactE
       sx={{
         flexGrow: 1,
         maxHeight: '50vh',
-        overflowY: 'scroll',
+        overflowY: 'scroll'
       }}
     >
       <List>
         {
           allMsgs.map((msg, i) => {
             if (msg.conversationId === con.id) {
-              return i !== allMsgs.length - 1 ? (
-                <ListItem key={`${i}`}>
-                  <Message msg={ msg } getAllMsgs={ getAllMsgs } key={ `${msg}-${i}` }/>
-                </ListItem>
-              ) : (
-                <ListItem key={`${i}`} ref={ latestMsgRef }>
-                  <Message msg={ msg } getAllMsgs={ getAllMsgs } key={ `${msg}-${i}` }/>
-                </ListItem>
-              )
+              if (userId === msg.senderId) {
+                return i !== allMsgs.length - 1 ? (
+                  <ListItem
+                    key={`${i}`}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row-reverse'
+                    }}
+                  >
+                    <OutgoingMessage msg={ msg } getAllMsgs={ getAllMsgs } key={ `${msg}-${i}` }/>
+                  </ListItem>
+                ) : (
+                  <ListItem
+                    key={`${i}`}
+                    ref={ latestMsgRef }
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row-reverse'
+                    }}
+                  >
+                    <OutgoingMessage msg={ msg } getAllMsgs={ getAllMsgs } key={ `${msg}-${i}` }/>
+                  </ListItem>
+                )
+              } else {
+                return i !== allMsgs.length - 1 ? (
+                  <ListItem key={`${i}`}>
+                    <IncomingMessage msg={ msg } getAllMsgs={ getAllMsgs } key={ `${msg}-${i}` }/>
+                  </ListItem>
+                ) : (
+                  <ListItem key={`${i}`} ref={ latestMsgRef }>
+                    <IncomingMessage msg={ msg } getAllMsgs={ getAllMsgs } key={ `${msg}-${i}` }/>
+                  </ListItem>
+                )
+              }
             }
           })
         }
