@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Tags } from "@prisma/client";
 import { useLocation } from "react-router-dom";
 import { PostWithRelations, RepoWithFiles, SimpleUser, Comment } from "../../../../../types";
+import { UserContext } from "../../UserContext";
 
 import MarkDown from "../MarkDown";
 import RepoDisplay from "./RepoDisplay";
@@ -28,7 +29,7 @@ const FullPost = ({content, imageLink, getPost} :
         tags: Tags[]
         repo: RepoWithFiles,
         author: SimpleUser,
-        
+
         id: undefined | number,
         likedByUser: undefined | boolean,
         liked: undefined | {id: number}[],
@@ -41,6 +42,7 @@ const FullPost = ({content, imageLink, getPost} :
 
   const editMode = useLocation().pathname.includes('edit');
   const [open, setOpen] = useState(false);
+  const userId = useContext(UserContext).id
 
   const openBackdrop = () => {
     setOpen(true);
@@ -90,7 +92,7 @@ const FullPost = ({content, imageLink, getPost} :
                 <PostUserInfo author={content!.author} createdAt={content!.createdAt} />
                 <Box>
                   {editMode ? <LikeButton postID={content!.id!} liked={content!.likedByUser} numLikes={content!.liked!.length} refreshParent={getPost!} /> : <></>}
-                  {!editMode ? <ActionMenu id={content.id!} refreshParent={getPost!}/> : <></>}
+                  {!editMode && userId === content.author.id ? <ActionMenu id={content.id!} refreshParent={getPost!}/> : <></>}
                 </Box>
               </Box>
             </Box>

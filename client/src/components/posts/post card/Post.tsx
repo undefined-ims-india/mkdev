@@ -33,7 +33,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         </Grid>
         <Grid item lg={6} xs={0}/>
         <Grid item xs={3} sx={{display: 'flex', justifyContent: "end", alignItems: 'start'}}>
-          {userId === content.author.id || true ?
+          {userId === content.author.id ?
           <ActionMenu id={content.id} refreshParent={refreshParent}/>
           :
           <></>
