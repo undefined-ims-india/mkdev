@@ -16,7 +16,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper'
 
 
-export default ({handlers, content, paperStyling} :
+export default ({handlers, content, paperStyling, mode = 'post', id} :
   {
     handlers: {
       handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void,
@@ -36,7 +36,9 @@ export default ({handlers, content, paperStyling} :
         }[];
       },
     }
-    paperStyling: SxProps | undefined
+    paperStyling: SxProps | undefined,
+    mode?: 'edit' | 'post'
+    id?: number | string,
   }) => {
 
   const { title, body, selectedTags, img} = content;
@@ -107,7 +109,7 @@ export default ({handlers, content, paperStyling} :
           <></>
         }
         <Box sx={{margin: 2}}>
-          <SubmitButton {...content} />
+          <SubmitButton {...content} mode={mode} id={id} />
         </Box>
       </Box>
     </Stack>

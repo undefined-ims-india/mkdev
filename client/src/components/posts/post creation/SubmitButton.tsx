@@ -6,7 +6,7 @@ import { Tags } from '@prisma/client';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 
-export default ({title, body, img, selectedTags, repo} :
+export default ({title, body, img, selectedTags, repo, mode='post', id} :
   {
     title: string,
     body: string,
@@ -18,24 +18,40 @@ export default ({title, body, img, selectedTags, repo} :
         path: string;
         contents: string;
       }[];
-    }
+    },
+    mode: 'edit' | 'post',
+    id?: number | string,
   }) => {
 
   const navigate = useNavigate();
   const [cantSubmit, setCantSubmit] = React.useState(false)
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    setCantSubmit(true);
-    axios.postForm('/api/posts', { title, body, img, tags: JSON.stringify(selectedTags), repo: btoa(JSON.stringify(repo)) })
-      .then(() => {
-        navigate('/dashboard');
-      })
-      .catch((err) => {
-        console.error(err)
-        setCantSubmit(false);
-      });
-  };
+  const handleSubmit = mode === 'edit' ?
+      (e: any) => {
+        e.preventDefault();
+        setCantSubmit(true);
+        axios.putForm(`/api/posts/${id}`, { title, body, img, tags: JSON.stringify(selectedTags), repo: btoa(JSON.stringify(repo)) })
+          .then(() => {
+            navigate('/dashboard');
+          })
+          .catch((err) => {
+            console.error(err)
+            setCantSubmit(false);
+          });
+      }
+    :
+      (e: any) => {
+      e.preventDefault();
+        setCantSubmit(true);
+        axios.postForm('/api/posts', { title, body, img, tags: JSON.stringify(selectedTags), repo: btoa(JSON.stringify(repo)) })
+          .then(() => {
+            navigate('/dashboard');
+          })
+          .catch((err) => {
+            console.error(err)
+            setCantSubmit(false);
+          });
+      };
 
   return (
     <Tooltip disableFocusListener title={

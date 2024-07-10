@@ -1,7 +1,7 @@
 import React, {ReactElement, useContext, useState} from "react";
 import { UserContext } from '../../UserContext';
 import { PostWithRelations } from "../../../../../types";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material";
 
 import MarkDown from "../MarkDown";
@@ -28,6 +28,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
   const userId = useContext(UserContext).id;
   const [anchorEl, setAnchor] = useState<null | HTMLElement>(null)
   const open = !!anchorEl;
+  const navigate = useNavigate();
 
   const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(e.currentTarget);
@@ -45,8 +46,8 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         <Grid item lg={3} xs={9} >
           <PostUserInfo createdAt={content.createdAt} author={content.author}/>
         </Grid>
-        <Grid item lg={8} xs={2}/>
-        <Grid item xs={1} sx={{display: 'flex', justifyContent: "end", alignItems: 'start'}}>
+        <Grid item lg={6} xs={0}/>
+        <Grid item xs={3} sx={{display: 'flex', justifyContent: "end", alignItems: 'start'}}>
           {userId === content.author.id || true ?
           <>
             <IconButton onClick={openMenu}>
@@ -57,13 +58,13 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
             anchorEl={anchorEl}
             onClose={closeMenu}
             >
+              <MenuItem sx={{textDecoration: 'none'}} onClick={() => {navigate(`/post/${content.id}/edit`)}}>
+                <EditIcon/>
+                <Typography variant="body1"> Edit</Typography>
+              </MenuItem>
               <MenuItem>
                 <DeleteForeverIcon/>
                 <Typography variant="body1"> Delete</Typography>
-              </MenuItem>
-              <MenuItem>
-                <EditIcon/>
-                <Typography variant="body1"> Edit</Typography>
               </MenuItem>
             </Menu>
           </>
