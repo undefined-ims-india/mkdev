@@ -62,8 +62,6 @@ const ConversationView: React.FC<PropsType> =
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            // border: 2,
-            // borderColor: 'green'
           }}
         >
           <Box
@@ -77,17 +75,12 @@ const ConversationView: React.FC<PropsType> =
           </Box>
           <Box
             sx={{
-              // border: 2,
-              // borderColor: 'red',
               flexGrow: 1
             }}
           >
             <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
           </Box>
-          <Box sx={{
-            // border: 2,
-            // borderColor: 'yellow'
-          }}>
+          <Box>
             <MessageInput con={ con } />
           </Box>
         </Box>

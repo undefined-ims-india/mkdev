@@ -202,8 +202,6 @@ const Messages = (): ReactElement => {
           <Box                                     // top most container for ConversationList and ConversationView
             className='glass-card'
             sx={{
-              // border: 2,
-              // borderColor: 'orange',
               display: 'flex',
               minHeight: '70vh',
               mx: 2
@@ -228,8 +226,6 @@ const Messages = (): ReactElement => {
               sx={{
                 p: 2,
                 flexGrow: 1,
-                // border: 2,
-                // borderColor: 'purple'
               }}
             >
               { addingConversation ? (
