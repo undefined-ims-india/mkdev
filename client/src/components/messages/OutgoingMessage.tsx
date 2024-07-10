@@ -59,19 +59,16 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
     <Box
       sx={{
         display: 'flex',
+        flexDirection: 'row-reverse',
         minWidth: '33%',
         maxWidth: '70%',
-        border: 2,
-        borderColor: 'red'
       }}
     >
       <Box
         sx={{
-          border: 2,
-          borderColor: 'yellow',
           display: 'flex',
           flexDirection: 'column',
-          pr: 1
+          pl: 1
         }}
       >
         <Avatar src={ sender.picture! }></Avatar>
@@ -88,26 +85,26 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
       </Box>
       <Box
         sx={{
-          flexGrow: 1,
-          border: 2,
-          borderColor: 'orange'
+          flexGrow: 1
         }}
       >
-        <Typography>
+        <Typography align='right'>
           { sender.username }
         </Typography>
         <Paper
           elevation={2}
           sx={{
+            display: 'flex',
+            flexDirection: 'column',
             color:'white',
             background: '#349FDA',
             padding: 1
           }}
         >
-          <Typography>
+          <Typography align='right'>
             { body }
           </Typography>
-          <Typography variant="caption">
+          <Typography variant="caption" align='right'>
           { dayjs(createdAt).calendar() }
           </Typography>
         </Paper>
