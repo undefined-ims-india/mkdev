@@ -1,46 +1,26 @@
 import React, {ReactElement, useContext, useState} from "react";
 import { UserContext } from '../../UserContext';
 import { PostWithRelations } from "../../../../../types";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material";
-import axios from 'axios';
 
 import MarkDown from "../MarkDown";
 import PostTagsChips from "../PostTagsChips";
 import PostUserInfo from "./PostUserInfo";
 import PostComments from "./PostComments";
 import LikeButton from "./LikeButton";
+import ActionMenu from "./ActionMenu";
 
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
 
 const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
   const theme = useTheme().palette.mode;
   const userId = useContext(UserContext).id;
-  const [anchorEl, setAnchor] = useState<null | HTMLElement>(null)
-  const open = !!anchorEl;
-  const navigate = useNavigate();
-
-  const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchor(e.currentTarget);
-  }
-  const closeMenu = () => {
-    setAnchor(null);
-  }
-  const deletePost = async () => {
-    await axios.delete(`/api/posts/${content.id}`);
-    refreshParent();
-  }
 
   return (
     <>
@@ -54,25 +34,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         <Grid item lg={6} xs={0}/>
         <Grid item xs={3} sx={{display: 'flex', justifyContent: "end", alignItems: 'start'}}>
           {userId === content.author.id || true ?
-          <>
-            <IconButton onClick={openMenu}>
-              <MoreVertIcon/>
-            </IconButton>
-            <Menu
-            open={open}
-            anchorEl={anchorEl}
-            onClose={closeMenu}
-            >
-              <MenuItem sx={{textDecoration: 'none'}} onClick={() => {navigate(`/post/${content.id}/edit`)}}>
-                <EditIcon/>
-                <Typography variant="body1"> Edit</Typography>
-              </MenuItem>
-              <MenuItem onClick={deletePost}>
-                <DeleteForeverIcon/>
-                <Typography variant="body1"> Delete</Typography>
-              </MenuItem>
-            </Menu>
-          </>
+          <ActionMenu id={content.id} refreshParent={refreshParent}/>
           :
           <></>
           }
