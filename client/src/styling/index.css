@@ -71,6 +71,6 @@
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  /* backdrop-filter: invert(70%); */
+  border: 1px solid rgba(51, 50, 50, 0.354);
   background-color: rgba(216, 213, 213, 0.3);
 }
