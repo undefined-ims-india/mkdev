@@ -74,7 +74,7 @@ posts.put('/:id', async (req: any, res: any) => {
     if (req.files && req.files.img) {
       const key = await awsS3Upload(req.files.img);
       post = await prisma.post.update({
-        where: { id },
+        where: { id: +id },
         data: {
           title,
           body,
