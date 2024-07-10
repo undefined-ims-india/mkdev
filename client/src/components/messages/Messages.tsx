@@ -1,6 +1,7 @@
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, useEffect, useContext, ReactElement } from 'react';
 import ConversationList from './ConversationList';
 import ConversationView from './ConversationView';
+import { UserContext } from '../UserContext';
 
 import io from 'socket.io-client';
 import axios from 'axios';
@@ -13,18 +14,20 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import { ConversationWithParticipants } from '../../../../types';
 
 const socket = io('http://localhost:4000');
 
 const Messages = (): ReactElement => {
 
-  const [con, setCon] = useState<Conversations | null>();
+  const userId = useContext(UserContext).id;
+  const [con, setCon] = useState<ConversationWithParticipants | null>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
   const [participantsEntry, setParticipantsEntry] = useState<(string)[]>([]);
-  const [allConversations, setAllConversations] = useState<Conversations[]>([]);
-  const [visibleConversation, setVisibleConversation] = useState<Conversations | null>(null);
+  const [allConversations, setAllConversations] = useState<ConversationWithParticipants[]>([]);
+  const [visibleConversation, setVisibleConversation] = useState<ConversationWithParticipants | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
 
@@ -32,8 +35,8 @@ const Messages = (): ReactElement => {
   const getAllConversations = (): void => {
     axios
       .get('/api/conversations')
-      .then((conversations) => {
-        setAllConversations(conversations.data);
+      .then(({ data }) => {
+        setAllConversations(data);
       })
       .catch((err) => {
         setLoginError(true);
@@ -73,22 +76,31 @@ const Messages = (): ReactElement => {
     setParticipantsEntry(value);
     // iterate through participants entry and find user objects from all users
     const participantsArr: User[] = [];
-
-    // store in array to then pass in request body
     value.forEach((username) => {
       for (let i = 0; i < allUsers.length; i++) {
-        if ( allUsers[i].username === username) {
+        if (allUsers[i].username === username) {
           participantsArr.push(allUsers[i]);
         }
       }
     })
     setParticipants(participantsArr);
+  }
 
-    // set participants label
-    const label = participantsArr.reduce((acc, curr) => {
-        return acc.concat(`${curr.username}, `)
-    }, '');
-    setParticipantsLabel(label.slice(0, label.length - 2));
+  const generateConversationLabel = (con: Conversations): void => {
+    axios
+      .get(`/api/conversations/label/${con.id}`)
+      .then(({ data }) => {
+        let label = '';
+        for (let i = 0; i < data.participants.length; i++) {
+          if (data.participants[i].id !== userId) {
+            label += `${data.participants[i].username}, `
+          }
+        }
+        setParticipantsLabel(label.slice(0, label.length - 2))
+      })
+      .catch((err) => {
+        console.error('Failed to generate conversation label', err);
+      })
   }
 
   const addConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -104,16 +116,19 @@ const Messages = (): ReactElement => {
     axios
       .post('/api/conversations', {
         participants: participants, // users that sender enters
-        label: participantsLabel
       })
-      .then((conversation) => {
-        setCon(conversation.data);
-
+      .then(({ data }) => {
+        generateConversationLabel(data);
+        return data;
+      })
+      .then((data) => {
+        setCon(data);
+        return data;
+      })
+      .then((data) => {
         socket.emit('add-conversation', {
-          id: conversation.data.id
+          id: data.id
         });
-      })
-      .then(() => {
         setAddingConversation(false);
         getAllConversations();
         setParticipantsEntry([]);
@@ -123,13 +138,14 @@ const Messages = (): ReactElement => {
       });
   }
 
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null): void => {
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null): void => {
     if (addingConversation) {
       setAddingConversation(false);
     }
     setCon(newCon);
     if (newCon) {
-      setParticipantsLabel(newCon!.label);
+      // set label at top of conversation
+      generateConversationLabel(newCon);
     }
     setVisibleConversation(newCon);
   }
@@ -140,7 +156,7 @@ const Messages = (): ReactElement => {
   }
 
   // add emitted conversation to allConversations
-  socket.on('add-conversation', (conversation: Conversations): void => {
+  socket.on('add-conversation', (conversation: ConversationWithParticipants): void => {
     setAllConversations([...allConversations, conversation]);
     getAllConversations();
   })
@@ -158,7 +174,7 @@ const Messages = (): ReactElement => {
         <>
           <Grid container>
             <Grid item>
-              <Typography variant="h1">
+              <Typography variant="h3">
                 You must be logged in to view conversations
               </Typography>
             </Grid>
@@ -232,7 +248,7 @@ const Messages = (): ReactElement => {
                         />
                       )}
                     />
-                    <Button onClick={ addConversation }>Add Conversation</Button>
+                    <Button onClick={ addConversation } variant='contained'>Create</Button>
                   </form>
                 ) : ('')
               }
