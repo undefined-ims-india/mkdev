@@ -42,7 +42,7 @@ const Conversation: React.FC<PropsType> =
     if (con.participants) {
       let label = '';
       for (let i = 0; i < con.participants.length; i++) {
-        if (con.participants[i].id !== userId) {
+        if (con.participants[i].id !== user.id) {
           label += `${con.participants[i].username}, `
         }
       }
