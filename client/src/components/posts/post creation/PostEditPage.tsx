@@ -73,7 +73,6 @@ export default (): ReactElement => {
       setTitle(data.title);
       setBody(data.body);
       setImgLink(`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${data.s3_key}`);
-      console.log(data.s3_key)
       setRepo(data.repo || repo);
       setSelectedTags(data.tags);
       setLiked(data.liked);
