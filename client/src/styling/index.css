@@ -48,3 +48,16 @@
   height: 100px;
 
 }
+
+.largeDevices {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .largeDevices {
+    display: block;
+  }
+  .smallDevices {
+    display: none;
+  }
+}
