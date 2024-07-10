@@ -18,7 +18,7 @@ interface PropsType {
 
 const MessagesList: React.FC<PropsType> = ({ allMsgs, getAllMsgs, con }): ReactElement => {
 
-  const { userId } = useContext(UserContext)
+  const userId = useContext(UserContext).id;
   const latestMsgRef = useRef<HTMLLIElement>(null);
 
   // scroll to most recent message automatically
