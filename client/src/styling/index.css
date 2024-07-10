@@ -65,7 +65,7 @@
 ::-webkit-scrollbar-thumb {
   backdrop-filter: blur(14px);
   background-color: rgba(17, 25, 40, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.125);
+  border: 1px solid rgba(255, 255, 255, 0.354);
   border-radius: 10px;
 }
 
