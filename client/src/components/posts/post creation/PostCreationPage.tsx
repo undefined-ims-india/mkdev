@@ -1,15 +1,13 @@
-import React, { ReactElement, useState, useCallback, useContext } from 'react';
+import React, { ReactElement, useState, useCallback, useContext, useEffect } from 'react';
 import { Tags } from '@prisma/client';
+import { useNavigate } from 'react-router-dom';
 
-import MarkDown from '../MarkDown';
 import Repo from './Repo';
-import PostTagsChips from '../PostTagsChips';
 import InputTab from './InputTab';
 import FullPost from '../full post/FullPost';
 import { UserContext } from '../../UserContext';
 
 import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography';
@@ -29,6 +27,7 @@ const PostCreationPage = (): ReactElement => {
   const [repo, setRepo]: [{link: string, files: { path: string; contents: string }[]},Function] = useState({link:'', files:[]});
   const [currentTab, setCurrentTab] = useState('0');
   const [selectedTags, setSelectedTags]: [Tags[], Function] = useState([]);
+  const navigate = useNavigate();
 
   const paperStyling = { padding: 2, minHeight: '6rem'};
 
@@ -63,6 +62,10 @@ const PostCreationPage = (): ReactElement => {
   const saveRepo = (link: string) => {
     setRepo({...repo, link})
   };
+
+  useEffect(() => {
+    if (user.id < 1) { navigate('/dashboard')}
+  }, [])
 
   const content = { title, body, img, selectedTags, repo};
   const handlers = { handleFile, handleTagSelect, handleTextInput}

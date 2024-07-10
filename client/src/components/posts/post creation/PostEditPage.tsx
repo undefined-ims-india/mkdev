@@ -2,6 +2,7 @@ import React, { ReactElement, useState, useCallback, useContext, useEffect } fro
 import { Tags } from '@prisma/client';
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 import Repo from './Repo';
 import InputTab from './InputTab';
@@ -31,6 +32,7 @@ export default (): ReactElement => {
   const [selectedTags, setSelectedTags]: [Tags[], Function] = useState([]);
   const [imgLink, setImgLink] = useState('');
   const [liked, setLiked] = useState([])
+  const navigate = useNavigate()
 
   const paperStyling = { padding: 2, minHeight: '6rem'};
 
@@ -70,6 +72,7 @@ export default (): ReactElement => {
   useEffect(() => {
     axios.get(`/api/posts/${postID}`)
     .then(({data}) => {
+      if (user.id !== data.author.id) { navigate('/dashboard'); return;}
       setTitle(data.title);
       setBody(data.body);
       setImgLink(`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${data.s3_key}`);
