@@ -1,4 +1,4 @@
-import { User, Post, Tags, Blog, Repo, File, Messages } from '@prisma/client';
+import { User, Post, Tags, Blog, Repo, File, Messages, Conversations } from '@prisma/client';
 import { Request } from 'express';
 
 export interface RequestWithUser extends Request {
@@ -46,6 +46,10 @@ export interface RepoWithFiles extends Repo {
 
 export interface MessageWithMetadata extends Messages {
   sender: User;
+}
+
+export interface ConversationWithParticipants extends Conversations {
+  participants: User[];
 }
 
 export interface BlogPosts {

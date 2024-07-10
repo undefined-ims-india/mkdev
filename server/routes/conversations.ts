@@ -9,7 +9,8 @@ const prisma = new PrismaClient();
 // create a conversation
 conversations.post('/', async (req: any, res: Response) => {
   const { user } = req; // sends the message
-  const { participants, label } = req.body;
+  // const { participants, label } = req.body;
+  const { participants } = req.body;
 
   // map new array from submitted usernames
   const connectArr = participants.map((user: User) => {
@@ -19,7 +20,6 @@ conversations.post('/', async (req: any, res: Response) => {
   // a conversation is created, then the id is sent back to frontend
   prisma.conversations.create({
     data: {
-      label,
       participants: {
         connect: [ { id: user.id }, ...connectArr],
       },
@@ -60,7 +60,8 @@ conversations.get('/', async (req: any, res: Response) => {
       include: {
         participants: {
           select: {
-            name: true,
+            id: true,
+            username: true,
           }
         }
       },
@@ -74,6 +75,26 @@ conversations.get('/', async (req: any, res: Response) => {
   }
 
 });
+
+conversations.get('/label/:id', (req: any, res: any) => {
+  const { id } = req.params;
+  // generate label for conversation
+  prisma.conversations.findFirst({
+    where: {
+      id: +id
+    },
+    select: {
+      participants: true
+    }
+  })
+  .then((data) => {
+    res.status(200).send(data);
+  })
+  .catch((err) => {
+    console.error('Failed to get conversation label', err);
+    res.sendStatus(500);
+  })
+})
 
 // delete a specific conversation
 conversations.delete('/:id', (req: Request, res: Response) => {
