@@ -1,11 +1,7 @@
-import React, {ReactElement, useContext} from "react";
+import React, {ReactElement, useContext, useState} from "react";
 import { UserContext } from '../../UserContext';
 import { PostWithRelations } from "../../../../../types";
 import { Link } from "react-router-dom";
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
-import axios from 'axios';
 import { useTheme } from "@mui/material";
 
 import MarkDown from "../MarkDown";
@@ -15,23 +11,30 @@ import PostComments from "./PostComments";
 import LikeButton from "./LikeButton";
 
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
-import Box from '@mui/material/Box'
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import Button from '@mui/material/Button'
-import Grid from '@mui/material/Grid'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Post = ({content, refreshParent} : {content: PostWithRelations, refreshParent: Function}): ReactElement => {
 
-  const userId = useContext(UserContext).id;
   const theme = useTheme().palette.mode;
+  const userId = useContext(UserContext).id;
+  const [anchorEl, setAnchor] = useState<null | HTMLElement>(null)
+  const open = !!anchorEl;
 
-  const handleLike = () => {
-    axios.patch(`/api/posts/${content!.id}/${content!.likedByUser ? 'dislike' : 'like'}`)
-      .then(() => {refreshParent()})
-  };
+  const openMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchor(e.currentTarget);
+  }
+  const closeMenu = () => {
+    setAnchor(null);
+  }
 
   return (
     <>
@@ -39,10 +42,35 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
         {content!.s3_key ? <img alt="cover image" src={`https://mkdev-ims-india.s3.us-east-2.amazonaws.com/${content!.s3_key}`} /> : <></>}
       </Box>
       <Grid container spacing={0} sx={{background: theme === 'light' ? 'white' : '#171717', padding: '1vh',}} className={content.s3_key ? "" : "top-curve"}>
-        <Grid item lg={3} xs={12} >
+        <Grid item lg={3} xs={9} >
           <PostUserInfo createdAt={content.createdAt} author={content.author}/>
         </Grid>
-        <Grid item lg={9} xs={0}/>
+        <Grid item lg={8} xs={2}/>
+        <Grid item xs={1} sx={{display: 'flex', justifyContent: "end", alignItems: 'start'}}>
+          {userId === content.author.id || true ?
+          <>
+            <IconButton onClick={openMenu}>
+              <MoreVertIcon/>
+            </IconButton>
+            <Menu
+            open={open}
+            anchorEl={anchorEl}
+            onClose={closeMenu}
+            >
+              <MenuItem>
+                <DeleteForeverIcon/>
+                <Typography variant="body1"> Delete</Typography>
+              </MenuItem>
+              <MenuItem>
+                <EditIcon/>
+                <Typography variant="body1"> Edit</Typography>
+              </MenuItem>
+            </Menu>
+          </>
+          :
+          <></>
+          }
+        </Grid>
         <Grid item xs={12} sx={{overflow: 'wrap'}}>
           <MarkDown text={content.title} />
         </Grid>
