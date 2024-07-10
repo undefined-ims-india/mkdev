@@ -160,14 +160,6 @@ const Messages = (): ReactElement => {
     getAllConversations();
   })
 
-  // disable horizontal and vertical scroll on body for this component
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-        document.body.style.overflow = "scroll"
-    };
-  }, []);
-
   return (
     <Box>
       <Box
