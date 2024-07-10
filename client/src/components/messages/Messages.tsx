@@ -20,7 +20,7 @@ const socket = io('http://localhost:4000');
 
 const Messages = (): ReactElement => {
 
-  const { userId } = useContext(UserContext);
+  const userId = useContext(UserContext).id;
   const [con, setCon] = useState<ConversationWithParticipants | null>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);

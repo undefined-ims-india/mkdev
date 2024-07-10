@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 
 export default ({postID, liked, numLikes, refreshParent} : {postID: number, liked: boolean | undefined, numLikes: number, refreshParent : Function}) => {
 
-  const { userId } = useContext(UserContext);
+  const user = useContext(UserContext);
 
   const handleLike = () => {
     axios.patch(`/api/posts/${postID}/${liked ? 'dislike' : 'like'}`)
@@ -19,7 +19,7 @@ export default ({postID, liked, numLikes, refreshParent} : {postID: number, like
 
   return (
     <Box sx={{display: "flex", flexDirection: "row", alignItems: 'center'}}>
-      <IconButton aria-label='Like' onClick={handleLike} disabled={!userId}>
+      <IconButton aria-label='Like' onClick={handleLike} disabled={!user.id}>
         {liked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
       </IconButton>
       <Typography variant="body1">{numLikes}</Typography>

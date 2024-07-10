@@ -33,7 +33,7 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
   } = msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
-  const loggedInUser = useContext(UserContext).userId;
+  const loggedInUser = useContext(UserContext).id;
 
   const handleLike = () => {
     axios
