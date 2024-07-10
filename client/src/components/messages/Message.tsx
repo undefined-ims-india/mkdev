@@ -29,7 +29,8 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
     liked,
     createdAt,
     senderId,
-    sender } = msg;
+    sender
+  } = msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
   const loggedInUser = useContext(UserContext).id;
