@@ -8,6 +8,7 @@ import RepoDisplay from "./RepoDisplay";
 import PostComments from '../post card/PostComments';
 import PostUserInfo from '../post card/PostUserInfo'
 import LikeButton from "../post card/LikeButton";
+import ActionMenu from "../post card/ActionMenu";
 
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -85,8 +86,13 @@ const FullPost = ({content, imageLink, getPost} :
                 alignItems: "center",
               }}
             >
-              <PostUserInfo author={content!.author} createdAt={content!.createdAt} />
-              {editMode ? <LikeButton postID={content!.id!} liked={content!.likedByUser} numLikes={content!.liked!.length} refreshParent={getPost!} /> : <></>}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', flexGrow: 1}}>
+                <PostUserInfo author={content!.author} createdAt={content!.createdAt} />
+                <Box>
+                  {editMode ? <LikeButton postID={content!.id!} liked={content!.likedByUser} numLikes={content!.liked!.length} refreshParent={getPost!} /> : <></>}
+                  {!editMode ? <ActionMenu id={content.id!} refreshParent={getPost!}/> : <></>}
+                </Box>
+              </Box>
             </Box>
             <Box
               sx={{ display: "flex", flexDirection: "column", marginLeft: 2 }}
