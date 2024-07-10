@@ -23,7 +23,7 @@ import Badge from '@mui/material/Badge';
 const socket = io('http://localhost:4000');
 
 const Nav = (): ReactElement => {
-  const {userId, userImage} = useContext(UserContext);
+  const user = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
   const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
@@ -34,7 +34,7 @@ const Nav = (): ReactElement => {
   // count total unread messages for logged in user
   useEffect(() => {
     axios
-      .get(`/api/users/unread/${userId}`)
+      .get(`/api/users/unread/${user.id}`)
       .then(({ data }): void => {
         if (data > 0) {
           setIsHidden(false);
@@ -78,7 +78,7 @@ const Nav = (): ReactElement => {
             <Grid item lg={8} xs={4} />
             <Grid item lg={2} xs={6}>
               <Box sx={{display: 'flex', flexDirection:'row', justifyContent:'end', alignItems:'center', height: '100%'}}>
-                {!!userId ?
+                {!!user.id ?
                   (
                     <>
                       <IconButton onClick={() => {navigate('/create-post')}}>
@@ -92,11 +92,11 @@ const Nav = (): ReactElement => {
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
                       </IconButton>
                       <Button onClick={handleOpen} sx={{ padding: 0, border: 'none', background: 'none' }}>
-                        <Avatar src={userImage}/>
+                        <Avatar src={user.picture}/>
                       </Button>
                       <Menu open={open} anchorEl={anchorEl} onClose={handleClose} sx={{zIndex: 11}}>
                         <MenuItem>
-                          <Button onClick={() => { navigate(`/user/${userId}/profile`)}}>Profile</Button>
+                          <Button onClick={() => { navigate(`/user/${user.id}/profile`)}}>Profile</Button>
                         </MenuItem>
                         <MenuItem>
                           <Button onClick={() => { navigate(`/messages`)}}>Messages</Button>
