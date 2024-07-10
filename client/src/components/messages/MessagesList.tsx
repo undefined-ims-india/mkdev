@@ -21,7 +21,7 @@ const MessagesList: React.FC<PropsType> = ({ allMsgs, getAllMsgs, con }): ReactE
   // scroll to most recent message automatically
   useEffect(() => {
     if (latestMsgRef.current) {
-      latestMsgRef.current.scrollIntoView();
+      latestMsgRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [allMsgs])
 
@@ -30,7 +30,7 @@ const MessagesList: React.FC<PropsType> = ({ allMsgs, getAllMsgs, con }): ReactE
       sx={{
         flexGrow: 1,
         maxHeight: '50vh',
-        overflow: 'auto',
+        overflowY: 'scroll',
       }}
     >
       <List>
