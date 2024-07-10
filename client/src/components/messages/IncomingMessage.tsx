@@ -61,14 +61,10 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
         display: 'flex',
         minWidth: '33%',
         maxWidth: '70%',
-        border: 2,
-        borderColor: 'red'
       }}
     >
       <Box
         sx={{
-          border: 2,
-          borderColor: 'yellow',
           display: 'flex',
           flexDirection: 'column',
           pr: 1
@@ -88,9 +84,7 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
       </Box>
       <Box
         sx={{
-          flexGrow: 1,
-          border: 2,
-          borderColor: 'orange'
+          flexGrow: 1
         }}
       >
         <Typography>
