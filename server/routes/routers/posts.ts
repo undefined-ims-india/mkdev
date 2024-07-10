@@ -220,7 +220,7 @@ posts.patch('/:id', (req: any, res: any) => {
 posts.delete('/:id', (req: any, res: any) => {
   const { id }: { id: string } = req.params;
   prisma.post
-    .delete({ where: { userId: req.user.id, id: +id } })
+    .delete({ where: { id: +id } })
     .then(() => {
       res.sendStatus(200);
     })

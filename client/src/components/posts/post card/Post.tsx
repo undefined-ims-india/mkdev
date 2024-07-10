@@ -3,6 +3,7 @@ import { UserContext } from '../../UserContext';
 import { PostWithRelations } from "../../../../../types";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material";
+import axios from 'axios';
 
 import MarkDown from "../MarkDown";
 import PostTagsChips from "../PostTagsChips";
@@ -36,6 +37,10 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
   const closeMenu = () => {
     setAnchor(null);
   }
+  const deletePost = async () => {
+    await axios.delete(`/api/posts/${content.id}`);
+    refreshParent();
+  }
 
   return (
     <>
@@ -62,7 +67,7 @@ const Post = ({content, refreshParent} : {content: PostWithRelations, refreshPar
                 <EditIcon/>
                 <Typography variant="body1"> Edit</Typography>
               </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={deletePost}>
                 <DeleteForeverIcon/>
                 <Typography variant="body1"> Delete</Typography>
               </MenuItem>
