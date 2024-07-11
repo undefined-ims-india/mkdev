@@ -214,13 +214,21 @@ const Messages = (): ReactElement => {
                 borderColor: 'rgba(255, 255, 255, 0.125)',
               }}
             >
-              <ConversationList
-                allCons={ allConversations }
-                visibleCon={ visibleConversation }
-                setCons={ getAllConversations }
-                select={ selectConversation }
-                deleteCon={ deleteConversation }
-              />
+              {
+                allConversations.length ? (
+                  <ConversationList
+                    allCons={ allConversations }
+                    visibleCon={ visibleConversation }
+                    setCons={ getAllConversations }
+                    select={ selectConversation }
+                    deleteCon={ deleteConversation }
+                  />
+                ) : (
+                  <Typography sx={{ border: 1, borderColor: 'red' }}>
+                    No conversations yet
+                  </Typography>
+                )
+              }
             </Box>
             <Box                              // ConversationView container
               sx={{
