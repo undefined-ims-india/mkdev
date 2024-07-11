@@ -47,27 +47,17 @@ const Welcome = () => {
             >
             Welcome to
           </Typography>
-
+          <Box sx={{alignSelf: 'center', display: 'flex', justifyContent: 'center'}}>
+            <img src="/img/mkdev_1200x600.gif" alt="mkdev logo" style={{width: '40vw', maxWidth: '600px'}} />
+          </Box>
           <Typography
             variant='h1'
             align='center'
-            sx={{
-              fontFamily: 'Roboto',
-              fontSize: '7rem',
-              fontWeight: 'bold',
-            }}
-            >
-            MKDEV
-          </Typography>
-          <Typography
-            variant='h1'
-            align='center'
-            gutterBottom
             sx={{
               fontFamily: 'Roboto',
               fontSize: '2rem',
               fontWeight: 'bold',
-              mb: 3,
+              my: 3,
             }}
             >
             A Platform For Developers To Connect And Share Their Work

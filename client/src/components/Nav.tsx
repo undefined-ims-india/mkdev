@@ -64,7 +64,7 @@ const Nav = (): ReactElement => {
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar enableColorOnDark sx={{
-          backgroundColor: theme === 'light' ? 'rgba(90, 217, 219, .3)' : 'rgba(51, 34, 77, .6)',
+          backgroundColor: theme === 'light' ? 'rgb(135, 231, 186, .4)' : 'rgb(76, 194, 137,.4)',
           backdropFilter: 'blur(14px) saturate(180%)',
           zIndex: '10',
           height: '70px'
@@ -74,7 +74,7 @@ const Nav = (): ReactElement => {
             <Grid item xs={2}>
               <Box sx={{display: 'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', marginX: 2}}>
                 <Button onClick={() => {navigate('/dashboard')}} >
-                  <img src="/img/mkdev-logo-square.gif" alt="mkdev logo" style={{height: '60px', width: '60px'}}/>
+                  <img src="/img/mkdev_1200x600.gif" alt="mkdev logo" style={{height: '60px'}}/>
                 </Button>
               </Box>
             </Grid>
@@ -84,15 +84,15 @@ const Nav = (): ReactElement => {
                 {!!user.id ?
                   (
                     <>
-                      <IconButton onClick={() => {navigate('/create-post')}}>
-                        <AddBoxIcon fontSize="medium" />
-                        <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
-                      </IconButton>
-                      <IconButton onClick={() => {navigate('/messages')}} sx={{color: 'aliceblue'}}>
+                      <IconButton onClick={() => {navigate('/messages')}} sx={{color: useTheme().palette.secondary.main}}>
                         <Badge badgeContent={unreadMsgs} invisible={isHidden} color="warning">
                           <InboxIcon fontSize="medium" />
                         </Badge>
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
+                      </IconButton>
+                      <IconButton onClick={() => {navigate('/create-post')}} sx={{color: useTheme().palette.secondary.main}}>
+                        <AddBoxIcon fontSize="medium" />
+                        <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
                       </IconButton>
                       <Button onClick={handleOpen} sx={{ padding: 0, border: 'none', background: 'none' }}>
                         <Avatar src={user.picture}/>
@@ -116,10 +116,10 @@ const Nav = (): ReactElement => {
                   )
                 :
                   (
-                    <>
-                      <Button onClick={() => {navigate('/login')}} size='large'>Login</Button>
+                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                      <Button onClick={() => {navigate('/login')}} size='large' sx={{color: useTheme().palette.secondary.main}}>Login</Button>
                       <ThemeToggle />
-                    </>
+                    </Box>
                   )
                 }
               </Box>
