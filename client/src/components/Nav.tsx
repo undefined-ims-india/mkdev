@@ -41,6 +41,9 @@ const Nav = (): ReactElement => {
         }
         setUnreadMsgs(data);
       })
+      .catch((err) => {
+        console.error('Failed to get unread message total for user:\n', err);
+      })
   }, [unreadMsgs])
 
   socket.on('read-message', () => {

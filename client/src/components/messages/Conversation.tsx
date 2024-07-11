@@ -54,11 +54,16 @@ const Conversation: React.FC<PropsType> =
   const [label, setLabel] = useState(generateConversationLabel(con));
 
   const getUnreadMsgsTotal = (conversationId: number, userId: number) => {
-    axios
-      .get(`/api/messages/unread/${conversationId}/${userId}`)
-      .then(({ data }): void => {
-        setUnreadMsgsTotal(data);
-      })
+    if (con.id) {
+      axios
+        .get(`/api/messages/unread/${conversationId}/${userId}`)
+        .then(({ data }): void => {
+          setUnreadMsgsTotal(data);
+        })
+        .catch((err) => {
+          console.error(`Failed to get unread message total for conversation ${con.id}:`, err);
+        })
+    }
   }
 
   const markAllMsgsRead = (userId: number, conId: number): void => {
