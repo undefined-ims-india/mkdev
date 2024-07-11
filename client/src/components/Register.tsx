@@ -6,28 +6,31 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { TextField } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
 const Register = (): ReactElement => {
   const navigate = useNavigate();
 
-  const [userInfo, setUserInfo] = useState({
+  const [newUser, setNewUser] = useState({
     email: '',
     password: '',
     username: '',
-    name: '',
     firstName: '',
     lastName: '',
+    name: '',
+    picture: '',
   });
 
+  newUser.name = `${newUser.firstName} ${newUser.lastName}`;
+
   const handleChange = (e: any) => {
-    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+    setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post('api/users', userInfo);
+      await axios.post('/api/users', newUser);
       navigate('/login');
     } catch (error) {
       console.error(error);

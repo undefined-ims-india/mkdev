@@ -13,7 +13,6 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 
 const Login = (): ReactElement => {
-  const user = useContext(UserContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,19 +21,19 @@ const Login = (): ReactElement => {
     navigate('/Register');
   };
 
-  const login = async (e: React.FormEvent) => {
+  const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/api/login', { email, password });
-      if (data.success) {
-        navigate('/dashboard');
-      } else {
-        console.error('Login failed:', data.message);
-      }
-    } catch (err) {
-      console.error(err);
+      const response = await axios.post('/login', {
+        email: email,
+        password: password,
+      });
+      console.log('response', response);
+    } catch (error) {
+      console.error(error);
     }
   };
+
   return (
     <Box
       display='flex'
