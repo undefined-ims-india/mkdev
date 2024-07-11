@@ -11,11 +11,12 @@ import Logout from './Logout';
 import Search from './Search';
 import Messages from './messages/Messages';
 import Profile from './profile/UserProfile';
-import FullPost from './posts/full post/FullPost';
+import FullPostPage from './posts/full post/FullPostPage';
 import SearchResults from './SearchResults';
 import Welcome from './Welcome';
 import Signup from './Survey';
 import Register from './Register';
+import PostEditPage from './posts/post creation/PostEditPage';
 
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -58,7 +59,7 @@ const routes = [
   },
   {
     path: '/post/:id',
-    element: <FullPost />,
+    element: <FullPostPage />,
   },
   {
     path: '/searchresults/:tagType/:tags',
@@ -71,6 +72,10 @@ const routes = [
   {
     path: '/register',
     element: <Register />,
+  },
+  {
+    path: '/post/:id/edit',
+    element: <PostEditPage />,
   },
 ];
 

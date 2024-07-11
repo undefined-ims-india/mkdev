@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, ReactElement } from 'react';
+import React, { useState, useContext, ReactElement } from 'react';
 import { UserContext } from '../UserContext';
 import axios from 'axios';
 import ConversationDelConf from './ConversationDelConf';
@@ -12,13 +12,14 @@ import Badge from '@mui/material/Badge';
 
 import { Conversations } from '@prisma/client';
 import { Typography } from '@mui/material';
+import { ConversationWithParticipants } from '../../../../types';
 
 const socket = io('http://localhost:4000');
 
 interface PropsType {
-  con: Conversations;
+  con: ConversationWithParticipants;
   visibleCon: Conversations | null,
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null) => void;
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
   setCons: () => void;
   deleteCon: () => void;
 }
@@ -32,10 +33,25 @@ const Conversation: React.FC<PropsType> =
     deleteCon
   }): ReactElement => {
 
-  const { userId } = useContext(UserContext);
+  const user = useContext(UserContext);
   const [unreadMsgsTotal, setUnreadMsgsTotal] = useState<React.ReactNode>(0);
   const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
+
+  const generateConversationLabel = (con: ConversationWithParticipants): string => {
+    if (con.participants) {
+      let label = '';
+      for (let i = 0; i < con.participants.length; i++) {
+        if (con.participants[i].id !== user.id) {
+          label += `${con.participants[i].username}, `
+        }
+      }
+      return label.slice(0, label.length - 2)
+    } else {
+      return '';
+    }
+  }
+  const [label, setLabel] = useState(generateConversationLabel(con));
 
   const getUnreadMsgsTotal = (conversationId: number, userId: number) => {
     axios
@@ -68,29 +84,29 @@ const Conversation: React.FC<PropsType> =
           // don't show the badge
           setIsHidden(true);
           // and mark all messages as read
-          markAllMsgsRead(userId, con.id);
+          markAllMsgsRead(user.id, con.id);
         } else {
           // make sure badge is showing
           setIsHidden(false);
           // get total number of unread messages in the conversation
-          getUnreadMsgsTotal(con.id, userId);
+          getUnreadMsgsTotal(con.id, user.id);
         }
         // else is message is received in another message
       } else if (visibleCon.id !== message.conversationId) {
         // make sure badge is showing
         setIsHidden(false);
         // get total number of unread messages in the conversation
-        getUnreadMsgsTotal(con.id, userId);
+        getUnreadMsgsTotal(con.id, user.id);
       }
     } else { // no conversation is is view
-      getUnreadMsgsTotal(con.id, userId);
+      getUnreadMsgsTotal(con.id, user.id);
     }
   })
 
   // pass selected conversation id to Messages component, set selected conversation as visible
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations): void => {
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants): void => {
     select(e, newCon);
-    markAllMsgsRead(userId, con.id);
+    markAllMsgsRead(user.id, con.id);
   }
 
   // show delete conversation confirmation dialog
@@ -120,7 +136,7 @@ const Conversation: React.FC<PropsType> =
               noWrap
               align='left'
             >
-              { con.label }
+              { label }
             </Typography>
           </Button>
           <Button onClick={ handleDelete }>
