@@ -16,22 +16,25 @@ enum TagType {
 //Posts that will show up on feed based on the tags a user has saved
 model Post {
   id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
+  title     String   @default("") @db.VarChar(255)
   body      String
   userId    Int
-  s3_Etag   String?
+  s3_key    String?
   repo      Repo?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation("UserPosts", fields: [userId], references: [id])
   liked     User[]   @relation("LikedPosts")
   tags      Tags[]   @relation("PostToTags")
+  postId    Int?
+  comments  Post[]   @relation("PostComments")
+  commentOn Post?    @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Repo {
   id     Int    @id @default(autoincrement())
   postId Int    @unique
-  post   Post   @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   link   String
   files  File[]
 }
@@ -40,7 +43,6 @@ model File {
   id        Int      @id @default(autoincrement())
   repoId    Int      @unique
   repo      Repo     @relation(fields: [repoId], references: [id])
-  star      Boolean  @default(false)
   path      String
   contents  String
   createdAt DateTime @default(now())
@@ -49,22 +51,24 @@ model File {
 model User {
   id             Int             @id @default(autoincrement())
   name           String
-  username       String?         @unique
+  username       String          @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
   devId          String?         @unique
   mediumId       String?         @unique
   githubId       String?         @unique
   aboutMe        String?
-  picture        String?
+  bio            String?
+  picture        String          @default("")
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
   blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
-  posts          Post[]          @relation("UserPosts")
+  unreadMessages Messages[]      @relation("UnreadMessages")
   conversations  Conversations[] @relation("ConversationsToUser")
+  posts          Post[]          @relation("UserPosts")
   likedPosts     Post[]          @relation("LikedPosts")
   tags           Tags[]          @relation("TagsToUser")
   followedBy     User[]          @relation("UserFollows")
@@ -95,15 +99,16 @@ model Messages {
   id             Int           @id @default(autoincrement())
   body           String
   liked          Boolean       @default(false)
+  unreadBy       User[]        @relation("UnreadMessages")
+  createdAt      DateTime      @default(now())
   senderId       Int
   conversationId Int
   conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender         User          @relation(fields: [senderId], references: [id])
+  sender         User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
 
 model Conversations {
   id           Int        @id @default(autoincrement())
-  label        String
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
 }

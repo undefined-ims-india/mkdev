@@ -1,18 +1,21 @@
 import React, { ReactElement, useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserContext } from './UserContext';
+import { UserContext } from '../UserContext';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 
 const Follow = (): ReactElement => {
-  const userId = useContext(UserContext);
+  const userId = useContext(UserContext).id;
   const { id } = useParams();
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
-    axios.get(`/api/follows/isFollowing/${id}`).then(({ data }) => {
-      setIsFollowing(data.isFollowing);
-    });
+    axios
+      .get(`/api/follows/isFollowing/${id}`)
+      .then(({ data }) => {
+        setIsFollowing(data.isFollowing);
+      })
+      .catch((err) => console.error(err));
   }, []);
 
   const follow = () => {

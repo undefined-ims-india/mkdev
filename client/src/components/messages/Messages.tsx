@@ -1,31 +1,32 @@
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, useEffect, useContext, ReactElement } from 'react';
 import ConversationList from './ConversationList';
 import ConversationView from './ConversationView';
+import { UserContext } from '../UserContext';
 
 import io from 'socket.io-client';
 import axios from 'axios';
 import { User, Conversations } from '@prisma/client';
+import { ConversationWithParticipants } from '../../../../types';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 
-const socket = io('https://mkdev.dev:4000', {
-  withCredentials: true,
-});
+const socket = io('https://mkdev.dev');
 
 const Messages = (): ReactElement => {
 
-  const [con, setCon] = useState<Conversations | null>();
+  const userId = useContext(UserContext).id;
+  const [con, setCon] = useState<ConversationWithParticipants | null>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
-  const [participantsEntry, setParticipantsEntry] = useState<(string | null)[]>([]);
-  const [allConversations, setAllConversations] = useState<Conversations[]>([]);
+  const [participantsEntry, setParticipantsEntry] = useState<(string)[]>([]);
+  const [allConversations, setAllConversations] = useState<ConversationWithParticipants[]>([]);
+  const [visibleConversation, setVisibleConversation] = useState<ConversationWithParticipants | null>(null);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
 
@@ -33,8 +34,8 @@ const Messages = (): ReactElement => {
   const getAllConversations = (): void => {
     axios
       .get('/api/conversations')
-      .then((conversations) => {
-        setAllConversations(conversations.data);
+      .then(({ data }) => {
+        setAllConversations(data);
       })
       .catch((err) => {
         setLoginError(true);
@@ -70,34 +71,43 @@ const Messages = (): ReactElement => {
     setAddingConversation(true);
   }
 
-  const changeParticipants = (e: any, value: (string | null)[] ): void => {
+  const changeParticipants = (e: any, value: (string)[] ): void => {
     setParticipantsEntry(value);
     // iterate through participants entry and find user objects from all users
     const participantsArr: User[] = [];
-
-    // store in array to then pass in request body
     value.forEach((username) => {
       for (let i = 0; i < allUsers.length; i++) {
-        if ( allUsers[i].username === username) {
+        if (allUsers[i].username === username) {
           participantsArr.push(allUsers[i]);
         }
       }
     })
     setParticipants(participantsArr);
+  }
 
-    // set participants label
-    const label = participantsArr.reduce((acc, curr) => {
-        return acc.concat(`${curr.username}, `)
-    }, '');
-    setParticipantsLabel(label.slice(0, label.length - 2));
+  const generateConversationLabel = (con: Conversations): void => {
+    axios
+      .get(`/api/conversations/label/${con.id}`)
+      .then(({ data }) => {
+        let label = '';
+        for (let i = 0; i < data.participants.length; i++) {
+          if (data.participants[i].id !== userId) {
+            label += `${data.participants[i].username}, `
+          }
+        }
+        setParticipantsLabel(label.slice(0, label.length - 2))
+      })
+      .catch((err) => {
+        console.error('Failed to generate conversation label', err);
+      })
   }
 
   const addConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
     e.preventDefault();
 
     // TODO: check if participants has length 0 -> if length 0, prompt user to add usernames. can't create conv without participants
-    // use mui textfield error
     if (!participants.length) {
+      // use mui textfield error -> update a state variable responsible for showing error
       return;
     }
 
@@ -105,16 +115,19 @@ const Messages = (): ReactElement => {
     axios
       .post('/api/conversations', {
         participants: participants, // users that sender enters
-        label: participantsLabel
       })
-      .then((conversation) => {
-        setCon(conversation.data);
-
+      .then(({ data }) => {
+        generateConversationLabel(data);
+        return data;
+      })
+      .then((data) => {
+        setCon(data);
+        return data;
+      })
+      .then((data) => {
         socket.emit('add-conversation', {
-          id: conversation.data.id
+          id: data.id
         });
-      })
-      .then(() => {
         setAddingConversation(false);
         getAllConversations();
         setParticipantsEntry([]);
@@ -124,14 +137,16 @@ const Messages = (): ReactElement => {
       });
   }
 
-  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null): void => {
+  const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null): void => {
     if (addingConversation) {
       setAddingConversation(false);
     }
     setCon(newCon);
     if (newCon) {
-      setParticipantsLabel(newCon!.label);
+      // set label at top of conversation
+      generateConversationLabel(newCon);
     }
+    setVisibleConversation(newCon);
   }
 
   const deleteConversation = () => {
@@ -140,69 +155,82 @@ const Messages = (): ReactElement => {
   }
 
   // add emitted conversation to allConversations
-  socket.on('add-conversation', (conversation: Conversations): void => {
+  socket.on('add-conversation', (conversation: ConversationWithParticipants): void => {
     setAllConversations([...allConversations, conversation]);
     getAllConversations();
   })
 
+  socket.on("connect_error", (err) => {
+    // the reason of the error, for example "xhr poll error"
+    console.log('io client err, Messages', err.message);
+  });
+
   return (
-    <>
-      <Grid container>
-        <Grid item>
-          <Typography variant="h3">
-            Direct Messages
-          </Typography>
-        </Grid>
-      </Grid>
+    <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 2
+        }}
+      >
+        <Typography variant="h3">
+          Inbox
+        </Typography>
+      </Box>
       { loginError ? (
-        <>
-          <Grid container>
-            <Grid item>
-              <Typography variant="h1">
-                You must be logged in to view conversations
-              </Typography>
-            </Grid>
-          </Grid>
-        </>
+        <Box
+          sx={{
+            display: 'flex',
+            padding: 2
+          }}
+        >
+          <Typography variant="h3">
+            You must be logged in to view conversations
+          </Typography>
+        </Box>
       ) : (
-        <>
-          <Button
-            sx={{ marginBottom: 4 }}
-            variant='contained'
-            onClick={ beginConversation }
-          >
-            ➕ Start Conversation
-          </Button>
-          <Grid container                                     // top most container for ConversationList and ConversationView
-            component={Paper}
-            spacing={{ md: 1.5, lg: 3}}
+        <Box>
+          <Box
             sx={{
-              width: '100%',
-              height: '80vh',
+              pl: 2,
+              pb: 2
             }}
           >
-            <Grid container item                              // ConversationList container
-              md={4}
-              xs={12}
+            <Button
+              variant='contained'
+              onClick={ beginConversation }
+            >
+              ➕ New Conversation
+            </Button>
+          </Box>
+          <Box                                     // top most container for ConversationList and ConversationView
+            className='glass-card'
+            sx={{
+              display: 'flex',
+              minHeight: '70vh',
+              mx: 2
+            }}
+          >
+            <Box                              // ConversationList container
               sx={{
-                border: 1,
-                borderColor: '#8c959f',
-                paddingLeft: 4,
+                pl: 4,
+                borderRight: 2,
+                borderColor: 'rgba(255, 255, 255, 0.125)',
               }}
             >
               <ConversationList
                 allCons={ allConversations }
+                visibleCon={ visibleConversation }
                 setCons={ getAllConversations }
                 select={ selectConversation }
                 deleteCon={ deleteConversation }
               />
-            </Grid>
-            <Grid container item                                // ConversationView container
-              md={8}
-              xs={12}
+            </Box>
+            <Box                              // ConversationView container
               sx={{
-                border: 1,
-                borderColor: '#8c959f'
+                p: 2,
+                flexGrow: 1,
               }}
             >
               { addingConversation ? (
@@ -211,7 +239,7 @@ const Messages = (): ReactElement => {
                       multiple
                       id="tags-filled"
                       options={allUsers.map((option) => option.username)}
-                      value={ participantsEntry }
+                      value={ participantsEntry! }
                       onChange={ changeParticipants }
                       freeSolo
                       renderTags={(value, getTagProps) =>
@@ -231,24 +259,25 @@ const Messages = (): ReactElement => {
                         />
                       )}
                     />
-                    <Button onClick={ addConversation }>Add Conversation</Button>
+                    <Button onClick={ addConversation } variant='contained'>Create</Button>
                   </form>
                 ) : ('')
               }
               { con ? (
                 <ConversationView
-                  addingConversation={ addingConversation }
                   con={ con }
+                  visibleCon={ visibleConversation }
+                  addingConversation={ addingConversation }
                   label={ participantsLabel }
                 />
                 ) : ('')
               }
-            </Grid>
-          </Grid>
-        </>
+            </Box>
+          </Box>
+        </Box>
       )
       }
-    </>
+    </Box>
   );
 }
 

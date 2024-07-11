@@ -16,8 +16,8 @@ const GoogleStrategy = Strategy;
 const prisma = new PrismaClient();
 
 const PORT = process.env.PORT || 3000;
-// const WS_PORT = process.env.WS_PORT || 4000;
 const CLIENT = path.resolve(__dirname, '..', '..');
+const PUBLIC = path.resolve(__dirname, '.', 'public');
 
 dotEnv.config();
 
@@ -42,7 +42,6 @@ app.use(
 
 app.use(fileUpload());
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true })); //parses incoming requests with URL-encoded payloads.
 app.use(express.static(CLIENT));
 app.use(cookieParser());
 
@@ -56,6 +55,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/img', express.static(PUBLIC))
 app.use('/api', routes);
 
 // Google Strategy
@@ -137,10 +137,10 @@ app.get(
 );
 
 app.get('/login', (req: Request, res: Response) => {
-  res.render('login');
+  res.redirect('/login');
 });
 
-app.post('/logout', function (req: Request, res: Response, next) {
+app.post('/logout', (req: Request, res: Response, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
@@ -153,7 +153,7 @@ app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
 });
 
-// const socket = express();
+// socket.io server
 const server = createServer(app);
 const io = new Server(server, {
   connectionStateRecovery: {},
@@ -161,7 +161,11 @@ const io = new Server(server, {
     origin: [
       `http://localhost:${PORT}`,
       `http://127.0.0.1:${PORT}`,
-      `https://mkdev.dev`,
+      `18.224.139.2:${PORT}`, // aws instance public IP
+      `https://mkdev.dev/`,
+      `http://mkdev.dev/`,
+      `mkdev.dev`,
+      `www.mkdev.dev`
     ],
     methods: ['GET', 'POST'],
     credentials: true,
@@ -179,11 +183,24 @@ io.on('connection', (socket) => {
   socket.on('add-conversation', () => {
     io.emit('add-conversation');
   });
-  // on disconnection
+
+  socket.on('read-message', () => {
+    io.emit('read-message');
+  })
+
+   // on disconnection
   socket.on('disconnect', () => {});
+
+  socket.on("connection_error", (err) => {
+    console.error(err.req);
+    console.error(err.code);
+    console.error(err.message);
+    console.error(err.context);
+  });
 });
 // socket handling ----------------------------------------- //
-// websocket server
+
+// socket.io listening
 io.listen(4000);
 
 app.listen(PORT, () => {

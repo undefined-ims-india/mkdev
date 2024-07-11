@@ -4,24 +4,29 @@ import MessageInput from './MessageInput';
 
 import axios from 'axios';
 import io from 'socket.io-client';
-import { Messages, Conversations } from '@prisma/client';
+import { Conversations } from '@prisma/client';
+import { MessageWithMetadata } from '../../../../types';
 
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
-const socket = io('https://mkdev.dev:4000');
+const socket = io('https://mkdev.dev');
 
 interface PropsType {
   con: Conversations;
+  visibleCon: Conversations | null;
   label: string;
   addingConversation: boolean;
 }
 
-const ConversationView: React.FC<PropsType> = (props): ReactElement => {
-  const { con, label, addingConversation } = props;
+const ConversationView: React.FC<PropsType> =
+  ({
+    con,
+    label,
+    addingConversation
+  }): ReactElement => {
 
-  const [allMsgs, setAllMsgs] = useState<Messages[]>([]);
+  const [allMsgs, setAllMsgs] = useState<MessageWithMetadata[]>([]);
 
   // get messages in conversation
   const getAllMsgs = (): void => {
@@ -34,45 +39,59 @@ const ConversationView: React.FC<PropsType> = (props): ReactElement => {
       console.error('Failed to retrieve messages from db:\n', err);
     })
   }
+
+  // initial messages load, changes based on conversation selected
   useEffect(() => {
     getAllMsgs();
   }, [con])
 
   // add any received message from websocket
-  socket.on('message', (msg: Messages): void => {
-    // add emitted messages to allMsgs
+  socket.on('message', (msg: MessageWithMetadata): void => {
+    // add emitted message to allMsgs
     setAllMsgs([...allMsgs, msg]);
   })
 
+  socket.on("connect_error", (err) => {
+    // the reason of the error, for example "xhr poll error"
+    console.log('io client err, ConversationView', err.message);
+  });
+
   return (
-    <Grid container
-      direction="column"
-      justifyContent="flex-start"
-      alignItems="flex-start"
+    <Box
+      sx={{ height: '100%' }}
     >
       { !addingConversation ? (
-        <>
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
           <Box
             sx={{
-              top: 0
+              mb: 1
             }}
           >
             <Typography variant='h4'>
               { label }
             </Typography>
           </Box>
-          <Box>
-            <Grid item>
-              <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
-            </Grid>
-            <Grid item>
-              <MessageInput con={ con }/>
-            </Grid>
+          <Box
+            sx={{
+              flexGrow: 1
+            }}
+          >
+            <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
           </Box>
-        </>
+          <Box>
+            <MessageInput con={ con } />
+          </Box>
+        </Box>
         ) : ('')
       }
-    </Grid>
+    </Box>
   );
 }
 
