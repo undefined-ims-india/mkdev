@@ -32,7 +32,7 @@ app.use(
 
 app.use(fileUpload());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); //parses incoming requests with URL-encoded payloads.
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(CLIENT));
 app.use(cookieParser());
 
@@ -50,12 +50,13 @@ app.use(passport.session());
 app.use('/img', express.static(PUBLIC));
 app.use('/api', routes);
 
-// Auth Routes
+//**Auth Routes**\\
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
+//* Google
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
@@ -66,9 +67,15 @@ app.get(
   }
 );
 
-app.get('/login', (req: Request, res: Response) => {
-  res.redirect('/login');
-});
+//* Local
+app.post(
+  '/login',
+  passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/login',
+    failureFlash: true,
+  })
+);
 
 app.post('/logout', (req: Request, res: Response, next) => {
   req.logout((err) => {
@@ -78,6 +85,7 @@ app.post('/logout', (req: Request, res: Response, next) => {
     res.redirect('/login');
   });
 });
+//**End Auth Routes**\\
 
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
@@ -111,9 +119,9 @@ io.on('connection', (socket) => {
 
   socket.on('read-message', () => {
     io.emit('read-message');
-  })
+  });
 
-   // on disconnection
+  // on disconnection
   socket.on('disconnect', () => {});
 });
 // socket handling ----------------------------------------- //
