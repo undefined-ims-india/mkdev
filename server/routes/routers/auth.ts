@@ -2,7 +2,8 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as LocalStrategy } from 'passport-local';
-import crypto from 'crypto';
+// import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
@@ -20,7 +21,8 @@ passport.use(
       callbackURL: CALLBACK_URL,
     },
     (accessToken: string, refreshToken: string, profile: any, done: any) => {
-      const { name, given_name, family_name, sub, picture } = profile._json;
+      const { name, given_name, family_name, sub, picture, email } =
+        profile._json;
       prisma.user
         .findUnique({
           where: { googleId: sub },
@@ -58,14 +60,17 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: 'email',
+      passwordField: 'password',
     },
     async (email, password, done) => {
       try {
         const user = await prisma.user.findUnique({ where: { email } });
+        console.log('user', user);
         if (!user) {
           return done(null, false, { message: 'Incorrect username.' });
         }
-        if (user.password !== password) {
+        const isMatch = await bcrypt.compare(password, user.password || '');
+        if (!isMatch) {
           return done(null, false, { message: 'Incorrect password.' });
         }
         return done(null, user);
