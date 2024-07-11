@@ -15,7 +15,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev');
 
 const Messages = (): ReactElement => {
 
@@ -159,6 +159,11 @@ const Messages = (): ReactElement => {
     setAllConversations([...allConversations, conversation]);
     getAllConversations();
   })
+
+  socket.on("connect_error", (err) => {
+    // the reason of the error, for example "xhr poll error"
+    console.log('io client err, Messages', err.message);
+  });
 
   return (
     <Box>

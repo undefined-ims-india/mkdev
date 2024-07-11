@@ -20,7 +20,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Grid from '@mui/material/Grid';
 import Badge from '@mui/material/Badge';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev');
 
 const Nav = (): ReactElement => {
   const user = useContext(UserContext);
@@ -50,6 +50,11 @@ const Nav = (): ReactElement => {
   socket.on('message', (message) => {
     setUnreadMsgs(() => unreadMsgs + message.newMessage);
   })
+
+  socket.on("connect_error", (err) => {
+    // the reason of the error, for example "xhr poll error"
+    console.log('io client err, Nav', err.message);
+  });
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(e.currentTarget);

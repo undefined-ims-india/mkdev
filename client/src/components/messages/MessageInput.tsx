@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import SendIcon from '@mui/icons-material/Send';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev');
 
 interface PropsType {
   con: Conversations;
@@ -82,6 +82,11 @@ const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
       }
     }
   }
+
+  socket.on("connect_error", (err) => {
+    // the reason of the error, for example "xhr poll error"
+    console.log('io client err, MessageInput', err.message);
+  });
 
   return (
       <Box

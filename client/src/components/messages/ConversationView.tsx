@@ -10,7 +10,7 @@ import { MessageWithMetadata } from '../../../../types';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev');
 
 interface PropsType {
   con: Conversations;
@@ -50,6 +50,11 @@ const ConversationView: React.FC<PropsType> =
     // add emitted message to allMsgs
     setAllMsgs([...allMsgs, msg]);
   })
+
+  socket.on("connect_error", (err) => {
+    // the reason of the error, for example "xhr poll error"
+    console.log('io client err, ConversationView', err.message);
+  });
 
   return (
     <Box

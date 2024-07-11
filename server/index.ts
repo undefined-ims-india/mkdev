@@ -151,15 +151,19 @@ app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
 });
 
-const socket = express();
-const server = createServer(socket);
+// const socket = express();
+const server = createServer(app);
 const io = new Server(server, {
   connectionStateRecovery: {},
   cors: {
     origin: [
       `http://localhost:${PORT}`,
       `http://127.0.0.1:${PORT}`,
-      `http://ec2-3-19-237-1.us-east-2.compute.amazonaws.com:${PORT}/`,
+      `18.224.139.2:${PORT}`, // aws instance public IP
+      `https://mkdev.dev/`,
+      `http://mkdev.dev/`,
+      `mkdev.dev`,
+      `www.mkdev.dev`
     ],
     methods: ['GET', 'POST'],
   },
@@ -183,6 +187,13 @@ io.on('connection', (socket) => {
 
    // on disconnection
   socket.on('disconnect', () => {});
+
+  socket.on("connection_error", (err) => {
+    console.log(err.req);      // the request object
+    console.log(err.code);     // the error code, for example 1
+    console.log(err.message);  // the error message, for example "Session ID unknown"
+    console.log(err.context);  // some additional error context
+  });
 });
 // socket handling ----------------------------------------- //
 // websocket server

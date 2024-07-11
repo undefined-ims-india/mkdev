@@ -14,7 +14,7 @@ import { Conversations } from '@prisma/client';
 import { Typography } from '@mui/material';
 import { ConversationWithParticipants } from '../../../../types';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev');
 
 interface PropsType {
   con: ConversationWithParticipants;
@@ -102,6 +102,11 @@ const Conversation: React.FC<PropsType> =
       getUnreadMsgsTotal(con.id, user.id);
     }
   })
+
+  socket.on("connect_error", (err) => {
+    // the reason of the error, for example "xhr poll error"
+    console.log('io client err, Conversation', err.message);
+  });
 
   // pass selected conversation id to Messages component, set selected conversation as visible
   const selectConversation = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants): void => {
