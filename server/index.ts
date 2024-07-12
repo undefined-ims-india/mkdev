@@ -10,6 +10,7 @@ import fileUpload from 'express-fileupload';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import initializePassport from './routes/routers/auth';
+import registration from './routes/routers/register';
 
 const PORT = process.env.PORT || 3000;
 const WS_PORT = process.env.WS_PORT || 4000;
@@ -51,12 +52,14 @@ app.use('/img', express.static(PUBLIC));
 app.use('/api', routes);
 
 //**Auth Routes**\\
+app.use(registration);
+
+//* Google
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-//* Google
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
@@ -69,7 +72,7 @@ app.get(
 
 //* Local
 app.post(
-  '/login',
+  '/auth/login',
   passport.authenticate('local', {
     successRedirect: '/dashboard',
     failureRedirect: '/login',
@@ -77,7 +80,7 @@ app.post(
   })
 );
 
-app.post('/logout', (req: Request, res: Response, next) => {
+app.post('/auth/logout', (req: Request, res: Response, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
