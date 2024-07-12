@@ -2,25 +2,19 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import LoginIcon from '@mui/icons-material/Login';
-import {
-  Drawer,
-  Box,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import Drawers from './Drawers';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tags from './Tags';
+import Drawer from '@mui/material/Drawer';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/Inbox';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { ThemeToggle } from './ThemeToggle';
 const drawerWidth = 240;
 
 export default function Sidebar() {
