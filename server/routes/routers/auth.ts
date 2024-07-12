@@ -1,8 +1,6 @@
-// passportConfig.ts
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as LocalStrategy } from 'passport-local';
-// import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 
 import { PrismaClient } from '@prisma/client';
@@ -32,8 +30,9 @@ passport.use(
             return prisma.user
               .create({
                 data: {
+                  email: email,
                   googleId: sub,
-                  username: `user-${crypto.randomUUID()}`,
+                  username: email.split('@')[0],
                   name: name,
                   firstName: given_name,
                   lastName: family_name,
