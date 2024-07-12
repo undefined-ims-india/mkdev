@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,30 +7,44 @@ import Input from '@mui/material/Input';
 import GoogleButton from 'react-google-button';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import CardMedia from '@mui/material/CardMedia';
 
 const Login = (): ReactElement => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
   const handleSignUp = () => {
     navigate('/Register');
   };
 
-  const login = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/auth/login', {
-        email: email,
-        password: password,
-      });
-      console.log('response', response);
+      const { data } = await axios.post('/auth/login', { email, password });
+      console.log('Login successful', data);
+      navigate('/dashboard');
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        console.error('Login error:', error.response?.data);
+      } else {
+        console.error('Unexpected error:', error);
+      }
     }
+  };
+
+  const handleGoogleSignIn = () => {
+    window.location.href = '/auth/google';
   };
 
   return (
@@ -50,22 +64,31 @@ const Login = (): ReactElement => {
               justifyContent: 'center',
             }}
           >
-            <img
-              src='/img/mkdev_1200x600.gif'
+            <CardMedia
+              component='img'
+              image='/img/mkdev_1200x600.gif'
               alt='mkdev logo'
-              style={{ width: '40vw', maxWidth: '100%' }}
+              sx={{ width: '40vw', maxWidth: '100%' }}
             />
           </Box>
         </Box>
         <Box
           component='form'
-          onSubmit={login}
+          onSubmit={handleSubmit}
           noValidate
           sx={{ mt: 1, p: 3, justifyContent: 'center' }}
         >
           <FormControl fullWidth margin='normal' required>
-            <InputLabel htmlFor='email'>User Email</InputLabel>
-            <Input id='email' name='email' autoComplete='email' autoFocus />
+            <InputLabel htmlFor='email'>Email</InputLabel>
+            <Input
+              id='email'
+              name='email'
+              value={email}
+              onChange={handleEmail}
+              autoComplete='email'
+              required
+              autoFocus
+            />
           </FormControl>
           <FormControl fullWidth margin='normal' required>
             <InputLabel htmlFor='password'>Password</InputLabel>
@@ -73,7 +96,9 @@ const Login = (): ReactElement => {
               name='password'
               type='password'
               id='password'
-              autoComplete='current-password'
+              value={password}
+              onChange={handlePassword}
+              required
             />
           </FormControl>
           <Button
@@ -102,7 +127,7 @@ const Login = (): ReactElement => {
             alignItems: 'center',
           }}
         >
-          <Button onClick={() => navigate('/auth/google')}>
+          <Button onClick={handleGoogleSignIn}>
             <GoogleButton />
           </Button>
         </Box>
