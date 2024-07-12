@@ -6,15 +6,14 @@ import { UserContext } from '../UserContext';
 import io from 'socket.io-client';
 import axios from 'axios';
 import { User, Conversations } from '@prisma/client';
+import { ConversationWithParticipants } from '../../../../types';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import { ConversationWithParticipants } from '../../../../types';
 
 const socket = io('http://localhost:4000');
 
@@ -162,48 +161,57 @@ const Messages = (): ReactElement => {
   })
 
   return (
-    <>
-      <Grid container>
-        <Grid item>
-          <Typography variant="h3">
-            Direct Messages
-          </Typography>
-        </Grid>
-      </Grid>
+    <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 2
+        }}
+      >
+        <Typography variant="h3">
+          Inbox
+        </Typography>
+      </Box>
       { loginError ? (
-        <>
-          <Grid container>
-            <Grid item>
-              <Typography variant="h3">
-                You must be logged in to view conversations
-              </Typography>
-            </Grid>
-          </Grid>
-        </>
+        <Box
+          sx={{
+            display: 'flex',
+            padding: 2
+          }}
+        >
+          <Typography variant="h3">
+            You must be logged in to view conversations
+          </Typography>
+        </Box>
       ) : (
-        <>
-          <Button
-            sx={{ marginBottom: 4 }}
-            variant='contained'
-            onClick={ beginConversation }
-          >
-            ➕ New Conversation
-          </Button>
-          <Grid container                                     // top most container for ConversationList and ConversationView
-            component={Paper}
-            spacing={{ md: 1.5, lg: 3}}
+        <Box>
+          <Box
             sx={{
-              width: '100%',
-              height: '80vh',
+              pl: 2,
+              pb: 2
             }}
           >
-            <Grid container item                              // ConversationList container
-              md={4}
-              xs={12}
+            <Button
+              variant='contained'
+              onClick={ beginConversation }
+            >
+              ➕ New Conversation
+            </Button>
+          </Box>
+          <Box                                     // top most container for ConversationList and ConversationView
+            className='glass-card'
+            sx={{
+              display: 'flex',
+              minHeight: '70vh',
+              mx: 2
+            }}
+          >
+            <Box                              // ConversationList container
               sx={{
-                border: 1,
-                borderColor: '#8c959f',
-                paddingLeft: 4,
+                pl: 4,
+                borderRight: 2,
+                borderColor: 'rgba(255, 255, 255, 0.125)',
               }}
             >
               <ConversationList
@@ -213,13 +221,11 @@ const Messages = (): ReactElement => {
                 select={ selectConversation }
                 deleteCon={ deleteConversation }
               />
-            </Grid>
-            <Grid container item                                // ConversationView container
-              md={8}
-              xs={12}
+            </Box>
+            <Box                              // ConversationView container
               sx={{
-                border: 1,
-                borderColor: '#8c959f'
+                p: 2,
+                flexGrow: 1,
               }}
             >
               { addingConversation ? (
@@ -261,12 +267,12 @@ const Messages = (): ReactElement => {
                 />
                 ) : ('')
               }
-            </Grid>
-          </Grid>
-        </>
+            </Box>
+          </Box>
+        </Box>
       )
       }
-    </>
+    </Box>
   );
 }
 

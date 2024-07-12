@@ -8,7 +8,6 @@ import { Conversations } from '@prisma/client';
 import { MessageWithMetadata } from '../../../../types';
 
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
 const socket = io('http://localhost:4000');
@@ -53,34 +52,41 @@ const ConversationView: React.FC<PropsType> =
   })
 
   return (
-    <Grid container
-      direction="column"
-      justifyContent="flex-start"
-      alignItems="flex-start"
+    <Box
+      sx={{ height: '100%' }}
     >
       { !addingConversation ? (
-        <>
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
           <Box
             sx={{
-              top: 0
+              mb: 1
             }}
           >
             <Typography variant='h4'>
               { label }
             </Typography>
           </Box>
-          <Box>
-            <Grid item>
-              <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
-            </Grid>
-            <Grid item>
-              <MessageInput con={ con } />
-            </Grid>
+          <Box
+            sx={{
+              flexGrow: 1
+            }}
+          >
+            <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
           </Box>
-        </>
+          <Box>
+            <MessageInput con={ con } />
+          </Box>
+        </Box>
         ) : ('')
       }
-    </Grid>
+    </Box>
   );
 }
 
