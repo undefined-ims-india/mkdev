@@ -8,12 +8,16 @@ import axios from 'axios';
 import { User, Conversations } from '@prisma/client';
 import { ConversationWithParticipants } from '../../../../types';
 
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import CreateIcon from '@mui/icons-material/Create';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const socket = io('http://localhost:4000');
 
@@ -23,12 +27,14 @@ const Messages = (): ReactElement => {
   const [con, setCon] = useState<ConversationWithParticipants | null>();
   const [addingConversation, setAddingConversation] = useState<boolean>(false);
   const [participants, setParticipants] = useState<User[]>([]);
-  const [participantsLabel, setParticipantsLabel] = useState<string>('')
+  const [participantsLabel, setParticipantsLabel] = useState<string>('');
   const [participantsEntry, setParticipantsEntry] = useState<(string)[]>([]);
   const [allConversations, setAllConversations] = useState<ConversationWithParticipants[]>([]);
   const visibleConRef = useRef<number>(0);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
+  const mobileLayout = useMediaQuery<boolean>('(max-width:650px)');
+  const [mobileView, setMobileView] = useState<string>('desktop');
 
   // get all current conversations for current user
   const getAllConversations = (): void => {
@@ -192,11 +198,12 @@ const Messages = (): ReactElement => {
               pb: 2
             }}
           >
-            <Button
-              variant='contained'
-              onClick={ beginConversation }
-            >
-              ➕ New Conversation
+            {/* TODO: add mobileView ternary for these buttons */}
+            <Button variant='contained' /* TODO: add view change handler */>
+              <ArrowBackIosNewIcon />
+            </Button>
+            <Button variant='contained' onClick={ beginConversation }>
+              <CreateIcon />
             </Button>
           </Box>
           <Box                                     // top most container for ConversationList and ConversationView
@@ -204,14 +211,19 @@ const Messages = (): ReactElement => {
             sx={{
               display: 'flex',
               minHeight: '70vh',
-              mx: 2
+              mx: 2,
+              border: 3,
+              borderColor: 'red'
             }}
           >
             <Box                              // ConversationList container
               sx={{
-                pl: 4,
-                borderRight: 2,
-                borderColor: 'rgba(255, 255, 255, 0.125)',
+                // p: 4,
+                flexGrow: 0,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                border: 3,
+                borderColor: 'yellow'
               }}
             >
               {
@@ -224,16 +236,27 @@ const Messages = (): ReactElement => {
                     deleteCon={ deleteConversation }
                   />
                 ) : (
-                  <Typography sx={{ border: 1, borderColor: 'red' }}>
+                  <Typography>
                     No conversations yet
                   </Typography>
                 )
               }
             </Box>
+            { !mobileLayout &&
+              <Divider orientation='vertical' variant='middle' flexItem
+                sx={{
+                  mx: 2
+                }}
+              />
+            }
             <Box                              // ConversationView container
               sx={{
                 p: 2,
                 flexGrow: 1,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                border: 3,
+                borderColor: 'blue'
               }}
             >
               { addingConversation ? (
