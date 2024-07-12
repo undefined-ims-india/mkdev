@@ -1,43 +1,118 @@
-import * as React from 'react';
-import { IconButton, AppBar, Toolbar, Typography, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from './UserContext';
+import LoginIcon from '@mui/icons-material/Login';
+import {
+  Drawer,
+  Box,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import Drawers from './Drawers';
-
-const drawerWidth = 240; 
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tags from './Tags';
+import InboxIcon from '@mui/icons-material/Inbox';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { ThemeToggle } from './ThemeToggle';
+const drawerWidth = 240;
 
 export default function Sidebar() {
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-    const [isClosing, setIsClosing] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(true);
+  const navigate = useNavigate();
+  const user = useContext(UserContext);
 
-    const handleDrawerClose = () => {
-        setIsClosing(true);
-        setMobileOpen(false);
-    };
+  const handleDrawerToggle = () => {
+    console.log('Drawer toggled1');
+    setMobileOpen(true);
+  };
 
-    const handleDrawerTransitionEnd = () => {
-        setIsClosing(false);
-    };
+  const handleDrawerClose = () => {
+    console.log('Drawer Toggled again');
+    setMobileOpen(false);
+  };
 
-    const handleDrawerToggle = () => {
-        if (!isClosing) {
-            setMobileOpen(!mobileOpen);
-        }
-    };
+  const LoggedOutDrawerList = () => (
+    <List>
+      <ListItem>
+        <ListItemButton onClick={() => navigate('/login')}>
+          <ListItemIcon>
+            <LoginIcon />
+          </ListItemIcon>
+          <ListItemText primary='Log In' />
+        </ListItemButton>
+      </ListItem>
+    </List>
+  );
 
-    return (
-        <Box sx={{ display: 'flex' }}>
-            <Drawers
-                mobileOpen={mobileOpen}
-                onTransitionEnd={handleDrawerTransitionEnd}
-                handleDrawerClose={handleDrawerClose}
-                handleDrawerTransitionEnd={handleDrawerTransitionEnd}
-                handleDrawerToggle={handleDrawerToggle}
-            />
-            <Box
-                component="main"
-                sx={{ flexGrow: 1, p: .1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-            >
-            </Box>
-        </Box>
-    );
+  const LoggedInDrawerList = () => (
+    <List>
+      <ListItem>
+        <ListItemButton onClick={() => navigate(`/user/${user.id}/profile`)}>
+          <ListItemIcon>
+            <Avatar src={user.picture} />
+          </ListItemIcon>
+          <ListItemText primary='Your Profile' />
+        </ListItemButton>
+      </ListItem>
+      <ListItem>
+        <ListItemButton onClick={() => navigate('/messages')}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary='Messages' />
+        </ListItemButton>
+      </ListItem>
+      <ListItem>
+        <ListItemButton onClick={() => navigate('/create-post')}>
+          <ListItemIcon>
+            <AddBoxIcon />
+          </ListItemIcon>
+          <ListItemText primary='Create Post' />
+        </ListItemButton>
+      </ListItem>
+      <ListItem>
+        <ListItemButton>
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText primary='Log Out' />
+        </ListItemButton>
+      </ListItem>
+    </List>
+  );
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant='persistent'
+        anchor='left'
+        open={true}
+      >
+        {!!user.id ? (
+          <>
+            <LoggedInDrawerList />
+            <Divider />
+            <Tags />
+          </>
+        ) : (
+          <LoggedOutDrawerList />
+        )}
+      </Drawer>
+    </Box>
+  );
 }
