@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext, useRef, ReactElement } from 'react';
 import ConversationList from './ConversationList';
 import ConversationView from './ConversationView';
-import DesktopInbox from './DesktopInbox';
-import MobileInbox from './MobileInbox';
 import { UserContext } from '../UserContext';
 
 import io from 'socket.io-client';
@@ -23,7 +21,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const socket = io('http://localhost:4000');
 
-const Messages = (): ReactElement => {
+const DesktopInbox = (): ReactElement => {
 
   const userId = useContext(UserContext).id;
   const [con, setCon] = useState<ConversationWithParticipants | null>();
@@ -170,6 +168,17 @@ const Messages = (): ReactElement => {
 
   return (
     <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 2
+        }}
+      >
+        <Typography variant="h3">
+          Inbox
+        </Typography>
+      </Box>
       { loginError ? (
         <Box
           sx={{
@@ -181,16 +190,124 @@ const Messages = (): ReactElement => {
             You must be logged in to view conversations
           </Typography>
         </Box>
-        ) : (
-          mobileLayout ? (
-            <MobileInbox />
-          ) : (
-            <DesktopInbox />
-          )
-        )
+      ) : (
+        <Box>
+          <Box
+            sx={{
+              pl: 2,
+              pb: 2
+            }}
+          >
+            { mobileLayout ?
+              (
+                <Button variant='contained' /* TODO: add view change handler */>
+                  <ArrowBackIosNewIcon />
+                </Button>
+                ) : (
+                <Button variant='contained' onClick={ beginConversation }>
+                  <CreateIcon />
+                </Button>
+              )
+            }
+          </Box>
+          <Box                                     // top most container for ConversationList and ConversationView
+            className='glass-card'
+            sx={{
+              display: 'flex',
+              minHeight: '70vh',
+              mx: 2,
+              border: 3,
+              borderColor: 'red'
+            }}
+          >
+            <Box                              // ConversationList container
+              sx={{
+                // p: 4,
+                flexGrow: 0,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                border: 3,
+                borderColor: 'yellow'
+              }}
+            >
+              {
+                allConversations.length ? (
+                  <ConversationList
+                    allCons={ allConversations }
+                    visibleCon={ visibleConRef }
+                    setCons={ getAllConversations }
+                    select={ selectConversation }
+                    deleteCon={ deleteConversation }
+                  />
+                ) : (
+                  <Typography>
+                    No conversations yet
+                  </Typography>
+                )
+              }
+            </Box>
+            { !mobileLayout &&
+              <Divider orientation='vertical' variant='middle' flexItem
+                sx={{
+                  mx: 2
+                }}
+              />
+            }
+            <Box                              // ConversationView container
+              sx={{
+                p: 2,
+                flexGrow: 1,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                border: 3,
+                borderColor: 'blue'
+              }}
+            >
+              { addingConversation ? (
+                  <form>
+                    <Autocomplete
+                      multiple
+                      id="tags-filled"
+                      options={allUsers.map((option) => option.username)}
+                      value={ participantsEntry! }
+                      onChange={ changeParticipants }
+                      freeSolo
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index: number) => {
+                          const { key, ...tagProps } = getTagProps({ index });
+                          return (
+                            <Chip variant="outlined" label={option} key={key} {...tagProps} />
+                          );
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="filled"
+                          label="To:"
+                          placeholder="usernames"
+                        />
+                      )}
+                    />
+                    <Button onClick={ addConversation } variant='contained'>Create</Button>
+                  </form>
+                ) : ('')
+              }
+              { con ? (
+                <ConversationView
+                  con={ con }
+                  addingConversation={ addingConversation }
+                  label={ participantsLabel }
+                />
+                ) : ('')
+              }
+            </Box>
+          </Box>
+        </Box>
+      )
       }
     </Box>
   );
 }
 
-export default Messages;
+export default DesktopInbox;
