@@ -16,12 +16,9 @@ const Login = (): ReactElement => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    return name === 'email' ? setEmail(value) : setPassword(value);
   };
 
   const handleSignUp = () => {
@@ -31,19 +28,14 @@ const Login = (): ReactElement => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/auth/login', { email, password });
-      console.log('Login successful', data);
+      await axios.post('/auth/login', { email, password });
       navigate('/dashboard');
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error('Login error:', error.response?.data);
-      } else {
-        console.error('Unexpected error:', error);
-      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  const handleGoogleSignIn = () => {
+  const GoogleSignIn = () => {
     window.location.href = '/auth/google';
   };
 
@@ -84,7 +76,7 @@ const Login = (): ReactElement => {
               id='email'
               name='email'
               value={email}
-              onChange={handleEmail}
+              onChange={handleChange}
               autoComplete='email'
               required
               autoFocus
@@ -97,7 +89,7 @@ const Login = (): ReactElement => {
               type='password'
               id='password'
               value={password}
-              onChange={handlePassword}
+              onChange={handleChange}
               required
             />
           </FormControl>
@@ -127,7 +119,7 @@ const Login = (): ReactElement => {
             alignItems: 'center',
           }}
         >
-          <Button onClick={handleGoogleSignIn}>
+          <Button onClick={GoogleSignIn}>
             <GoogleButton />
           </Button>
         </Box>
