@@ -56,37 +56,56 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
   }
 
   return (
-    <Box>
-      <Box>
-        <Avatar src={ sender.picture! }></Avatar>
-        <Typography>
-          { sender.username }
-        </Typography>
-        <Typography>
-          { dayjs(createdAt).calendar() }
-        </Typography>
-      </Box>
-      <Paper
-        elevation={2}
+    <Box
+      sx={{
+        display: 'flex',
+        minWidth: '33%',
+        maxWidth: '70%',
+      }}
+    >
+      <Box
         sx={{
-          color:'white',
-          background: '#349FDA',
-          padding: 1
+          display: 'flex',
+          flexDirection: 'column',
+          pr: 1
+        }}
+      >
+        <Avatar src={ sender.picture! }></Avatar>
+          { loggedInUser === senderId ? (
+              <IconButton onClick={ handleDelete }>
+                <DeleteIcon fontSize='small'/>
+              </IconButton>
+            ) : (
+              <IconButton onClick={ handleLike }>
+                { isLiked ? <ThumbUpAltIcon fontSize='small'/> : <ThumbUpOffAltIcon fontSize='small'/> }
+              </IconButton>
+            )
+          }
+      </Box>
+      <Box
+        sx={{
+          flexGrow: 1
         }}
       >
         <Typography>
-          { body }
+          { sender.username }
         </Typography>
-        { loggedInUser === senderId ? (
-            <IconButton onClick={ handleDelete }>
-              <DeleteIcon fontSize='small'/>
-            </IconButton>
-          ) : (<></>)
-        }
-        <IconButton onClick={ handleLike }>
-          { isLiked ? <ThumbUpAltIcon fontSize='small'/> : <ThumbUpOffAltIcon fontSize='small'/> }
-        </IconButton>
-      </Paper>
+        <Paper
+          elevation={2}
+          sx={{
+            color:'white',
+            background: '#349FDA',
+            padding: 1
+          }}
+        >
+          <Typography>
+            { body }
+          </Typography>
+          <Typography variant="caption">
+          { dayjs(createdAt).calendar() }
+          </Typography>
+        </Paper>
+      </Box>
     </Box>
   );
 }

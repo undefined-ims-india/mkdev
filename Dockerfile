@@ -17,6 +17,8 @@ RUN npx prisma generate
 
 RUN npm run build
 
+RUN npm run copy
+
 CMD [ "node", "dist/server/server/index.js" ]
 
 # To Build run docker build -t <Name of Build> . [ie. directory]
