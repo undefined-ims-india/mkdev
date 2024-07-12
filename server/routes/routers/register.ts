@@ -10,7 +10,7 @@ const saltRounds = parseInt(process.env.SALT_ROUNDS || '10');
 const passwordStrength = (password: string): boolean =>
   password.length >= 8 && /\d/.test(password) && /[a-zA-Z]/.test(password);
 
-register.post('/', async (req: any, res: any) => {
+register.post('/auth/register', async (req: any, res: any) => {
   const { email, password, username, name, firstName, lastName } = req.body; // *  picture?
 
   if (!passwordStrength(password)) {
@@ -37,17 +37,13 @@ register.post('/', async (req: any, res: any) => {
         },
       });
 
-      req.login(user, (err: any) => {
-        if (err) {
-          console.error(err);
-          return res.sendStatus(400);
-        }
-        return res.redirect('/login');
-      });
+      res
+        .status(201)
+        .json({ id: user.id, email: user.email, username: user.username });
     }
   } catch (err) {
-    console.error(err);
-    return res.sendStatus(500);
+    console.error('Failed to register user:', err);
+    res.sendStatus(500);
   }
 });
 
