@@ -23,7 +23,7 @@ import Badge from '@mui/material/Badge';
 const socket = io('http://localhost:4000');
 
 const Nav = (): ReactElement => {
-  const {userId, userImage} = useContext(UserContext);
+  const user = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
   const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
@@ -34,7 +34,7 @@ const Nav = (): ReactElement => {
   // count total unread messages for logged in user
   useEffect(() => {
     axios
-      .get(`/api/users/unread/${userId}`)
+      .get(`/api/users/unread/${user.id}`)
       .then(({ data }): void => {
         if (data > 0) {
           setIsHidden(false);
@@ -58,10 +58,17 @@ const Nav = (): ReactElement => {
     setAnchorEl(null);
   };
 
+  const handleNav = (location :string) => {
+    return () => {
+      navigate(`/${location}`);
+      handleClose();
+    }
+  }
+
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar enableColorOnDark sx={{
-          backgroundColor: theme === 'light' ? 'rgba(90, 217, 219, .3)' : 'rgba(51, 34, 77, .6)',
+          backgroundColor: theme === 'light' ? 'rgb(135, 231, 186, .4)' : 'rgb(76, 194, 137,.4)',
           backdropFilter: 'blur(14px) saturate(180%)',
           zIndex: '10',
           height: '70px'
@@ -71,41 +78,41 @@ const Nav = (): ReactElement => {
             <Grid item xs={2}>
               <Box sx={{display: 'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', marginX: 2}}>
                 <Button onClick={() => {navigate('/dashboard')}} >
-                  <img src="/img/mkdev-logo-square.gif" alt="mkdev logo" style={{height: '60px', width: '60px'}}/>
+                  <img src="/img/mkdev_1200x600.gif" alt="mkdev logo" style={{height: '60px'}}/>
                 </Button>
               </Box>
             </Grid>
             <Grid item lg={8} xs={4} />
             <Grid item lg={2} xs={6}>
               <Box sx={{display: 'flex', flexDirection:'row', justifyContent:'end', alignItems:'center', height: '100%'}}>
-                {!!userId ?
+                {!!user.id ?
                   (
                     <>
-                      <IconButton onClick={() => {navigate('/create-post')}}>
-                        <AddBoxIcon fontSize="medium" />
-                        <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
-                      </IconButton>
-                      <IconButton onClick={() => {navigate('/messages')}} sx={{color: 'aliceblue'}}>
+                      <IconButton onClick={handleNav('messages')} sx={{color: useTheme().palette.secondary.main}}>
                         <Badge badgeContent={unreadMsgs} invisible={isHidden} color="warning">
                           <InboxIcon fontSize="medium" />
                         </Badge>
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
                       </IconButton>
+                      <IconButton onClick={handleNav('create-post')} sx={{color: useTheme().palette.secondary.main}}>
+                        <AddBoxIcon fontSize="medium" />
+                        <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
+                      </IconButton>
                       <Button onClick={handleOpen} sx={{ padding: 0, border: 'none', background: 'none' }}>
-                        <Avatar src={userImage}/>
+                        <Avatar src={user.picture}/>
                       </Button>
                       <Menu open={open} anchorEl={anchorEl} onClose={handleClose} sx={{zIndex: 11}}>
-                        <MenuItem>
-                          <Button onClick={() => { navigate(`/user/${userId}/profile`)}}>Profile</Button>
+                        <MenuItem onClick={handleNav(`/user/${user.id}/profile`)}>
+                          Your Profile
                         </MenuItem>
-                        <MenuItem>
-                          <Button onClick={() => { navigate(`/messages`)}}>Messages</Button>
+                        <MenuItem onClick={handleNav('messages')}>
+                          Messages
                         </MenuItem>
-                        <MenuItem>
-                          <Button onClick={() => { navigate(`/create-post`)}}>Create Post</Button>
+                        <MenuItem onClick={handleNav('create-post')}>
+                          Create Post
                         </MenuItem>
-                        <MenuItem>
-                          <Button onClick={() => { navigate(`/logout`)}}>Logout</Button>
+                        <MenuItem onClick={handleNav('logout')}>
+                          Logout
                         </MenuItem>
                         <ThemeToggle />
                       </Menu>
@@ -113,10 +120,10 @@ const Nav = (): ReactElement => {
                   )
                 :
                   (
-                    <>
-                      <Button onClick={() => {navigate('/login')}} size='large'>Login</Button>
+                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                      <Button onClick={() => {navigate('/login')}} size='large' sx={{color: useTheme().palette.secondary.main}}>Login</Button>
                       <ThemeToggle />
-                    </>
+                    </Box>
                   )
                 }
               </Box>

@@ -60,6 +60,72 @@ posts.post('/', async (req: any, res: any) => {
   }
 });
 
+posts.put('/:id', async (req: any, res: any) => {
+  //image in files & title and body in body
+  const { id } = req.params;
+  const { title, body, tags } = req.body;
+  const tagArr = tags.length ? JSON.parse(tags).map((tag:Tags) => ({id: tag.id})) : [];
+  const repoObj: {
+    link: string;
+    files: { path: string; contents: string }[];
+  } | null = req.body.repo ? JSON.parse(atob(req.body.repo)) : null;
+  try {
+    let post;
+    if (req.files && req.files.img) {
+      const key = await awsS3Upload(req.files.img);
+      post = await prisma.post.update({
+        where: { id: +id },
+        data: {
+          title,
+          body,
+          s3_key: key,
+          tags: { connect: tagArr }
+        },
+      });
+    } else {
+      post = await prisma.post.update({
+        where: { id: +id },
+        data: {
+          title,
+          body,
+          tags: { connect: tagArr }
+        },
+      });
+    }
+    if (repoObj) {
+      await prisma.file.deleteMany({
+        where: {
+          repo: {
+            post: {
+              id: {in: [+id]}
+            }
+          }
+        }
+      })
+      await prisma.repo.delete({
+        where: {
+          postId: +id
+        }
+      })
+      await prisma.repo.create({
+        data: {
+          post: { connect: { id: post.id } },
+          link: repoObj.link,
+          files: {
+            create: repoObj.files,
+          },
+        },
+      });
+    }
+    res.sendStatus(201);
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  } finally {
+    await prisma.$disconnect();
+  }
+});
+
 //like post
 posts.patch('/:id/like', async(req: RequestWithUser, res: any) => {
   try {
@@ -154,7 +220,7 @@ posts.patch('/:id', (req: any, res: any) => {
 posts.delete('/:id', (req: any, res: any) => {
   const { id }: { id: string } = req.params;
   prisma.post
-    .delete({ where: { userId: req.user.id, id: +id } })
+    .delete({ where: { id: +id } })
     .then(() => {
       res.sendStatus(200);
     })
