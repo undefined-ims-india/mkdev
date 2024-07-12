@@ -15,21 +15,23 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/Inbox';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import LogoutIcon from '@mui/icons-material/Logout';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+
 const drawerWidth = 240;
 
 export default function Sidebar() {
-  const [mobileOpen, setMobileOpen] = React.useState(true);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
   const navigate = useNavigate();
   const user = useContext(UserContext);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 
   const handleDrawerToggle = () => {
-    console.log('Drawer toggled1');
-    setMobileOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    console.log('Drawer Toggled again');
-    setMobileOpen(false);
+    setMobileOpen(!mobileOpen);
   };
 
   const LoggedOutDrawerList = () => (
@@ -84,6 +86,17 @@ export default function Sidebar() {
 
   return (
     <Box sx={{ display: 'flex' }}>
+       {isMobile && (
+        <IconButton
+          color='inherit'
+          aria-label='open drawer'
+          edge='start'
+          onClick={handleDrawerToggle}
+          sx={{ mr: 2 }}
+        >
+          <MenuIcon />
+        </IconButton>
+      )}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -93,9 +106,10 @@ export default function Sidebar() {
             boxSizing: 'border-box',
           },
         }}
-        variant='persistent'
+        variant={isMobile ? 'temporary' : 'persistent'}
         anchor='left'
-        open={true}
+        open={isMobile ? mobileOpen : true}
+        onClose={handleDrawerToggle}
       >
         {!!user.id ? (
           <>
