@@ -58,6 +58,13 @@ const Nav = (): ReactElement => {
     setAnchorEl(null);
   };
 
+  const handleNav = (location :string) => {
+    return () => {
+      navigate(`/${location}`);
+      handleClose();
+    }
+  }
+
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar enableColorOnDark sx={{
@@ -81,13 +88,13 @@ const Nav = (): ReactElement => {
                 {!!user.id ?
                   (
                     <>
-                      <IconButton onClick={() => {navigate('/messages')}} sx={{color: useTheme().palette.secondary.main}}>
+                      <IconButton onClick={handleNav('messages')} sx={{color: useTheme().palette.secondary.main}}>
                         <Badge badgeContent={unreadMsgs} invisible={isHidden} color="warning">
                           <InboxIcon fontSize="medium" />
                         </Badge>
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
                       </IconButton>
-                      <IconButton onClick={() => {navigate('/create-post')}} sx={{color: useTheme().palette.secondary.main}}>
+                      <IconButton onClick={handleNav('create-post')} sx={{color: useTheme().palette.secondary.main}}>
                         <AddBoxIcon fontSize="medium" />
                         <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
                       </IconButton>
@@ -95,17 +102,17 @@ const Nav = (): ReactElement => {
                         <Avatar src={user.picture}/>
                       </Button>
                       <Menu open={open} anchorEl={anchorEl} onClose={handleClose} sx={{zIndex: 11}}>
-                        <MenuItem>
-                          <Button onClick={() => { navigate(`/user/${user.id}/profile`)}}>Profile</Button>
+                        <MenuItem onClick={handleNav(`/user/${user.id}/profile`)}>
+                          Your Profile
                         </MenuItem>
-                        <MenuItem>
-                          <Button onClick={() => { navigate(`/messages`)}}>Messages</Button>
+                        <MenuItem onClick={handleNav('messages')}>
+                          Messages
                         </MenuItem>
-                        <MenuItem>
-                          <Button onClick={() => { navigate(`/create-post`)}}>Create Post</Button>
+                        <MenuItem onClick={handleNav('create-post')}>
+                          Create Post
                         </MenuItem>
-                        <MenuItem>
-                          <Button onClick={() => { navigate(`/logout`)}}>Logout</Button>
+                        <MenuItem onClick={handleNav('logout')}>
+                          Logout
                         </MenuItem>
                         <ThemeToggle />
                       </Menu>
