@@ -18,10 +18,7 @@ const Register = (): ReactElement => {
     firstName: '',
     lastName: '',
     name: '',
-    picture: '',
   });
-
-  newUser.name = `${newUser.firstName} ${newUser.lastName}`;
 
   const handleChange = (e: any) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
@@ -29,9 +26,21 @@ const Register = (): ReactElement => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const userWithFullName = {
+      ...newUser,
+      name: `${newUser.firstName} ${newUser.lastName}`,
+    };
     try {
-      await axios.post('/api/users', newUser);
-      navigate('/login');
+      await axios.post('/auth/register', userWithFullName);
+      const registeredUser = await axios.post('/auth/login', {
+        email: newUser.email,
+        password: newUser.password,
+      });
+      if (registeredUser.status === 200) {
+        navigate('/survey');
+      } else {
+        console.error('Failed to register user.');
+      }
     } catch (error) {
       console.error(error);
     }
@@ -39,7 +48,6 @@ const Register = (): ReactElement => {
   return (
     <Container maxWidth='sm'>
       <Box
-        className='glass-card'
         sx={{
           p: 3,
           mt: 10,
@@ -48,39 +56,46 @@ const Register = (): ReactElement => {
           alignItems: 'center',
         }}
       >
-        <Typography
-          component='h1'
-          variant='h1'
-          className='glass-card'
-          sx={{
-            p: 1,
-            fontFamily: 'SomeType',
-            fontSize: {
-              xs: '1rem',
-              sm: '1.2rem',
-              md: '1.5rem',
-            },
-          }}
-        >
-          Enter Your Information To Create An Account
+        <Typography component='h1' variant='h5'>
+          Account Registration
         </Typography>
         <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
-            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            id='firstName'
+            label='First Name'
+            name='firstName'
+            autoComplete='firstName'
+            onChange={handleChange}
+          />
+          <TextField
+            margin='normal'
+            required
+            fullWidth
+            id='lastName'
+            label='Last Name'
+            name='lastName'
+            autoComplete='lastName'
+            onChange={handleChange}
+          />
+          <TextField
             margin='normal'
             required
             fullWidth
             id='email'
             label='Email Address'
+            name='email'
             autoComplete='email'
             autoFocus
             onChange={handleChange}
           />
           <TextField
-            variant='outlined'
             margin='normal'
             required
             fullWidth
+            name='password'
             label='Password'
             type='password'
             id='password'
@@ -88,53 +103,23 @@ const Register = (): ReactElement => {
             onChange={handleChange}
           />
           <TextField
-            variant='outlined'
             margin='normal'
             required
             fullWidth
-            label='Username'
             id='username'
+            label='Username'
+            name='username'
+            autoComplete='username'
             onChange={handleChange}
           />
-          <TextField
-            variant='outlined'
-            margin='normal'
+          <Button
+            type='submit'
             fullWidth
-            label='Name'
-            id='name'
-            onChange={handleChange}
-          />
-          <TextField
-            variant='outlined'
-            margin='normal'
-            fullWidth
-            label='First Name'
-            id='firstName'
-            onChange={handleChange}
-          />
-          <TextField
-            variant='outlined'
-            margin='normal'
-            fullWidth
-            label='Last Name'
-            id='lastName'
-            onChange={handleChange}
-          />
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              mt: 3,
-              mb: 2,
-            }}
+            variant='contained'
+            sx={{ mt: 3, mb: 2 }}
           >
-            <Button variant='outlined' onClick={() => navigate(-1)}>
-              Cancel
-            </Button>
-            <Button type='submit' variant='contained'>
-              Register
-            </Button>
-          </Box>
+            Sign Up
+          </Button>
         </Box>
       </Box>
     </Container>
