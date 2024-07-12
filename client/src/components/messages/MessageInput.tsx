@@ -19,7 +19,7 @@ interface PropsType {
 const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
 
   const [text, setText] = useState('');
-  const sender = useContext(UserContext).userId;
+  const sender = useContext(UserContext).id;
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
@@ -88,21 +88,22 @@ const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
         component='form'
         autoComplete='off'
         sx={{
-          width: .6,
-          position: 'absolute',
-          bottom: 12,
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
         <TextField
-          fullWidth
           placeholder='message
           'value={ text }
           onChange={ handleText }
           onKeyDown={ handleEnter }
+          sx={{
+            flexGrow: 1
+          }}
         />
-          <IconButton onClick={ sendMessage } >
-            <SendIcon />
-          </IconButton>
+        <IconButton onClick={ sendMessage } >
+          <SendIcon />
+        </IconButton>
         </Box>
   );
 }

@@ -13,23 +13,19 @@ export const ThemeToggle = (): ReactElement => {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
 
-  const styling = {marginRight: 2, color: theme.palette.primary.main}
-
   return (
-      <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-        <Box sx={{display: 'flex', flexDirection: 'row', ...styling}}>
+    <>
+      <IconButton onClick={colorMode.toggleColorMode} sx={{color: theme.palette.mode === 'light' ? '#000000' : '#ffffffff'}}>
         {theme.palette.mode === 'dark' ?
           <>
-            <Typography sx={styling}>Light Mode</Typography>
             <Brightness7Icon />
           </>
         :
           <>
-            <Typography sx={styling}>Dark Mode</Typography>
             <Brightness4Icon />
           </>
         }
-          </Box>
       </IconButton>
+    </>
   );
 }

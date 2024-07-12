@@ -14,7 +14,7 @@ import Button from '@mui/material/Button';
 
 export default ({comments, refreshParent, postID}:{comments: Comment[], refreshParent: Function, postID: number}) => {
 
-  const {userId, userImage} = useContext(UserContext);
+  const user = useContext(UserContext);
   const [body, setBody] = useState('');
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -31,14 +31,14 @@ export default ({comments, refreshParent, postID}:{comments: Comment[], refreshP
   return (
     <Grid spacing={0} container className="glass-card bottom-curve">
       {
-        userId ? (
+        user.id ? (
           <>
           <Grid item xs={12} sx={{padding: 2}}>
             <Card sx={{display: 'flex', flexDirection: 'row', justifyContent:'center', alignItems: 'center', flexGrow: 1, paddingX: 2, paddingY: 1}}>
               <Grid container spacing={1} >
                 <Grid item xs={1} sx={{display: 'flex', justifyContent:'center', alignItems: 'center'}}>
                   <Avatar
-                  src={userImage}
+                  src={user.picture}
                   sx={{
                     width: '2.3vw', height: '2.3vw',
                     minWidth: 30, minHeight: 30
