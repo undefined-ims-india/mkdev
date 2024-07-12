@@ -10,7 +10,7 @@ import { ConversationWithParticipants } from '../../../../types';
 
 interface PropTypes {
   allCons: ConversationWithParticipants[];
-  visibleCon: Conversations | null;
+  visibleCon: React.MutableRefObject<number>;
   select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
   setCons: () => void;
   deleteCon: () => void;

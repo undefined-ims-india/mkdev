@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, ReactElement } from 'react';
+import React, { useState, useEffect, useContext, useRef, ReactElement } from 'react';
 import ConversationList from './ConversationList';
 import ConversationView from './ConversationView';
 import { UserContext } from '../UserContext';
@@ -26,7 +26,7 @@ const Messages = (): ReactElement => {
   const [participantsLabel, setParticipantsLabel] = useState<string>('')
   const [participantsEntry, setParticipantsEntry] = useState<(string)[]>([]);
   const [allConversations, setAllConversations] = useState<ConversationWithParticipants[]>([]);
-  const [visibleConversation, setVisibleConversation] = useState<ConversationWithParticipants | null>(null);
+  const visibleConRef = useRef<number>(0);
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
 
@@ -146,7 +146,7 @@ const Messages = (): ReactElement => {
       // set label at top of conversation
       generateConversationLabel(newCon);
     }
-    setVisibleConversation(newCon);
+    visibleConRef.current = newCon!.id;
   }
 
   const deleteConversation = () => {
@@ -218,7 +218,7 @@ const Messages = (): ReactElement => {
                 allConversations.length ? (
                   <ConversationList
                     allCons={ allConversations }
-                    visibleCon={ visibleConversation }
+                    visibleCon={ visibleConRef }
                     setCons={ getAllConversations }
                     select={ selectConversation }
                     deleteCon={ deleteConversation }
@@ -269,7 +269,6 @@ const Messages = (): ReactElement => {
               { con ? (
                 <ConversationView
                   con={ con }
-                  visibleCon={ visibleConversation }
                   addingConversation={ addingConversation }
                   label={ participantsLabel }
                 />

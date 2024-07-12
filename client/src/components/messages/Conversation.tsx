@@ -1,4 +1,4 @@
-import React, { useState, useContext, ReactElement } from 'react';
+import React, { useState, useContext, useRef, ReactElement } from 'react';
 import { UserContext } from '../UserContext';
 import axios from 'axios';
 import ConversationDelConf from './ConversationDelConf';
@@ -18,7 +18,7 @@ const socket = io('http://localhost:4000');
 
 interface PropsType {
   con: ConversationWithParticipants;
-  visibleCon: Conversations | null,
+  visibleCon: React.MutableRefObject<number>;
   select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
   setCons: () => void;
   deleteCon: () => void;
@@ -37,6 +37,9 @@ const Conversation: React.FC<PropsType> =
   const [unreadMsgsTotal, setUnreadMsgsTotal] = useState<React.ReactNode>(0);
   const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
+  const visibleConRef = useRef(visibleCon)
+
+  console.log('visibleConRef.current while convo rendering', visibleConRef.current.current);
 
   const generateConversationLabel = (con: ConversationWithParticipants): string => {
     if (con.participants) {
@@ -53,7 +56,7 @@ const Conversation: React.FC<PropsType> =
   }
   const [label, setLabel] = useState(generateConversationLabel(con));
 
-  const getUnreadMsgsTotal = (conversationId: number, userId: number) => {
+  const getUnreadMsgsTotal = (conversationId: number, userId: number): void=> {
     if (con.id) {
       axios
         .get(`/api/messages/unread/${conversationId}/${userId}`)
@@ -65,14 +68,19 @@ const Conversation: React.FC<PropsType> =
         })
     }
   }
+  // get unread message total on initial render
+  getUnreadMsgsTotal(con.id, user.id);
 
   const markAllMsgsRead = (userId: number, conId: number): void => {
     axios
       .patch(`/api/users/read/${userId}/${conId}`)
       .then(() => {
-        setUnreadMsgsTotal(0)
+        // setUnreadMsgsTotal(0);
         // send socket event to change inbox notification badge
-        socket.emit('read-message', {})
+        // socket.emit('read-message', {})
+      })
+      .then(() => {
+        getUnreadMsgsTotal(conId, userId);
       })
       .catch((err) => {
         console.error('Failed to mark messages read:\n', err);
@@ -80,30 +88,27 @@ const Conversation: React.FC<PropsType> =
   }
 
   socket.on('message', (message) => {
-    // if conversation is in view
-    if (visibleCon !== null) {
-      // and a message is received in that conversation
-      if (visibleCon.id === message.conversationId) {
-        // and the visibleCon id matches the conversation id
-        if (visibleCon.id === con.id) {
-          // don't show the badge
-          setIsHidden(true);
-          // and mark all messages as read
+    console.log('socket visibileConRef.current', visibleConRef.current)
+    const visibleCon: number = visibleConRef.current.current;
+    // if a conversation is in view
+    if (visibleCon) {
+      // and an incoming message is not in that conversation
+      if (visibleCon !== message.conversationId) {
+        // get unread message total for that conversation
+        getUnreadMsgsTotal(con.id, user.id);
+      } else {
+        // don't show badge, mark all as read
+        try {
+          // setIsHidden(true);
           markAllMsgsRead(user.id, con.id);
-        } else {
-          // make sure badge is showing
-          setIsHidden(false);
-          // get total number of unread messages in the conversation
+          // setUnreadMsgsTotal(0);
+        } catch {
+          console.error('Unable to mark all messages read when conversation is currently in view');
+        } finally {
           getUnreadMsgsTotal(con.id, user.id);
         }
-        // else is message is received in another message
-      } else if (visibleCon.id !== message.conversationId) {
-        // make sure badge is showing
-        setIsHidden(false);
-        // get total number of unread messages in the conversation
-        getUnreadMsgsTotal(con.id, user.id);
       }
-    } else { // no conversation is is view
+    } else { // no conversation is in view
       getUnreadMsgsTotal(con.id, user.id);
     }
   })
