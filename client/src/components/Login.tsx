@@ -1,7 +1,6 @@
 import React, { ReactElement, useContext, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from './UserContext';
 
 import Divider from '@mui/material/Divider';
 import Input from '@mui/material/Input';
@@ -24,7 +23,7 @@ const Login = (): ReactElement => {
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/login', {
+      const response = await axios.post('/auth/login', {
         email: email,
         password: password,
       });
@@ -44,39 +43,19 @@ const Login = (): ReactElement => {
     >
       <Box alignContent={'center'} className='glass-card' width={'30%'}>
         <Box alignContent={'center'} className='glass-card'>
-          <Typography
-            variant='h1'
-            align='center'
-            sx={{ fontFamily: 'SomeType', fontSize: '2rem', my: 2 }}
-          >
-            Welcome to
-          </Typography>
-
-          <Typography
-            variant='h1'
-            align='center'
+          <Box
             sx={{
-              fontFamily: 'SomeType',
-              fontSize: '6rem',
-              fontWeight: 'bold',
+              alignSelf: 'center',
+              display: 'flex',
+              justifyContent: 'center',
             }}
           >
-            MKDEV
-          </Typography>
-          <Typography
-            variant='h1'
-            align='center'
-            gutterBottom
-            sx={{
-              fontFamily: 'SomeType',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              mb: 3,
-              p: 2,
-            }}
-          >
-            A Platform For Developers To Connect And Share Their Work
-          </Typography>
+            <img
+              src='/img/mkdev_1200x600.gif'
+              alt='mkdev logo'
+              style={{ width: '40vw', maxWidth: '100%' }}
+            />
+          </Box>
         </Box>
         <Box
           component='form'
@@ -123,11 +102,9 @@ const Login = (): ReactElement => {
             alignItems: 'center',
           }}
         >
-          <form action='/auth/google' method='GET'>
-            <Button type='submit'>
-              <GoogleButton />
-            </Button>
-          </form>
+          <Button onClick={() => navigate('/auth/google')}>
+            <GoogleButton />
+          </Button>
         </Box>
       </Box>
     </Box>
