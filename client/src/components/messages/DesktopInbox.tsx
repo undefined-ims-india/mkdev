@@ -17,7 +17,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import CreateIcon from '@mui/icons-material/Create';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const socket = io('http://localhost:4000');
 
@@ -236,7 +235,7 @@ const DesktopInbox = (): ReactElement => {
                 flexBasis: 'auto',
               }}
             >
-              { addingConversation ? (
+              { addingConversation &&
                   <form>
                     <Autocomplete
                       multiple
@@ -264,15 +263,13 @@ const DesktopInbox = (): ReactElement => {
                     />
                     <Button onClick={ addConversation } variant='contained'>Create</Button>
                   </form>
-                ) : ('')
               }
-              { con ? (
+              { con &&
                 <ConversationView
                   con={ con }
                   addingConversation={ addingConversation }
                   label={ participantsLabel }
                 />
-                ) : ('')
               }
             </Box>
           </Box>

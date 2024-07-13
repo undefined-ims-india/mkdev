@@ -1,11 +1,10 @@
-import React, { useState, useContext, ReactElement } from 'react';
+import React, { useContext, ReactElement } from 'react';
 import DesktopInbox from './DesktopInbox';
 import MobileInbox from './MobileInbox';
 import { UserContext } from '../UserContext';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 
 
 const Messages = (): ReactElement => {

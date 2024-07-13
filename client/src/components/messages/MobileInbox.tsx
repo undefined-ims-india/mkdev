@@ -8,14 +8,12 @@ import axios from 'axios';
 import { User, Conversations } from '@prisma/client';
 import { ConversationWithParticipants } from '../../../../types';
 
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import CreateIcon from '@mui/icons-material/Create';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
@@ -234,7 +232,7 @@ const DesktopInbox = (): ReactElement => {
                 flexBasis: 'auto',
               }}
             >
-              { addingConversation ? (
+              { addingConversation &&
                   <form>
                     <Autocomplete
                       multiple
@@ -262,15 +260,13 @@ const DesktopInbox = (): ReactElement => {
                     />
                     <Button onClick={ addConversation } variant='contained'>Create</Button>
                   </form>
-                ) : ('')
               }
-              { con ? (
+              { con &&
                 <ConversationView
                   con={ con }
                   addingConversation={ addingConversation }
                   label={ participantsLabel }
                 />
-                ) : ('')
               }
             </Box>
           )}
