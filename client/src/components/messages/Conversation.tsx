@@ -4,13 +4,12 @@ import axios from 'axios';
 import ConversationDelConf from './ConversationDelConf';
 import io from 'socket.io-client';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Grid from '@mui/material/Grid';
 import Badge from '@mui/material/Badge';
 
-import { Conversations } from '@prisma/client';
 import { Typography } from '@mui/material';
 import { ConversationWithParticipants } from '../../../../types';
 
@@ -38,8 +37,6 @@ const Conversation: React.FC<PropsType> =
   const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
   const visibleConRef = useRef(visibleCon)
-
-  console.log('visibleConRef.current while convo rendering', visibleConRef.current.current);
 
   const generateConversationLabel = (con: ConversationWithParticipants): string => {
     if (con.participants) {
@@ -77,7 +74,7 @@ const Conversation: React.FC<PropsType> =
       .then(() => {
         // setUnreadMsgsTotal(0);
         // send socket event to change inbox notification badge
-        // socket.emit('read-message', {})
+        socket.emit('read-message', {})
       })
       .then(() => {
         getUnreadMsgsTotal(conId, userId);
@@ -88,7 +85,6 @@ const Conversation: React.FC<PropsType> =
   }
 
   socket.on('message', (message) => {
-    console.log('socket visibileConRef.current', visibleConRef.current)
     const visibleCon: number = visibleConRef.current.current;
     // if a conversation is in view
     if (visibleCon) {
@@ -130,16 +126,26 @@ const Conversation: React.FC<PropsType> =
   }
 
   return (
-    <Grid item>
-      <Badge badgeContent={ unreadMsgsTotal } invisible={ isHidden }color="warning">
+    <Box
+      sx={{
+        display: 'flex',
+        flexGrow: 1,
+      }}
+    >
+      <Box
+        sx={{
+          flexGrow: 1,
+          width: '100%',
+        }}
+      >
         <ButtonGroup
+          fullWidth={true}
           sx={{
-            width: '200px'
+            pl: 0
           }}
           variant='contained'
         >
           <Button
-            fullWidth
             onClick={ (e)=> {selectConversation(e, con)} }
           >
             <Typography
@@ -149,13 +155,15 @@ const Conversation: React.FC<PropsType> =
               { label }
             </Typography>
           </Button>
-          <Button onClick={ handleDelete }>
-            <DeleteIcon />
-          </Button>
+          <Badge badgeContent={ unreadMsgsTotal } invisible={ isHidden }color="warning">
+            <Button onClick={ handleDelete }>
+              <DeleteIcon />
+            </Button>
+          </Badge>
         </ButtonGroup>
-      </Badge>
+      </Box>
       <ConversationDelConf con={ con } setCons={ setCons } deleteCon={ deleteCon } handleClose={ handleClose } hidden={ showDelConfirm }/>
-    </Grid>
+    </Box>
   );
 }
 

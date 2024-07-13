@@ -32,9 +32,7 @@ const DesktopInbox = (): ReactElement => {
   const [allConversations, setAllConversations] = useState<ConversationWithParticipants[]>([]);
   const visibleConRef = useRef<number>(0);
   const [allUsers, setAllUsers] = useState<User[]>([]);
-  const [loginError, setLoginError] = useState<boolean>(false);
-  const mobileLayout = useMediaQuery<boolean>('(max-width:650px)');
-  const [mobileView, setMobileView] = useState<string>(() => visibleConRef.current ? 'chat' : 'list');
+  const [mobileView, setMobileView] = useState<string>('list');
 
   // get all current conversations for current user
   const getAllConversations = (): void => {
@@ -44,7 +42,6 @@ const DesktopInbox = (): ReactElement => {
         setAllConversations(data);
       })
       .catch((err) => {
-        setLoginError(true);
         console.error('Failed to retrieve conversations:\n', err);
       })
   }
@@ -75,6 +72,7 @@ const DesktopInbox = (): ReactElement => {
     e.preventDefault();
 
     setAddingConversation(true);
+    setMobileView('chat');
   }
 
   const changeParticipants = (e: any, value: (string)[] ): void => {
@@ -152,6 +150,7 @@ const DesktopInbox = (): ReactElement => {
       // set label at top of conversation
       generateConversationLabel(newCon);
     }
+    setMobileView('chat');
     visibleConRef.current = newCon!.id;
   }
 
@@ -166,68 +165,48 @@ const DesktopInbox = (): ReactElement => {
     getAllConversations();
   })
 
+  const handleBackToList = () => {
+    setMobileView('list');
+  }
+
   return (
     <Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          padding: 2
-        }}
-      >
-        <Typography variant="h3">
-          Mobile Inbox
+      <Box sx={{ display: 'flex', padding: 1 }}>
+        <Typography variant="h1" fontSize={'2rem'}>
+          Inbox
         </Typography>
       </Box>
-      { loginError ? (
+      <Box>
         <Box
           sx={{
-            display: 'flex',
-            padding: 2
+            pl: 1,
+            pb: 1
           }}
         >
-          <Typography variant="h3">
-            You must be logged in to view conversations
-          </Typography>
+          { mobileView === 'list' ? (
+            <Button variant='contained' onClick={ beginConversation }>
+              <CreateIcon />
+            </Button>
+          ) : (
+            <Button variant='contained' onClick={ handleBackToList }>
+              <ArrowBackIosNewIcon />
+            </Button>
+          )}
         </Box>
-      ) : (
-        <Box>
-          <Box
-            sx={{
-              pl: 2,
-              pb: 2
-            }}
-          >
-            { mobileLayout ?
-              (
-                <Button variant='contained' /* TODO: add view change handler */>
-                  <ArrowBackIosNewIcon />
-                </Button>
-                ) : (
-                <Button variant='contained' onClick={ beginConversation }>
-                  <CreateIcon />
-                </Button>
-              )
-            }
-          </Box>
-          <Box                                     // top most container for ConversationList and ConversationView
-            className='glass-card'
-            sx={{
-              display: 'flex',
-              minHeight: '70vh',
-              mx: 2,
-              border: 3,
-              borderColor: 'red'
-            }}
-          >
+        <Box                                     // top most container for ConversationList and ConversationView
+          className='glass-card'
+          sx={{
+            display: 'flex',
+            minHeight: '70vh',
+            ml: 1,
+          }}
+        >
+          { mobileView === 'list' ? (
             <Box                              // ConversationList container
               sx={{
-                // p: 4,
-                flexGrow: 0,
+                flexGrow: 1,
                 flexShrink: 1,
                 flexBasis: 'auto',
-                border: 3,
-                borderColor: 'yellow'
               }}
             >
               {
@@ -246,21 +225,13 @@ const DesktopInbox = (): ReactElement => {
                 )
               }
             </Box>
-            { !mobileLayout &&
-              <Divider orientation='vertical' variant='middle' flexItem
-                sx={{
-                  mx: 2
-                }}
-              />
-            }
+          ) : (
             <Box                              // ConversationView container
               sx={{
                 p: 2,
                 flexGrow: 1,
                 flexShrink: 1,
                 flexBasis: 'auto',
-                border: 3,
-                borderColor: 'blue'
               }}
             >
               { addingConversation ? (
@@ -302,10 +273,9 @@ const DesktopInbox = (): ReactElement => {
                 ) : ('')
               }
             </Box>
-          </Box>
+          )}
         </Box>
-      )
-      }
+      </Box>
     </Box>
   );
 }

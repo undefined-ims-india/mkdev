@@ -15,20 +15,8 @@ const Messages = (): ReactElement => {
 
   return (
     <Box>
-      { !userId ? (
-        <Box
-          sx={{
-            display: 'flex',
-            padding: 2
-          }}
-        >
-          <Typography variant="h3">
-            You must be logged in to view conversations
-          </Typography>
-        </Box>
-        ) : (
-          mobileLayout ? ( <MobileInbox /> ) : ( <DesktopInbox /> )
-        )
+      { userId &&
+        mobileLayout ? ( <MobileInbox /> ) : ( <DesktopInbox /> )
       }
     </Box>
   );

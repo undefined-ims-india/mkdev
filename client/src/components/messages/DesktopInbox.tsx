@@ -34,7 +34,6 @@ const DesktopInbox = (): ReactElement => {
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [loginError, setLoginError] = useState<boolean>(false);
   const mobileLayout = useMediaQuery<boolean>('(max-width:650px)');
-  const [mobileView, setMobileView] = useState<string>(() => visibleConRef.current ? 'chat' : 'list');
 
   // get all current conversations for current user
   const getAllConversations = (): void => {
@@ -179,18 +178,7 @@ const DesktopInbox = (): ReactElement => {
           Inbox
         </Typography>
       </Box>
-      { loginError ? (
-        <Box
-          sx={{
-            display: 'flex',
-            padding: 2
-          }}
-        >
-          <Typography variant="h3">
-            You must be logged in to view conversations
-          </Typography>
-        </Box>
-      ) : (
+      { !loginError &&
         <Box>
           <Box
             sx={{
@@ -198,17 +186,9 @@ const DesktopInbox = (): ReactElement => {
               pb: 2
             }}
           >
-            { mobileLayout ?
-              (
-                <Button variant='contained' /* TODO: add view change handler */>
-                  <ArrowBackIosNewIcon />
-                </Button>
-                ) : (
-                <Button variant='contained' onClick={ beginConversation }>
-                  <CreateIcon />
-                </Button>
-              )
-            }
+            <Button variant='contained' onClick={ beginConversation }>
+              <CreateIcon />
+            </Button>
           </Box>
           <Box                                     // top most container for ConversationList and ConversationView
             className='glass-card'
@@ -216,18 +196,13 @@ const DesktopInbox = (): ReactElement => {
               display: 'flex',
               minHeight: '70vh',
               mx: 2,
-              border: 3,
-              borderColor: 'red'
             }}
           >
             <Box                              // ConversationList container
               sx={{
-                // p: 4,
                 flexGrow: 0,
                 flexShrink: 1,
                 flexBasis: 'auto',
-                border: 3,
-                borderColor: 'yellow'
               }}
             >
               {
@@ -259,8 +234,6 @@ const DesktopInbox = (): ReactElement => {
                 flexGrow: 1,
                 flexShrink: 1,
                 flexBasis: 'auto',
-                border: 3,
-                borderColor: 'blue'
               }}
             >
               { addingConversation ? (
@@ -304,7 +277,6 @@ const DesktopInbox = (): ReactElement => {
             </Box>
           </Box>
         </Box>
-      )
       }
     </Box>
   );
