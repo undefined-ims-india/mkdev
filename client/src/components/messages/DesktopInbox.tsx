@@ -236,33 +236,33 @@ const DesktopInbox = (): ReactElement => {
               }}
             >
               { addingConversation &&
-                  <form>
-                    <Autocomplete
-                      multiple
-                      id="tags-filled"
-                      options={allUsers.map((option) => option.username)}
-                      value={ participantsEntry! }
-                      onChange={ changeParticipants }
-                      freeSolo
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index: number) => {
-                          const { key, ...tagProps } = getTagProps({ index });
-                          return (
-                            <Chip variant="outlined" label={option} key={key} {...tagProps} />
-                          );
-                        })
-                      }
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="filled"
-                          label="To:"
-                          placeholder="usernames"
-                        />
-                      )}
-                    />
-                    <Button onClick={ addConversation } variant='contained'>Create</Button>
-                  </form>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Autocomplete
+                    multiple
+                    id="message-recipients"
+                    options={allUsers.map((option) => option.username)}
+                    value={ participantsEntry! }
+                    onChange={ changeParticipants }
+                    freeSolo
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index: number) => {
+                        const { key, ...tagProps } = getTagProps({ index });
+                        return (
+                          <Chip variant="outlined" label={option} key={key} {...tagProps} />
+                        );
+                      })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="filled"
+                        label="To:"
+                        placeholder="usernames"
+                      />
+                    )}
+                  />
+                  <Button onClick={ addConversation } variant='contained'>Create</Button>
+                </Box>
               }
               { con &&
                 <ConversationView
