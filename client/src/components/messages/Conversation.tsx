@@ -146,6 +146,7 @@ const Conversation: React.FC<PropsType> =
           variant='contained'
         >
           <Button
+            sx={{ display: 'flex', justifyContent: 'flex-start' }}
             onClick={ (e)=> {selectConversation(e, con)} }
           >
             <Typography
