@@ -230,7 +230,7 @@ const DesktopInbox = (): ReactElement => {
             <Box                              // ConversationView container
               sx={{
                 p: 2,
-                flexGrow: 1,
+                flexGrow: 3,
                 flexShrink: 1,
                 flexBasis: 'auto',
               }}

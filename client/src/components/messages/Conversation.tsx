@@ -7,6 +7,7 @@ import io from 'socket.io-client';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Badge from '@mui/material/Badge';
 
@@ -138,15 +139,15 @@ const Conversation: React.FC<PropsType> =
           width: '100%',
         }}
       >
-        <ButtonGroup
-          fullWidth={true}
+        <Box
           sx={{
+            display: 'flex',
             pl: 0
           }}
-          variant='contained'
         >
           <Button
-            sx={{ display: 'flex', justifyContent: 'flex-start' }}
+            variant='text'
+            sx={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1 }}
             onClick={ (e)=> {selectConversation(e, con)} }
           >
             <Typography
@@ -157,11 +158,14 @@ const Conversation: React.FC<PropsType> =
             </Typography>
           </Button>
           <Badge badgeContent={ unreadMsgsTotal } invisible={ isHidden }color="warning">
-            <Button onClick={ handleDelete }>
-              <DeleteIcon />
+            <Button
+              id='delete-conversation'
+              onClick={ handleDelete }
+            >
+              <ClearIcon />
             </Button>
           </Badge>
-        </ButtonGroup>
+        </Box>
       </Box>
       <ConversationDelConf con={ con } setCons={ setCons } deleteCon={ deleteCon } handleClose={ handleClose } hidden={ showDelConfirm }/>
     </Box>
