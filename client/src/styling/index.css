@@ -57,6 +57,10 @@
   opacity: 1;
 }
 
+#delete-conversation-mobile {
+  opacity: .3;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 15px;

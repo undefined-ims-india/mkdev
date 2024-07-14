@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 interface PropTypes {
   allCons: ConversationWithParticipants[];
   visibleCon: React.MutableRefObject<number>;
+  display: string;
   select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
   setCons: () => void;
   deleteCon: () => void;
@@ -19,6 +20,7 @@ const ConversationList: React.FC<PropTypes> =
   ({
     allCons,
     visibleCon,
+    display,
     select,
     setCons,
     deleteCon
@@ -37,6 +39,7 @@ const ConversationList: React.FC<PropTypes> =
           return (
             <ListItem dense={true} key={`${i}`}>
               <Conversation
+                display={ display }
                 con={ con }
                 key={ `${con.id}-${i}` }
                 visibleCon={ visibleCon }

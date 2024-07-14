@@ -19,6 +19,7 @@ const socket = io('http://localhost:4000');
 interface PropsType {
   con: ConversationWithParticipants;
   visibleCon: React.MutableRefObject<number>;
+  display: string;
   select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
   setCons: () => void;
   deleteCon: () => void;
@@ -28,6 +29,7 @@ const Conversation: React.FC<PropsType> =
   ({
     con,
     visibleCon,
+    display,
     select,
     setCons,
     deleteCon
@@ -159,7 +161,7 @@ const Conversation: React.FC<PropsType> =
           </Button>
           <Badge badgeContent={ unreadMsgsTotal } invisible={ isHidden }color="warning">
             <Button
-              id='delete-conversation'
+              id={ display === 'mobile' ? 'delete-conversation-mobile' : 'delete-conversation'}
               onClick={ handleDelete }
             >
               <ClearIcon />
