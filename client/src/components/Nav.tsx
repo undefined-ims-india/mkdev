@@ -29,7 +29,7 @@ const Nav = (): ReactElement => {
   const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
   const open = !!anchorEl;
   const navigate = useNavigate();
-  const theme = useTheme().palette.mode;
+  const theme = useTheme();
 
   // count total unread messages for logged in user
   useEffect(() => {
@@ -40,6 +40,9 @@ const Nav = (): ReactElement => {
           setIsHidden(false);
         }
         setUnreadMsgs(data);
+      })
+      .catch((err) => {
+        console.error('Failed to get unread message total for user:\n', err);
       })
   }, [unreadMsgs])
 
@@ -68,7 +71,7 @@ const Nav = (): ReactElement => {
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar enableColorOnDark sx={{
-          backgroundColor: theme === 'light' ? 'rgb(135, 231, 186, .4)' : 'rgb(76, 194, 137,.4)',
+          backgroundColor: theme.palette.mode === 'light' ? 'rgb(135, 231, 186, .4)' : 'rgb(76, 194, 137,.4)',
           backdropFilter: 'blur(14px) saturate(180%)',
           zIndex: '10',
           height: '70px'
@@ -88,13 +91,13 @@ const Nav = (): ReactElement => {
                 {!!user.id ?
                   (
                     <>
-                      <IconButton onClick={handleNav('messages')} sx={{color: useTheme().palette.secondary.main}}>
+                      <IconButton onClick={handleNav('messages')} sx={{color: theme.palette.secondary.main}}>
                         <Badge badgeContent={unreadMsgs} invisible={isHidden} color="warning">
                           <InboxIcon fontSize="medium" />
                         </Badge>
                         <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
                       </IconButton>
-                      <IconButton onClick={handleNav('create-post')} sx={{color: useTheme().palette.secondary.main}}>
+                      <IconButton onClick={handleNav('create-post')} sx={{color: theme.palette.secondary.main}}>
                         <AddBoxIcon fontSize="medium" />
                         <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
                       </IconButton>
@@ -121,7 +124,7 @@ const Nav = (): ReactElement => {
                 :
                   (
                     <Box sx={{display: 'flex', alignItems: 'center'}}>
-                      <Button onClick={() => {navigate('/login')}} size='large' sx={{color: useTheme().palette.secondary.main}}>Login</Button>
+                      <Button onClick={() => {navigate('/login')}} size='large' sx={{color: theme.palette.secondary.main}}>Login</Button>
                       <ThemeToggle />
                     </Box>
                   )

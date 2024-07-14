@@ -1,5 +1,5 @@
-import React, { useState, useContext, ReactElement } from 'react';
-import { UserContext } from '../UserContext';
+import React, { useState, ReactElement } from 'react';
+import { useTheme } from '@mui/material';
 import { MessageWithMetadata } from '../../../../types';
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
@@ -9,8 +9,6 @@ import axios from 'axios';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUp';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -28,12 +26,11 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
     body,
     liked,
     createdAt,
-    senderId,
     sender
   } = msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
-  const loggedInUser = useContext(UserContext).id;
+  const theme = useTheme();
 
   const handleLike = () => {
     axios
@@ -72,20 +69,15 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
         }}
       >
         <Avatar src={ sender.picture! }></Avatar>
-          { loggedInUser === senderId ? (
-              <IconButton onClick={ handleDelete }>
-                <DeleteIcon fontSize='small'/>
-              </IconButton>
-            ) : (
-              <IconButton onClick={ handleLike }>
-                { isLiked ? <ThumbUpAltIcon fontSize='small'/> : <ThumbUpOffAltIcon fontSize='small'/> }
-              </IconButton>
-            )
-          }
+        <IconButton onClick={ handleDelete }>
+          <DeleteIcon fontSize='small'/>
+        </IconButton>
       </Box>
       <Box
         sx={{
-          flexGrow: 1
+          display: 'flex',
+          flexGrow: 1,
+          flexDirection: 'column',
         }}
       >
         <Typography align='right'>
@@ -95,19 +87,18 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
           elevation={2}
           sx={{
             display: 'flex',
-            flexDirection: 'column',
-            color:'white',
-            background: '#349FDA',
+            flexGrow: 1,
+            background: '#00ff884d',
             padding: 1
           }}
         >
-          <Typography align='right'>
+          <Typography align='left' color={ theme.palette.text.secondary }>
             { body }
           </Typography>
-          <Typography variant="caption" align='right'>
-          { dayjs(createdAt).calendar() }
-          </Typography>
         </Paper>
+        <Typography align='right' variant='caption'>
+        { dayjs(createdAt).calendar() }
+        </Typography>
       </Box>
     </Box>
   );
