@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import LinearProgress from '@mui/material/LinearProgress';
 import Grid from '@mui/material/Grid';
-import EditOrFollowButton from './Edit';
+import EditOrFollowButton from './EditOrFollowButton';
 import Divider from '@mui/material/Divider';
 
 interface ProfileProps {
