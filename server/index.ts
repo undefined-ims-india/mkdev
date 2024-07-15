@@ -9,6 +9,7 @@ import routes from './routes';
 import fileUpload from 'express-fileupload';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
+
 import initializePassport from './routes/routers/auth';
 import registration from './routes/routers/register';
 
