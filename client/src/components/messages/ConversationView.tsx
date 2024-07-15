@@ -14,7 +14,6 @@ const socket = io('http://localhost:4000');
 
 interface PropsType {
   con: Conversations;
-  visibleCon: Conversations | null;
   label: string;
   addingConversation: boolean;
 }
