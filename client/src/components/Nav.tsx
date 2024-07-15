@@ -29,17 +29,22 @@ const Nav = (): ReactElement => {
   const [isHidden, setIsHidden] = useState<boolean | undefined>(true);
   const open = !!anchorEl;
   const navigate = useNavigate();
-  const theme = useTheme().palette.mode;
+  const theme = useTheme();
 
   // count total unread messages for logged in user
   useEffect(() => {
-    axios.get(`/api/users/unread/${user.id}`).then(({ data }): void => {
-      if (data > 0) {
-        setIsHidden(false);
-      }
-      setUnreadMsgs(data);
-    });
-  }, [unreadMsgs]);
+    axios
+      .get(`/api/users/unread/${user.id}`)
+      .then(({ data }): void => {
+        if (data > 0) {
+          setIsHidden(false);
+        }
+        setUnreadMsgs(data);
+      })
+      .catch((err) => {
+        console.error('Failed to get unread message total for user:\n', err);
+      })
+  }, [unreadMsgs])
 
   socket.on('read-message', () => {
     setUnreadMsgs(0);
@@ -64,14 +69,9 @@ const Nav = (): ReactElement => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar
-        enableColorOnDark
-        sx={{
-          backgroundColor:
-            theme === 'light'
-              ? 'rgb(135, 231, 186, .4)'
-              : 'rgb(76, 194, 137,.4)',
+    <Box sx={{flexGrow: 1}}>
+      <AppBar enableColorOnDark sx={{
+          backgroundColor: theme.palette.mode === 'light' ? 'rgb(135, 231, 186, .4)' : 'rgb(76, 194, 137,.4)',
           backdropFilter: 'blur(14px) saturate(180%)',
           zIndex: '10',
           height: '70px',
@@ -117,7 +117,7 @@ const Nav = (): ReactElement => {
                   <>
                     <IconButton
                       onClick={handleNav('messages')}
-                      sx={{ color: useTheme().palette.secondary.main }}
+                      sx={{ color: theme.palette.secondary.main }}
                     >
                       <Badge
                         badgeContent={unreadMsgs}
@@ -132,7 +132,7 @@ const Nav = (): ReactElement => {
                     </IconButton>
                     <IconButton
                       onClick={handleNav('create-post')}
-                      sx={{ color: useTheme().palette.secondary.main }}
+                      sx={{ color: theme.palette.secondary.main }}
                     >
                       <AddBoxIcon fontSize='medium' />
                       <Typography variant='h1' sx={{ fontSize: 20 }}>
@@ -171,7 +171,7 @@ const Nav = (): ReactElement => {
                         navigate('/login');
                       }}
                       size='large'
-                      sx={{ color: useTheme().palette.secondary.main }}
+                      sx={{ color: theme.palette.secondary.main }}
                     >
                       Login
                     </Button>

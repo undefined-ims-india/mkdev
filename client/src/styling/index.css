@@ -49,6 +49,22 @@
 
 }
 
+#delete-conversation {
+  opacity: .1;
+}
+
+#delete-conversation:hover {
+  opacity: 1;
+}
+
+#delete-conversation {
+  opacity: .1;
+}
+
+#delete-conversation:hover {
+  opacity: 1;
+}
+
 .largeDevices {
   display: none;
 }
