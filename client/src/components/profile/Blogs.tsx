@@ -67,8 +67,21 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
 
   return (
     <Box>
-      <Grid container spacing={4}>
-        {loading ? (
+      {blogs.length === 0 && !loading && (
+        <Typography
+          variant='h1'
+          component='h2'
+          fontSize={'1rem'}
+          fontFamily={'SomeType'}
+          justifyContent={'center'}
+          align='center'
+        >
+          No Blogs Found
+        </Typography>
+      )}
+
+      {loading ? (
+        <Grid container spacing={4}>
           <Grid item xs={12}>
             <Box
               sx={{
@@ -81,15 +94,17 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
               <LinearProgress sx={{ width: '50%', height: '10px' }} />
             </Box>
           </Grid>
-        ) : blogs.length ? (
-          blogs.map((blog, idx) => (
+        </Grid>
+      ) : (
+        <Grid container spacing={4}>
+          {blogs.map((blog, idx) => (
             <Grid item key={idx} xs={12} sm={6} md={4}>
               <Card>
                 <Link href={blog.url} target='_blank'>
                   <CardMedia
                     component='img'
                     image={blog.cover_image}
-                    alt={blog.title}
+                    alt={'Blog Cover Image'}
                   />
                 </Link>
                 <CardContent>
@@ -98,7 +113,7 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h2'
                     fontSize={'2rem'}
                     align='center'
-                    fontFamily={'Sometype'}
+                    fontFamily={'SomeType'}
                   >
                     {blog.title}
                   </Typography>
@@ -107,28 +122,16 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h3'
                     fontSize={'1rem'}
                     align='center'
-                    fontFamily={'Sometype'}
+                    fontFamily={'SomeType'}
                   >
                     {blog.description}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
-          ))
-        ) : (
-          <Grid item xs={12}>
-            <Typography
-              variant='h1'
-              component='h2'
-              fontSize={'1rem'}
-              align='center'
-              fontFamily={'Sometype'}
-            >
-              No Blogs Found
-            </Typography>
-          </Grid>
-        )}
-      </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 };

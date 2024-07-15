@@ -47,7 +47,7 @@ const Socials = ({ profileData }: UserProps): ReactElement => {
                 target='_blank'
                 title='GitHub Profile'
               >
-                <GitHubIcon fontSize='large' />
+                <GitHubIcon fontSize='large' sx={{ color: 'black' }} />
               </Link>
             ) : (
               <GitHubIcon fontSize='large' color='disabled' />

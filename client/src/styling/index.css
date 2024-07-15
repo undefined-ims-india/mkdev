@@ -57,6 +57,26 @@
   opacity: 1;
 }
 
+#delete-conversation {
+  opacity: .1;
+}
+
+#delete-conversation:hover {
+  opacity: 1;
+}
+
+.largeDevices {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .largeDevices {
+    display: block;
+  }
+  .smallDevices {
+    display: none;
+  }
+}
 /* width */
 ::-webkit-scrollbar {
   width: 15px;
