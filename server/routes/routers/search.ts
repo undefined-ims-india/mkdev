@@ -16,7 +16,7 @@ search.get(
     if (!Object.values(TagType).includes(tagType)) {
       return res.status(400).send('Invalid tag type');
     }
-    // Find posts where tag === tag and 
+    // Find posts where tag === tag and
     try {
       const searchResults = await prisma.tags.findMany({
         where: {
@@ -49,8 +49,7 @@ search.put(
   '/addTag/:tagType/:existingTag',
   async (req: Request, res: Response) => {
     // Fallback to a default user ID if req.user is not set
-    //const userId = req.user?.id || 1; // Default user ID for testing purposes
-    const userId = 1; // TODO I have to fix this. !!!!
+    const userId = 1;
     const { tagType, existingTag } = req.params;
 
     try {

@@ -82,7 +82,7 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
             {profileData &&
               profileData!.posts.map((post) => (
                 <Box
-                  key={post.title + crypto.randomUUID()}
+                  key={post.title + post.id}
                   my={1}
                   width='50%'
                   sx={{

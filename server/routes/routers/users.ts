@@ -120,22 +120,23 @@ users.get('/', (req: any, res: any) => {
 users.get('/unread/:id', (req: any, res: any) => {
   const { id } = req.params;
 
-  prisma.user.findFirst({
-    where: {
-      id: +id
-    },
-    select: {
-      _count: {
-        select: {
-          unreadMessages: true
-        }
-      }
-    }
-  })
-  .then((unreadCount) => {
-    res.status(200).send(JSON.stringify(unreadCount?._count.unreadMessages));
-  })
-})
+  prisma.user
+    .findFirst({
+      where: {
+        id: +id,
+      },
+      select: {
+        _count: {
+          select: {
+            unreadMessages: true,
+          },
+        },
+      },
+    })
+    .then((unreadCount) => {
+      res.status(200).send(JSON.stringify(unreadCount?._count.unreadMessages));
+    });
+});
 
 // Update user by id
 users.patch('/:id', async (req: any, res: any) => {
@@ -183,37 +184,37 @@ users.patch('/read/:id/:conversationId', async (req, res) => {
     where: {
       AND: [
         {
-          conversationId: +conversationId
+          conversationId: +conversationId,
         },
         {
           unreadBy: {
             some: {
               id: {
-                equals: +id
-              }
-            }
-          }
-        }
-      ]
+                equals: +id,
+              },
+            },
+          },
+        },
+      ],
     },
     select: {
-      id: true
-    }
-  })
+      id: true,
+    },
+  });
 
   // disconnect newly read messages from user's unreadMessages
   await prisma.user.update({
     where: {
-      id: +id
+      id: +id,
     },
     data: {
       unreadMessages: {
-        disconnect: readMsgs
-      }
-    }
-  })
+        disconnect: readMsgs,
+      },
+    },
+  });
 
   res.sendStatus(202);
-})
+});
 
 export default users;
