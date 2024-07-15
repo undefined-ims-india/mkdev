@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { UserProfile } from '../../../../types';
@@ -12,45 +12,28 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Modal from '@mui/material/Modal';
+import { UserContext } from '../UserContext';
 
 const Profile = (): React.ReactElement => {
-  const { id } = useParams<{ id: string }>();
+  const { id: loggedInUserId } = useContext(UserContext);
+  const { id: profileUserId } = useParams<{ id: string }>();
   const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [edit, setEdit] = useState(false);
+  const [userInfo, setUserInfo]: [UserProfile | null, Function] =
+    useState(null);
+  const profileDataREF = useRef(profileData);
 
   const getProfile = () => {
+    const userId = profileUserId || loggedInUserId;
     axios
-      .get(`/api/users/${id}/profile`)
+      .get(`/api/users/${userId}/profile`)
       .then(({ data }) => setProfileData(data))
       .catch((err) => console.error('Failed to get user:', err));
   };
 
   useEffect(() => {
     getProfile();
-  }, [id]);
-
-  const handleEdit = () => setEdit(true);
-
-  const updateUserInfo = (userInfo: UserProfile) => {
-    axios
-      .patch(`/api/users/user/${userInfo.id}`, userInfo)
-      .then(({ data }) => {
-        setProfileData(data);
-        setEdit(false);
-      })
-      .catch((error) => console.error('Error updating user info:', error));
-  };
-
-  if (!profileData) {
-    return <Skeleton variant='rectangular' width={210} height={118} />;
-  }
-  // const { id } = useParams();
-  // const [profileData, setProfileData]: [UserProfile | null, Function] =
-  //   useState(null);
-  // const [userInfo, setUserInfo]: [UserProfile | null, Function] =
-  //   useState(null);
-  // const [edit, setEdit] = useState(false);
-  // const profileDataREF = useRef(profileData);
+  }, [profileUserId, loggedInUserId]);
 
   // const getProfile = () => {
   //   axios
@@ -58,23 +41,22 @@ const Profile = (): React.ReactElement => {
   //     .then(({ data }) => setProfileData(data))
   //     .catch((err) => console.error('Failed to get user:', err));
   // };
-
   // useEffect(getProfile, [profileDataREF]);
 
-  // const handleEdit = () => {
-  //   setEdit(true);
-  // };
+  const handleEdit = () => {
+    setEdit(true);
+  };
 
-  // const updateUserInfo = (userInfo: UserProfile) => {
-  //   axios
-  //     .patch(`/api/users/${userInfo.id}`, userInfo)
-  //     .then(({ data }): void => {
-  //       setUserInfo(data);
-  //     })
-  //     .catch((error) => console.error('Error updating user info:', error));
-  //   setEdit(false);
-  //   setProfileData(userInfo);
-  // };
+  const updateUserInfo = (userInfo: UserProfile) => {
+    axios
+      .patch(`/api/users/${userInfo.id}`, userInfo)
+      .then(({ data }): void => {
+        setUserInfo(data);
+      })
+      .catch((error) => console.error('Error updating user info:', error));
+    setEdit(false);
+    setProfileData(userInfo);
+  };
 
   try {
     return (
