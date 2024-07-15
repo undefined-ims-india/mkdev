@@ -15,6 +15,7 @@ import FullPostPage from './posts/full post/FullPostPage';
 import SearchResults from './SearchResults';
 import Welcome from './Welcome';
 import Signup from './Survey';
+import Register from './Register';
 import PostEditPage from './posts/post creation/PostEditPage';
 
 import { CssBaseline } from '@mui/material';
@@ -69,9 +70,13 @@ const routes = [
     element: <Signup />,
   },
   {
+    path: '/register',
+    element: <Register />,
+  },
+  {
     path: '/post/:id/edit',
-    element: <PostEditPage/>
-  }
+    element: <PostEditPage />,
+  },
 ];
 
 const App = (): ReactElement => {

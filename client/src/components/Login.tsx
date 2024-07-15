@@ -1,21 +1,44 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import Divider from '@mui/material/Divider';
 import Input from '@mui/material/Input';
 import GoogleButton from 'react-google-button';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import CardMedia from '@mui/material/CardMedia';
 
 const Login = (): ReactElement => {
-  const login = () => {
-    axios.get('/auth/google').catch((err) => {
-      console.log(err);
-    });
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    return name === 'email' ? setEmail(value) : setPassword(value);
   };
+
+  const handleSignUp = () => {
+    navigate('/Register');
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await axios.post('/auth/login', { email, password });
+      navigate('/dashboard');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const GoogleSignIn = () => {
+    window.location.href = '/auth/google';
+  };
+
   return (
     <Box
       display='flex'
@@ -24,49 +47,38 @@ const Login = (): ReactElement => {
       justifyContent='center'
       minHeight='100vh'
     >
-      <div className='glass-card'>
-        <Box alignContent={'center'}>
-          <Typography
-            variant='h1'
-            align='center'
-            gutterBottom
-            sx={{ fontFamily: 'Roboto', fontSize: '3rem' }}
-          >
-            Welcome to
-          </Typography>
-
-          <Typography
-            variant='h1'
-            align='center'
+      <Box alignContent={'center'} className='glass-card' width={'30%'}>
+        <Box alignContent={'center'} className='glass-card'>
+          <Box
             sx={{
-              fontFamily: 'Roboto',
-              fontSize: '6rem',
-              fontWeight: 'bold',
+              alignSelf: 'center',
+              display: 'flex',
+              justifyContent: 'center',
             }}
           >
-            MKDEV
-          </Typography>
-          <Typography
-            variant='h1'
-            align='center'
-            gutterBottom
-            sx={{
-              fontFamily: 'Roboto',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              mb: 3,
-            }}
-          >
-            A Platform For Developers To Connect And Share Their Work
-          </Typography>
+            <CardMedia
+              component='img'
+              image='/img/mkdev_1200x600.gif'
+              alt='mkdev logo'
+              sx={{ width: '40vw', maxWidth: '100%' }}
+            />
+          </Box>
         </Box>
-        <Box component='form' onSubmit={login} noValidate sx={{ mt: 1 }}>
+        <Box
+          component='form'
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 1, p: 3, justifyContent: 'center' }}
+        >
           <FormControl fullWidth margin='normal' required>
-            <InputLabel htmlFor='username'>Username</InputLabel>
+            <InputLabel htmlFor='email'>Email</InputLabel>
             <Input
-              id='username'
-              name='username'
-              autoComplete='username'
+              id='email'
+              name='email'
+              value={email}
+              onChange={handleChange}
+              autoComplete='email'
+              required
               autoFocus
             />
           </FormControl>
@@ -76,19 +88,29 @@ const Login = (): ReactElement => {
               name='password'
               type='password'
               id='password'
-              autoComplete='current-password'
+              value={password}
+              onChange={handleChange}
+              required
             />
           </FormControl>
           <Button
             type='submit'
             fullWidth
             variant='contained'
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ my: 2, alignContent: 'center' }}
           >
             Sign In
           </Button>
+          <Button
+            onClick={handleSignUp}
+            variant='text'
+            fullWidth
+            sx={{ alignContent: 'center' }}
+          >
+            Don't have an account? Sign Up
+          </Button>
         </Box>
-        <Divider sx={{ my: 2, color: 'aliceblue' }}>OR</Divider>
+        <Divider sx={{ mb: 1, color: 'aliceblue' }}>OR</Divider>
         <Box
           sx={{
             my: 2,
@@ -97,13 +119,11 @@ const Login = (): ReactElement => {
             alignItems: 'center',
           }}
         >
-          <form action='/auth/google' method='GET'>
-            <Button type='submit'>
-              <GoogleButton />
-            </Button>
-          </form>
+          <Button onClick={GoogleSignIn}>
+            <GoogleButton />
+          </Button>
         </Box>
-      </div>
+      </Box>
     </Box>
   );
 };

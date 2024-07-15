@@ -26,7 +26,7 @@ const Nav = (): ReactElement => {
   const user = useContext(UserContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [unreadMsgs, setUnreadMsgs] = useState<React.ReactNode>(0);
-  const [isHidden, setIsHidden] = useState<boolean | undefined>(true)
+  const [isHidden, setIsHidden] = useState<boolean | undefined>(true);
   const open = !!anchorEl;
   const navigate = useNavigate();
   const theme = useTheme();
@@ -48,11 +48,11 @@ const Nav = (): ReactElement => {
 
   socket.on('read-message', () => {
     setUnreadMsgs(0);
-  })
+  });
 
   socket.on('message', (message) => {
     setUnreadMsgs(() => unreadMsgs + message.newMessage);
-  })
+  });
 
   const handleOpen = (e: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(e.currentTarget);
@@ -61,12 +61,12 @@ const Nav = (): ReactElement => {
     setAnchorEl(null);
   };
 
-  const handleNav = (location :string) => {
+  const handleNav = (location: string) => {
     return () => {
       navigate(`/${location}`);
       handleClose();
-    }
-  }
+    };
+  };
 
   return (
     <Box sx={{flexGrow: 1}}>
@@ -74,61 +74,110 @@ const Nav = (): ReactElement => {
           backgroundColor: theme.palette.mode === 'light' ? 'rgb(135, 231, 186, .4)' : 'rgb(76, 194, 137,.4)',
           backdropFilter: 'blur(14px) saturate(180%)',
           zIndex: '10',
-          height: '70px'
-        }} >
+          height: '70px',
+        }}
+      >
         <Toolbar disableGutters>
-          <Grid container spacing={2} sx={{paddingX: 2}}>
+          <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={2}>
-              <Box sx={{display: 'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', marginX: 2}}>
-                <Button onClick={() => {navigate('/dashboard')}} >
-                  <img src="/img/mkdev_1200x600.gif" alt="mkdev logo" style={{height: '60px'}}/>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'start',
+                  alignItems: 'center',
+                  marginX: 2,
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    navigate('/dashboard');
+                  }}
+                >
+                  <img
+                    src='/img/mkdev_1200x600.gif'
+                    alt='mkdev logo'
+                    style={{ height: '60px' }}
+                  />
                 </Button>
               </Box>
             </Grid>
             <Grid item lg={8} xs={4} />
             <Grid item lg={2} xs={6}>
-              <Box sx={{display: 'flex', flexDirection:'row', justifyContent:'end', alignItems:'center', height: '100%'}}>
-                {!!user.id ?
-                  (
-                    <>
-                      <IconButton onClick={handleNav('messages')} sx={{color: theme.palette.secondary.main}}>
-                        <Badge badgeContent={unreadMsgs} invisible={isHidden} color="warning">
-                          <InboxIcon fontSize="medium" />
-                        </Badge>
-                        <Typography variant='h1' sx={{fontSize: 20}}>Inbox</Typography>
-                      </IconButton>
-                      <IconButton onClick={handleNav('create-post')} sx={{color: theme.palette.secondary.main}}>
-                        <AddBoxIcon fontSize="medium" />
-                        <Typography variant='h1' sx={{fontSize: 20}}>Create Post</Typography>
-                      </IconButton>
-                      <Button onClick={handleOpen} sx={{ padding: 0, border: 'none', background: 'none' }}>
-                        <Avatar src={user.picture}/>
-                      </Button>
-                      <Menu open={open} anchorEl={anchorEl} onClose={handleClose} sx={{zIndex: 11}}>
-                        <MenuItem onClick={handleNav(`/user/${user.id}/profile`)}>
-                          Your Profile
-                        </MenuItem>
-                        <MenuItem onClick={handleNav('messages')}>
-                          Messages
-                        </MenuItem>
-                        <MenuItem onClick={handleNav('create-post')}>
-                          Create Post
-                        </MenuItem>
-                        <MenuItem onClick={handleNav('logout')}>
-                          Logout
-                        </MenuItem>
-                        <ThemeToggle />
-                      </Menu>
-                    </>
-                  )
-                :
-                  (
-                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                      <Button onClick={() => {navigate('/login')}} size='large' sx={{color: theme.palette.secondary.main}}>Login</Button>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'end',
+                  alignItems: 'center',
+                  height: '100%',
+                }}
+              >
+                {!!user.id ? (
+                  <>
+                    <IconButton
+                      onClick={handleNav('messages')}
+                      sx={{ color: theme.palette.secondary.main }}
+                    >
+                      <Badge
+                        badgeContent={unreadMsgs}
+                        invisible={isHidden}
+                        color='warning'
+                      >
+                        <InboxIcon fontSize='medium' />
+                      </Badge>
+                      <Typography variant='h1' sx={{ fontSize: 20 }}>
+                        Inbox
+                      </Typography>
+                    </IconButton>
+                    <IconButton
+                      onClick={handleNav('create-post')}
+                      sx={{ color: theme.palette.secondary.main }}
+                    >
+                      <AddBoxIcon fontSize='medium' />
+                      <Typography variant='h1' sx={{ fontSize: 20 }}>
+                        Create Post
+                      </Typography>
+                    </IconButton>
+                    <Button
+                      onClick={handleOpen}
+                      sx={{ padding: 0, border: 'none', background: 'none' }}
+                    >
+                      <Avatar src={user.picture} />
+                    </Button>
+                    <Menu
+                      open={open}
+                      anchorEl={anchorEl}
+                      onClose={handleClose}
+                      sx={{ zIndex: 11 }}
+                    >
+                      <MenuItem onClick={handleNav(`user/${user.id}/profile`)}>
+                        Your Profile
+                      </MenuItem>
+                      <MenuItem onClick={handleNav('messages')}>
+                        Messages
+                      </MenuItem>
+                      <MenuItem onClick={handleNav('create-post')}>
+                        Create Post
+                      </MenuItem>
+                      <MenuItem onClick={handleNav('logout')}>Logout</MenuItem>
                       <ThemeToggle />
-                    </Box>
-                  )
-                }
+                    </Menu>
+                  </>
+                ) : (
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Button
+                      onClick={() => {
+                        navigate('/login');
+                      }}
+                      size='large'
+                      sx={{ color: theme.palette.secondary.main }}
+                    >
+                      Login
+                    </Button>
+                    <ThemeToggle />
+                  </Box>
+                )}
               </Box>
             </Grid>
           </Grid>
