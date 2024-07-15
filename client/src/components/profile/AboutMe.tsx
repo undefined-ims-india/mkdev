@@ -7,10 +7,11 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
 
 interface UserInfoProps {
   profileData: UserProfile;
-  UpdateUserInfo: (userInfo: UserProfile) => void;
+  updateUserInfo: (userInfo: UserProfile) => void;
   getProfile: () => void;
 }
 
@@ -29,43 +30,62 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
     <Box>
       <Paper
         elevation={3}
-        sx={{ width: 400, height: 200, m: 2, p: 2, overflow: 'hidden' }}
+        sx={{
+          width: { xs: '90%', sm: 400 },
+          height: { xs: 'auto', sm: 200 },
+          m: 2,
+          p: 2,
+          overflow: 'hidden',
+        }}
       >
+        <Typography
+          variant='h1'
+          fontFamily='SomeType'
+          align='center'
+          fontSize={'1rem'}
+          fontWeight={'bold'}
+        >
+          About {profileData.firstName}
+          <Divider />
+        </Typography>
         {profileData!.aboutMe ? (
           <Typography
             variant='body1'
             paragraph
             fontFamily={'SomeType'}
             sx={{
-              overflow: 'hidden',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              whiteSpace: 'wrap',
             }}
           >
             {profileData!.aboutMe}
           </Typography>
         ) : (
-          <Typography
-            variant='body1'
-            paragraph
-            fontFamily={'SomeType'}
-            sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
+          <Typography variant='body1' paragraph fontFamily={'SomeType'}>
             Nothing, yet...
           </Typography>
         )}
       </Paper>
       <Paper
         elevation={3}
-        sx={{ width: 400, height: 200, m: 2, p: 2, overflow: 'hidden' }}
+        sx={{
+          width: { xs: '90%', sm: 400 },
+          height: { xs: 'auto', sm: 200 },
+          m: 2,
+          p: 2,
+          overflow: 'hidden',
+        }}
       >
-        <Typography variant='h6' fontFamily='SomeType' align='center'>
+        <Typography
+          variant='h1'
+          fontFamily='SomeType'
+          align='center'
+          fontSize={'1rem'}
+          fontWeight={'bold'}
+        >
           Interests
         </Typography>
+        <Divider sx={{ my: 1 }} />
         <Box
           sx={{
             display: 'flex',

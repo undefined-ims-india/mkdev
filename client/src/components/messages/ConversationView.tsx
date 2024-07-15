@@ -14,7 +14,6 @@ const socket = io('https://mkdev.dev');
 
 interface PropsType {
   con: Conversations;
-  visibleCon: Conversations | null;
   label: string;
   addingConversation: boolean;
 }

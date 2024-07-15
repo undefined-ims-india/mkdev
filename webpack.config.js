@@ -11,7 +11,6 @@ module.exports = {
   devtool: 'source-map',
   module: {
     rules: [
-      { test: /\.(png|jpeg?|gif)$/i, use: ['file-loader'] },
       {
         test: /\.(tsx|ts)?$/,
         exclude: /node_modules/,

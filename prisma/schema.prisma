@@ -57,6 +57,8 @@ model User {
   devId          String?         @unique
   mediumId       String?         @unique
   githubId       String?         @unique
+  email          String?         @unique
+  password       String?
   aboutMe        String?
   bio            String?
   picture        String          @default("")

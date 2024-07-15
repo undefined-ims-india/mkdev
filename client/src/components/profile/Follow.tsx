@@ -38,25 +38,26 @@ const Follow = (): ReactElement => {
 
   return (
     <>
-      {isFollowing ? (
-        <Button
-          size='small'
-          variant='outlined'
-          color='error'
-          onClick={unfollow}
-        >
-          Unfollow
-        </Button>
-      ) : (
-        <Button
-          size='small'
-          variant='contained'
-          color='success'
-          onClick={follow}
-        >
-          Follow
-        </Button>
-      )}
+      {userId !== Number(id) &&
+        (isFollowing ? (
+          <Button
+            size='small'
+            variant='outlined'
+            color='error'
+            onClick={unfollow}
+          >
+            Unfollow
+          </Button>
+        ) : (
+          <Button
+            size='small'
+            variant='contained'
+            color='success'
+            onClick={follow}
+          >
+            Follow
+          </Button>
+        ))}
     </>
   );
 };

@@ -8,12 +8,10 @@ import { Server } from 'socket.io';
 import routes from './routes';
 import fileUpload from 'express-fileupload';
 import passport from 'passport';
-import { PrismaClient } from '@prisma/client';
-import { Strategy } from 'passport-google-oauth20';
 import cookieParser from 'cookie-parser';
 
-const GoogleStrategy = Strategy;
-const prisma = new PrismaClient();
+import initializePassport from './routes/routers/auth';
+import registration from './routes/routers/register';
 
 const PORT = process.env.PORT || 3000;
 const CLIENT = path.resolve(__dirname, '..', '..');
@@ -23,10 +21,7 @@ dotEnv.config();
 
 const app = express();
 
-const GOOGLE_CLIENT_ID: string = process.env.GOOGLE_CLIENT_ID || '';
-const GOOGLE_CLIENT_SECRET: string = process.env.GOOGLE_CLIENT_SECRET || '';
 const SESSION_SECRET: string = process.env.SESSION_SECRET || '';
-const CALLBACK_URL: string = process.env.CALLBACK_URL || '';
 
 app.use(
   cors({
@@ -52,75 +47,17 @@ app.use(
     saveUninitialized: false,
   })
 );
+initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/img', express.static(PUBLIC))
+app.use('/img', express.static(PUBLIC));
 app.use('/api', routes);
 
-// Google Strategy
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: CALLBACK_URL,
-    },
-    (accessToken: string, refreshToken: string, profile: any, done: any) => {
-      const { name, given_name, family_name, sub, picture } = profile._json;
-      prisma.user
-        .findUnique({
-          where: { googleId: sub },
-        })
-        .then((user) => {
-          if (!user) {
-            return prisma.user
-              .create({
-                data: {
-                  googleId: sub,
-                  username: `user-${crypto.randomUUID()}`,
-                  name: name,
-                  firstName: given_name,
-                  lastName: family_name,
-                  picture: picture,
-                },
-              })
-              .then((newUser) => {
-                done(null, newUser);
-              });
-          } else {
-            done(null, user);
-          }
-        })
-        .catch((err) => {
-          console.error('Failed to find or create user:', err);
-          done(err);
-        });
-    }
-  )
-);
+//**Auth Routes**\\
+app.use(registration);
 
-// Serialization
-passport.serializeUser((user: any, done) => {
-  done(null, {
-    id: user.id,
-    username: user.username,
-    picture: user.picture,
-  });
-});
-
-passport.deserializeUser(async (serializedUser: { id: number }, done) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: serializedUser.id },
-    });
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-});
-
-// Auth Routes
+//* Google
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
@@ -136,11 +73,16 @@ app.get(
   }
 );
 
-app.get('/login', (req: Request, res: Response) => {
-  res.redirect('/login');
-});
+//* Local
+app.post(
+  '/auth/login',
+  passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/login',
+  })
+);
 
-app.post('/logout', (req: Request, res: Response, next) => {
+app.post('/auth/logout', (req: Request, res: Response, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
@@ -148,6 +90,7 @@ app.post('/logout', (req: Request, res: Response, next) => {
     res.redirect('/login');
   });
 });
+//**End Auth Routes**\\
 
 app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(CLIENT, 'index.html'));
@@ -186,9 +129,9 @@ io.on('connection', (socket) => {
 
   socket.on('read-message', () => {
     io.emit('read-message');
-  })
+  });
 
-   // on disconnection
+  // on disconnection
   socket.on('disconnect', () => {});
 
   socket.on("connection_error", (err) => {

@@ -25,7 +25,10 @@ const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
     setText(e.target.value);
   }
 
-  const sendMessage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+  const sendMessage =
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent> |
+        React.KeyboardEvent<HTMLDivElement>): void => {
+
     e.preventDefault();
 
     // only send message if there is text in input field
@@ -54,33 +57,7 @@ const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
   }
 
   const handleEnter = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-
-      // only send message if there is text in input field
-      if (text) {
-        // send message to database with current conversation
-        axios
-          .post(`/api/messages/${con.id}`, {
-            message: {
-              body: text,
-              sender
-            }
-          })
-          .then(({ data }) => {
-            // broadcast the message to all the clients
-            socket.emit('message', {
-              ...data,
-              newMessage: 1,
-            })
-          })
-          .catch((err) => {
-            console.error('Failed to post message to db', err.cause);
-          });
-
-        setText('');
-      }
-    }
+    if (e.key === 'Enter') sendMessage(e);
   }
 
   socket.on("connect_error", (err) => {
@@ -98,8 +75,8 @@ const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
         }}
       >
         <TextField
-          placeholder='message
-          'value={ text }
+          placeholder='message'
+          value={ text }
           onChange={ handleText }
           onKeyDown={ handleEnter }
           sx={{
