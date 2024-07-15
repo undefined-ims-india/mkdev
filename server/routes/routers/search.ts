@@ -7,7 +7,7 @@ search.get(
   '/filter/:tagType/:tags',
   async (
     req: Request<{ tagType: 'User' | 'Post'; tags: string }>,
-    res: Response
+    res: Response,
   ) => {
     const { tagType, tags } = req.params;
     const splitTags = tags.split('-');
@@ -21,15 +21,16 @@ search.get(
       const searchResults = await prisma.tags.findMany({
         where: {
           tagType: TagType[tagType],
-          name: { in: splitTags},
+          name: { in: splitTags },
         },
         include: {
           posts: {
             include: {
               author: true,
               tags: true,
-              liked: { select: {id: true}}
-            }
+              comments: true,
+              liked: { select: { id: true } },
+            },
           },
           user: true,
           // posts: tagType === "Post" ? true : false,
@@ -41,7 +42,7 @@ search.get(
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
-  }
+  },
 );
 
 //Give a user or a post a tag
@@ -67,7 +68,7 @@ search.put(
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
-  }
+  },
 );
 
 //add a tag to a user or a
