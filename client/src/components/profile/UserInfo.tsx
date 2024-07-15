@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UserProfile } from '../../../../types';
 import { useNavigate } from 'react-router-dom';
+import useTheme from '@mui/material/styles/useTheme';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -22,6 +23,7 @@ const UserInfo = ({
   profileData,
   updateUserInfo,
 }: UserInfoProps): React.ReactElement => {
+  const theme = useTheme().palette.mode;
   const navigate = useNavigate();
   const [userInfo, setUserInfo]: [UserProfile | null, Function] =
     useState(profileData);
@@ -40,6 +42,8 @@ const UserInfo = ({
     navigate(0);
   };
 
+  const changeTheme = theme === 'light' ? 'black' : 'primary.main';
+
   return (
     <Container>
       <Box component='form' sx={{ p: 1, m: 1 }} onSubmit={handleUpdate}>
@@ -55,7 +59,9 @@ const UserInfo = ({
                   fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='username'>Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='username'>
+                  Username
+                </InputLabel>
                 <Input
                   id='username'
                   name='username'
@@ -72,7 +78,9 @@ const UserInfo = ({
                   fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='githubId'>Github Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='githubId'>
+                  Github Username
+                </InputLabel>
                 <Input
                   id='githubId'
                   name='githubId'
@@ -89,7 +97,9 @@ const UserInfo = ({
                   fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='devId'>Dev.to Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='devId'>
+                  Dev.to Username
+                </InputLabel>
                 <Input
                   id='devId'
                   name='devId'
@@ -106,7 +116,9 @@ const UserInfo = ({
                   fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='mediumId'>Medium Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='mediumId'>
+                  Medium Username
+                </InputLabel>
                 <Input
                   id='mediumId'
                   name='mediumId'
@@ -123,7 +135,9 @@ const UserInfo = ({
                   fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='linkedinId'>LinkedIn Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='linkedinId'>
+                  LinkedIn Username
+                </InputLabel>
                 <Input
                   id='linkedinId'
                   name='linkedinId'
@@ -131,11 +145,11 @@ const UserInfo = ({
                   onChange={handleChange}
                 />
               </FormControl>
-              <Box display='flex' justifyContent='center' gap={2}>
+              <Box display='flex' justifyContent='center' gap={4}>
                 <Button type='button' onClick={handleCancel} color='error'>
                   Cancel
                 </Button>
-                <Button type='submit' color='primary'>
+                <Button type='submit' color='primary' variant='contained'>
                   Update
                 </Button>
               </Box>
@@ -147,7 +161,7 @@ const UserInfo = ({
               <Typography
                 variant='h1'
                 fontSize={'1.5rem'}
-                sx={{ mb: 2, fontFamily: 'SomeType' }}
+                sx={{ mb: 2, fontFamily: 'SomeType', color: changeTheme }}
               >
                 Bio
               </Typography>
@@ -171,7 +185,7 @@ const UserInfo = ({
               <Typography
                 variant='h1'
                 fontSize={'1.5rem'}
-                sx={{ mb: 2, fontFamily: 'SomeType' }}
+                sx={{ mb: 2, fontFamily: 'SomeType', color: changeTheme }}
               >
                 About Me
               </Typography>
