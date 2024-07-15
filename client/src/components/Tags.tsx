@@ -18,7 +18,6 @@ const Tags = () => {
     const getUserTags = async () => {
         try {
             const { data } = await axios.get('/api/tags');
-            console.log(data.tags);
             setUserTags(data.tags);
         } catch (error) {
             console.error('Error fetching user tags:', error);
