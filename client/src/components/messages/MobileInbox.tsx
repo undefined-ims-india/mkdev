@@ -17,7 +17,7 @@ import Typography from '@mui/material/Typography';
 import CreateIcon from '@mui/icons-material/Create';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev');
 
 const DesktopInbox = ({ display }: { display: string }): ReactElement => {
 

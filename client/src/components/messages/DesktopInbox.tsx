@@ -18,7 +18,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import CreateIcon from '@mui/icons-material/Create';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://mkdev.dev');
 
 const DesktopInbox = ({ display }: { display: string }): ReactElement => {
 
