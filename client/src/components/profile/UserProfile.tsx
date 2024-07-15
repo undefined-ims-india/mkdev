@@ -33,7 +33,7 @@ const Profile = (): React.ReactElement => {
 
   const updateUserInfo = (userInfo: UserProfile) => {
     axios
-      .patch(`/api/users/${userInfo.id}`, userInfo)
+      .patch(`/api/users/user/${userInfo.id}`, userInfo)
       .then(({ data }) => {
         setProfileData(data);
         setEdit(false);
