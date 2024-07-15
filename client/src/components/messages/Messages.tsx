@@ -15,7 +15,7 @@ const Messages = (): ReactElement => {
   return (
     <Box>
       { userId &&
-        mobileLayout ? ( <MobileInbox /> ) : ( <DesktopInbox /> )
+        mobileLayout ? ( <MobileInbox display={ 'mobile' } /> ) : ( <DesktopInbox display={ 'desktop' }/> )
       }
     </Box>
   );

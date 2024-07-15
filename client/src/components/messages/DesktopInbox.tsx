@@ -20,7 +20,7 @@ import CreateIcon from '@mui/icons-material/Create';
 
 const socket = io('http://localhost:4000');
 
-const DesktopInbox = (): ReactElement => {
+const DesktopInbox = ({ display }: { display: string }): ReactElement => {
 
   const userId = useContext(UserContext).id;
   const [con, setCon] = useState<ConversationWithParticipants | null>();
@@ -207,6 +207,7 @@ const DesktopInbox = (): ReactElement => {
               {
                 allConversations.length ? (
                   <ConversationList
+                    display={ display }
                     allCons={ allConversations }
                     visibleCon={ visibleConRef }
                     setCons={ getAllConversations }

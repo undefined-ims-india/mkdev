@@ -57,12 +57,8 @@
   opacity: 1;
 }
 
-#delete-conversation {
-  opacity: .1;
-}
-
-#delete-conversation:hover {
-  opacity: 1;
+#delete-conversation-mobile {
+  opacity: .3;
 }
 
 .largeDevices {
@@ -77,6 +73,7 @@
     display: none;
   }
 }
+
 /* width */
 ::-webkit-scrollbar {
   width: 15px;
