@@ -25,7 +25,7 @@ export const lightTheme = createTheme({
     },
     text: {
       primary: '#1f2328',
-      secondary: '#636c76',
+      secondary: '#fff',
       disabled: '#8c959f',
     },
   },
@@ -43,6 +43,10 @@ export const darkTheme = createTheme({
     background: {
       default: '#000000',
       paper: '#060401',
+    },
+    text: {
+      primary: '#fff',
+      secondary: '#fff'
     },
   },
 });

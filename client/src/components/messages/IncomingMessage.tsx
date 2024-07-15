@@ -1,5 +1,5 @@
-import React, { useState, useContext, ReactElement } from 'react';
-import { UserContext } from '../UserContext';
+import React, { useState, ReactElement } from 'react';
+import { useTheme } from '@mui/material';
 import { MessageWithMetadata } from '../../../../types';
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
@@ -7,7 +7,6 @@ dayjs.extend(calendar);
 
 import axios from 'axios';
 
-import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
@@ -28,12 +27,11 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
     body,
     liked,
     createdAt,
-    senderId,
     sender
   } = msg;
 
   const [isLiked, setIsLiked] = useState<boolean>(liked);
-  const loggedInUser = useContext(UserContext).id;
+  const theme = useTheme();
 
   const handleLike = () => {
     axios
@@ -71,16 +69,9 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
         }}
       >
         <Avatar src={ sender.picture! }></Avatar>
-          { loggedInUser === senderId ? (
-              <IconButton onClick={ handleDelete }>
-                <DeleteIcon fontSize='small'/>
-              </IconButton>
-            ) : (
-              <IconButton onClick={ handleLike }>
-                { isLiked ? <ThumbUpAltIcon fontSize='small'/> : <ThumbUpOffAltIcon fontSize='small'/> }
-              </IconButton>
-            )
-          }
+        <IconButton onClick={ handleLike }>
+          { isLiked ? <ThumbUpAltIcon fontSize='small'/> : <ThumbUpOffAltIcon fontSize='small'/> }
+        </IconButton>
       </Box>
       <Box
         sx={{
@@ -93,18 +84,17 @@ const Message: React.FC<PropsType> = ({ msg, getAllMsgs }): ReactElement => {
         <Paper
           elevation={2}
           sx={{
-            color:'white',
-            background: '#349FDA',
+            background: '#00ff8899',
             padding: 1
           }}
         >
-          <Typography>
+          <Typography color={ theme.palette.text.secondary }>
             { body }
           </Typography>
-          <Typography variant="caption">
-          { dayjs(createdAt).calendar() }
-          </Typography>
         </Paper>
+        <Typography variant="caption">
+        { dayjs(createdAt).calendar() }
+        </Typography>
       </Box>
     </Box>
   );
