@@ -34,7 +34,7 @@ tags.get('/all/post', async (req: Request, res: Response) => {
     res.send(allPostTags);
   }
   catch (err){
-    console.log('Error: GET /api/tags/all/post: ', err);
+    console.error('Error: GET /api/tags/all/post: ', err);
     res.sendStatus(500);
   }
   finally {
@@ -79,7 +79,7 @@ tags.post('/all', async (req: any, res: any) => {
 
     res.sendStatus(201);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send('Error getting the data');
   }
 });

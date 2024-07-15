@@ -10,35 +10,29 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import SendIcon from '@mui/icons-material/Send';
 
-const socket = io('https://mkdev.dev:4000');
+const socket = io('https://mkdev.dev');
 
 interface PropsType {
   con: Conversations;
 }
 
-const MessageInput: React.FC<PropsType> = (props): ReactElement => {
-  const { con } = props;
+const MessageInput: React.FC<PropsType> = ({ con }): ReactElement => {
 
   const [text, setText] = useState('');
-  const sender = useContext(UserContext);
+  const sender = useContext(UserContext).id;
 
   const handleText = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setText(e.target.value);
   }
 
-  const sendMessage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+  const sendMessage =
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent> |
+        React.KeyboardEvent<HTMLDivElement>): void => {
+
     e.preventDefault();
 
     // only send message if there is text in input field
     if (text) {
-      // broadcast the message to all the clients
-      socket.emit('message', {
-        body: text,
-        // TODO: senderId -> how to include here?
-        conversationId: con.id
-      });
-      setText('');
-
       // send message to database with current conversation
       axios
         .post(`/api/messages/${con.id}`, {
@@ -47,61 +41,51 @@ const MessageInput: React.FC<PropsType> = (props): ReactElement => {
             sender
           }
         })
+        .then(({ data }) => {
+          // broadcast the message to all the clients
+          socket.emit('message', {
+            ...data,
+            newMessage: 1,
+          })
+        })
         .catch((err) => {
           console.error('Failed to post message to db', err.cause);
         });
+
+      setText('');
     }
   }
 
   const handleEnter = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-
-      // only send message if there is text in input field
-      if (text) {
-        // broadcast the message to all the clients
-        socket.emit('message', {
-          body: text,
-          // TODO: senderId -> how to include here?
-          conversationId: con.id
-        });
-        setText('');
-
-        // send message to database with current conversation
-        axios
-          .post(`/api/messages/${con.id}`, {
-            message: {
-              body: text,
-              sender
-            }
-          })
-          .catch((err) => {
-            console.error('Failed to post message to db', err.cause);
-          });
-      }
-    }
+    if (e.key === 'Enter') sendMessage(e);
   }
+
+  socket.on("connect_error", (err) => {
+    // the reason of the error, for example "xhr poll error"
+    console.log('io client err, MessageInput', err.message);
+  });
 
   return (
       <Box
         component='form'
         autoComplete='off'
         sx={{
-          width: .6,
-          position: 'absolute',
-          bottom: 12,
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
         <TextField
-          fullWidth
-          placeholder='message
-          'value={ text }
+          placeholder='message'
+          value={ text }
           onChange={ handleText }
           onKeyDown={ handleEnter }
+          sx={{
+            flexGrow: 1
+          }}
         />
-          <IconButton onClick={ sendMessage } >
-            <SendIcon />
-          </IconButton>
+        <IconButton onClick={ sendMessage } >
+          <SendIcon />
+        </IconButton>
         </Box>
   );
 }

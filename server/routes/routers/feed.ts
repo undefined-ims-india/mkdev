@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { PostWithRelations } from '../../../types';
+import { postWithRelationsSelector } from '../../helpers/post-selectors';
 
 const feed = Router();
 const prisma = new PrismaClient();
@@ -11,11 +12,12 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
     if (!req.user) {
       allPosts = await prisma.post.findMany(
         {
-          include: {
-            author: true,
-            tags: true,
-            liked: {select: {id:true}}
+          where: {
+            NOT: {
+              title: ""
+            }
           },
+          include: postWithRelationsSelector,
           orderBy: [
             {
               createdAt: 'desc'
@@ -41,11 +43,12 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
       if(feedFilter.users.length <= 1 && feedFilter.tags.length === 0 ) {
         allPosts = await prisma.post.findMany(
           {
-            include: {
-              author: true,
-              tags: true,
-              liked: {select: {id:true}}
+            where: {
+              NOT: {
+                title: ""
+              }
             },
+            include: postWithRelationsSelector,
             orderBy: [
               {
                 createdAt: 'desc'
@@ -63,14 +66,20 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
                   author: {
                     id: { in: feedFilter.users }
                   }
+                },
+                {
+                  tags : {
+                    every : {
+                      id : { in: feedFilter.tags }
+                    },
+                  }
                 }
-              ]
+              ],
+              NOT: {
+                title: ""
+              }
             },
-            include: {
-              author: true,
-              tags: true,
-              liked: {select: {id:true}}
-            },
+            include: postWithRelationsSelector,
             orderBy: [
               {
                 createdAt: 'desc'
@@ -80,8 +89,15 @@ feed.get('/', async (req: any, res: any):Promise<void> => {
         )
       }
       allPosts = allPosts.map(post => (
-        {...post, likedByUser: post.liked.slice().map(like => like.id).includes(req.user.id)}
-      ))
+        {
+          ...post,
+          likedByUser: post.liked.slice().map(like => like.id).includes(req.user.id),
+          comments: post.comments?.map((comment) => ({
+            ...comment,
+            likedByUser: comment.liked.slice().map((like) => like.id).includes(req.user.id)}
+          ))
+        }
+      ));
     }
     res.send(allPosts);
   }

@@ -54,9 +54,6 @@ const Tags = () => {
 
     return (
         <div>
-            <Typography variant="h6">User Tags</Typography>
-            {renderTagsByType('User')}
-            <Divider />
             <Typography variant="h6">Post Tags</Typography>
             {renderTagsByType('Post')}
         </div>

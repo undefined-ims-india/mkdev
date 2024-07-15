@@ -4,20 +4,25 @@ import { PrismaClient } from '@prisma/client';
 const messages = Router();
 const prisma = new PrismaClient();
 
-messages.get('/:conversationId', async (req, res) => {
-  const { conversationId } = req.params;
-
-  const allMessages = await prisma.messages.findMany({
-    where: {
-      conversationId: +conversationId,
-    }
-  });
-  res.status(200).send(allMessages);
-});
-
-messages.post('/:conversationId', (req: Request, res: Response) => {
+// create a message
+messages.post('/:conversationId', async (req: Request, res: Response) => {
   const { body, sender } = req.body.message;
   const conversationId: number = +req.params.conversationId;
+
+  // find participants and store recipients in variable
+  const participants = await prisma.conversations.findFirst({
+    where: {
+      id: conversationId,
+    },
+    select: {
+      participants: {
+        select: {
+          id: true
+        }
+      }
+    }
+  })
+  const recipients = participants?.participants.filter(user => user.id !== sender);
 
   // create message with data from request body and params
   prisma.messages.create({
@@ -28,15 +33,73 @@ messages.post('/:conversationId', (req: Request, res: Response) => {
       },
       conversation: {
         connect: { id: conversationId }
+      },
+      unreadBy: {
+        connect: recipients
       }
+    },
+    include: {
+      sender: {
+        select: {
+          username: true,
+          picture: true,
+        }
+      },
+      unreadBy: true
     }
   })
-  .then(() => { res.sendStatus(201) })
+  .then((data) => {
+    res.status(201).send(data);
+  })
   .catch((err: Error) => {
     console.error('Failed to create new message:\n', err);
     res.sendStatus(500);
   });
 
+})
+
+// get all messages in a conversation
+messages.get('/:conversationId', async (req, res) => {
+  const { conversationId } = req.params;
+
+  const allMessages = await prisma.messages.findMany({
+    where: {
+      conversationId: +conversationId,
+    },
+    include: {
+      sender: {
+        select: {
+          username: true,
+          picture: true,
+        }
+      }
+    }
+  });
+  res.status(200).send(allMessages);
+});
+
+// get all unread messages in a conversation, per logged in user
+messages.get('/unread/:conversationId/:userId', async(req, res) => {
+  const { conversationId, userId } = req.params;
+
+  const unreadMessages = await prisma.messages.findMany({
+    where: {
+      conversationId: +conversationId,
+    },
+    select: {
+      unreadBy: {
+        where: {
+          id: +userId
+        }
+      }
+    }
+  })
+
+  const totalUnreadMessages = unreadMessages.filter((obj) => {
+    return obj.unreadBy.length > 0;
+  }).length
+
+  res.status(200).send(JSON.stringify(totalUnreadMessages));
 })
 
 // update liked status on specific message
@@ -54,7 +117,7 @@ messages.patch('/:id', (req: Request, res: Response) => {
     res.sendStatus(201);
   })
   .catch((err) => {
-    console.error('Failed to update like field', err);
+    console.error('Failed to update like field:\n', err);
   })
 })
 
@@ -69,7 +132,7 @@ messages.delete('/:id', (req: Request, res: Response) => {
     res.sendStatus(200);
   })
   .catch((err) => {
-    console.error('Failed to delete message', err)
+    console.error('Failed to delete message:\n', err)
   });
 })
 

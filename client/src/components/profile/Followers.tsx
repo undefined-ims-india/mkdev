@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { UserProfile } from '../../../types';
+import { UserProfile } from '../../../../types';
 import axios from 'axios';
 
 import List from '@mui/material/List';
@@ -9,6 +9,8 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import { Box } from '@mui/material';
 
 const Followers = (): ReactElement => {
   const { id } = useParams();
@@ -17,16 +19,19 @@ const Followers = (): ReactElement => {
   useEffect(() => {
     axios
       .get(`/api/follows/followers/${id}`)
-      .then(({ data }): void => {
-        setFollowerData(data);
-      })
+      .then(({ data }): void => setFollowerData(data))
       .catch((err) => console.error(err));
   }, [id]);
 
   return (
-    <div>
+    <Box>
       {followerData && followerData.length === 0 ? (
-        <Typography variant='h1' component='h2' fontSize={'1rem'}>
+        <Typography
+          variant='h1'
+          component='h2'
+          fontSize={'1rem'}
+          fontFamily={'SomeType'}
+        >
           No Followers
         </Typography>
       ) : (
@@ -36,12 +41,12 @@ const Followers = (): ReactElement => {
               followerData.map((follower) => (
                 <ListItem key={follower.id}>
                   <ListItemAvatar>
-                    <a href={`/user/${follower.id}/profile`}>
+                    <Link href={`/user/${follower.id}/profile`}>
                       <Avatar
                         alt={follower.username || ''}
                         src={follower.picture || ''}
                       />
-                    </a>
+                    </Link>
                   </ListItemAvatar>
                   <ListItemText primary={follower.username} />
                 </ListItem>
@@ -49,7 +54,7 @@ const Followers = (): ReactElement => {
           </List>
         </>
       )}
-    </div>
+    </Box>
   );
 };
 

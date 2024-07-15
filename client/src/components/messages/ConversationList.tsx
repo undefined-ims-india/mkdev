@@ -1,32 +1,37 @@
 import React, { ReactElement } from 'react';
 import Conversation from './Conversation';
 
-import { Conversations } from '@prisma/client';
+import { ConversationWithParticipants } from '../../../../types';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
 interface PropTypes {
-  allCons: Conversations[],
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: Conversations | null) => void;
+  allCons: ConversationWithParticipants[];
+  visibleCon: React.MutableRefObject<number>;
+  display: string;
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
   setCons: () => void;
   deleteCon: () => void;
 }
 
-const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
-  const { allCons, select, setCons, deleteCon } = props;
+const ConversationList: React.FC<PropTypes> =
+  ({
+    allCons,
+    visibleCon,
+    display,
+    select,
+    setCons,
+    deleteCon
+  }): ReactElement => {
 
   return (
-    <Grid container
-    sx={{
-      // border: 1,
-      paddingTop: 4
-    }}
-    direction="column"
-    justifyContent="flex-start"
-    alignItems="center"
-    spacing={3}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
     >
       <List>
       {
@@ -34,8 +39,10 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
           return (
             <ListItem dense={true} key={`${i}`}>
               <Conversation
+                display={ display }
                 con={ con }
                 key={ `${con.id}-${i}` }
+                visibleCon={ visibleCon }
                 setCons={ setCons }
                 select={ select }
                 deleteCon={ deleteCon }
@@ -45,7 +52,7 @@ const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
         })
       }
       </List>
-    </Grid>
+    </Box>
   );
 }
 

@@ -9,133 +9,157 @@ import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import axios from 'axios';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import styled from '@mui/system/styled';
 import { useNavigate } from 'react-router-dom';
+import { Box } from '@mui/material';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 const tagTypes = ['User', 'Post'];
 
 const Form = styled('form')(({ theme }) => ({
-	display: 'flex',
-	flexDirection: 'column',
-	gap: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
 }));
 
+
+
 const SelectContainer = styled(FormControl)(({ theme }) => ({
-	minWidth: 120,
+  minWidth: 120,
 }));
 
 const AutocompleteContainer = styled('div')(({ theme }) => ({
-	width: '100%',
+  display: 'flex',
+  width: '100%',
+  gap: theme.spacing(2),
+}));
+
+const AutocompleteWrapper = styled('div')(({ theme }) => ({
+  flex: 1,
 }));
 
 const SearchButton = styled(Button)(({ theme }) => ({
-	alignSelf: 'flex-start',
+  flex: 0.25,
 }));
 
 const CustomChip = styled(Chip)(({ theme }) => ({
-	margin: theme.spacing(0.5),
+  margin: theme.spacing(0.5),
 }));
 
 interface Tag {
-	id: number;
-	name: string;
-	tagType: string;
+  id: number;
+  name: string;
+  tagType: string;
 }
 
 export default function SearchComponent(): ReactElement {
-	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-	const [tags, setTags] = useState<Tag[]>([]);
-	const [tagType, setTagType] = useState<string>('Post');
-    const navigate  = useNavigate();
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [tagType, setTagType] = useState<string>('Post');
+  const navigate = useNavigate();
 
-	const getAllTags = async () => {
-		try {
-			const { data } = await axios.get('/api/tags/all/post');
-			setTags(data);
-		} catch (error) {
-			console.error('Error fetching tags:', error);
-		}
-	};
+  const getAllTags = async () => {
+    try {
+      const { data } = await axios.get('/api/tags/all/post');
+      setTags(data);
+    } catch (error) {
+      console.error('Error fetching tags:', error);
+    }
+  };
 
-	useEffect(() => {
-		getAllTags();
-	}, []);
+  useEffect(() => {
+    getAllTags();
+  }, []);
 
-	const handleChangeTagType = (event: SelectChangeEvent<string>) => {
-		setTagType(event.target.value);
-	};
+  const handleChangeTagType = (event: SelectChangeEvent<string>) => {
+    setTagType(event.target.value);
+  };
 
-	const handleSearch = async () => {
-		const names = selectedTags.map((tag) => tag.name).join('-');
-		try {
-            navigate(`/searchresults/${tagType}/${names}`)
-			// const { data } = await axios.get(`/api/search/${tagType}/${names}`);
-		} catch (error) {
-			console.error('Error during search:', error);
-		}
-	};
+  const handleSearch = async () => {
+    const names = selectedTags.map((tag) => tag.name).join('-');
+    try {
+      navigate(`/searchresults/${tagType}/${names}`);
+      // const { data } = await axios.get(`/api/search/${tagType}/${names}`);
+    } catch (error) {
+      console.error('Error during search:', error);
+    }
+  };
 
-	const changeSelectedEvent = (
-		event: React.SyntheticEvent,
-		newValue: Tag[],
-	) => {
-		setSelectedTags(newValue);
-	};
+  const changeSelectedEvent = (
+    event: React.SyntheticEvent,
+    newValue: Tag[],
+  ) => {
+    setSelectedTags(newValue);
+  };
 
-	return (
-		<Form>
-			<SelectContainer variant='outlined' fullWidth>
-				<InputLabel id='tagType-label'>Search By Tag Type</InputLabel>
-				<Select
-					value={tagType}
-					onChange={handleChangeTagType}
-					input={<OutlinedInput label='Search By Tag Type' />}
-					renderValue={(selected) => (
-						<CustomChip key={selected} label={selected} />
-					)}
-				>
-					{tagTypes.map((type) => (
-						<MenuItem key={type} value={type}>
-							{type}
-						</MenuItem>
-					))}
-				</Select>
-			</SelectContainer>
-			<AutocompleteContainer>
-				<Autocomplete
-					multiple
-					options={tags}
-					getOptionLabel={(option: Tag) => option.name}
-					value={selectedTags}
-					onChange={changeSelectedEvent}
-					renderInput={(params) => (
-						<TextField
-							{...params}
-							variant='outlined'
-							label='Select Tags'
-							placeholder='Add Tags'
-						/>
-					)}
-					renderTags={(value: Tag[], getTagProps) =>
-						value.map((option: Tag, index: number) => (
-							<CustomChip
-								variant='outlined'
-								label={option.name}
-								{...getTagProps({ index })}
-							/>
-						))
-					}
-				/>
-			</AutocompleteContainer>
-			<SearchButton
-				variant='contained'
-				color='primary'
-				onClick={handleSearch}
-			>
-				Search
-			</SearchButton>
-			<Divider />
-		</Form>
-	);
+  return (
+    <Box
+      sx={{
+        flexDirection: 'column',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      <Form
+        sx={{
+          width: '75vw',
+          minWidth: 300,
+          marginY: 2,
+        }}
+      >
+        <SelectContainer variant='outlined' fullWidth>
+          <InputLabel id='tagType-label'>Search By Tag Type</InputLabel>
+          <Select
+            value={tagType}
+            onChange={handleChangeTagType}
+            input={<OutlinedInput label='Search By Tag Type' />}
+            renderValue={(selected) => (
+              <CustomChip key={selected} label={selected} />
+            )}
+          >
+            {tagTypes.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
+        </SelectContainer>
+        <AutocompleteContainer>
+          <AutocompleteWrapper>
+            <Autocomplete
+              multiple
+              options={tags}
+              getOptionLabel={(option: Tag) => option.name}
+              value={selectedTags}
+              onChange={changeSelectedEvent}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant='outlined'
+                  label='Select Tags'
+                  placeholder='Add Tags'
+                />
+              )}
+              renderTags={(value: Tag[], getTagProps) =>
+                value.map((option: Tag, index: number) => (
+                  <CustomChip
+                    variant='outlined'
+                    label={option.name}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+            />
+          </AutocompleteWrapper>
+          <SearchButton
+            variant='contained'
+            color='primary'
+            onClick={handleSearch}
+          >
+							<ManageSearchIcon fontSize='large' />
+          </SearchButton>
+        </AutocompleteContainer>
+      </Form>
+    </Box>
+  );
 }
