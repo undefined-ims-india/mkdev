@@ -10,11 +10,15 @@ import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import CardMedia from '@mui/material/CardMedia';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import useTheme from '@mui/material/styles/useTheme';
 
 const Login = (): ReactElement => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,7 +51,11 @@ const Login = (): ReactElement => {
       justifyContent='center'
       minHeight='100vh'
     >
-      <Box alignContent={'center'} className='glass-card' width={'30%'}>
+      <Box
+        alignContent={'center'}
+        className='glass-card'
+        width={mobile ? '90%' : '30%'}
+      >
         <Box alignContent={'center'} className='glass-card'>
           <Box
             sx={{
@@ -60,7 +68,7 @@ const Login = (): ReactElement => {
               component='img'
               image='/img/mkdev_1200x600.gif'
               alt='mkdev logo'
-              sx={{ width: '40vw', maxWidth: '100%' }}
+              sx={{ width: mobile ? '80vw' : '40vw', maxWidth: '100%' }}
             />
           </Box>
         </Box>
