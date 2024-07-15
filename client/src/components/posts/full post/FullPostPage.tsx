@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { PostWithRelations } from '../../../../../types';
 import axios from 'axios';
 import {useParams} from 'react-router-dom';
@@ -7,6 +7,7 @@ import FullPost from './FullPost';
 export default () => {
 
   const [content, setContent] : [PostWithRelations | null, Function] = useState(null);
+  const contentREF = useRef(content)
   const [imageLink, setImageLink] = useState('');
   const {id} = useParams();
 
@@ -18,7 +19,7 @@ export default () => {
     })
   }
 
-  useEffect(getPost, [content]);
+  useEffect(getPost, [contentREF]);
 
   return (
     <>

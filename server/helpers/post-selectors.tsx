@@ -25,6 +25,7 @@ export const simpleUserSelector = {
 export const postWithRelationsSelector = {
   author: simpleUserSelector,
   tags: true,
+  repo: { include: { files: true }},
   liked: {select: {id:true}},
   comments: commentSelector,
 }
