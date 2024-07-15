@@ -73,6 +73,8 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
           component='h2'
           fontSize={'1rem'}
           fontFamily={'SomeType'}
+          justifyContent={'center'}
+          align='center'
         >
           No Blogs Found
         </Typography>
