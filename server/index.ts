@@ -11,6 +11,7 @@ import passport from 'passport';
 import { PrismaClient } from '@prisma/client';
 import { Strategy } from 'passport-google-oauth20';
 import cookieParser from 'cookie-parser';
+import crypto from 'crypto';
 
 const GoogleStrategy = Strategy;
 const prisma = new PrismaClient();
