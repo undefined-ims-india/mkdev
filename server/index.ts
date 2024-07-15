@@ -9,10 +9,7 @@ import routes from './routes';
 import fileUpload from 'express-fileupload';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
-import crypto from 'crypto';
 
-const GoogleStrategy = Strategy;
-const prisma = new PrismaClient();
 import initializePassport from './routes/routers/auth';
 import registration from './routes/routers/register';
 
