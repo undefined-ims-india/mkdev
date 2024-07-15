@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import LinearProgress from '@mui/material/LinearProgress';
 import Grid from '@mui/material/Grid';
-import EditOrFollow from './Edit';
+import EditOrFollowButton from './Edit';
 import Divider from '@mui/material/Divider';
 
 interface ProfileProps {
@@ -84,7 +84,10 @@ const ProfileInfo = ({
         </Box>
         <Divider />
         <Box mt={2} display='flex' justifyContent='center'>
-          <EditOrFollow profileData={profileData!} handleEdit={handleEdit} />
+          <EditOrFollowButton
+            profileData={profileData!}
+            handleEdit={handleEdit}
+          />
         </Box>
       </Card>
     </>
