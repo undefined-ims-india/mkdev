@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
-import { Divider } from '@mui/material';
+import Divider from '@mui/material/Divider';
 
 interface UserInfoProps {
   profileData: UserProfile;
