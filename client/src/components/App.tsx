@@ -126,7 +126,7 @@ const App = (): ReactElement => {
           }}
         >
           <UserProvider>
-            {['/', '/survey'].includes(location.pathname) ? (
+            {['/', '/survey', '/login'].includes(location.pathname) ? (
               <></>
             ) : (
               <>
