@@ -5,6 +5,10 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
+import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { useNavigate } from 'react-router-dom';
+
 
 interface TagsResponse {
     id: number;
@@ -14,6 +18,7 @@ interface TagsResponse {
 
 const Tags = () => {
     const [userTags, setUserTags] = useState<TagsResponse[]>([]);
+    const navigate = useNavigate();
 
     const getUserTags = async () => {
         try {
@@ -40,6 +45,14 @@ const Tags = () => {
     const renderTagsByType = (tagType: 'User' | 'Post') => {
         return (
             <List>
+                <ListItem>
+                    <ListItemButton onClick={() => navigate('/survey')}>
+                        <ListItemIcon>
+                            <SettingsIcon />
+                        </ListItemIcon>
+                        <ListItemText>Your Interests</ListItemText>
+                    </ListItemButton>
+                </ListItem>
                 {userTags.filter(tag => tag.tagType === tagType).map(tag => (
                     <ListItem key={tag.id}>
                         <Chip
@@ -54,7 +67,6 @@ const Tags = () => {
 
     return (
         <div>
-            <Typography variant="h6">Post Tags</Typography>
             {renderTagsByType('Post')}
         </div>
     );
