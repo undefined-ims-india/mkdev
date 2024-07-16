@@ -181,45 +181,51 @@ users.patch('/:id', async (req: any, res: any) => {
 });
 
 // Update unread messages for single user
-users.patch('/read/:id/:conversationId', async (req, res) => {
-  const { id, conversationId } = req.params;
+users.patch('/read/:id', async (req, res) => {
+  const { id } = req.params;
+  const { conId } = req.body;
   try {
-    // find messages that are unread by user in specific conversation
-    const readMsgs = await prisma.messages.findMany({
-      where: {
-        AND: [
-          {
-            conversationId: +conversationId,
-          },
-          {
-            unreadBy: {
-              some: {
-                id: {
-                  equals: +id,
+    if (conId) {
+      // find messages that are unread by user in specific conversation
+      const readMsgs = await prisma.messages.findMany({
+        where: {
+          AND: [
+            {
+              conversationId: conId,
+            },
+            {
+              unreadBy: {
+                some: {
+                  id: {
+                    equals: +id,
+                  },
                 },
               },
             },
-          },
-        ],
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    // disconnect newly read messages from user's unreadMessages
-    await prisma.user.update({
-      where: {
-        id: +id,
-      },
-      data: {
-        unreadMessages: {
-          disconnect: readMsgs,
+          ],
         },
-      },
-    });
+        select: {
+          id: true,
+        },
+      });
 
-    res.sendStatus(202);
+      // disconnect newly read messages from user's unreadMessages
+      await prisma.user.update({
+        where: {
+          id: +id,
+        },
+        data: {
+          unreadMessages: {
+            disconnect: readMsgs,
+          },
+        },
+      });
+
+      res.sendStatus(202);
+    } else {
+      console.error('Conversation id is missing');
+      res.sendStatus(400);
+    }
   } catch (err) {
     console.error('Failed to mark messages read:\n', err)
     res.sendStatus(500);
