@@ -22,6 +22,7 @@ export default (
         renderInput={(params) => (
           <TextField
             {...params}
+            fullWidth
             variant='outlined'
             label='Select Tags'
             placeholder='Add Tags'

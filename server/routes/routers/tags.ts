@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Tags } from '@prisma/client';
 import { Router, Response, Request } from 'express';
 const tags = Router();
 const prisma = new PrismaClient();
@@ -126,5 +126,36 @@ tags.patch('/:tagId', async (req: any, res: Response) => {
     res.status(500).send(error);
   }
 });
+
+tags.put('/:user', async (req: any, res: any) => {
+  const { id } = req.user;
+  const { tags } = req.body;
+  try {
+    await prisma.user.update({
+      where: { id: +id },
+      data: {
+        tags: {
+          set: []
+        }
+      }
+    })
+    await prisma.user.update({
+      where: { id: +id },
+      data: {
+        tags: {
+          connect: [...tags]
+        }
+      }
+    })
+    res.sendStatus(200);
+  }
+  catch (err) {
+    console.log (err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect()
+  }
+})
 
 export default tags;
