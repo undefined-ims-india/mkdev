@@ -1,6 +1,4 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -13,6 +11,8 @@ import styled from '@mui/system/styled';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+import TagsAutoComplete from './TagsAutoComplete';
+import { Tags } from '@prisma/client';
 
 const tagTypes = ['User', 'Post'];
 
@@ -21,8 +21,6 @@ const Form = styled('form')(({ theme }) => ({
   flexDirection: 'column',
   gap: theme.spacing(2),
 }));
-
-
 
 const SelectContainer = styled(FormControl)(({ theme }) => ({
   minWidth: 120,
@@ -46,15 +44,9 @@ const CustomChip = styled(Chip)(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
-interface Tag {
-  id: number;
-  name: string;
-  tagType: string;
-}
-
 export default function SearchComponent(): ReactElement {
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tags[]>([]);
+  const [tags, setTags] = useState<Tags[]>([]);
   const [tagType, setTagType] = useState<string>('Post');
   const navigate = useNavigate();
 
@@ -87,7 +79,7 @@ export default function SearchComponent(): ReactElement {
 
   const changeSelectedEvent = (
     event: React.SyntheticEvent,
-    newValue: Tag[],
+    newValue: Tags[],
   ) => {
     setSelectedTags(newValue);
   };
@@ -126,30 +118,7 @@ export default function SearchComponent(): ReactElement {
         </SelectContainer>
         <AutocompleteContainer>
           <AutocompleteWrapper>
-            <Autocomplete
-              multiple
-              options={tags}
-              getOptionLabel={(option: Tag) => option.name}
-              value={selectedTags}
-              onChange={changeSelectedEvent}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant='outlined'
-                  label='Select Tags'
-                  placeholder='Add Tags'
-                />
-              )}
-              renderTags={(value: Tag[], getTagProps) =>
-                value.map((option: Tag, index: number) => (
-                  <CustomChip
-                    variant='outlined'
-                    label={option.name}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
-            />
+            <TagsAutoComplete all={tags} selected={selectedTags} handleChange={changeSelectedEvent} />
           </AutocompleteWrapper>
           <SearchButton
             variant='contained'
