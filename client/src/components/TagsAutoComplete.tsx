@@ -4,22 +4,18 @@ import { Tags } from '@prisma/client'
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import styled from '@mui/system/styled';
-
-const CustomChip = styled(Chip)(({ theme }) => ({
-  margin: theme.spacing(0.5),
-}));
 
 export default (
   {selected, all, handleChange}
   :{
     selected: Tags[],
     all: Tags[],
-    handleChange(event: React.SyntheticEvent, newValue: Tags[]):void}) => {
+    handleChange(event: React.SyntheticEvent, newValue: Tags[]):void
+  }) => {
   return (
       <Autocomplete
         multiple
-        options={all}
+        options={all.filter(opt => !selected.map(opt => opt.name).includes(opt.name))}
         getOptionLabel={(option: Tags) => option.name}
         value={selected}
         onChange={handleChange}
@@ -33,7 +29,7 @@ export default (
         )}
         renderTags={(value: Tags[], getTagProps) =>
           value.map((option: Tags, index: number) => (
-            <CustomChip
+            <Chip
               variant='outlined'
               label={option.name}
               {...getTagProps({ index })}
