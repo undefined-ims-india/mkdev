@@ -6,9 +6,13 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import { useNavigate } from 'react-router-dom';
+import useTheme from '@mui/material/styles/useTheme';
+import { useMediaQuery } from '@mui/material';
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const theme = useTheme().breakpoints.down('sm');
+  const mobile = useMediaQuery(theme);
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -36,13 +40,16 @@ const Welcome = () => {
       justifyContent='center'
       sx={{ height: '100vh', width: '100vw' }}
     >
-      <Box alignContent={'center'} sx={{ maxWidth: 90 / 100 }}>
-        <Box sx={{ marginBottom: 6 }}>
+      <Box alignContent={'center'} sx={{ maxWidth: mobile ? '90%' : '80%' }}>
+        <Box sx={{ marginBottom: mobile ? 4 : 6 }}>
           <Typography
             variant='h1'
             align='center'
             gutterBottom
-            sx={{ fontFamily: 'Roboto', fontSize: '4rem' }}
+            sx={{
+              fontFamily: 'Roboto',
+              fontSize: mobile ? '2.5rem' : '4rem',
+            }}
           >
             Welcome to
           </Typography>
@@ -56,7 +63,7 @@ const Welcome = () => {
             <img
               src='/img/mkdev_1200x600.gif'
               alt='mkdev logo'
-              style={{ width: '40vw', maxWidth: '600px' }}
+              style={{ width: mobile ? '80vw' : '40vw', maxWidth: '600px' }}
             />
           </Box>
           <Typography
@@ -64,7 +71,7 @@ const Welcome = () => {
             align='center'
             sx={{
               fontFamily: 'Roboto',
-              fontSize: '2rem',
+              fontSize: mobile ? '1.5rem' : '2rem',
               fontWeight: 'bold',
               my: 3,
             }}
@@ -79,12 +86,12 @@ const Welcome = () => {
           flexDirection: 'column',
           justifyContent: 'space-evenly',
           alignItems: 'center',
-          marginY: 3,
+          my: mobile ? 2 : 3,
           minHeight: '35vh',
         }}
         className='glass-card'
       >
-        <Typography variant='h1' sx={{ fontSize: 20 }}>
+        <Typography variant='h1' sx={{ fontSize: mobile ? 18 : 20 }}>
           Join the Community
         </Typography>
         <Button
@@ -92,25 +99,32 @@ const Welcome = () => {
             navigate('/login');
           }}
           variant='contained'
-          size='large'
+          size={mobile ? 'medium' : 'large'}
         >
           Login
         </Button>
         <Box
           sx={{
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: mobile ? 'column' : 'row',
             justifyContent: 'space-evenly',
             alignItems: 'center',
           }}
         >
-          <Divider sx={{ borderColor: 'aliceblue', width: '9vw' }}></Divider>
-          <Typography variant='h2' sx={{ fontSize: 18, marginX: 1 }}>
+          <Divider
+            sx={{ borderColor: 'aliceblue', width: mobile ? '20vw' : '9vw' }}
+          ></Divider>
+          <Typography
+            variant='h2'
+            sx={{ fontSize: 16, marginX: mobile ? 0.5 : 1, my: 0.5 }}
+          >
             OR
           </Typography>
-          <Divider sx={{ borderColor: 'aliceblue', width: '9vw' }}></Divider>
+          <Divider
+            sx={{ borderColor: 'aliceblue', width: mobile ? '20vw' : '9vw' }}
+          ></Divider>
         </Box>
-        <Typography variant='h1' sx={{ fontSize: 20 }}>
+        <Typography variant='h1' sx={{ fontSize: mobile ? 18 : 20 }}>
           Just Browse
         </Typography>
         <Button
@@ -118,7 +132,10 @@ const Welcome = () => {
             navigate('/dashboard');
           }}
           variant='contained'
-          size='large'
+          size={mobile ? 'medium' : 'large'}
+          sx={{
+            mx: 2,
+          }}
         >
           Continue Without Logging In
         </Button>
