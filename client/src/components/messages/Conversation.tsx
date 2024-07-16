@@ -37,7 +37,6 @@ const Conversation: React.FC<PropsType> =
 
   const user = useContext(UserContext);
   const [unreadMsgsTotal, setUnreadMsgsTotal] = useState<React.ReactNode>(0);
-  const [isHidden, setIsHidden] = useState<boolean | undefined>(false) // badge in view
   const [showDelConfirm, setShowDelConfirm] = useState<boolean>(false);
   const visibleConRef = useRef(visibleCon)
 
@@ -73,7 +72,9 @@ const Conversation: React.FC<PropsType> =
 
   const markAllMsgsRead = (userId: number, conId: number): void => {
     axios
-      .patch(`/api/users/read/${userId}/${conId}`)
+      .patch(`/api/users/read/${userId}`, {
+        conId,
+      })
       .then(() => {
         // setUnreadMsgsTotal(0);
         // send socket event to change inbox notification badge
@@ -93,18 +94,12 @@ const Conversation: React.FC<PropsType> =
     if (visibleCon) {
       // and an incoming message is not in that conversation
       if (visibleCon !== message.conversationId) {
-        // get unread message total for that conversation
         getUnreadMsgsTotal(con.id, user.id);
       } else {
-        // don't show badge, mark all as read
         try {
-          // setIsHidden(true);
           markAllMsgsRead(user.id, con.id);
-          // setUnreadMsgsTotal(0);
-        } catch {
-          console.error('Unable to mark all messages read when conversation is currently in view');
-        } finally {
-          getUnreadMsgsTotal(con.id, user.id);
+        } catch (err) {
+          console.error('Unable to mark all messages read when conversation is currently in view', err);
         }
       }
     } else { // no conversation is in view
@@ -149,7 +144,7 @@ const Conversation: React.FC<PropsType> =
         >
           <Button
             variant='text'
-            sx={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1 }}
+            sx={{ display: 'flex', justifyContent: 'flex-start', flexGrow: 1, maxWidth: '250px' }}
             onClick={ (e)=> {selectConversation(e, con)} }
           >
             <Typography
@@ -159,7 +154,7 @@ const Conversation: React.FC<PropsType> =
               { label }
             </Typography>
           </Button>
-          <Badge badgeContent={ unreadMsgsTotal } invisible={ isHidden }color="warning">
+          <Badge badgeContent={ unreadMsgsTotal } color="warning">
             <Button
               id={ display === 'mobile' ? 'delete-conversation-mobile' : 'delete-conversation'}
               onClick={ handleDelete }
