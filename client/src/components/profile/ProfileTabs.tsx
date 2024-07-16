@@ -13,13 +13,14 @@ import Tab from '@mui/material/Tab';
 import TabPanel from '@mui/lab/TabPanel';
 import Grid from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
-
+import useTheme from '@mui/material/styles/useTheme';
 interface UserProps {
   profileData: UserProfile;
   getProfile: () => void;
 }
 
 const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
+  const theme = useTheme().breakpoints.down('sm');
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [tab, setTab] = useState('1');
@@ -41,6 +42,7 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
   ) => {
     setTab(value);
   };
+  const changeTheme = theme === 'light' ? 'black' : 'primary.main';
 
   if (!profileData) {
     return (
@@ -71,10 +73,18 @@ const ProfileTabs = ({ profileData, getProfile }: UserProps): ReactElement => {
               },
             }}
           >
-            <Tab label='Posts' value='1' />
-            <Tab label='Blogs' value='2' />
-            <Tab label={`Followers (${followerCount})`} value='3' />
-            <Tab label={`Following (${followingCount})`} value='4' />
+            <Tab sx={{ color: changeTheme }} label='Posts' value='1' />
+            <Tab sx={{ color: changeTheme }} label='Blogs' value='2' />
+            <Tab
+              sx={{ color: changeTheme }}
+              label={`Followers (${followerCount})`}
+              value='3'
+            />
+            <Tab
+              sx={{ color: changeTheme }}
+              label={`Following (${followingCount})`}
+              value='4'
+            />
           </TabList>
         </Box>
         <TabPanel value='1'>
