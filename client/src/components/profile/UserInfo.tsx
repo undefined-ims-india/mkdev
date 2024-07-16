@@ -56,7 +56,6 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel sx={{ color: changeTheme }} htmlFor='username'>
@@ -75,7 +74,6 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel sx={{ color: changeTheme }} htmlFor='githubId'>
@@ -94,7 +92,6 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel sx={{ color: changeTheme }} htmlFor='devId'>
@@ -113,7 +110,6 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel sx={{ color: changeTheme }} htmlFor='mediumId'>
@@ -132,7 +128,6 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
                 <InputLabel sx={{ color: changeTheme }} htmlFor='linkedinId'>
@@ -161,13 +156,11 @@ const UserInfo = ({
               <Typography
                 variant='h1'
                 fontSize={'1.5rem'}
-                sx={{ mb: 2, fontFamily: 'SomeType', color: changeTheme }}
+                sx={{ mb: 2, color: changeTheme }}
               >
                 Bio
               </Typography>
-              <FormControl
-                sx={{ width: '100%', fontFamily: 'SomeType', fontSize: '1rem' }}
-              >
+              <FormControl sx={{ width: '100%', fontSize: '1rem' }}>
                 <Input
                   id='bio'
                   name='bio'
@@ -185,11 +178,11 @@ const UserInfo = ({
               <Typography
                 variant='h1'
                 fontSize={'1.5rem'}
-                sx={{ mb: 2, fontFamily: 'SomeType', color: changeTheme }}
+                sx={{ mb: 2, color: changeTheme }}
               >
                 About Me
               </Typography>
-              <FormControl sx={{ width: '100%', fontFamily: 'SomeType' }}>
+              <FormControl sx={{ width: '100%' }}>
                 <Input
                   id='aboutMe'
                   name='aboutMe'

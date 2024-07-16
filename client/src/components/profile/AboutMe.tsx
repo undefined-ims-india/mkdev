@@ -40,7 +40,6 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
       >
         <Typography
           variant='h1'
-          fontFamily='SomeType'
           align='center'
           fontSize={'1rem'}
           fontWeight={'bold'}
@@ -52,7 +51,6 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
           <Typography
             variant='body1'
             paragraph
-            fontFamily={'SomeType'}
             sx={{
               textOverflow: 'ellipsis',
               whiteSpace: 'wrap',
@@ -61,7 +59,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
             {profileData!.aboutMe}
           </Typography>
         ) : (
-          <Typography variant='body1' paragraph fontFamily={'SomeType'}>
+          <Typography variant='body1' paragraph>
             Nothing, yet...
           </Typography>
         )}
@@ -78,7 +76,6 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
       >
         <Typography
           variant='h1'
-          fontFamily='SomeType'
           align='center'
           fontSize={'1rem'}
           fontWeight={'bold'}
@@ -108,9 +105,7 @@ const AboutMe = ({ profileData }: UserInfoProps): ReactElement => {
               />
             ))
           ) : (
-            <Typography variant='body2' fontFamily={'SomeType'}>
-              No interests, yet...
-            </Typography>
+            <Typography variant='body2'>No interests, yet...</Typography>
           )}
         </Box>
       </Paper>

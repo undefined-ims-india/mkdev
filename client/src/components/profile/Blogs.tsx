@@ -72,7 +72,6 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
           variant='h1'
           component='h2'
           fontSize={'1rem'}
-          fontFamily={'SomeType'}
           justifyContent={'center'}
           align='center'
         >
@@ -113,7 +112,6 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h2'
                     fontSize={'2rem'}
                     align='center'
-                    fontFamily={'SomeType'}
                   >
                     {blog.title}
                   </Typography>
@@ -122,7 +120,6 @@ const Blogs = ({ devId, mediumId }: UserProps): ReactElement => {
                     component='h3'
                     fontSize={'1rem'}
                     align='center'
-                    fontFamily={'SomeType'}
                   >
                     {blog.description}
                   </Typography>
