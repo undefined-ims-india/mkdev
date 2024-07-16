@@ -46,30 +46,35 @@ conversations.post('/', async (req: any, res: Response) => {
 conversations.get('/', async (req: any, res: Response) => {
 
   if (req.user !== undefined) {
-    // find many conversation IDs associated with logged in user
-    const allConversations = await prisma.conversations.findMany({
-      where: {
-        participants: {
-          some: {
-            id: {
-              equals: req.user.id
+    try {
+      // find many conversation IDs associated with logged in user
+      const allConversations = await prisma.conversations.findMany({
+        where: {
+          participants: {
+            some: {
+              id: {
+                equals: req.user.id
+              }
             }
           }
-        }
-      },
-      include: {
-        participants: {
-          select: {
-            id: true,
-            username: true,
+        },
+        include: {
+          participants: {
+            select: {
+              id: true,
+              username: true,
+            }
           }
+        },
+        orderBy: {
+          id: 'desc'
         }
-      },
-      orderBy: {
-        id: 'desc'
-      }
-    });
-    res.status(200).send(allConversations);
+      });
+      res.status(200).send(allConversations);
+    } catch (err) {
+      console.error('Failed to get conversations for user:\n', err);
+      res.sendStatus(500);
+    }
   } else {
     res.status(401).send('You must be logged in to view direct messages');
   }

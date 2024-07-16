@@ -135,7 +135,12 @@ users.get('/unread/:id', (req: any, res: any) => {
     })
     .then((unreadCount) => {
       res.status(200).send(JSON.stringify(unreadCount?._count.unreadMessages));
-    });
+    })
+    .catch((err) => {
+      console.error('Failed to get unread message count:\n', err);
+      res.sendStatus(500);
+    })
+
 });
 
 // Update user by id
@@ -178,43 +183,48 @@ users.patch('/:id', async (req: any, res: any) => {
 // Update unread messages for single user
 users.patch('/read/:id/:conversationId', async (req, res) => {
   const { id, conversationId } = req.params;
-
-  // find messages that are unread by user in specific conversation
-  const readMsgs = await prisma.messages.findMany({
-    where: {
-      AND: [
-        {
-          conversationId: +conversationId,
-        },
-        {
-          unreadBy: {
-            some: {
-              id: {
-                equals: +id,
+  try {
+    // find messages that are unread by user in specific conversation
+    const readMsgs = await prisma.messages.findMany({
+      where: {
+        AND: [
+          {
+            conversationId: +conversationId,
+          },
+          {
+            unreadBy: {
+              some: {
+                id: {
+                  equals: +id,
+                },
               },
             },
           },
-        },
-      ],
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  // disconnect newly read messages from user's unreadMessages
-  await prisma.user.update({
-    where: {
-      id: +id,
-    },
-    data: {
-      unreadMessages: {
-        disconnect: readMsgs,
+        ],
       },
-    },
-  });
+      select: {
+        id: true,
+      },
+    });
 
-  res.sendStatus(202);
+    // disconnect newly read messages from user's unreadMessages
+    await prisma.user.update({
+      where: {
+        id: +id,
+      },
+      data: {
+        unreadMessages: {
+          disconnect: readMsgs,
+        },
+      },
+    });
+
+    res.sendStatus(202);
+  } catch (err) {
+    console.error('Failed to mark messages read:\n', err)
+    res.sendStatus(500);
+  }
+
 });
 
 export default users;
