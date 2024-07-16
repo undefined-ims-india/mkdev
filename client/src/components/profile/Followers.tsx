@@ -26,12 +26,7 @@ const Followers = (): ReactElement => {
   return (
     <Box>
       {followerData && followerData.length === 0 ? (
-        <Typography
-          variant='h1'
-          component='h2'
-          fontSize={'1rem'}
-          fontFamily={'SomeType'}
-        >
+        <Typography variant='h1' component='h2' fontSize={'1rem'}>
           No Followers
         </Typography>
       ) : (

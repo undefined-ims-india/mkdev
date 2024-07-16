@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { UserProfile } from '../../../../types';
 import { useNavigate } from 'react-router-dom';
+import useTheme from '@mui/material/styles/useTheme';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -22,6 +23,7 @@ const UserInfo = ({
   profileData,
   updateUserInfo,
 }: UserInfoProps): React.ReactElement => {
+  const theme = useTheme().palette.mode;
   const navigate = useNavigate();
   const [userInfo, setUserInfo]: [UserProfile | null, Function] =
     useState(profileData);
@@ -40,6 +42,8 @@ const UserInfo = ({
     navigate(0);
   };
 
+  const changeTheme = theme === 'light' ? 'black' : 'primary.main';
+
   return (
     <Container>
       <Box component='form' sx={{ p: 1, m: 1 }} onSubmit={handleUpdate}>
@@ -52,10 +56,11 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='username'>Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='username'>
+                  Username
+                </InputLabel>
                 <Input
                   id='username'
                   name='username'
@@ -69,10 +74,11 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='githubId'>Github Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='githubId'>
+                  Github Username
+                </InputLabel>
                 <Input
                   id='githubId'
                   name='githubId'
@@ -86,10 +92,11 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='devId'>Dev.to Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='devId'>
+                  Dev.to Username
+                </InputLabel>
                 <Input
                   id='devId'
                   name='devId'
@@ -103,10 +110,11 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='mediumId'>Medium Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='mediumId'>
+                  Medium Username
+                </InputLabel>
                 <Input
                   id='mediumId'
                   name='mediumId'
@@ -120,10 +128,11 @@ const UserInfo = ({
                   my: 0.5,
                   mx: 0.5,
                   width: '50%',
-                  fontFamily: 'SomeType',
                 }}
               >
-                <InputLabel htmlFor='linkedinId'>LinkedIn Username</InputLabel>
+                <InputLabel sx={{ color: changeTheme }} htmlFor='linkedinId'>
+                  LinkedIn Username
+                </InputLabel>
                 <Input
                   id='linkedinId'
                   name='linkedinId'
@@ -131,11 +140,11 @@ const UserInfo = ({
                   onChange={handleChange}
                 />
               </FormControl>
-              <Box display='flex' justifyContent='center' gap={2}>
+              <Box display='flex' justifyContent='center' gap={4}>
                 <Button type='button' onClick={handleCancel} color='error'>
                   Cancel
                 </Button>
-                <Button type='submit' color='primary'>
+                <Button type='submit' color='primary' variant='contained'>
                   Update
                 </Button>
               </Box>
@@ -147,13 +156,11 @@ const UserInfo = ({
               <Typography
                 variant='h1'
                 fontSize={'1.5rem'}
-                sx={{ mb: 2, fontFamily: 'SomeType' }}
+                sx={{ mb: 2, color: changeTheme }}
               >
                 Bio
               </Typography>
-              <FormControl
-                sx={{ width: '100%', fontFamily: 'SomeType', fontSize: '1rem' }}
-              >
+              <FormControl sx={{ width: '100%', fontSize: '1rem' }}>
                 <Input
                   id='bio'
                   name='bio'
@@ -171,11 +178,11 @@ const UserInfo = ({
               <Typography
                 variant='h1'
                 fontSize={'1.5rem'}
-                sx={{ mb: 2, fontFamily: 'SomeType' }}
+                sx={{ mb: 2, color: changeTheme }}
               >
                 About Me
               </Typography>
-              <FormControl sx={{ width: '100%', fontFamily: 'SomeType' }}>
+              <FormControl sx={{ width: '100%' }}>
                 <Input
                   id='aboutMe'
                   name='aboutMe'

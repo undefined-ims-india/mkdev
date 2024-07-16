@@ -55,7 +55,6 @@ const ProfileInfo = ({
               fontWeight: 'bold',
               fontSize: '1.25rem',
               color: 'text.primary',
-              fontFamily: 'SomeType',
             }}
           >
             {profileData!.name}
@@ -74,7 +73,7 @@ const ProfileInfo = ({
           <Typography
             variant='body1'
             color='textSecondary'
-            sx={{ mt: 1, p: 1, fontFamily: 'SomeType' }}
+            sx={{ mt: 1, p: 1 }}
           >
             {profileData!.bio}
           </Typography>

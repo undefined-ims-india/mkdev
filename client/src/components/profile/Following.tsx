@@ -28,12 +28,7 @@ const Following = (): React.ReactElement => {
   return (
     <>
       {followingData && followingData.length === 0 ? (
-        <Typography
-          variant='h1'
-          component='h2'
-          fontSize={'1rem'}
-          fontFamily={'SomeType'}
-        >
+        <Typography variant='h1' component='h2' fontSize={'1rem'}>
           Not Following Any Developers
         </Typography>
       ) : (

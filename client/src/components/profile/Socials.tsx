@@ -34,7 +34,7 @@ const Socials = ({ profileData }: UserProps): ReactElement => {
                 target='_blank'
                 title='LinkedIn Profile'
               >
-                <LinkedInIcon fontSize='large' />
+                <LinkedInIcon fontSize='large' sx={{ color: '#0A66C2' }} />
               </Link>
             ) : (
               <LinkedInIcon fontSize='large' color='disabled' />
