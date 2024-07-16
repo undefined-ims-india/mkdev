@@ -6,6 +6,7 @@ import ProfileTabs from './ProfileTabs';
 import ProfileInfo from './ProfileInfo';
 import AboutMe from './AboutMe';
 import UserInfo from './UserInfo';
+import ProfileTags from './ProfileTags';
 
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
@@ -117,6 +118,7 @@ const Profile = (): React.ReactElement => {
                     />
                   </Box>
                 </Box>
+                <ProfileTags savedTags={profileData!.tags} refreshParent={getProfile} />
               </Box>
             </CardContent>
           </Card>
