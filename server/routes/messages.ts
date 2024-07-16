@@ -62,44 +62,55 @@ messages.post('/:conversationId', async (req: Request, res: Response) => {
 messages.get('/:conversationId', async (req, res) => {
   const { conversationId } = req.params;
 
-  const allMessages = await prisma.messages.findMany({
-    where: {
-      conversationId: +conversationId,
-    },
-    include: {
-      sender: {
-        select: {
-          username: true,
-          picture: true,
+  try {
+    const allMessages = await prisma.messages.findMany({
+      where: {
+        conversationId: +conversationId,
+      },
+      include: {
+        sender: {
+          select: {
+            username: true,
+            picture: true,
+          }
         }
       }
-    }
-  });
-  res.status(200).send(allMessages);
+    });
+    res.status(200).send(allMessages);
+  } catch (err) {
+    console.error('Failed to retrieve messages in converation:\n', err);
+    res.sendStatus(500);
+  }
+
 });
 
 // get all unread messages in a conversation, per logged in user
 messages.get('/unread/:conversationId/:userId', async(req, res) => {
   const { conversationId, userId } = req.params;
 
-  const unreadMessages = await prisma.messages.findMany({
-    where: {
-      conversationId: +conversationId,
-    },
-    select: {
-      unreadBy: {
-        where: {
-          id: +userId
+  try {
+    const unreadMessages = await prisma.messages.findMany({
+      where: {
+        conversationId: +conversationId,
+      },
+      select: {
+        unreadBy: {
+          where: {
+            id: +userId
+          }
         }
       }
-    }
-  })
+    })
 
-  const totalUnreadMessages = unreadMessages.filter((obj) => {
-    return obj.unreadBy.length > 0;
-  }).length
+    const totalUnreadMessages = unreadMessages.filter((obj) => {
+      return obj.unreadBy.length > 0;
+    }).length
 
-  res.status(200).send(JSON.stringify(totalUnreadMessages));
+    res.status(200).send(JSON.stringify(totalUnreadMessages));
+  } catch (err) {
+    console.error('Failed to get all unread messages in conversation:\n', err);
+    res.status(500).send(JSON.stringify(0));
+  }
 })
 
 // update liked status on specific message
@@ -118,6 +129,7 @@ messages.patch('/:id', (req: Request, res: Response) => {
   })
   .catch((err) => {
     console.error('Failed to update like field:\n', err);
+    res.sendStatus(500);
   })
 })
 
@@ -133,6 +145,7 @@ messages.delete('/:id', (req: Request, res: Response) => {
   })
   .catch((err) => {
     console.error('Failed to delete message:\n', err)
+    res.sendStatus(500);
   });
 })
 
