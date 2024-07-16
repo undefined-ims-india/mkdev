@@ -97,7 +97,7 @@ const Conversation: React.FC<PropsType> =
         getUnreadMsgsTotal(con.id, user.id);
       } else {
         try {
-          markAllMsgsRead(user.id, con.id);
+          markAllMsgsRead(user.id, visibleCon);
         } catch (err) {
           console.error('Unable to mark all messages read when conversation is currently in view', err);
         }
