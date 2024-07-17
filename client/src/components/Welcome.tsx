@@ -47,7 +47,6 @@ const Welcome = () => {
             align='center'
             gutterBottom
             sx={{
-              fontFamily: 'Roboto',
               fontSize: mobile ? '2.5rem' : '4rem',
             }}
           >
@@ -70,7 +69,6 @@ const Welcome = () => {
             variant='h1'
             align='center'
             sx={{
-              fontFamily: 'Roboto',
               fontSize: mobile ? '1.5rem' : '2rem',
               fontWeight: 'bold',
               my: 3,
