@@ -65,7 +65,7 @@ export default function Signup() {
     <Container maxWidth='md'>
       <Paper elevation={3} sx={{ padding: 3, marginTop: 4 }}>
         <Typography variant='h4' gutterBottom>
-          Signup
+		Pick your interests and what kind of developer you are!!
         </Typography>
         <form
           onSubmit={(e) => {
@@ -75,7 +75,7 @@ export default function Signup() {
         >
           <Box marginBottom={3}>
             <Typography variant='h5' gutterBottom>
-              Select User Tags
+              Select Your Strengths 
             </Typography>
             <Grid container spacing={2}>
               {allUserTags.map((tag) => (
@@ -91,7 +91,7 @@ export default function Signup() {
           </Box>
           <Box marginBottom={3}>
             <Typography variant='h5' gutterBottom>
-              Select Post Tags
+              Select Your Interests
             </Typography>
             <Grid container spacing={2}>
               {allPostTags.map((tag) => (
