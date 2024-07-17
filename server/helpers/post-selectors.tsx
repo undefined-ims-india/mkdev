@@ -10,10 +10,7 @@ export const commentSelector = {
       name: true,
       picture: true
     }},
-  },
-  orderBy: [
-    { createdAt: 'desc'}
-  ]
+  }
 }
 
 export const simpleUserSelector = {
