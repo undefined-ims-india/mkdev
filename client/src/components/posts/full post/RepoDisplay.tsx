@@ -15,7 +15,7 @@ const RepoDisplay = ({content}:{content: RepoWithFiles | null}):React.ReactEleme
   const handleChange = (e: React.SyntheticEvent, newTab: number):void => {
     setTab(newTab);
   };
-  if (content === null) { return <></>}
+  if (content === null || content.files.length === 0) { return <></>}
 
   return (
     <Box sx={{padding: 1}}>
