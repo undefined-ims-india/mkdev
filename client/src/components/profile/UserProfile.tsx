@@ -22,7 +22,6 @@ const Profile = (): React.ReactElement => {
   const [edit, setEdit] = useState(false);
   const [userInfo, setUserInfo]: [UserProfile | null, Function] =
     useState(null);
-  const profileDataREF = useRef(profileData);
 
   const getProfile = () => {
     const userId = profileUserId || loggedInUserId;
@@ -35,14 +34,6 @@ const Profile = (): React.ReactElement => {
   useEffect(() => {
     getProfile();
   }, [profileUserId, loggedInUserId]);
-
-  // const getProfile = () => {
-  //   axios
-  //     .get(`/api/users/${id}/profile`)
-  //     .then(({ data }) => setProfileData(data))
-  //     .catch((err) => console.error('Failed to get user:', err));
-  // };
-  // useEffect(getProfile, [profileDataREF]);
 
   const handleEdit = () => {
     setEdit(true);
@@ -72,7 +63,7 @@ const Profile = (): React.ReactElement => {
             p: 3,
           }}
         >
-          <Card sx={{ maxWidth: 750, width: '100%' }}>
+          <Card sx={{ maxWidth: 750, width: '100%', pt: 5 }}>
             <CardContent>
               <Box
                 sx={{
@@ -118,7 +109,10 @@ const Profile = (): React.ReactElement => {
                     />
                   </Box>
                 </Box>
-                <ProfileTags savedTags={profileData!.tags} refreshParent={getProfile} />
+                <ProfileTags
+                  savedTags={profileData!.tags}
+                  refreshParent={getProfile}
+                />
               </Box>
             </CardContent>
           </Card>
