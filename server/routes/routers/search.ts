@@ -29,6 +29,7 @@ search.get(
               author: true,
               tags: true,
               comments: true,
+              // commentOn: true,
               liked: { select: { id: true } },
             },
           },
@@ -37,6 +38,9 @@ search.get(
           // user: tagType === "User" ? true : false,
         },
       });
+      searchResults.forEach((category) =>
+        category.posts.forEach((post) => (post.comments = [])),
+      );
       res.status(200).json(searchResults);
     } catch (error) {
       console.error(error);
