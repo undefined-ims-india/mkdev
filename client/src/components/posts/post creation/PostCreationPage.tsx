@@ -85,9 +85,9 @@ const PostCreationPage = (): ReactElement => {
         <TabContext value={currentTab}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleTabChange} sx={{background: 'rgb(255, 255, 255, .25)', borderRadius: 2}}>
-              <Tab label="Edit" value="0" sx={{color: 'aliceblue'}}/>
-              <Tab label="Repo" value="1" sx={{color: 'aliceblue'}}/>
-              <Tab label="Preview" value="2" sx={{color: 'aliceblue'}}/>
+              <Tab label="Edit" value="0"/>
+              <Tab label="Repo" value="1"/>
+              <Tab label="Preview" value="2"/>
             </TabList>
           </Box>
           <TabPanel value="0">
