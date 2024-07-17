@@ -63,7 +63,7 @@ const Profile = (): React.ReactElement => {
             p: 3,
           }}
         >
-          <Card sx={{ maxWidth: 750, width: '100%' }}>
+          <Card sx={{ maxWidth: 750, width: '100%', pt: 5 }}>
             <CardContent>
               <Box
                 sx={{
