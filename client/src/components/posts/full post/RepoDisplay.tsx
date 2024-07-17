@@ -18,13 +18,15 @@ const RepoDisplay = ({content}:{content: RepoWithFiles | null}):React.ReactEleme
   if (content === null) { return <></>}
 
   return (
-    <Box>
-      <TabContext value={tab}>
-        <TabList onChange={handleChange}>
-          {content.files.map((file, index) => <Tab key={file.path + index} label={file.path} value={index + ''} />)}
-        </TabList>
-        {content.files.map((file, index) => <TabPanel value={index + ''}><MarkDown text={file.contents}/></TabPanel> )}
-      </TabContext>
+    <Box sx={{padding: 1}}>
+      <Box sx={{backgroundColor: 'rgba(40, 140, 40, .3)'}}>
+        <TabContext value={tab}>
+          <TabList onChange={handleChange}>
+            {content.files.map((file, index) => <Tab key={file.path + index} label={file.path} value={index + ''} />)}
+          </TabList>
+          {content.files.map((file, index) => <TabPanel value={index + ''}><MarkDown text={file.contents}/></TabPanel> )}
+        </TabContext>
+      </Box>
     </Box>
   )
 }
