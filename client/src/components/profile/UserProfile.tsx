@@ -109,10 +109,6 @@ const Profile = (): React.ReactElement => {
                     />
                   </Box>
                 </Box>
-                <ProfileTags
-                  savedTags={profileData!.tags}
-                  refreshParent={getProfile}
-                />
               </Box>
             </CardContent>
           </Card>
@@ -135,6 +131,12 @@ const Profile = (): React.ReactElement => {
                 updateUserInfo={updateUserInfo}
                 profileData={profileData!}
               />
+              <Box>
+                <ProfileTags
+                  savedTags={profileData!.tags}
+                  refreshParent={getProfile}
+                />
+              </Box>
             </Box>
           </Modal>
         </Box>
