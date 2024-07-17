@@ -7,95 +7,110 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//Enum for types of tags, If want a new tag Type change here
+enum TagType {
+  Post
+  User
+}
+
+//Posts that will show up on feed based on the tags a user has saved
 model Post {
   id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
+  title     String   @default("") @db.VarChar(255)
   body      String
   userId    Int
-  s3_Etag   String?
+  s3_key    String?
+  repo      Repo?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation("UserPosts", fields: [userId], references: [id])
-  repoLink  Repo?
   liked     User[]   @relation("LikedPosts")
   tags      Tags[]   @relation("PostToTags")
+  postId    Int?
+  comments  Post[]   @relation("PostComments")
+  commentOn Post?    @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Repo {
   id     Int    @id @default(autoincrement())
   postId Int    @unique
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   link   String
-  files  File?
-  post   Post   @relation(fields: [postId], references: [id])
+  files  File[]
 }
 
 model File {
   id        Int      @id @default(autoincrement())
   repoId    Int      @unique
-  star      Boolean  @default(false)
+  repo      Repo     @relation(fields: [repoId], references: [id])
   path      String
   contents  String
   createdAt DateTime @default(now())
-  repo      Repo     @relation(fields: [repoId], references: [id])
 }
 
 model User {
   id             Int             @id @default(autoincrement())
-  username       String?         @unique
+  name           String
+  username       String          @unique
   googleId       String?         @unique
   linkedinId     String?         @unique
+  devId          String?         @unique
+  mediumId       String?         @unique
   githubId       String?         @unique
-  picture        String?
+  email          String?         @unique
+  password       String?
+  aboutMe        String?
+  bio            String?
+  picture        String          @default("")
   firstName      String
   lastName       String?
   follower_count Int?            @default(0)
   post_count     Int?            @default(0)
-  devId          String?         @unique
   blogs          Blog[]          @relation("UserBlogs")
   messages       Messages[]
-  posts          Post[]          @relation("UserPosts")
+  unreadMessages Messages[]      @relation("UnreadMessages")
   conversations  Conversations[] @relation("ConversationsToUser")
+  posts          Post[]          @relation("UserPosts")
   likedPosts     Post[]          @relation("LikedPosts")
   tags           Tags[]          @relation("TagsToUser")
-  User_A         User[]          @relation("UserFollows")
-  User_B         User[]          @relation("UserFollows")
+  followedBy     User[]          @relation("UserFollows")
+  following      User[]          @relation("UserFollows")
 }
 
 model Blog {
-  id        Int      @id @default(autoincrement())
-  title     String
-  body      String
-  userId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  author    User     @relation("UserBlogs", fields: [userId], references: [id])
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  userId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User     @relation("UserBlogs", fields: [userId], references: [id])
 }
 
 model Tags {
-  id       Int     @id @default(autoincrement())
-  tagType  tagType
-  name     String
-  category String?
-  posts    Post[]  @relation("PostToTags")
-  user     User[]  @relation("TagsToUser")
+  id      Int     @id @default(autoincrement())
+  tagType TagType
+  name    String
+  posts   Post[]  @relation("PostToTags")
+  user    User[]  @relation("TagsToUser")
+
+  @@unique([name, tagType])
 }
 
 model Messages {
   id             Int           @id @default(autoincrement())
   body           String
+  liked          Boolean       @default(false)
+  unreadBy       User[]        @relation("UnreadMessages")
+  createdAt      DateTime      @default(now())
   senderId       Int
   conversationId Int
-  conversation   Conversations @relation(fields: [conversationId], references: [id])
-  sender         User          @relation(fields: [senderId], references: [id])
+  conversation   Conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
 
 model Conversations {
   id           Int        @id @default(autoincrement())
   messages     Messages[]
   participants User[]     @relation("ConversationsToUser")
-}
-
-enum tagType {
-  post
-  user
 }

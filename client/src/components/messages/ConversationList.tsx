@@ -1,31 +1,58 @@
 import React, { ReactElement } from 'react';
 import Conversation from './Conversation';
 
+import { ConversationWithParticipants } from '../../../../types';
+
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Box from '@mui/material/Box';
+
 interface PropTypes {
-  allCons: {
-    id: number;
-  }[],
-  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newId: number) => void;
+  allCons: ConversationWithParticipants[];
+  visibleCon: React.MutableRefObject<number>;
+  display: string;
+  select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, newCon: ConversationWithParticipants | null) => void;
+  setCons: () => void;
+  deleteCon: () => void;
 }
 
-const ConversationList: React.FC<PropTypes> = (props): ReactElement => {
-  const { allCons, select } = props;
+const ConversationList: React.FC<PropTypes> =
+  ({
+    allCons,
+    visibleCon,
+    display,
+    select,
+    setCons,
+    deleteCon
+  }): ReactElement => {
 
   return (
-    <div>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <List>
       {
         allCons.map((con, i) => {
           return (
-            <Conversation
-              id={ con.id }
-              key={ `${con.id}-${i}` }
-              select={ select }
-            />
+            <ListItem dense={true} key={`${i}`}>
+              <Conversation
+                display={ display }
+                con={ con }
+                key={ `${con.id}-${i}` }
+                visibleCon={ visibleCon }
+                setCons={ setCons }
+                select={ select }
+                deleteCon={ deleteCon }
+              />
+            </ListItem>
           )
         })
       }
-
-    </div>
+      </List>
+    </Box>
   );
 }
 

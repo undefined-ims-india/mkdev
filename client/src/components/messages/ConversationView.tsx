@@ -1,48 +1,91 @@
 import React, { useState, useEffect, ReactElement } from 'react';
-import axios from 'axios';
 import MessagesList from './MessagesList';
 import MessageInput from './MessageInput';
+
+import axios from 'axios';
 import io from 'socket.io-client';
+import { Conversations } from '@prisma/client';
+import { MessageWithMetadata } from '../../../../types';
+
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 const socket = io('http://localhost:4000');
 
-interface Message {
-    body: string;
-    senderId: number;
-    conversationId: number;
-}
-
 interface PropsType {
-  conId: number;
+  con: Conversations;
+  label: string;
+  addingConversation: boolean;
 }
 
-const ConversationView: React.FC<PropsType> = (props): ReactElement => {
-  const { conId } = props;
+const ConversationView: React.FC<PropsType> =
+  ({
+    con,
+    label,
+    addingConversation
+  }): ReactElement => {
 
-  const [allMsgs, setAllMsgs] = useState<Message[]>([]);
+  const [allMsgs, setAllMsgs] = useState<MessageWithMetadata[]>([]);
 
-  useEffect(() => {
+  // get messages in conversation
+  const getAllMsgs = (): void => {
     axios
-      .get(`/api/messages/${conId}`)
-      .then(({ data }) => {
-        setAllMsgs(data);
-      })
-      .catch((err) => {
-        console.error('Failed to retrieve messages from db:\n', err);
-      })
-  }, [conId])
+    .get(`/api/messages/${con.id}`)
+    .then(({ data }) => {
+      setAllMsgs(data);
+    })
+    .catch((err) => {
+      console.error('Failed to retrieve messages from db:\n', err);
+    })
+  }
 
-  socket.on('message', (msg: Message): void => {
-    // add emitted messages to allMsgs
+  // initial messages load, changes based on conversation selected
+  useEffect(() => {
+    getAllMsgs();
+  }, [con])
+
+  // add any received message from websocket
+  socket.on('message', (msg: MessageWithMetadata): void => {
+    // add emitted message to allMsgs
     setAllMsgs([...allMsgs, msg]);
   })
 
   return (
-    <div>
-      <h2>Conversation { conId }</h2>
-      <MessagesList allMsgs={ allMsgs } conId={ conId }/>
-      <MessageInput conId={ conId }/>
-    </div>
+    <Box
+      sx={{ height: '100%' }}
+    >
+      { !addingConversation ? (
+        <Box
+          sx={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box
+            sx={{
+              mb: 1
+            }}
+          >
+            <Typography variant='h4'>
+              { label }
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              flexGrow: 1
+            }}
+          >
+            <MessagesList allMsgs={ allMsgs } getAllMsgs={ getAllMsgs } con={ con }/>
+          </Box>
+          <Box>
+            <MessageInput con={ con } />
+          </Box>
+        </Box>
+        ) : ('')
+      }
+    </Box>
   );
 }
 

@@ -1,0 +1,161 @@
+import { PrismaClient, Tags } from '@prisma/client';
+import { Router, Response, Request } from 'express';
+const tags = Router();
+const prisma = new PrismaClient();
+
+// get tags for the given user
+tags.get('/', async (req: any, res: Response) => {
+  try {
+    const tagResponse = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+      select: {
+        tags: true,
+      },
+    });
+    
+    res.status(201).send(tagResponse);
+  } catch {
+    res.status(500).send('User Not Found');
+  }
+});
+
+//get all post tags
+tags.get('/all/post', async (req: Request, res: Response) => {
+  try {
+    const allPostTags = await prisma.tags.findMany(
+      {
+        where: {
+          tagType: 'Post'
+        }
+      }
+    )
+    res.send(allPostTags);
+  }
+  catch (err){
+    console.error('Error: GET /api/tags/all/post: ', err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect();
+  }
+})
+
+//get all tags sorted by tagType
+tags.get('/all', async (req: Request, res: Response) => {
+  try {
+    const tags = await prisma.tags.findMany();
+
+    const groupedTags = tags.reduce((groups: any, tag: any) => {
+      const groupKey = tag.tagType; // Grouping by tagType
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push(tag);
+      return groups;
+    }, {});
+
+    res.status(200).send(groupedTags);
+  } catch (error) {
+    res.status(500).send('Error getting all tags from user');
+  }
+});
+
+//post all tags to the current user
+tags.post('/all', async (req: any, res: any) => {
+  const { tags } = req.body;
+
+  try {
+    const mappedTags = tags.map((tag: { id: number }) => ({ id: +tag.id }));
+    await prisma.user.update({
+      where: { id: req.user.id },
+      data: {
+        tags: {
+          connect: mappedTags,
+        },
+      },
+    });
+
+    res.sendStatus(201);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error getting the data');
+  }
+});
+
+//Handler to add tags to the user
+tags.post('/:tagId', async (req: any, res: Response) => {
+  const { tagId } = req.params;
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.id },
+
+      data: {
+        tags: {
+          connect: { id: +tagId },
+        },
+      },
+      select: { tags: true },
+    });
+
+    res.status(200).send(updatedUser);
+  } catch (error) {
+    res.status(500).send('Error adding tag to user');
+  }
+});
+
+//patch request to remove a tag from a users array of tags
+tags.patch('/:tagId', async (req: any, res: Response) => {
+  const { tagId } = req.params;
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.id },
+      data: {
+        tags: {
+          disconnect: { id: +tagId },
+        },
+      },
+      select: { tags: true },
+    });
+    res.status(200).send(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
+tags.put('/:user', async (req: any, res: any) => {
+  const { id } = req.user;
+  const { tags } = req.body;
+  try {
+    await prisma.user.update({
+      where: { id: +id },
+      data: {
+        tags: {
+          set: []
+        }
+      }
+    })
+    await prisma.user.update({
+      where: { id: +id },
+      data: {
+        tags: {
+          connect: [...tags]
+        }
+      }
+    })
+    res.sendStatus(200);
+  }
+  catch (err) {
+    console.log (err);
+    res.sendStatus(500);
+  }
+  finally {
+    await prisma.$disconnect()
+  }
+})
+
+export default tags;

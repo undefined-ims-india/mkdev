@@ -7,6 +7,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
 
 const Repo = ({ saveFile, saveRepo }: {saveFile: Function, saveRepo: Function}): ReactElement => {
   const [tree, setTree]: [{ path: string }[], Function] = useState([]);
@@ -43,21 +45,28 @@ const Repo = ({ saveFile, saveRepo }: {saveFile: Function, saveRepo: Function}):
 
   return (
     <>
-      <TextField value={repoLink} name="repo-link" onChange={handleTextInput} />
-      <Button onClick={handleLookup}>Add Repo</Button>
-      <Box>
-        <List>
+    <Box sx={{display:'flex', flexDirection: 'row'}}>
+      <TextField value={repoLink} name="repo-link" onChange={handleTextInput} sx={{width: 1/3}}/>
+      <Box sx={{display:'flex', flexDirection: 'column'}}>
+        <Button onClick={handleLookup} size='small'>Add Repo</Button>
+        <Button disabled={!tree.length || !displayFile.length} onClick={() => {saveFile(displayFilePath, displayFile)}}>Save file to post</Button>
+      </Box>
+    </Box>
+    <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly'}}>
+        <List sx={{height: 600, overflow: 'scroll'}}>
           {tree.map((file, index) => (
             <ListItem key={index}>
-              <Button onClick={changePath} name={file.path}>
+              <Button onClick={changePath} name={file.path} sx={{fontSize: 12}}>
                 {file.path}
               </Button>
             </ListItem>
           ))}
         </List>
+      <Divider orientation='vertical' />
+      <Paper sx={{height:600,overflow: 'scroll', background: '#0d1117'}}>
         <MarkDown text={displayFile} />
-        <Button onClick={() => {saveFile(displayFilePath, displayFile)}}>Save file to post</Button>
-      </Box>
+      </Paper>
+    </Box>
     </>
   );
 };
