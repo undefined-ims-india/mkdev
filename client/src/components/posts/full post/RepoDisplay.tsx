@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { RepoWithFiles } from "../../../../../types";
 import MarkDown from "../MarkDown";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { a11yDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 import Box from '@mui/material/Box';
 import TabList from '@mui/lab/TabList';
@@ -24,7 +26,13 @@ const RepoDisplay = ({content}:{content: RepoWithFiles | null}):React.ReactEleme
           <TabList onChange={handleChange}>
             {content.files.map((file, index) => <Tab key={file.path + index} label={file.path} value={index + ''} />)}
           </TabList>
-          {content.files.map((file, index) => <TabPanel value={index + ''}><MarkDown text={file.contents}/></TabPanel> )}
+          {content.files.map((file, index) => (
+            <TabPanel value={index + ''}>
+              <SyntaxHighlighter showLineNumbers style={a11yDark}>
+                {file.contents}
+              </SyntaxHighlighter>
+            </TabPanel>
+          ) )}
         </TabContext>
       </Box>
     </Box>
