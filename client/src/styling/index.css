@@ -1,4 +1,5 @@
 .markdown-container pre {
+  overflow-x: scroll;
   background-color: #0d1117;
   color: aliceblue;
   padding: 5px;
