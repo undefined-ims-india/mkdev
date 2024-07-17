@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Repo from './Repo';
 import InputTab from './InputTab';
+import SubmitButton from './SubmitButton';
 import FullPost from '../full post/FullPost';
 import { UserContext } from '../../UserContext';
 
@@ -99,17 +100,26 @@ const PostCreationPage = (): ReactElement => {
             </Paper>
           </TabPanel>
           <TabPanel value="2">
-            <FullPost
-              content={{
-                title,
-                body,
-                author: user,
-                repo: {...repo, id: 0, postId: 0, files: repo.files.map(file => ({...file, id: 0, repoId: 0, createdAt: new Date(Date.now()), star: false}))},
-                tags: selectedTags,
-                liked: undefined, likedByUser: undefined, comments: undefined, id: undefined, createdAt: new Date(Date.now())
-              }}
-              imageLink={img ? URL.createObjectURL(img) : ''}
-            />
+            <Grid container>
+              <Grid item xs={12}>
+                <FullPost
+                  content={{
+                    title,
+                    body,
+                    author: user,
+                    repo: {...repo, id: 0, postId: 0, files: repo.files.map(file => ({...file, id: 0, repoId: 0, createdAt: new Date(Date.now()), star: false}))},
+                    tags: selectedTags,
+                    liked: undefined, likedByUser: undefined, comments: undefined, id: undefined, createdAt: new Date(Date.now())
+                  }}
+                  imageLink={img ? URL.createObjectURL(img) : ''}
+                />
+              </Grid>
+              <Grid item xs={1}/>
+              <Grid item xs={10} sx={{display: 'flex', justifyContent: 'end', alignItems: 'center', marginTop: 2}}>
+                <SubmitButton {...content} mode="post"/>
+              </Grid>
+              <Grid item xs={1}/>
+            </Grid>
           </TabPanel>
         </TabContext>
       </Grid>
