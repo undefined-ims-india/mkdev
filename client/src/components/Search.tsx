@@ -70,8 +70,8 @@ export default function SearchComponent(): ReactElement {
   const handleSearch = async () => {
     const names = selectedTags.map((tag) => tag.name).join('-');
     try {
-      navigate(`/searchresults/${tagType}/${names}`);
-      // const { data } = await axios.get(`/api/search/${tagType}/${names}`);
+      await navigate('/dashboard')
+      return navigate(`/searchresults/${tagType}/${names}`);
     } catch (error) {
       console.error('Error during search:', error);
     }
