@@ -11,7 +11,7 @@ const DevIconDisabled = (props: React.SVGProps<SVGSVGElement>) => (
   >
     <g
       fillOpacity='0.2'
-      fill='#000000'
+      fill='#00ff88'
       fillRule='nonzero'
       stroke='none'
       strokeWidth='1'

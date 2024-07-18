@@ -10,8 +10,8 @@ const MediumIconDisabled = (props: React.SVGProps<SVGSVGElement>) => (
     viewBox='0 0 300 250'
   >
     <g
-      fillOpacity='0.52157'
-      fill='#0b0b0b'
+      fillOpacity='0.2'
+      fill='#00ff88'
       fillRule='nonzero'
       stroke='none'
       strokeWidth='1'
